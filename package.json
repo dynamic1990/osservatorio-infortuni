@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "test:etl": "python3 -m unittest discover -s tests/etl -p 'test_*.py'",
-    "etl:infortuni": "python3 scripts/etl/inail_infortuni_snapshot.py"
+    "etl:infortuni": "python3 scripts/etl/inail_infortuni_snapshot.py",
+    "test:snapshots": "python3 scripts/ci/validate-generated-artifacts.py"
   },
   "dependencies": {
     "next": "16.3.1",
