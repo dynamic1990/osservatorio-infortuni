@@ -16,7 +16,7 @@ export const InailSnapshotMetaSchema = z.object({
   period: z.object({
     annoDa: z.number(),
     annoA: z.number(),
-    mesi: z.number(),
+    mesi: z.number().nullable(),
   }),
   coverage: z.object({
     regioni: z.number(),

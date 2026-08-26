@@ -1,33 +1,7 @@
 "use client";
 
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import type { InjuryAggregate } from "@/lib/data/inail-infortuni-contract";
-
-export interface SeriePoint {
-  label: string;
-  totale: number;
-  mortali: number;
-}
-
-export function buildMonthlySerie(aggregates: InjuryAggregate[]): SeriePoint[] {
-  const map = new Map<string, { totale: number; mortali: number }>();
-  // Nota: nel dataset mensile gli esiti mortali sono contati separatamente nel meta;
-  // qui la serie mostra i casi totali per mese.
-  for (const row of aggregates) {
-    const key = `${row.anno}-${String(row.mese).padStart(2, "0")}`;
-    const current = map.get(key) ?? { totale: 0, mortali: 0 };
-    current.totale += row.casi;
-    map.set(key, current);
-  }
-  const mesi = ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"];
-  return [...map.entries()]
-    .sort((a, b) => a[0].localeCompare(b[0]))
-    .map(([key, value]) => ({
-      label: `${mesi[Number(key.slice(5, 7)) - 1]} ${key.slice(0, 4)}`,
-      totale: value.totale,
-      mortali: value.mortali,
-    }));
-}
+import type { SeriePoint } from "@/lib/serie-utils";
 
 export function InfortuniMonthlyChart({ data }: { data: SeriePoint[] }) {
   return (

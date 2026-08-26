@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
-"""Valida gli snapshot generati prima della pubblicazione.
-
-Verifica che:
-- i file esistano e siano JSON validi;
-- lo snapshot dati rispetti il contratto (chiavi attese, tipi, valori);
-- il meta riporti fonte, data estrazione e hash coerente con il file dati.
-
-Uso:
-    python3 scripts/ci/validate-generated-artifacts.py
-"""
+"""Valida gli snapshot generati prima della pubblicazione."""
 
 from __future__ import annotations
 
@@ -20,51 +11,41 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "src" / "data" / "generated"
 
-REQUIRED_META = {"schemaVersion", "datasetId", "source", "extractedAt", "period", "coverage", "limits", "methodology", "dataArtifactSha256"}
-REQUIRED_DATA = {"schemaVersion", "datasetId", "period", "coverage", "aggregates"}
+REQUIRED_META = {"schemaVersion", "datasetId", "source", "extractedAt", "period", "coverage", "limits", "methodology"}
+REQUIRED_VISTE = {"schemaVersion", "datasetId", "period", "coverage", "serieAnnuale", "serieAnnualeRegioni", "serieMensile", "settori", "regioni", "generi", "fasceEta", "modalita", "gestioni", "gruppiTariffari"}
 
 
 def check(condition: bool, message: str) -> None:
     if not condition:
-        raise SystemExit(f"ERRORE: {message}")
+        raise SystemExit(f"ERROR: {message}")
 
 
 def main() -> int:
-    data_path = DATA_DIR / "inail-infortuni-serie.json"
     meta_path = DATA_DIR / "inail-infortuni-serie.meta.json"
+    viste_path = DATA_DIR / "inail-infortuni-viste.json"
 
-    check(data_path.exists(), f"manca {data_path.name}")
     check(meta_path.exists(), f"manca {meta_path.name}")
+    check(viste_path.exists(), f"manca {viste_path.name}")
 
-    with open(data_path, encoding="utf-8") as f:
-        data = json.load(f)
-    with open(meta_path, encoding="utf-8") as f:
-        meta = json.load(f)
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    viste = json.loads(viste_path.read_text(encoding="utf-8"))
 
-    check(set(data) >= REQUIRED_DATA, f"contratto dati incompleto: mancano {REQUIRED_DATA - set(data)}")
-    check(data["schemaVersion"] == 1, "schemaVersion dati != 1")
-    check(data["datasetId"] == meta.get("datasetId"), "datasetId dati/meta non coincide")
-    check(data["period"] == meta.get("period"), "period dati/meta non coincide")
-    check(data["coverage"]["record"] == meta["coverage"]["record"], "coverage.record dati/meta non coincide")
+    check(set(meta) >= REQUIRED_META, f"meta incompleto: mancano {REQUIRED_META - set(meta)}")
+    check(set(viste) >= REQUIRED_VISTE, f"viste incomplete: mancano {REQUIRED_VISTE - set(viste)}")
+    check(viste["schemaVersion"] == 2, "schemaVersion viste != 2")
+    check(viste["coverage"]["regioni"] == meta["coverage"]["regioni"], "regioni viste/meta diversa")
+    check(viste["coverage"]["casi"] == meta["coverage"]["casi"], "casi viste/meta diversa")
 
-    check(set(meta) >= REQUIRED_META, f"contratto meta incompleto: mancano {REQUIRED_META - set(meta)}")
-    check("source" in meta and "owner" in meta["source"] and "apiUrl" in meta["source"], "meta.source incompleta")
+    # Coerenza serie annuale col coverage
+    totale = sum(p["casi"] for p in viste["serieAnnuale"])
+    check(totale == viste["coverage"]["casi"], f"serieAnnuale somma {totale}, coverage {viste['coverage']['casi']}")
 
-    # Hash del file dati come dichiarato nel meta
-    digest = hashlib.sha256(data_path.read_bytes()).hexdigest()
-    check(digest == meta.get("dataArtifactSha256"), f"sha256 non coincide: {digest} != {meta.get('dataArtifactSha256')}")
+    # serieAnnualeRegioni: somma degli anni = totale
+    tot_reg = sum(pa["casi"] for r in viste["serieAnnualeRegioni"] for pa in r["anni"])
+    check(abs(tot_reg - totale) / max(totale, 1) < 0.01, f"serieAnnualeRegioni somma {tot_reg} vs {totale}")
 
-    # Sanità degli aggregati
-    aggregates = data["aggregates"]
-    check(isinstance(aggregates, list) and len(aggregates) > 0, "aggregates vuoto")
-    for row in aggregates[:1000]:
-        check(row["casi"] > 0, f"casi <= 0 in {row['key']}")
-        check(row["genere"] in ("M", "F"), f"genere non valido in {row['key']}")
-        check(row["modalita"] in ("S", "N"), f"modalita non valida in {row['key']}")
-        check(isinstance(row["eta"], int), f"eta non intera in {row['key']}")
-
-    print(f"OK: {data_path.name} ({len(aggregates)} aggregati, {meta['coverage']['record']} record fonte)")
-    print(f"OK: {meta_path.name} (estrazione {meta['extractedAt']}, hash verificato)")
+    print(f"OK: {viste_path.name} ({len(viste['serieAnnuale'])} anni, {viste['coverage']['regioni']} regioni)")
+    print(f"OK: {meta_path.name} (estrazione {meta['extractedAt']})")
     return 0
 
 

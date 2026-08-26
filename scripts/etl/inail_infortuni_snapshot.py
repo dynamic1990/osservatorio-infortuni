@@ -30,7 +30,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -175,10 +175,74 @@ def aggregate(records: list[dict], regione: str, anno: int, mese: int) -> list[d
     return rows
 
 
+def build_views(aggregates: list[dict], period: dict, coverage: dict) -> dict:
+    """Viste precalcolate per la dashboard (piccole, versionate).
+
+    Lo snapshot completo resta nel file serie (rigenerabile); il sito
+    carica solo queste viste per restare leggero.
+    """
+    per_mese: Counter[str] = Counter()
+    per_settore: Counter[str] = Counter()
+    per_regione: Counter[str] = Counter()
+    per_genere: Counter[str] = Counter()
+    per_fascia: Counter[str] = Counter()
+    per_modalita: Counter[str] = Counter()
+    per_gestione: Counter[str] = Counter()
+    per_gruppo: Counter[str] = Counter()
+
+    def fascia(eta: int) -> str:
+        if eta < 0:
+            return "ND"
+        if eta < 15:
+            return "0-14"
+        if eta < 25:
+            return "15-24"
+        if eta < 35:
+            return "25-34"
+        if eta < 45:
+            return "35-44"
+        if eta < 55:
+            return "45-54"
+        if eta < 65:
+            return "55-64"
+        return "65+"
+
+    for row in aggregates:
+        mese_key = f"{row['anno']}-{row['mese']:02d}"
+        per_mese[mese_key] += row["casi"]
+        per_settore[row["settoreAteco"] or "ND"] += row["casi"]
+        per_regione[row["regione"]] += row["casi"]
+        per_genere[row["genere"]] += row["casi"]
+        per_fascia[fascia(row["eta"])] += row["casi"]
+        per_modalita[row["modalita"]] += row["casi"]
+        per_gestione[row["gestione"] or "ND"] += row["casi"]
+        per_gruppo[row["grandeGruppo"] or "ND"] += row["casi"]
+
+    def top(counter: Counter, n: int = 15) -> list[dict]:
+        return [{"key": k, "casi": v} for k, v in counter.most_common(n)]
+
+    return {
+        "schemaVersion": 1,
+        "datasetId": "inail_infortuni_viste",
+        "period": period,
+        "coverage": coverage,
+        "serieMensile": [{"key": k, "casi": v} for k, v in sorted(per_mese.items())],
+        "settori": top(per_settore),
+        "regioni": [{"key": k, "casi": v} for k, v in sorted(per_regione.items(), key=lambda kv: -kv[1])],
+        "generi": [{"key": k, "casi": v} for k, v in per_genere.items()],
+        "fasceEta": [{"key": k, "casi": v} for k, v in per_fascia.items()],
+        "modalita": [{"key": k, "casi": v} for k, v in per_modalita.items()],
+        "gestioni": [{"key": k, "casi": v} for k, v in per_gestione.items()],
+        "gruppiTariffari": [{"key": k, "casi": v} for k, v in per_gruppo.items()],
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--anno-da", type=int, default=2020)
     parser.add_argument("--anno-a", type=int, default=datetime.now().year - 1)
+    parser.add_argument("--mese-a", type=int, default=6, choices=range(1, 13),
+                        help="Mese finale (default 6: la finestra API arriva a giugno)")
     parser.add_argument("--output-dir", type=Path, default=Path("src/data/generated"))
     parser.add_argument("--raw-dir", type=Path, default=Path("data/raw"))
     args = parser.parse_args()
@@ -198,17 +262,21 @@ def main() -> int:
     casi_mortali = 0
 
     for anno in range(args.anno_da, args.anno_a + 1):
-        for mese in range(1, 13):
+        for mese in range(1, args.mese_a + 1):
             for regione in REGIONI:
                 raw_path = raw_dir / f"infortuni-{regione.lower()}-{anno}-{mese:02d}.json"
                 if raw_path.exists() and raw_path.stat().st_size > 0:
-                    continue  # già scaricato (riavvii idempotenti)
-                fetched = fetch_regione_mese(regione, anno, mese)
-                if fetched is None:
-                    continue  # finestra API: mese non disponibile
-                # Raw layer: salva i record grezzi (gitignored), con hash
-                with open(raw_path, "w", encoding="utf-8") as f:
-                    json.dump({"fonte": API_URL, "regione": regione, "anno": anno, "mese": mese, "record": fetched}, f, ensure_ascii=False)
+                    # Già scaricato: riavvii idempotenti, rileggi e aggrega.
+                    with open(raw_path, encoding="utf-8") as f:
+                        fetched = json.load(f)["record"]
+                else:
+                    fetched = fetch_regione_mese(regione, anno, mese)
+                    if fetched is None:
+                        continue  # finestra API: mese non disponibile
+                    # Raw layer: salva i record grezzi (gitignored)
+                    with open(raw_path, "w", encoding="utf-8") as f:
+                        json.dump({"fonte": API_URL, "regione": regione, "anno": anno, "mese": mese, "record": fetched}, f, ensure_ascii=False)
+                    time.sleep(0.15)  # gentilezza verso l'API
                 tutti.extend(aggregate(fetched, regione, anno, mese))
                 totale_record += len(fetched)
                 regioni_ok.add(regione)
@@ -216,8 +284,6 @@ def main() -> int:
                     province_ok.add(r["LuogoAccadimento"])
                     if r.get("DataMorte"):
                         casi_mortali += 1
-                print(f"{regione} {anno}-{mese:02d}: {len(fetched)} record")
-                time.sleep(0.15)  # gentilezza verso l'API
 
     if not tutti:
         print("Nessun dato scaricato", file=sys.stderr)
@@ -226,7 +292,7 @@ def main() -> int:
     serialized = {
         "schemaVersion": 1,
         "datasetId": "inail_infortuni_mensili",
-        "period": {"annoDa": args.anno_da, "annoA": args.anno_a, "mesi": (args.anno_a - args.anno_da + 1) * 12},
+        "period": {"annoDa": args.anno_da, "annoA": args.anno_a, "mesi": (args.anno_a - args.anno_da + 1) * args.mese_a},
         "coverage": {
             "regioni": len(regioni_ok),
             "province": len(province_ok),
@@ -253,7 +319,7 @@ def main() -> int:
             "attribution": "INAIL Open Data",
         },
         "extractedAt": utc_now(),
-        "period": {"annoDa": args.anno_da, "annoA": args.anno_a, "mesi": (args.anno_a - args.anno_da + 1) * 12},
+        "period": {"annoDa": args.anno_da, "annoA": args.anno_a, "mesi": (args.anno_a - args.anno_da + 1) * args.mese_a},
         "coverage": {
             "regioni": len(regioni_ok),
             "province": len(province_ok),
@@ -276,6 +342,15 @@ def main() -> int:
         "dataArtifactSha256": sha256_file(data_path),
         "dataArtifactBytes": data_path.stat().st_size,
     }
+    viste = build_views(tutti, serialized["period"], serialized["coverage"])
+    viste_path = args.output_dir / "inail-infortuni-viste.json"
+    with open(viste_path, "w", encoding="utf-8") as f:
+        json.dump(viste, f, ensure_ascii=False, separators=(",", ":"))
+
+    # Il file completo (serie) non viene versionato (grande); il meta e le
+    # viste sì. Lo snapshot si rigenera con questo script.
+    print(f"Viste:    {viste_path} ({viste_path.stat().st_size} bytes)")
+
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, separators=(",", ":"))
 

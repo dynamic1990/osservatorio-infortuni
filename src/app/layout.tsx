@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,9 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="it">
       <body>
         <header className="container" style={{ paddingTop: "var(--space-6)", paddingBottom: "var(--space-4)" }}>
-          <a href="/" style={{ textDecoration: "none", fontWeight: 700, fontSize: "1.1rem" }}>
+          <Link href="/" style={{ textDecoration: "none", fontWeight: 700, fontSize: "1.1rem" }}>
             Osservatorio Infortuni
-          </a>
+          </Link>
           <span style={{ color: "var(--color-text-soft)", marginLeft: "var(--space-2)" }}>
             open data INAIL, leggibili e verificabili
           </span>

@@ -1,23 +1,15 @@
 "use client";
 
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import type { InjuryAggregate } from "@/lib/data/inail-infortuni-contract";
+import type { SerieCount } from "@/lib/data/inail-viste-contract";
 
 export interface SettorePoint {
   settore: string;
   casi: number;
 }
 
-export function buildSettoriSerie(aggregates: InjuryAggregate[]): SettorePoint[] {
-  const map = new Map<string, number>();
-  for (const row of aggregates) {
-    const settore = row.settoreAteco || "ND";
-    map.set(settore, (map.get(settore) ?? 0) + row.casi);
-  }
-  return [...map.entries()]
-    .map(([settore, casi]) => ({ settore, casi }))
-    .sort((a, b) => b.casi - a.casi)
-    .slice(0, 15);
+export function buildSettoriSerie(settori: SerieCount[]): SettorePoint[] {
+  return settori.map((s) => ({ settore: s.key, casi: s.casi }));
 }
 
 export function InfortuniSettoriChart({ data }: { data: SettorePoint[] }) {

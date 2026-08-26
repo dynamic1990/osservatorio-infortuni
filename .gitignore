@@ -17,3 +17,10 @@ data/raw/
 
 # Snapshot temporanei
 src/data/generated/*.tmp
+
+# Snapshot completo (grande): rigenerabile con l'ETL; versionate solo le viste
+src/data/generated/inail-infortuni-serie.json
+
+# Snapshot storici grandi (rigenerabili): non versionati
+src/data/generated/inail-infortuni-semestrale-storico.json
+tsbuildinfo

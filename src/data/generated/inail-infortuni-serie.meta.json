@@ -1,0 +1,33 @@
+{
+ "schemaVersion": 1,
+ "datasetId": "inail_infortuni_viste",
+ "source": {
+  "owner": "INAIL – Istituto Nazionale Assicurazione contro gli Infortuni sul Lavoro",
+  "landingUrl": "https://dati.inail.it/portale/it/dataset/infortuni-sul-lavoro/dati-con-cadenza-semestrale.html",
+  "apiUrl": "https://dati.inail.it/opendata/downloads/daticoncadenzasemestraleinfortuni/zip/",
+  "license": "Italian Open Data License v2.0",
+  "attribution": "INAIL Open Data"
+ },
+ "extractedAt": "2026-08-27T00:30:00+00:00",
+ "period": {
+  "annoDa": 2020,
+  "annoA": 2024,
+  "mesi": null
+ },
+ "coverage": {
+  "regioni": 20,
+  "record": 3024370,
+  "casi": 3024370,
+  "mortali": 6954,
+  "province": 107
+ },
+ "limits": [
+  "Serie annuale consolidata da cadenza semestrale: copre 5 anni interi (2020-2024).",
+  "I dati mensili 2025-2026 delle API REST coprono finestre congiunturali (gen-giu) e 16 regioni; le 4 regioni con nome composto sono integrato da file CSV regionali.",
+  "La definizione amministrativa e l'indennizzo sono disponibili solo nella cadenza semestrale."
+ ],
+ "methodology": [
+  "Aggregazione di record pseudonimizzati: mai record singoli nel sito.",
+  "Le viste derivano da CSV regionali semestrali (20 regioni) e da API/CSV mensili."
+ ]
+}

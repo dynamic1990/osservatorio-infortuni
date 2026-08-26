@@ -1,37 +1,38 @@
-import snapshotJson from "@/data/generated/inail-infortuni-serie.json";
+import visteJson from "@/data/generated/inail-infortuni-viste.json";
 import metaJson from "@/data/generated/inail-infortuni-serie.meta.json";
-import { parseInailInfortuniSerie, type InailInfortuniSerie } from "@/lib/data/inail-infortuni-contract";
-import { type InailSnapshotMeta } from "@/lib/data/inail-meta-contract";
+import { parseInailInfortuniViste, type InailInfortuniViste } from "@/lib/data/inail-viste-contract";
+import { InailSnapshotMetaSchema, type InailSnapshotMeta } from "@/lib/data/inail-meta-contract";
 
-let cachedSnapshot: InailInfortuniSerie | undefined;
+let cachedViste: InailInfortuniViste | undefined;
 
 export class InailContractError extends Error {
   constructor(cause: unknown) {
-    super("Lo snapshot INAIL non supera il contratto dati", { cause });
+    super("Le viste INAIL non superano il contratto dati", { cause });
     this.name = "InailContractError";
   }
 }
 
-export function getInailSnapshot(): InailInfortuniSerie {
-  if (cachedSnapshot) return cachedSnapshot;
+export function getInailViste(): InailInfortuniViste {
+  if (cachedViste) return cachedViste;
   try {
-    cachedSnapshot = parseInailInfortuniSerie(snapshotJson);
-    return cachedSnapshot;
+    const parsed = parseInailInfortuniViste(visteJson);
+    cachedViste = parsed;
+    return parsed;
   } catch (error) {
     throw new InailContractError(error);
   }
 }
 
 export function getInailMeta(): InailSnapshotMeta {
-  return metaJson as InailSnapshotMeta;
+  return InailSnapshotMetaSchema.parse(metaJson);
 }
 
 export function getInailView(now = new Date()) {
-  const snapshot = getInailSnapshot();
+  const viste = getInailViste();
   const meta = getInailMeta();
   const ageDays = Math.floor((now.getTime() - Date.parse(meta.extractedAt)) / 86_400_000);
   return {
-    snapshot,
+    viste,
     meta,
     freshness: {
       extractedAt: meta.extractedAt,

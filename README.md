@@ -6,11 +6,13 @@ La banca dati INAIL è ricchissima ma di difficile lettura: dataset enormi, codi
 
 ## Fase 1: Open data INAIL
 
-- **Infortuni sul lavoro** con cadenza mensile e semestrale (API REST JSON)
-- **Malattie professionali** con cadenza mensile e semestrale (API REST JSON)
-- Analisi per: tempo (serie storiche), luogo (provincia/regione ISTAT), persona (età, genere), modalità (in occasione di lavoro / in itinere, con/senza mezzo di trasporto), settore (ATECO, gestione tariffaria, grande gruppo tariffario), esito (mortali)
+Copertura attuale (verificata 2026-08-27):
 
-La fase 2 integrerà i dati di vigilanza dell'Ispettorato Nazionale del Lavoro, i CSV storici completi INAIL (l'API REST copre ~18 mesi) e le malattie professionali.
+- **Serie storica consolidata 2020-2024**: dataset semestrali regionali INAIL (file CSV), tutte le 20 regioni, ~3 milioni di record, con definizione amministrativa, indennizzo e giorni indennizzati.
+- **Congiuntura mensile 2025-2026**: API REST mensile (16 regioni) + CSV mensili delle 4 regioni con nome composto (Valle d'Aosta, Trentino-Alto Adige, Friuli-Venezia Giulia, Emilia-Romagna).
+- Analisi per: tempo (serie storiche), luogo (regione/provincia ISTAT), persona (età, genere), modalità (in occasione di lavoro / in itinere, con/senza mezzo di trasporto), settore (ATECO), esito.
+
+Limite noto: l'API REST mensile espone ~18 mesi di finestra; per lo storico si usano i CSV semestrali regionali (5 anni). La fase 2 integrerà i dati di vigilanza dell'Ispettorato Nazionale del Lavoro e le malattie professionali (l'API REST copre ~18 mensili).
 
 ## Principi
 
