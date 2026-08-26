@@ -1,0 +1,78 @@
+@import "./design-system.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+.card {
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  padding: var(--space-6);
+}
+
+.metric {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.9rem;
+  font-weight: 650;
+  line-height: 1.1;
+}
+
+.metric-label {
+  color: var(--color-text-soft);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.source-note {
+  color: var(--color-text-soft);
+  font-size: 0.78rem;
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-3);
+}
+
+.freshness {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border: 1px solid var(--color-divider);
+  border-radius: 999px;
+}
+
+.freshness.fresh {
+  color: #1a6b34;
+  border-color: #1a6b34;
+}
+
+.freshness.stale {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}

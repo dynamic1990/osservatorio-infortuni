@@ -5,14 +5,21 @@ Ogni dataset pubblicato ha una riga in questo registro con: ente, URL, licenza, 
 | ID | Ente | Dataset | URL | Formato | Cadenza | Perimetro | Limiti |
 |----|------|---------|-----|---------|---------|-----------|--------|
 | INAIL-INF-MENS | INAIL | Infortuni con cadenza mensile | https://dati.inail.it/api/OpenData/DatiConCadenzaMensileInfortuni | JSON (REST) | Mensile | Regione, anno e mese di accadimento obbligatori; record singoli pseudonimizzati | Non include definizione amministrativa, indennizzo, giorni indennizzati (solo semestrale) |
-| INAIL-INF-SEM | INAIL | Infortuni con cadenza semestrale | https://dati.inail.it/api/OpenData/DatiConCadenzaSemestraleInfortuni | JSON (REST) | Semestrale | Come sopra + definizione, esito mortale, indennizzo | Parametro Regione accetta valori particolari (vedi note) |
+| INAIL-INF-SEM | INAIL | Infortuni con cadenza semestrale | https://dati.inail.it/api/OpenData/DatiConCadenzaSemestraleInfortuni | JSON (REST) | Semestrale | Come sopra + definizione, esito mortale, indennizzo | Parametro Regione accetta valori particolari; da testare |
 | INAIL-MAL-MENS | INAIL | Malattie professionali mensili | https://dati.inail.it/api/OpenData/DatiMensiliMalattieProfessionaliDataProt | JSON (REST) | Mensile | Data protocollo | Da testare |
-| INL-RAPP-ANNUALE | INL | Rapporto annuale attività di vigilanza | https://www.ispettorato.gov.it/.../Rapporto-annuale-2024.pdf | PDF | Annuale | Accessi, violazioni, diffide, sospensioni per settore e territorio | PDF non strutturato; parsing richiesto; cadenza annuale |
-| MLPS-CKAN | Min. Lavoro | Portale open data | https://dati.lavoro.gov.it | CKAN/CSV | ? | ? | Portale in manutenzione (ago 2026); endpoint SpodCkanApi |
+| INAIL-MAL-SEM | INAIL | Malattie professionali semestrali | https://dati.inail.it/api/OpenData/DatiSemestraliMalattieProfessionaliDataProt | JSON (REST) | Semestrale | Data protocollo; variante DataDec | Da testare |
+
+## Note di verifica (2026-08-27)
+
+- API infortuni mensile testata: parametri `Regione`, `AnnoAccadimento`, `MeseAccadimento` (2 cifre) obbligatori. Senza zero iniziale: "Dati non trovati".
+- Regioni accettate dall'API (16/20): Piemonte, Lombardia, Veneto, Liguria, Toscana, Umbria, Marche, Lazio, Abruzzo, Molise, Campania, Puglia, Basilicata, Calabria, Sicilia, Sardegna.
+- Non risolte (testate ~30 varianti al 2026-08-27): nomi accettati per Valle d'Aosta, Trentino-Alto Adige, Friuli-Venezia Giulia, Emilia-Romagna.
+  L'API le rifiuta sia come nome esteso sia come codice ISTAT. Fallback: dataset CSV completi pubblicati sul portale
+  (coprono tutte le province) oppure endpoint semestrale, da verificare. Impatto: 4 regioni su 20 mancanti nelle serie API. TODO.
+- Licenza esatta dei dataset INAIL: da verificare.
+- Storico disponibile: da verificare per anno (test iniziali con nomi errati hanno falsato il risultato).
 
 ## Da verificare
 
-- Licenza esatta dei dataset INAIL (CC BY?)
-- Storico anni disponibili per le API INAIL (fino a che anno si può risalire?)
-- Presenza di dataset di vigilanza INL nel CKAN del Ministero
-- Denominatori per tassi di incidenza (occupati per settore/territorio: Istat RCFL)
+- Denominatori per tassi di incidenza (occupati per settore/territorio: Istat RCFL).
+- Presenza di dataset di vigilanza INL nel CKAN del Ministero (portale in manutenzione ad ago 2026).

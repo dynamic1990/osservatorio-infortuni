@@ -1,10 +1,19 @@
+# Dipendenze e build
 node_modules/
 .next/
 out/
-data/raw/
-*.log
+next-env.d.ts
+
+# Ambiente
 .env
 .env.local
+
+# Python
 __pycache__/
 *.pyc
-data/generated/*.json.tmp
+
+# Raw layer: record singoli mai versionati
+data/raw/
+
+# Snapshot temporanei
+src/data/generated/*.tmp

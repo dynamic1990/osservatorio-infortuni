@@ -6,16 +6,15 @@ I dataset INAIL open data contengono **record pseudonimizzati a livello di singo
 
 ## Regole del progetto
 
-- **Nessun dato personale aggiuntivo**: non si integrano i record con altre fonti per risalire a persone o aziende. Gli identificativi si usano solo per analisi longitudinali aggregate (es. infortuni ripetuti nello stesso datore) e non si espongono mai singoli casi riconducibili.
+- **Nessun dato personale aggiuntivo**: non si integrano i record con altre fonti per risalire a persone o aziende. Gli identificativi si usano solo per analisi longitudinali aggregate e non si espongono mai singoli casi riconducibili.
 - **Nessuna pubblicazione di casi singoli**: le pagine pubbliche mostrano aggregazioni (conteggi, serie, tassi), mai il dettaglio del singolo infortunio.
 - **I numeri non parlano da soli**: ogni confronto riporta il perimetro e i limiti della misura. Un aumento delle denunce può dipendere da più vigilanza, più consapevolezza, cambi normativi o cambi demografici.
 - **Il progetto non sostituisce gli organi di controllo**: non denuncia, non accusa, non attribuisce responsabilità. Segnala dove guardare.
 
 ## Fonti ufficiali
 
-- INAIL Open Data: https://dati.inail.it — licenza CC BY (da verificare per ogni dataset)
-- INL: https://www.ispettorato.gov.it — rapporti annuali (documenti, non dataset)
-- Ministero del Lavoro: https://dati.lavoro.gov.it — portale CKAN
+- INAIL Open Data: https://dati.inail.it — dataset "Infortuni sul lavoro" e "Malattie professionali"
+- Ispettorato Nazionale del Lavoro: https://www.ispettorato.gov.it (fase 2)
 
 ## Responsabilità
 

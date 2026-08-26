@@ -1,11 +1,54 @@
 # Architettura
 
-## Flusso dei dati
+## Obiettivo
 
-1. **ETL (scripts/etl/)**: script Python che scaricano le fonti ufficiali e producono snapshot verificati in `src/data/generated/`. Ogni snapshot registra fonte, data di estrazione e versione dello schema.
-2. **Sito (src/)**: Next.js che legge esclusivamente gli snapshot, mai le fonti live. Nessun numero senza snapshot verificato.
-3. **API (src/app/api/)**: endpoint di sola lettura sugli snapshot, usati dalle pagine e (in futuro) da un endpoint MCP pubblico.
-4. **Refresh**: gli snapshot si rigenerano con cadenza definita per fonte (mensile INAIL, annuale INL). Il refresh è atomico: si scrive un file temporaneo e si rinomina.
+Osservatorio Infortuni deve rispondere a una domanda semplice: "quanti infortuni sul lavoro ci sono stati, dove, in quale settore, e come stanno cambiando nel tempo?". Deve farlo senza perdere la complessità amministrativa necessaria a dare una risposta corretta.
+
+Per questo l'architettura è pensata in livelli separati, sul modello di DoveVannoINostriSoldi.
+
+## 1. Source registry
+
+Il registro in `src/lib/sources.ts` descrive ogni fonte:
+
+- proprietario;
+- area;
+- URL ufficiale;
+- formato;
+- copertura;
+- frequenza;
+- stato di integrazione.
+
+È il punto di partenza per provenienza e monitoring.
+
+## 2. Acquisition
+
+Ogni connettore deve:
+
+1. scaricare solo da endpoint ufficiali (host verificato);
+2. rispettare rate limit e condizioni d'uso (pausa tra le chiamate);
+3. conservare timestamp di osservazione e metadati utili;
+4. calcolare un hash degli artefatti;
+5. evitare di riscaricare versioni identiche;
+6. fallire in modo esplicito: dati vecchi sono preferibili a dati silenziosamente corrotti.
+
+Per le API usiamo checkpoint e retry con backoff.
+
+## 3. Raw layer
+
+Il raw non viene "ripulito" in-place. I record singoli pseudonimizzati scaricati dall'API INAIL finiscono in `data/raw/` (gitignored), mai nel sito. Questo rende ogni trasformazione riproducibile e protegge la privacy.
+
+## 4. Normalized layer
+
+L'ETL produce **aggregazioni** (conteggi per regione, provincia, settore ATECO, genere, età, modalità, esito) in snapshot verificati:
+
+- `src/data/generated/inail-infortuni-serie.json` — i dati aggregati;
+- `src/data/generated/inail-infortuni-serie.meta.json` — provenienza, copertura, limiti, metodologia, hash.
+
+Mai record singoli negli artefatti pubblicati.
+
+## 5. Publication layer
+
+Il sito (Next.js App Router) legge **solo gli snapshot**, mai le API live. Ogni pagina passa dal contract di validazione (`src/lib/data/*-contract.ts`, zod) e mostra la freschezza del dato.
 
 ## Perché snapshot e non query live
 
@@ -15,11 +58,8 @@
 
 ## Stack
 
-- Node.js 22+, Next.js (App Router), TypeScript
-- Python 3 per gli script ETL
-- Test: vitest per unit, test E2E su build di produzione
-
-## Decisioni da prendere
-
-- Database per lo storico INAIL (SQLite/DuckDB) vs file JSON aggregati: da valutare con i volumi reali di download.
-- Normalizzazione codici ATECO (cambio classificazione) e province (Sardegna 2026).
+- Node.js 22+, Next.js (App Router), TypeScript, React 19
+- Grafici: Recharts
+- Validazione: zod
+- ETL: Python 3 (script indipendenti, testati con unittest)
+- Deploy: Vercel (config in `vercel.json`)
