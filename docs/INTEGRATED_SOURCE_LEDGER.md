@@ -17,7 +17,7 @@ Ogni dataset pubblicato ha una riga in questo registro con: ente, URL, licenza, 
   L'API le rifiuta sia come nome esteso sia come codice ISTAT. Fallback: dataset CSV completi pubblicati sul portale
   (coprono tutte le province) oppure endpoint semestrale, da verificare. Impatto: 4 regioni su 20 mancanti nelle serie API. TODO.
 - Licenza esatta dei dataset INAIL: da verificare.
-- Storico disponibile: da verificare per anno (test iniziali con nomi errati hanno falsato il risultato).
+- Finestra API mensile: circa 18 mesi (verificato 2026-08-27: disponibili 2025-01..2026-06; assenti 2024 e 2023). Per serie storiche lunghe servono i dataset CSV completi del portale (fase 2).
 
 ## Da verificare
 

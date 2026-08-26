@@ -10,7 +10,7 @@ La banca dati INAIL è ricchissima ma di difficile lettura: dataset enormi, codi
 - **Malattie professionali** con cadenza mensile e semestrale (API REST JSON)
 - Analisi per: tempo (serie storiche), luogo (provincia/regione ISTAT), persona (età, genere), modalità (in occasione di lavoro / in itinere, con/senza mezzo di trasporto), settore (ATECO, gestione tariffaria, grande gruppo tariffario), esito (mortali)
 
-La fase 2 integrerà i dati di vigilanza dell'Ispettorato Nazionale del Lavoro.
+La fase 2 integrerà i dati di vigilanza dell'Ispettorato Nazionale del Lavoro, i CSV storici completi INAIL (l'API REST copre ~18 mesi) e le malattie professionali.
 
 ## Principi
 

@@ -12,8 +12,12 @@ Seguendo il modello di DoveVannoINostriSoldi:
 
 I record singoli (pseudonimizzati) restano nel raw layer, fuori dal sito.
 
+Nota: l'API REST espone una finestra di circa 18 mesi (verificato 2026-08-27:
+dal 2025-01 al 2026-06). Per serie storiche più lunghe servono i dataset CSV
+completi del portale (fase 2).
+
 Esempio:
-    python3 scripts/etl/inail_infortuni_snapshot.py --anno-da 2020 --anno-a 2025
+    python3 scripts/etl/inail_infortuni_snapshot.py --anno-da 2025 --anno-a 2026
 """
 
 from __future__ import annotations
@@ -90,7 +94,7 @@ def fetch_json(url: str) -> dict:
                 continue
             body = error.read(200).decode("utf-8", "replace")
             if error.code == 500 and "Dati non trovati" in body:
-                return {}
+                return None  # mese/anno non disponibile (finestra API), non è un errore
             raise StructuralError(f"HTTP {error.code} da {url}: {body}") from error
         except urllib.error.URLError as error:
             last_error = error
@@ -105,6 +109,8 @@ def fetch_regione_mese(regione: str, anno: int, mese: int) -> list[dict]:
         "MeseAccadimento": f"{mese:02d}",
     })
     data = fetch_json(f"{API_URL}?{params}")
+    if data is None:
+        return None  # non disponibile
     records = data.get("DatiConCadenzaMensileInfortuni")
     if records is None:
         raise StructuralError(f"Chiave DatiConCadenzaMensileInfortuni assente per {regione} {anno}-{mese:02d}")
@@ -194,11 +200,13 @@ def main() -> int:
     for anno in range(args.anno_da, args.anno_a + 1):
         for mese in range(1, 13):
             for regione in REGIONI:
-                fetched = fetch_regione_mese(regione, anno, mese)
-                if not fetched:
-                    continue
-                # Raw layer: salva i record grezzi (gitignored), con hash
                 raw_path = raw_dir / f"infortuni-{regione.lower()}-{anno}-{mese:02d}.json"
+                if raw_path.exists() and raw_path.stat().st_size > 0:
+                    continue  # già scaricato (riavvii idempotenti)
+                fetched = fetch_regione_mese(regione, anno, mese)
+                if fetched is None:
+                    continue  # finestra API: mese non disponibile
+                # Raw layer: salva i record grezzi (gitignored), con hash
                 with open(raw_path, "w", encoding="utf-8") as f:
                     json.dump({"fonte": API_URL, "regione": regione, "anno": anno, "mese": mese, "record": fetched}, f, ensure_ascii=False)
                 tutti.extend(aggregate(fetched, regione, anno, mese))
@@ -257,6 +265,7 @@ def main() -> int:
             "Sono incluse solo le regioni i cui nomi sono accettati dall'API INAIL (16 su 20 al 2026-08-27).",
             "La definizione amministrativa (positivo/negativo) non è disponibile nella cadenza mensile.",
             "Esito mortale rilevato dal campo DataMorte non nullo; la conferma amministrativa è nel semestrale.",
+            "L'API REST INAIL espone una finestra di circa 18 mesi: per serie storiche più lunghe servono i dataset CSV completi del portale.",
             "Le serie storiche vanno lette con cautela: dal 2026 è attiva la nuova classificazione ATECO e la nuova suddivisione delle province della Sardegna.",
         ],
         "methodology": [
