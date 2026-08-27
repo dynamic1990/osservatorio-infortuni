@@ -1,18 +1,237 @@
-/* Design tokens: nessun colore scritto a mano nei componenti. */
+/* Design tokens e regole responsive per Osservatorio Infortuni */
 :root {
-  --color-bg: #f3f2f2;
-  --color-surface: #eae9e9;
+  --color-bg: #f5f4f2;
+  --color-surface: #ebe9e6;
   --color-raised: #ffffff;
-  --color-text: #201e1d;
-  --color-text-soft: #5c5855;
+  --color-text: #1d1b1a;
+  --color-text-soft: #57534e;
+  --color-text-muted: #78716c;
   --color-accent: #b3261e;
-  --color-divider: #d8d5d2;
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-numeric: "SF Mono", ui-monospace, "Cascadia Mono", monospace;
+  --color-accent-soft: #fbf2f1;
+  --color-success: #1b633e;
+  --color-success-soft: #edf7f0;
+  --color-warning: #9a6700;
+  --color-warning-soft: #fffbeb;
+  --color-divider: #d6d3d1;
+  --color-border: #e7e5e4;
+  
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-numeric: "SF Mono", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+  
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
+  
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* Regole globali di usabilità e responsive */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-6);
+  }
+}
+
+.card {
+  background: var(--color-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: var(--space-6);
+  }
+}
+
+.card-header {
+  margin-bottom: var(--space-4);
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 var(--space-1);
+  color: var(--color-text);
+}
+
+.card-desc {
+  font-size: 0.88rem;
+  color: var(--color-text-soft);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Metriche e KPI */
+.metric-label {
+  font-size: 0.76rem;
+  font-weight: 650;
+  color: var(--color-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  font-size: 1.6rem;
+  font-weight: 750;
+  line-height: 1.15;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+  .metric-value {
+    font-size: 1.85rem;
+  }
+}
+
+.metric-sub {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.source-note {
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* Pulsanti e Selettori touch-friendly */
+.btn-pill {
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 550;
+  cursor: pointer;
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: all 0.15s ease;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-pill:hover {
+  background: var(--color-border);
+}
+
+.btn-pill.active {
+  background: var(--color-text);
+  color: #ffffff;
+  border-color: var(--color-text);
+  font-weight: 650;
+}
+
+.btn-pill-accent.active {
+  background: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+}
+
+/* Tooltip grafici personalizzato e isolato */
+.custom-chart-tooltip {
+  background: rgba(29, 27, 26, 0.94);
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.custom-chart-tooltip .tooltip-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 2px;
+}
+
+.custom-chart-tooltip .tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Responsive grid helpers */
+.grid-kpi {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 520px) {
+  .grid-kpi {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grid-kpi {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.grid-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 860px) {
+  .grid-split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.grid-map-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 820px) {
+  .grid-map-panel {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
 }
