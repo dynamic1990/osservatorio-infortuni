@@ -1,0 +1,10 @@
+# Dati grezzi (solo per ETL, non servono al runtime)
+data/raw/
+
+# JSON enormi prodotto dall'ETL: l'app runtime importa solo i file piccoli
+src/data/generated/inail-infortuni-semestrale-storico.json
+src/data/generated/inail-infortuni-serie.json
+
+# Build e dipendenze gestiti da Vercel
+.next/
+node_modules/
