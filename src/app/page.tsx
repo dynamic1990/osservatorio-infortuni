@@ -8,6 +8,7 @@ import { InfortuniSettoriChart } from "@/components/charts/infortuni-settori-cha
 import { InfortuniRegioniChart } from "@/components/charts/infortuni-regioni-chart";
 import { InfortuniDistribuzioneChart } from "@/components/charts/infortuni-distribuzione-chart";
 import { regioneName, genereName, modalitaName, gruppoName } from "@/lib/labels";
+import { SerieTemporaleWidget } from "@/components/charts/serie-temporale-widget";
 
 export const revalidate = 86_400;
 export const metadata: Metadata = {
@@ -69,6 +70,16 @@ export default function HomePage() {
           Fonte: {meta.source.owner}. Estrazione: {longDate(freshness.extractedAt)}.{" "}
           <span className={`freshness ${freshness.state}`}>{freshness.state === "fresh" ? "dato fresco" : "dato da aggiornare"}</span>
         </div>
+      </section>
+
+      <section className="card">
+        <h2 style={{ marginTop: 0 }}>Andamento nel tempo</h2>
+        <p style={{ color: "var(--color-text-soft)", marginTop: 0, maxWidth: "80ch" }}>
+          Confronta l&apos;andamento di infortuni in occasione di lavoro e in itinere, esiti mortali,
+          casi con danno permanente e giornate di lavoro perse. Seleziona una o più regioni per
+          confrontarle tra loro.
+        </p>
+        <SerieTemporaleWidget />
       </section>
 
       <section className="card">
