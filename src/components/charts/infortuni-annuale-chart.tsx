@@ -17,7 +17,7 @@ export function InfortuniAnnualeChart({ data }: { data: AnnoPoint[] }) {
           <XAxis dataKey="anno" tick={{ fontSize: 13 }} />
           <YAxis tick={{ fontSize: 12 }} width={60} domain={[0, max]} />
           <Tooltip />
-          <Bar dataKey="casi" name="Casi" fill="var(--color-accent)" radius={[2, 2, 0, 0]} />
+          <Bar isAnimationActive={false} dataKey="casi" name="Casi" fill="var(--color-accent)" radius={[2, 2, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -21,7 +21,7 @@ export function InfortuniSettoriChart({ data }: { data: SettorePoint[] }) {
           <XAxis type="number" tick={{ fontSize: 12 }} />
           <YAxis type="category" dataKey="settore" tick={{ fontSize: 12 }} width={64} />
           <Tooltip />
-          <Bar dataKey="casi" name="Casi" fill="var(--color-accent)" />
+          <Bar isAnimationActive={false} dataKey="casi" name="Casi" fill="var(--color-accent)" />
         </BarChart>
       </ResponsiveContainer>
     </div>

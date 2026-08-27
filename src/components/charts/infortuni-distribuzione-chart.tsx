@@ -15,7 +15,7 @@ export function InfortuniDistribuzioneChart({ data }: { data: DistribuzionePoint
     <div style={{ width: "100%", height: 320 }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
-          <Pie data={data} dataKey="casi" nameKey="label" cx="50%" cy="50%" outerRadius={110} innerRadius={55} paddingAngle={1}>
+          <Pie isAnimationActive={false} data={data} dataKey="casi" nameKey="label" cx="50%" cy="50%" outerRadius={110} innerRadius={55} paddingAngle={1}>
             {data.map((_, i) => (
               <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
             ))}

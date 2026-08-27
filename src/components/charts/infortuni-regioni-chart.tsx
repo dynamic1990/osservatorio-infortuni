@@ -26,7 +26,7 @@ export function InfortuniRegioniChart({ data }: { data: RegionePoint[] }) {
           <XAxis type="number" tick={{ fontSize: 12 }} />
           <YAxis type="category" dataKey="label" tick={{ fontSize: 12 }} width={150} />
           <Tooltip />
-          <Bar dataKey="casi" name="Casi" fill="var(--color-accent)" />
+          <Bar isAnimationActive={false} dataKey="casi" name="Casi" fill="var(--color-accent)" />
         </BarChart>
       </ResponsiveContainer>
     </div>

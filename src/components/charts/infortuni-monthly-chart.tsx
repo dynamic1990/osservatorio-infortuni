@@ -12,7 +12,7 @@ export function InfortuniMonthlyChart({ data }: { data: SeriePoint[] }) {
           <XAxis dataKey="label" tick={{ fontSize: 12 }} interval="preserveStartEnd" />
           <YAxis tick={{ fontSize: 12 }} width={52} />
           <Tooltip />
-          <Line type="monotone" dataKey="totale" name="Casi" stroke="var(--color-accent)" strokeWidth={2} dot={false} />
+          <Line isAnimationActive={false} type="monotone" dataKey="totale" name="Casi" stroke="var(--color-accent)" strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
