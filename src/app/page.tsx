@@ -12,6 +12,7 @@ import { RegioniSection } from "@/components/charts/regioni-section";
 import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
 import { DimensioniWidget } from "@/components/charts/dimensioni-widget";
 import { StagionalitaWidget } from "@/components/charts/stagionalita-widget";
+import { IndiceIncidenzaWidget } from "@/components/charts/indice-incidenza-widget";
 
 export const revalidate = 86_400;
 export const metadata: Metadata = {
@@ -69,6 +70,16 @@ export default function HomePage() {
           Fonte: {meta.source.owner}. Estrazione: {longDate(freshness.extractedAt)}.{" "}
           <span className={`freshness ${freshness.state}`}>{freshness.state === "fresh" ? "dato fresco" : "dato da aggiornare"}</span>
         </div>
+      </section>
+
+      <section className="card">
+        <h2 style={{ marginTop: 0 }}>Indice di incidenza (per 1.000 occupati)</h2>
+        <p style={{ color: "var(--color-text-soft)", marginTop: 0, maxWidth: "80ch" }}>
+          Il numero di infortuni rapportato agli occupati: il vero indicatore di rischio per confrontare
+          regioni e anni senza il bias della dimensione. Fonte INAIL (numeratore) e ISTAT/Eurostat
+          (denominatore, occupati 15-64).
+        </p>
+        <IndiceIncidenzaWidget />
       </section>
 
       <section className="card">
