@@ -5,10 +5,10 @@ import { InfortuniAnnualeChart } from "@/components/charts/infortuni-annuale-cha
 import { buildMonthlySerie } from "@/lib/serie-utils";
 import { InfortuniMonthlyChart } from "@/components/charts/infortuni-monthly-chart";
 import { InfortuniSettoriChart } from "@/components/charts/infortuni-settori-chart";
-import { InfortuniRegioniChart } from "@/components/charts/infortuni-regioni-chart";
 import { InfortuniDistribuzioneChart } from "@/components/charts/infortuni-distribuzione-chart";
 import { regioneName, genereName, modalitaName, gruppoName } from "@/lib/labels";
 import { SerieTemporaleWidget } from "@/components/charts/serie-temporale-widget";
+import { RegioniSection } from "@/components/charts/regioni-section";
 
 export const revalidate = 86_400;
 export const metadata: Metadata = {
@@ -58,10 +58,6 @@ export default function HomePage() {
             <div className="metric">{exactNumber(mortali)}</div>
           </div>
           <div>
-            <div className="metric-label">Regioni</div>
-            <div className="metric">20/20</div>
-          </div>
-          <div>
             <div className="metric-label">Periodo</div>
             <div className="metric">2020-24</div>
           </div>
@@ -99,11 +95,7 @@ export default function HomePage() {
 
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Per regione (2020-2024)</h2>
-        <InfortuniRegioniChart data={regioni} />
-        <p className="source-note">
-          Casi per regione di accadimento. Il confronto diretto tra regioni richiede i denominatori
-          (occupati per territorio): una regione popolosa ha più casi senza avere un rischio più alto.
-        </p>
+        <RegioniSection data={regioni} />
       </section>
 
       <section className="card">
