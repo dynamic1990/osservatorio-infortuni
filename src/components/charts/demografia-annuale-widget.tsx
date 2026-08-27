@@ -5,15 +5,14 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
 } from "recharts";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
-import { genereName } from "@/lib/labels";
-import { compactNumber, exactNumber, percent } from "@/lib/format";
+import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
 
 export function DemografiaAnnualeWidget() {
@@ -29,7 +28,7 @@ export function DemografiaAnnualeWidget() {
     const totalGen = (annoData.generi["M"] || 0) + (annoData.generi["F"] || 0);
     const mortaliM = annoData.generiMortali?.["M"] || 0;
     const mortaliF = annoData.generiMortali?.["F"] || 0;
-    
+
     return [
       {
         key: "M",
@@ -53,10 +52,10 @@ export function DemografiaAnnualeWidget() {
   // Dati Fasce d'Età
   const etaData = useMemo(() => {
     const order = ["0-14", "15-24", "25-34", "35-49", "50-64", "65+"];
-    const totalEta = Object.values(annoData.fasceEta).reduce((a, b) => a + b, 0);
+    const totalEta = Object.values(annoData.fasceEta || {}).reduce((a, b) => a + b, 0);
 
     return order.map((f, i) => {
-      const casi = annoData.fasceEta[f] || 0;
+      const casi = annoData.fasceEta?.[f] || 0;
       const mort = annoData.fasceEtaMortali?.[f] || 0;
       return {
         fascia: f,
@@ -145,7 +144,7 @@ export function DemografiaAnnualeWidget() {
                 />
                 <Bar dataKey="casi" name="Infortuni" isAnimationActive={false} radius={[0, 4, 4, 0]}>
                   {genereData.map((entry, index) => (
-                    <Bar key={`bar-gen-${index}`} fill={entry.fill} />
+                    <Cell key={`cell-gen-${index}`} fill={entry.fill} />
                   ))}
                 </Bar>
               </BarChart>

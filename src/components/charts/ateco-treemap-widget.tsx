@@ -4,10 +4,8 @@ import { useMemo, useState } from "react";
 import { ResponsiveContainer, Treemap, Tooltip } from "recharts";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { atecoLabel, atecoShort } from "@/lib/ateco";
-import { compactNumber, exactNumber, percent } from "@/lib/format";
-import { PALETTE } from "@/lib/palette";
+import { compactNumber, exactNumber } from "@/lib/format";
 
-// Palette cromatica sobria per blocchi ATECO
 const BLOCK_COLORS = [
   "#2b5b8a",
   "#b3261e",
@@ -26,14 +24,15 @@ const BLOCK_COLORS = [
   "#343a40",
 ];
 
-// Componente rettangolo personalizzato per il Treemap
 function CustomizedTreemapContent(props: any) {
-  const { root, depth, x, y, width, height, index, name, value, casi, mortali, color } = props;
+  const { x = 0, y = 0, width = 0, height = 0, index = 0, name = "", casi = 0, mortali = 0, color } = props;
 
-  if (width < 32 || height < 24) return null;
+  if (width < 30 || height < 20) return null;
 
-  const isBig = width > 110 && height > 55;
-  const isMedium = width > 70 && height > 40;
+  const isBig = width > 110 && height > 50;
+  const isMedium = width > 65 && height > 35;
+  const displayName = String(name || "");
+  const shortName = displayName.length > 18 ? displayName.slice(0, 16) + "…" : displayName;
 
   return (
     <g>
@@ -50,32 +49,31 @@ function CustomizedTreemapContent(props: any) {
           rx: 4,
           ry: 4,
           cursor: "pointer",
-          transition: "opacity 0.2s ease",
         }}
       />
       {isMedium && (
-        <foreignObject x={x + 4} y={y + 4} width={width - 8} height={height - 8}>
-          <div
-            style={{
-              color: "#ffffff",
-              fontSize: isBig ? "0.78rem" : "0.7rem",
-              fontWeight: 650,
-              lineHeight: 1.2,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: isBig ? "normal" : "nowrap",
-              wordBreak: "break-word",
-              textShadow: "0 1px 2px rgba(0,0,0,0.6)",
-              pointerEvents: "none",
-            }}
-          >
-            <div>{name}</div>
-            <div style={{ fontWeight: 400, opacity: 0.95, marginTop: 2, fontSize: "0.72rem" }}>
-              {compactNumber(casi)}
-              {mortali > 0 && isBig ? ` (${mortali} mort.)` : ""}
-            </div>
-          </div>
-        </foreignObject>
+        <text
+          x={x + 6}
+          y={y + 16}
+          fill="#ffffff"
+          fontSize={isBig ? 12 : 11}
+          fontWeight={650}
+          style={{ textShadow: "0 1px 2px rgba(0,0,0,0.7)", pointerEvents: "none" }}
+        >
+          {shortName}
+        </text>
+      )}
+      {isBig && (
+        <text
+          x={x + 6}
+          y={y + 32}
+          fill="rgba(255,255,255,0.95)"
+          fontSize={11}
+          fontWeight={400}
+          style={{ pointerEvents: "none" }}
+        >
+          {compactNumber(casi)} casi {mortali > 0 ? `(${mortali} mort.)` : ""}
+        </text>
       )}
     </g>
   );
@@ -90,10 +88,9 @@ export function AtecoTreemapWidget() {
     return multidim.perAnno[anno] || multidim.consolidatoTotale;
   }, [multidim, anno]);
 
-  // Preparazione dati Treemap gerarchico a blocchi
   const treemapData = useMemo(() => {
     if (livello === "macro") {
-      const items = annoData.atecoMacro.filter((m) => m.key !== "ND");
+      const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND");
       const totNoti = items.reduce((acc, curr) => acc + curr.casi, 0);
 
       return items.map((item, idx) => {
@@ -109,7 +106,7 @@ export function AtecoTreemapWidget() {
         };
       });
     } else {
-      const items = annoData.atecoDivisioni.filter((d) => d.key !== "ND").slice(0, 18);
+      const items = (annoData.atecoDivisioni || []).filter((d) => d.key !== "ND").slice(0, 18);
       const totNoti = items.reduce((acc, curr) => acc + curr.casi, 0);
 
       return items.map((item, idx) => {
@@ -127,7 +124,7 @@ export function AtecoTreemapWidget() {
     }
   }, [annoData, livello]);
 
-  const casiND = annoData.atecoMacro.find((m) => m.key === "ND")?.casi || 0;
+  const casiND = (annoData.atecoMacro || []).find((m) => m.key === "ND")?.casi || 0;
   const percND = ((casiND / (annoData.totale || 1)) * 100).toFixed(1);
 
   return (
@@ -144,7 +141,6 @@ export function AtecoTreemapWidget() {
           paddingBottom: "var(--space-3)",
         }}
       >
-        {/* Selettore Anno */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
           <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Anno:</span>
           {multidim.anniDisponibili.map((a) => (
@@ -158,7 +154,6 @@ export function AtecoTreemapWidget() {
           ))}
         </div>
 
-        {/* Livello di dettaglio: Macro-settori o Top Divisioni */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
           <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Dettaglio:</span>
           <button
@@ -176,7 +171,7 @@ export function AtecoTreemapWidget() {
         </div>
       </div>
 
-      {/* Grafico Treemap a blocchi con proporzione visiva */}
+      {/* Grafico Treemap a blocchi */}
       <div style={{ width: "100%", height: 380, background: "var(--color-surface)", borderRadius: "var(--radius-md)", padding: "var(--space-2)" }}>
         <ResponsiveContainer width="100%" height="100%">
           <Treemap
@@ -200,7 +195,7 @@ export function AtecoTreemapWidget() {
                     </div>
                     <div className="tooltip-row">
                       <span>Quota sui settori noti:</span>
-                      <strong>{p.quota.toFixed(1)}%</strong>
+                      <strong>{(p.quota || 0).toFixed(1)}%</strong>
                     </div>
                     {p.mortali > 0 && (
                       <div className="tooltip-row">
@@ -225,7 +220,7 @@ export function AtecoTreemapWidget() {
           fontSize: "0.82rem",
         }}
       >
-        {treemapData.slice(0, 6).map((item, idx) => (
+        {treemapData.slice(0, 6).map((item) => (
           <div
             key={item.key}
             style={{
@@ -242,7 +237,7 @@ export function AtecoTreemapWidget() {
               {item.name}
             </span>
             <span style={{ fontWeight: 650, fontVariantNumeric: "tabular-nums" }}>
-              {compactNumber(item.casi)} ({item.quota.toFixed(1)}%)
+              {compactNumber(item.casi)} ({(item.quota || 0).toFixed(1)}%)
             </span>
           </div>
         ))}
