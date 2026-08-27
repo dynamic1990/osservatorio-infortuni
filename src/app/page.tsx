@@ -9,6 +9,9 @@ import { InfortuniDistribuzioneChart } from "@/components/charts/infortuni-distr
 import { regioneName, genereName, modalitaName, gruppoName } from "@/lib/labels";
 import { SerieTemporaleWidget } from "@/components/charts/serie-temporale-widget";
 import { RegioniSection } from "@/components/charts/regioni-section";
+import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
+import { DimensioniWidget } from "@/components/charts/dimensioni-widget";
+import { StagionalitaWidget } from "@/components/charts/stagionalita-widget";
 
 export const revalidate = 86_400;
 export const metadata: Metadata = {
@@ -66,6 +69,20 @@ export default function HomePage() {
           Fonte: {meta.source.owner}. Estrazione: {longDate(freshness.extractedAt)}.{" "}
           <span className={`freshness ${freshness.state}`}>{freshness.state === "fresh" ? "dato fresco" : "dato da aggiornare"}</span>
         </div>
+      </section>
+
+      <section className="card">
+        <h2 style={{ marginTop: 0 }}>Analisi di rischio (2020-2024)</h2>
+        <p style={{ color: "var(--color-text-soft)", marginTop: 0, maxWidth: "80ch" }}>
+          Le dimensioni che servono a un H&amp;S manager per orientare la prevenzione: quanto è grave
+          l&apos;infortunio, quanto dura l&apos;assenza, in quale gestione assicurativa avviene, con quale
+          dinamica e in quale periodo dell&apos;anno.
+        </p>
+        <GravitaDurataWidget />
+        <div style={{ height: "var(--space-6)" }} />
+        <DimensioniWidget />
+        <div style={{ height: "var(--space-6)" }} />
+        <StagionalitaWidget />
       </section>
 
       <section className="card">
