@@ -76,3 +76,203 @@ a:hover {
   color: var(--color-accent);
   border-color: var(--color-accent);
 }
+
+/* Stili Modale Metodologia e Fonti */
+.btn-info-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-info-header:hover {
+  background: var(--color-raised);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.modal-content {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg, 12px);
+  max-width: 780px;
+  width: 100%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-divider);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-badge {
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-soft);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.modal-close-btn:hover {
+  background: var(--color-raised);
+  color: var(--color-text);
+}
+
+.modal-body {
+  padding: var(--space-4) var(--space-5);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.modal-section-title {
+  font-size: 0.98rem;
+  font-weight: 750;
+  margin: 0 0 var(--space-2);
+  color: var(--color-accent);
+  border-bottom: 1px solid var(--color-divider);
+  padding-bottom: 4px;
+}
+
+.formula-box {
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-left: 3px solid var(--color-accent);
+  padding: var(--space-3);
+  border-radius: 6px;
+  margin-bottom: var(--space-2);
+}
+
+.formula-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.formula-math {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  margin: 4px 0;
+  color: var(--color-text);
+}
+
+.formula-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-soft);
+  margin: 4px 0 0;
+  line-height: 1.4;
+}
+
+.modal-list {
+  padding-left: 18px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.83rem;
+  color: var(--color-text);
+  line-height: 1.45;
+}
+
+.modal-text {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--color-text-soft);
+  margin: 0;
+}
+
+.modal-grid-definitions {
+  display: grid;
+  grid-templateColumns: 1fr 1fr;
+  gap: var(--space-3);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.modal-footer {
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--color-divider);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-raised);
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+/* Scroll Container per grafici a barre verticali con asse Y fitto */
+.chart-scroll-wrapper {
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow-y: auto;
+  max-height: 420px;
+  padding: var(--space-2);
+}
+
+.chart-scroll-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.chart-scroll-wrapper::-webkit-scrollbar-track {
+  background: var(--color-raised);
+}
+.chart-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: var(--color-divider);
+  border-radius: 3px;
+}
+.chart-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}

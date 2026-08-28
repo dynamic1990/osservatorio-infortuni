@@ -1,10 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ResponsiveContainer, Treemap, Tooltip } from "recharts";
-import { getMultidimensionaleData } from "@/lib/multidimensionale";
+import {
+  ResponsiveContainer,
+  Treemap,
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
+import { getMultidimensionaleData, AtecoMacroData } from "@/lib/multidimensionale";
 import { atecoLabel, atecoShort } from "@/lib/ateco";
 import { compactNumber, exactNumber } from "@/lib/format";
+import { PALETTE } from "@/lib/palette";
 
 const BLOCK_COLORS = [
   "#2b5b8a",
@@ -82,30 +93,30 @@ function CustomizedTreemapContent(props: any) {
 export function AtecoTreemapWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2024");
-  const [livello, setLivello] = useState<"macro" | "divisioni">("macro");
+  const [vista, setVista] = useState<"incidenza" | "gravita" | "treemap" | "divisioni">("incidenza");
 
   const annoData = useMemo(() => {
     return multidim.perAnno[anno] || multidim.consolidatoTotale;
   }, [multidim, anno]);
 
-  const treemapData = useMemo(() => {
-    if (livello === "macro") {
-      const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND");
-      const totNoti = items.reduce((acc, curr) => acc + curr.casi, 0);
+  // Dati per i macro-settori ordinati per incidenza o gravità
+  const macroData = useMemo(() => {
+    const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND");
+    return [...items].sort((a, b) => {
+      if (vista === "incidenza") return (b.indiceIncidenza || 0) - (a.indiceIncidenza || 0);
+      if (vista === "gravita") return (b.indiceGravita || 0) - (a.indiceGravita || 0);
+      return b.casi - a.casi;
+    }).map((item, idx) => ({
+      ...item,
+      label: `${item.key} · ${item.nome.length > 25 ? item.nome.slice(0, 23) + "…" : item.nome}`,
+      fullName: `${item.key} · ${item.nome}`,
+      color: PALETTE[idx % PALETTE.length],
+    }));
+  }, [annoData, vista]);
 
-      return items.map((item, idx) => {
-        const desc = atecoLabel(item.key);
-        return {
-          name: `${item.key} · ${desc}`,
-          key: item.key,
-          size: item.casi,
-          casi: item.casi,
-          mortali: item.mortali || 0,
-          quota: totNoti > 0 ? (item.casi / totNoti) * 100 : 0,
-          color: BLOCK_COLORS[idx % BLOCK_COLORS.length],
-        };
-      });
-    } else {
+  // Treemap data
+  const treemapData = useMemo(() => {
+    if (vista === "divisioni") {
       const items = (annoData.atecoDivisioni || []).filter((d) => d.key !== "ND").slice(0, 18);
       const totNoti = items.reduce((acc, curr) => acc + curr.casi, 0);
 
@@ -116,20 +127,32 @@ export function AtecoTreemapWidget() {
           key: item.key,
           size: item.casi,
           casi: item.casi,
-          mortali: item.mortali || 0,
           quota: totNoti > 0 ? (item.casi / totNoti) * 100 : 0,
           color: BLOCK_COLORS[idx % BLOCK_COLORS.length],
         };
       });
+    } else {
+      const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND");
+      const totNoti = items.reduce((acc, curr) => acc + curr.casi, 0);
+
+      return items.map((item, idx) => ({
+        name: `${item.key} · ${item.nome}`,
+        key: item.key,
+        size: item.casi,
+        casi: item.casi,
+        mortali: item.mortali || 0,
+        quota: totNoti > 0 ? (item.casi / totNoti) * 100 : 0,
+        color: BLOCK_COLORS[idx % BLOCK_COLORS.length],
+      }));
     }
-  }, [annoData, livello]);
+  }, [annoData, vista]);
 
   const casiND = (annoData.atecoMacro || []).find((m) => m.key === "ND")?.casi || 0;
   const percND = ((casiND / (annoData.totale || 1)) * 100).toFixed(1);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      {/* Controlli Anno e Livello ATECO */}
+      {/* Controlli Anno e Vista */}
       <div
         style={{
           display: "flex",
@@ -155,63 +178,151 @@ export function AtecoTreemapWidget() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Dettaglio:</span>
+          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Visualizzazione:</span>
           <button
-            onClick={() => setLivello("macro")}
-            className={`btn-pill ${livello === "macro" ? "btn-pill-accent active" : ""}`}
+            onClick={() => setVista("incidenza")}
+            className={`btn-pill ${vista === "incidenza" ? "btn-pill-accent active" : ""}`}
           >
-            Macro-Settori (Sezioni A–U)
+            Incidenza per Occupati (‰)
           </button>
           <button
-            onClick={() => setLivello("divisioni")}
-            className={`btn-pill ${livello === "divisioni" ? "btn-pill-accent active" : ""}`}
+            onClick={() => setVista("gravita")}
+            className={`btn-pill ${vista === "gravita" ? "btn-pill-accent active" : ""}`}
           >
-            Top 18 Attività Specifiche
+            Indice Gravità (gg / 1.000 occ.)
+          </button>
+          <button
+            onClick={() => setVista("treemap")}
+            className={`btn-pill ${vista === "treemap" ? "btn-pill-accent active" : ""}`}
+          >
+            Volumi Macro (Treemap)
+          </button>
+          <button
+            onClick={() => setVista("divisioni")}
+            className={`btn-pill ${vista === "divisioni" ? "btn-pill-accent active" : ""}`}
+          >
+            Top 18 Attività
           </button>
         </div>
       </div>
 
-      {/* Grafico Treemap a blocchi */}
-      <div style={{ width: "100%", height: 380, background: "var(--color-surface)", borderRadius: "var(--radius-md)", padding: "var(--space-2)" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <Treemap
-            data={treemapData}
-            dataKey="size"
-            aspectRatio={4 / 3}
-            stroke="#ffffff"
-            isAnimationActive={false}
-            content={<CustomizedTreemapContent />}
-          >
-            <Tooltip
-              content={({ active, payload }) => {
-                if (!active || !payload || !payload.length) return null;
-                const p = payload[0].payload;
-                return (
-                  <div className="custom-chart-tooltip">
-                    <div className="tooltip-title">{p.name}</div>
-                    <div className="tooltip-row">
-                      <span>Infortuni ({anno}):</span>
-                      <strong>{exactNumber(p.casi)} casi</strong>
-                    </div>
-                    <div className="tooltip-row">
-                      <span>Quota sui settori noti:</span>
-                      <strong>{(p.quota || 0).toFixed(1)}%</strong>
-                    </div>
-                    {p.mortali > 0 && (
-                      <div className="tooltip-row">
-                        <span>Esiti mortali:</span>
-                        <strong style={{ color: "#ff8b80" }}>{exactNumber(p.mortali)}</strong>
-                      </div>
-                    )}
-                  </div>
-                );
-              }}
-            />
-          </Treemap>
-        </ResponsiveContainer>
-      </div>
+      {/* Render Grafico: Ranking con Scroll per Incidenza/Gravità, oppure Treemap per Volumi */}
+      {vista === "incidenza" || vista === "gravita" ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.88rem", fontWeight: 700 }}>
+            <span>
+              {vista === "incidenza"
+                ? "Tasso di Incidenza per Settore ATECO (Infortuni ogni 1.000 occupati)"
+                : "Indice di Gravità per Settore ATECO (Giornate di inabilità ogni 1.000 occupati)"}
+            </span>
+            <span style={{ fontSize: "0.78rem", color: "var(--color-text-soft)", fontWeight: 400 }}>
+              Scorri l&apos;elenco per visualizzare tutte le categorie
+            </span>
+          </div>
 
-      {/* Tabella / Legenda descrittiva dei principali comparti */}
+          <div className="chart-scroll-wrapper" style={{ height: 380 }}>
+            <div style={{ width: "100%", height: macroData.length * 28 + 30 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={macroData}
+                  layout="vertical"
+                  margin={{ top: 8, right: 30, bottom: 4, left: 10 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
+                  <XAxis type="number" tick={{ fontSize: 11 }} />
+                  <YAxis type="category" dataKey="label" tick={{ fontSize: 11 }} width={180} interval={0} />
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (!active || !payload || !payload.length) return null;
+                      const p = payload[0].payload as AtecoMacroData & { fullName: string };
+                      return (
+                        <div className="custom-chart-tooltip">
+                          <div className="tooltip-title">{p.fullName} ({anno})</div>
+                          <div className="tooltip-row">
+                            <span>Tasso di Incidenza:</span>
+                            <strong>{p.indiceIncidenza} per 1.000 occ.</strong>
+                          </div>
+                          <div className="tooltip-row">
+                            <span>Indice di Gravità:</span>
+                            <strong>{p.indiceGravita || 0} gg per 1.000 occ.</strong>
+                          </div>
+                          <div className="tooltip-row">
+                            <span>Giornate perse totali:</span>
+                            <strong>{compactNumber(p.giorni)} gg (media {p.durataMedia || 0} gg/caso)</strong>
+                          </div>
+                          <div className="tooltip-row">
+                            <span>Infortuni denunciati:</span>
+                            <strong>{exactNumber(p.casi)} ({exactNumber(p.lavoro)} lav · {exactNumber(p.itinere)} iti)</strong>
+                          </div>
+                          <div className="tooltip-row">
+                            <span>Infortuni mortali:</span>
+                            <strong>{exactNumber(p.mortali)}</strong>
+                          </div>
+                          <div className="tooltip-row">
+                            <span>Occupati di comparto:</span>
+                            <strong>{exactNumber(p.occupati)}</strong>
+                          </div>
+                        </div>
+                      );
+                    }}
+                  />
+                  <Bar
+                    dataKey={vista === "incidenza" ? "indiceIncidenza" : "indiceGravita"}
+                    name={vista === "incidenza" ? "Incidenza ‰" : "Indice Gravità"}
+                    isAnimationActive={false}
+                    radius={[0, 3, 3, 0]}
+                  >
+                    {macroData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div style={{ width: "100%", height: 380, background: "var(--color-surface)", borderRadius: "var(--radius-md)", padding: "var(--space-2)" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <Treemap
+              data={treemapData}
+              dataKey="size"
+              aspectRatio={4 / 3}
+              stroke="#ffffff"
+              isAnimationActive={false}
+              content={<CustomizedTreemapContent />}
+            >
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (!active || !payload || !payload.length) return null;
+                  const p = payload[0].payload;
+                  return (
+                    <div className="custom-chart-tooltip">
+                      <div className="tooltip-title">{p.name}</div>
+                      <div className="tooltip-row">
+                        <span>Infortuni ({anno}):</span>
+                        <strong>{exactNumber(p.casi)} casi</strong>
+                      </div>
+                      <div className="tooltip-row">
+                        <span>Quota sui settori noti:</span>
+                        <strong>{(p.quota || 0).toFixed(1)}%</strong>
+                      </div>
+                      {p.mortali > 0 && (
+                        <div className="tooltip-row">
+                          <span>Esiti mortali:</span>
+                          <strong style={{ color: "#ff8b80" }}>{exactNumber(p.mortali)}</strong>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }}
+              />
+            </Treemap>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* Sintesi Settori Chiave */}
       <div
         style={{
           display: "grid",
@@ -220,7 +331,7 @@ export function AtecoTreemapWidget() {
           fontSize: "0.82rem",
         }}
       >
-        {treemapData.slice(0, 6).map((item) => (
+        {macroData.slice(0, 6).map((item) => (
           <div
             key={item.key}
             style={{
@@ -233,18 +344,18 @@ export function AtecoTreemapWidget() {
               borderLeft: `4px solid ${item.color}`,
             }}
           >
-            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "65%" }}>
-              {item.name}
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "60%" }}>
+              {item.key} &middot; {item.nome}
             </span>
             <span style={{ fontWeight: 650, fontVariantNumeric: "tabular-nums" }}>
-              {compactNumber(item.casi)} ({(item.quota || 0).toFixed(1)}%)
+              {item.indiceIncidenza}‰ ({compactNumber(item.casi)} casi)
             </span>
           </div>
         ))}
       </div>
 
       <p className="source-note">
-        Grafico a blocchi (Treemap ATECO): la superficie di ciascun blocco è proporzionale al volume degli infortuni denunciati nel comparto per l&apos;anno selezionato ({anno}). Casi senza codice settore attribuito (ND): {exactNumber(casiND)} ({percND}% del totale).
+        Classificazione ATECO 2007: l&apos;incidenza settoriale è calcolata rapportando gli infortuni INAIL per macro-sezione (A–U) agli occupati effettivi rilevati da ISTAT (Rilevazione Forze di Lavoro). Casi non attribuiti a specifico settore (ND): {exactNumber(casiND)} ({percND}% del totale).
       </p>
     </div>
   );

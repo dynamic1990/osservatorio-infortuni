@@ -13,24 +13,11 @@ import {
   CartesianGrid,
   ReferenceLine,
 } from "recharts";
-import { getMultidimensionaleData, RegioneAnnualData } from "@/lib/multidimensionale";
+import { getMultidimensionaleData, RegioneAnnualData, ProvinciaAutonomaData } from "@/lib/multidimensionale";
 import { regioneName } from "@/lib/labels";
 import { MAP_ID_REGIONE } from "@/lib/regioni-map";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
-
-// Scala cromatica per l'indice di incidenza (dal verde chiaro al rosso scuro)
-const INCIDENZA_SCALE = [
-  "#f7fbff", // molto basso
-  "#deebf7",
-  "#c6dbef",
-  "#9ecae1",
-  "#6baed6",
-  "#4292c6",
-  "#2171b5",
-  "#08519c",
-  "#08306b",
-];
 
 // Scala allerta rischio (giallo -> arancio -> rosso intenso)
 const RISK_COLOR_SCALE = [
@@ -46,9 +33,10 @@ const RISK_COLOR_SCALE = [
 export function RegioniIncidenzaSection() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2024");
-  const [metrica, setMetrica] = useState<"incidenza" | "mortaliInc" | "totale">("incidenza");
+  const [metrica, setMetrica] = useState<"incidenza" | "mortaliInc" | "gravita" | "totale">("incidenza");
   const [selectedReg, setSelectedReg] = useState<string | null>(null);
   const [hoverMapId, setHoverMapId] = useState<string | null>(null);
+  const [mostraProvincePA, setMostraProvincePA] = useState<boolean>(true);
 
   // Dati dell'anno selezionato
   const annoData = useMemo(() => {
@@ -69,7 +57,14 @@ export function RegioniIncidenzaSection() {
     let min = Infinity;
     let max = -Infinity;
     for (const r of annoData.regioni) {
-      const val = metrica === "incidenza" ? r.indiceIncidenza : metrica === "mortaliInc" ? r.indiceMortali : r.totale;
+      const val =
+        metrica === "incidenza"
+          ? r.indiceIncidenza
+          : metrica === "mortaliInc"
+          ? r.indiceMortali
+          : metrica === "gravita"
+          ? (r.indiceGravita ?? 0)
+          : r.totale;
       if (val < min) min = val;
       if (val > max) max = val;
     }
@@ -78,7 +73,9 @@ export function RegioniIncidenzaSection() {
         ? annoData.indiceIncidenza
         : metrica === "mortaliInc"
         ? annoData.indiceMortali
-        : annoData.totale / 20;
+        : metrica === "gravita"
+        ? (annoData.indiceGravita ?? 0)
+        : Math.round(annoData.totale / 20);
     return { minVal: min === Infinity ? 0 : min, maxVal: max === -Infinity ? 1 : max, mediaNazionale: media };
   }, [annoData, metrica]);
 
@@ -90,6 +87,8 @@ export function RegioniIncidenzaSection() {
         ? regMap[code].indiceIncidenza
         : metrica === "mortaliInc"
         ? regMap[code].indiceMortali
+        : metrica === "gravita"
+        ? (regMap[code].indiceGravita ?? 0)
         : regMap[code].totale;
 
     const range = maxVal - minVal || 1;
@@ -98,17 +97,65 @@ export function RegioniIncidenzaSection() {
     return RISK_COLOR_SCALE[idx];
   };
 
-  // Dati ordinati per il barchart
+  // Dati ordinati per il barchart con eventuale dettaglio Province Autonome Bolzano/Trento
   const sortedChartData = useMemo(() => {
-    return [...annoData.regioni]
-      .sort((a, b) => {
-        const valA = metrica === "incidenza" ? a.indiceIncidenza : metrica === "mortaliInc" ? a.indiceMortali : a.totale;
-        const valB = metrica === "incidenza" ? b.indiceIncidenza : metrica === "mortaliInc" ? b.indiceMortali : b.totale;
-        return valB - valA;
-      })
-      .map((r, i) => {
-        const val = metrica === "incidenza" ? r.indiceIncidenza : metrica === "mortaliInc" ? r.indiceMortali : r.totale;
-        return {
+    let items: Array<{
+      code: string;
+      name: string;
+      isProvincia?: boolean;
+      valore: number;
+      totale: number;
+      mortali: number;
+      lavoro: number;
+      itinere: number;
+      giorni: number;
+      durataMedia?: number;
+      indiceGravita?: number;
+      occupati: number;
+      indiceIncidenza: number;
+      indiceMortali: number;
+      color?: string;
+    }> = [];
+
+    for (const r of annoData.regioni) {
+      if (r.regione === "04" && mostraProvincePA && annoData.provinceAutonome) {
+        // Mostra le 2 province autonome separate
+        for (const pa of annoData.provinceAutonome) {
+          const val =
+            metrica === "incidenza"
+              ? pa.indiceIncidenza
+              : metrica === "mortaliInc"
+              ? pa.indiceMortali
+              : metrica === "gravita"
+              ? (pa.indiceGravita ?? 0)
+              : pa.totale;
+          items.push({
+            code: pa.codice,
+            name: pa.nome,
+            isProvincia: true,
+            valore: val,
+            totale: pa.totale,
+            mortali: pa.mortali,
+            lavoro: pa.lavoro,
+            itinere: pa.itinere,
+            giorni: pa.giorni,
+            durataMedia: pa.durataMedia,
+            indiceGravita: pa.indiceGravita,
+            occupati: pa.occupati,
+            indiceIncidenza: pa.indiceIncidenza,
+            indiceMortali: pa.indiceMortali,
+          });
+        }
+      } else {
+        const val =
+          metrica === "incidenza"
+            ? r.indiceIncidenza
+            : metrica === "mortaliInc"
+            ? r.indiceMortali
+            : metrica === "gravita"
+            ? (r.indiceGravita ?? 0)
+            : r.totale;
+        items.push({
           code: r.regione,
           name: regioneName(r.regione),
           valore: val,
@@ -116,20 +163,39 @@ export function RegioniIncidenzaSection() {
           mortali: r.mortali,
           lavoro: r.lavoro,
           itinere: r.itinere,
+          giorni: r.giorni,
+          durataMedia: r.durataMedia,
+          indiceGravita: r.indiceGravita,
           occupati: r.occupati,
           indiceIncidenza: r.indiceIncidenza,
           indiceMortali: r.indiceMortali,
-          color: PALETTE[i % PALETTE.length],
-        };
-      });
-  }, [annoData, metrica]);
+        });
+      }
+    }
+
+    return items
+      .sort((a, b) => b.valore - a.valore)
+      .map((entry, i) => ({
+        ...entry,
+        color: PALETTE[i % PALETTE.length],
+      }));
+  }, [annoData, metrica, mostraProvincePA]);
 
   const hoverCode = hoverMapId ? MAP_ID_REGIONE[hoverMapId] : undefined;
   const activeRegData = selectedReg ? regMap[selectedReg] : hoverCode ? regMap[hoverCode] : null;
 
+  // Dettagli Bolzano e Trento se selezionato Trentino
+  const provDetails = useMemo(() => {
+    if (!annoData.provinceAutonome) return null;
+    return {
+      bolzano: annoData.provinceAutonome.find((p) => p.codice === "021"),
+      trento: annoData.provinceAutonome.find((p) => p.codice === "022"),
+    };
+  }, [annoData]);
+
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      {/* Controlli Filtro: Anno e Metrica */}
+      {/* Controlli Filtro: Anno, Metrica e Toggle Province */}
       <div
         style={{
           display: "flex",
@@ -157,29 +223,35 @@ export function RegioniIncidenzaSection() {
 
         {/* Selettore Metrica Visualizzata */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Mappa colorata per:</span>
+          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Visualizza per:</span>
           <button
             onClick={() => setMetrica("incidenza")}
             className={`btn-pill ${metrica === "incidenza" ? "btn-pill-accent active" : ""}`}
           >
-            Incidenza ‰ (Rischio)
+            Incidenza (infortuni / 1.000 occ.)
+          </button>
+          <button
+            onClick={() => setMetrica("gravita")}
+            className={`btn-pill ${metrica === "gravita" ? "btn-pill-accent active" : ""}`}
+          >
+            Indice Gravità (gg / 1.000 occ.)
           </button>
           <button
             onClick={() => setMetrica("mortaliInc")}
             className={`btn-pill ${metrica === "mortaliInc" ? "btn-pill-accent active" : ""}`}
           >
-            Tasso Mortali ‰
+            Tasso Mortali
           </button>
           <button
             onClick={() => setMetrica("totale")}
             className={`btn-pill ${metrica === "totale" ? "btn-pill-accent active" : ""}`}
           >
-            Volume Casi Assoluti
+            Volume Casi
           </button>
         </div>
       </div>
 
-      {/* Griglia a 2 colonne: Mappa SVG interattiva a sinistra, Ranking e Scheda Regione a destra */}
+      {/* Griglia a 2 colonne: Mappa a sinistra, Ranking a destra */}
       <div className="grid-map-panel">
         {/* Colonna Mappa */}
         <div
@@ -196,20 +268,22 @@ export function RegioniIncidenzaSection() {
           <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "var(--space-2)" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: 700 }}>
               {metrica === "incidenza"
-                ? "Tasso di Incidenza Regionale (infortuni / 1.000 occupati)"
+                ? "Tasso di Incidenza (infortuni / 1.000 occupati)"
+                : metrica === "gravita"
+                ? "Indice di Gravità (giornate perse / 1.000 occupati)"
                 : metrica === "mortaliInc"
-                ? "Tasso Mortali per 1.000 occupati"
+                ? "Tasso Infortuni Mortali (per 1.000 occupati)"
                 : "Volume totale infortuni denunciati"}
             </div>
-            <div style={{ fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
-              Media Naz.: <strong>{metrica === "incidenza" ? `${mediaNazionale}‰` : metrica === "mortaliInc" ? `${mediaNazionale}‰` : compactNumber(annoData.totale)}</strong>
+            <div style={{ fontSize: "0.82rem", color: "var(--color-text)", background: "var(--color-raised)", padding: "2px 8px", borderRadius: "4px", border: "1px solid var(--color-divider)" }}>
+              Media Nazionale: <strong>{metrica === "incidenza" ? `${mediaNazionale}‰` : metrica === "gravita" ? `${mediaNazionale} gg` : metrica === "mortaliInc" ? `${mediaNazionale}‰` : compactNumber(annoData.totale)}</strong>
             </div>
           </div>
 
           <svg
             viewBox={italy.viewBox}
             role="img"
-            aria-label="Mappa regionale italiana del rischio infortunistico"
+            aria-label="Mappa regionale del rischio infortunistico"
             style={{ width: "100%", maxWidth: 440, height: "auto", maxHeight: 460 }}
           >
             {italy.locations.map((loc: { id: string; name: string; path: string }, i: number) => {
@@ -239,9 +313,9 @@ export function RegioniIncidenzaSection() {
           {/* Scala Legenda Colori */}
           <div style={{ width: "100%", marginTop: "var(--space-3)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.72rem", color: "var(--color-text-soft)", marginBottom: 3 }}>
-              <span>Min: {minVal}{metrica !== "totale" ? "‰" : ""}</span>
-              <span>Rischio crescente</span>
-              <span>Max: {maxVal}{metrica !== "totale" ? "‰" : ""}</span>
+              <span>Min: {minVal}{metrica === "incidenza" || metrica === "mortaliInc" ? "‰" : metrica === "gravita" ? " gg" : ""}</span>
+              <span>Intensità crescente</span>
+              <span>Max: {maxVal}{metrica === "incidenza" || metrica === "mortaliInc" ? "‰" : metrica === "gravita" ? " gg" : ""}</span>
             </div>
             <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden" }}>
               {RISK_COLOR_SCALE.map((c, i) => (
@@ -251,9 +325,9 @@ export function RegioniIncidenzaSection() {
           </div>
         </div>
 
-        {/* Colonna Ranking e Scheda di dettaglio */}
+        {/* Colonna Ranking e Scheda Regione */}
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-          {/* Scheda di approfondimento regione attiva */}
+          {/* Scheda di dettaglio regione attiva */}
           {activeRegData ? (
             <div
               style={{
@@ -265,7 +339,7 @@ export function RegioniIncidenzaSection() {
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "1.1rem", fontWeight: 700 }}>
+                <span style={{ fontSize: "1.05rem", fontWeight: 750 }}>
                   {regioneName(activeRegData.regione)} ({anno})
                 </span>
                 {selectedReg && (
@@ -295,39 +369,60 @@ export function RegioniIncidenzaSection() {
               >
                 <div>
                   <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase" }}>Tasso Incidenza</div>
-                  <div style={{ fontSize: "1.3rem", fontWeight: 750, color: "var(--color-accent)" }}>
+                  <div style={{ fontSize: "1.25rem", fontWeight: 750, color: "var(--color-accent)" }}>
                     {activeRegData.indiceIncidenza}‰
                   </div>
                   <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
                     {activeRegData.indiceIncidenza > annoData.indiceIncidenza
-                      ? `+${(activeRegData.indiceIncidenza - annoData.indiceIncidenza).toFixed(2)} vs media`
-                      : `${(activeRegData.indiceIncidenza - annoData.indiceIncidenza).toFixed(2)} vs media`}
+                      ? `+${(activeRegData.indiceIncidenza - annoData.indiceIncidenza).toFixed(2)} vs media naz.`
+                      : `${(activeRegData.indiceIncidenza - annoData.indiceIncidenza).toFixed(2)} vs media naz.`}
                   </div>
                 </div>
 
                 <div>
                   <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase" }}>Infortuni Totali</div>
-                  <div style={{ fontSize: "1.3rem", fontWeight: 750 }}>
+                  <div style={{ fontSize: "1.25rem", fontWeight: 750 }}>
                     {exactNumber(activeRegData.totale)}
                   </div>
                   <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
-                    {exactNumber(activeRegData.lavoro)} lav · {exactNumber(activeRegData.itinere)} iti
+                    {exactNumber(activeRegData.lavoro)} lav &middot; {exactNumber(activeRegData.itinere)} iti
                   </div>
                 </div>
 
                 <div>
-                  <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase" }}>Mortali / Gravi</div>
-                  <div style={{ fontSize: "1.3rem", fontWeight: 750 }}>
-                    {exactNumber(activeRegData.mortali)}
+                  <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase" }}>Giornate Perse</div>
+                  <div style={{ fontSize: "1.25rem", fontWeight: 750 }}>
+                    {compactNumber(activeRegData.giorni)}
                   </div>
                   <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
-                    {exactNumber(activeRegData.menomati)} con menomazione
+                    Media: {activeRegData.durataMedia || 0} gg / caso
                   </div>
                 </div>
               </div>
 
-              <div style={{ fontSize: "0.76rem", color: "var(--color-text-soft)", marginTop: "var(--space-2)", borderTop: "1px dashed var(--color-divider)", paddingTop: 4 }}>
-                Occupati regionali di riferimento: <strong>{exactNumber(activeRegData.occupati)}</strong> (fonte ISTAT/Eurostat).
+              {/* Dettaglio Province Autonome se è Trentino-Alto Adige */}
+              {activeRegData.regione === "04" && provDetails && provDetails.bolzano && provDetails.trento && (
+                <div style={{ marginTop: "var(--space-2)", paddingTop: "var(--space-2)", borderTop: "1px dashed var(--color-divider)" }}>
+                  <div style={{ fontSize: "0.76rem", fontWeight: 700, color: "var(--color-text-soft)", marginBottom: 4 }}>
+                    Dettaglio per Provincia Autonoma ({anno}):
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-2)", fontSize: "0.78rem" }}>
+                    <div style={{ background: "var(--color-surface)", padding: "4px 8px", borderRadius: "4px" }}>
+                      <strong>P.A. Bolzano / Bozen:</strong><br />
+                      Incidenza: <strong>{provDetails.bolzano.indiceIncidenza}‰</strong> ({exactNumber(provDetails.bolzano.totale)} casi su {compactNumber(provDetails.bolzano.occupati)} occ.)<br />
+                      Giornate perse: {compactNumber(provDetails.bolzano.giorni)} (media {provDetails.bolzano.durataMedia} gg)
+                    </div>
+                    <div style={{ background: "var(--color-surface)", padding: "4px 8px", borderRadius: "4px" }}>
+                      <strong>P.A. Trento:</strong><br />
+                      Incidenza: <strong>{provDetails.trento.indiceIncidenza}‰</strong> ({exactNumber(provDetails.trento.totale)} casi su {compactNumber(provDetails.trento.occupati)} occ.)<br />
+                      Giornate perse: {compactNumber(provDetails.trento.giorni)} (media {provDetails.trento.durataMedia} gg)
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div style={{ fontSize: "0.75rem", color: "var(--color-text-soft)", marginTop: "var(--space-2)", borderTop: "1px dashed var(--color-divider)", paddingTop: 4 }}>
+                Lavoratori occupati di riferimento: <strong>{exactNumber(activeRegData.occupati)}</strong> (fonte ISTAT / Eurostat).
               </div>
             </div>
           ) : (
@@ -341,97 +436,115 @@ export function RegioniIncidenzaSection() {
                 textAlign: "center",
               }}
             >
-              Passa il mouse sulla mappa o seleziona una regione per analizzare i dettagli HSE.
+              Passa il mouse sulla mappa o seleziona una regione per analizzare i dettagli territoriali e di gravità.
             </div>
           )}
 
-          {/* Ranking orizzontale scrollabile */}
-          <div style={{ flex: 1, minHeight: 320 }}>
-            <div style={{ fontSize: "0.88rem", fontWeight: 700, marginBottom: "var(--space-2)" }}>
-              Ranking 20 Regioni ({metrica === "incidenza" ? "Incidenza ‰ occupati" : metrica === "mortaliInc" ? "Tasso mortali ‰" : "Volume casi"})
+          {/* Ranking scrollabile con slider e controlli */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-2)" }}>
+              <div style={{ fontSize: "0.88rem", fontWeight: 700 }}>
+                Ranking Territoriale ({metrica === "incidenza" ? "Incidenza ‰ occupati" : metrica === "gravita" ? "Indice Gravità (gg / 1.000 occ.)" : metrica === "mortaliInc" ? "Tasso mortali ‰" : "Volume casi"})
+              </div>
+              <label style={{ fontSize: "0.75rem", display: "flex", alignItems: "center", gap: 4, cursor: "pointer", color: "var(--color-text-soft)" }}>
+                <input
+                  type="checkbox"
+                  checked={mostraProvincePA}
+                  onChange={(e) => setMostraProvincePA(e.target.checked)}
+                />
+                Dettaglia Bolzano e Trento
+              </label>
             </div>
-            <div style={{ width: "100%", height: 350 }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={sortedChartData}
-                  layout="vertical"
-                  margin={{ top: 4, right: 16, bottom: 4, left: 10 }}
-                  onClick={(state: any) => {
-                    if (state && state.activePayload && state.activePayload.length) {
-                      const code = state.activePayload[0].payload.code;
-                      setSelectedReg(selectedReg === code ? null : code);
-                    }
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
-                  <XAxis type="number" tick={{ fontSize: 11 }} />
-                  <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={100} />
-                  <Tooltip
-                    content={({ active, payload }) => {
-                      if (!active || !payload || !payload.length) return null;
-                      const p = payload[0].payload;
-                      return (
-                        <div className="custom-chart-tooltip">
-                          <div className="tooltip-title">{p.name} ({anno})</div>
-                          <div className="tooltip-row">
-                            <span>Tasso di Incidenza:</span>
-                            <strong>{p.indiceIncidenza} per 1.000 occ.</strong>
-                          </div>
-                          <div className="tooltip-row">
-                            <span>Casi totali denunciati:</span>
-                            <strong>{exactNumber(p.totale)}</strong>
-                          </div>
-                          <div className="tooltip-row">
-                            <span>In occasione di lavoro:</span>
-                            <strong>{exactNumber(p.lavoro)}</strong>
-                          </div>
-                          <div className="tooltip-row">
-                            <span>In itinere:</span>
-                            <strong>{exactNumber(p.itinere)}</strong>
-                          </div>
-                          <div className="tooltip-row">
-                            <span>Esiti mortali:</span>
-                            <strong>{exactNumber(p.mortali)}</strong>
-                          </div>
-                          <div className="tooltip-row">
-                            <span>Occupati di riferimento:</span>
-                            <strong>{exactNumber(p.occupati)}</strong>
-                          </div>
-                        </div>
-                      );
+
+            {/* Scroll Viewport con altezza fissa per garantire leggibilità asse Y */}
+            <div className="chart-scroll-wrapper" style={{ height: 360 }}>
+              <div style={{ width: "100%", height: sortedChartData.length * 25 + 40 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={sortedChartData}
+                    layout="vertical"
+                    margin={{ top: 8, right: 24, bottom: 4, left: 20 }}
+                    onClick={(state: any) => {
+                      if (state && state.activePayload && state.activePayload.length) {
+                        const code = state.activePayload[0].payload.code;
+                        if (code === "021" || code === "022") {
+                          setSelectedReg("04");
+                        } else {
+                          setSelectedReg(selectedReg === code ? null : code);
+                        }
+                      }
                     }}
-                  />
-                  <ReferenceLine
-                    x={mediaNazionale}
-                    stroke="#1d1b1a"
-                    strokeDasharray="4 4"
-                    strokeWidth={1.5}
-                    label={{
-                      value: `Media Naz. ${mediaNazionale}${metrica !== "totale" ? "‰" : ""}`,
-                      position: "insideTopRight",
-                      fill: "#1d1b1a",
-                      fontSize: 10,
-                    }}
-                  />
-                  <Bar dataKey="valore" name="Valore" isAnimationActive={false} radius={[0, 3, 3, 0]}>
-                    {sortedChartData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={selectedReg === entry.code ? "var(--color-accent)" : colorForRegion(entry.code)}
-                        stroke={selectedReg === entry.code ? "#000000" : "none"}
-                        strokeWidth={selectedReg === entry.code ? 2 : 0}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
+                    <XAxis type="number" tick={{ fontSize: 11 }} />
+                    <YAxis
+                      type="category"
+                      dataKey="name"
+                      tick={{ fontSize: 11 }}
+                      width={140}
+                      interval={0}
+                    />
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        if (!active || !payload || !payload.length) return null;
+                        const p = payload[0].payload;
+                        return (
+                          <div className="custom-chart-tooltip">
+                            <div className="tooltip-title">{p.name} ({anno})</div>
+                            <div className="tooltip-row">
+                              <span>Tasso di Incidenza:</span>
+                              <strong>{p.indiceIncidenza} per 1.000 occ.</strong>
+                            </div>
+                            <div className="tooltip-row">
+                              <span>Indice di Gravità:</span>
+                              <strong>{p.indiceGravita || 0} gg per 1.000 occ.</strong>
+                            </div>
+                            <div className="tooltip-row">
+                              <span>Giornate di inabilità:</span>
+                              <strong>{compactNumber(p.giorni)} gg (media {p.durataMedia || 0} gg/caso)</strong>
+                            </div>
+                            <div className="tooltip-row">
+                              <span>Casi totali denunciati:</span>
+                              <strong>{exactNumber(p.totale)}</strong>
+                            </div>
+                            <div className="tooltip-row">
+                              <span>Infortuni mortali:</span>
+                              <strong>{exactNumber(p.mortali)}</strong>
+                            </div>
+                            <div className="tooltip-row">
+                              <span>Occupati di riferimento:</span>
+                              <strong>{exactNumber(p.occupati)}</strong>
+                            </div>
+                          </div>
+                        );
+                      }}
+                    />
+                    <ReferenceLine
+                      x={mediaNazionale}
+                      stroke="#b3261e"
+                      strokeDasharray="4 4"
+                      strokeWidth={1.8}
+                    />
+                    <Bar dataKey="valore" name="Valore" isAnimationActive={false} radius={[0, 3, 3, 0]}>
+                      {sortedChartData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={selectedReg === entry.code ? "var(--color-accent)" : colorForRegion(entry.code === "021" || entry.code === "022" ? "04" : entry.code)}
+                          stroke={selectedReg === entry.code ? "#000000" : "none"}
+                          strokeWidth={selectedReg === entry.code ? 2 : 0}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <p className="source-note">
-        Metodologia di normalizzazione: l&apos;indice di incidenza regionale misura il numero di infortuni per 1.000 occupati nella fascia 15-64 anni residenti nella regione (dati ISTAT ed Eurostat lfst_r_lfe2emp). Consente di valutare oggettivamente il rischio territoriale eliminando l&apos;effetto distorcente della diversa concentrazione demografica e produttiva.
+        Metodologia di calcolo: <strong>Tasso di Incidenza</strong> = (Infortuni / Occupati residenti) &times; 1.000. <strong>Indice di Gravità</strong> = (Giornate di inabilità temporanea indennizzate / Occupati residenti) &times; 1.000. Denominatori occupazionali: ISTAT ed Eurostat NUTS2 (<code>lfst_r_lfe2emp</code>). La linea tratteggiata rossa indica il benchmark della media nazionale ponderata.
       </p>
     </div>
   );
