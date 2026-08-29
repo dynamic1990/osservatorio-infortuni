@@ -8,13 +8,16 @@ import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
 import { DimensioniWidget } from "@/components/charts/dimensioni-widget";
 import { StagionalitaWidget } from "@/components/charts/stagionalita-widget";
 import { SerieTemporaleWidget } from "@/components/charts/serie-temporale-widget";
+import { SerieDecennaleWidget } from "@/components/charts/serie-decennale-widget";
+import { NewsInfortuniWidget } from "@/components/charts/news-infortuni-widget";
+import { BenchmarkEurostatWidget } from "@/components/charts/benchmark-eurostat-widget";
 import { InfoModalButton } from "@/components/ui/info-modal";
 
 export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Osservatorio Infortuni sul Lavoro | Dati e Indicatori Statistici INAIL",
   description:
-    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: monitoraggio congiunturale a pari perimetro 2026 vs 2025, indici di incidenza per occupati, mappe del rischio, gravità, comparti ATECO e serie storiche consolidate.",
+    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: cronaca quotidiana degli infortuni mortali e gravi, serie storica decennale 2014-2024, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
 };
 
 export default function HomePage() {
@@ -60,6 +63,32 @@ export default function HomePage() {
       {/* 2. Sezione Apertura: Monitoraggio Congiunturale 2026 vs 2025 a Pari Perimetro */}
       <section className="card" aria-label="Monitoraggio Congiunturale 2026 vs 2025">
         <HeroCongiunturaleKpi />
+      </section>
+
+      {/* 2bis. Notizie e Cronaca: infortuni mortali e gravi (aggiornamento 06:00) */}
+      <section className="card" aria-label="Notizie sugli Infortuni sul Lavoro">
+        <div className="card-header">
+          <h2 className="card-title">Cronaca: infortuni mortali e gravi in Italia</h2>
+          <p className="card-desc">
+            Aggiornamento automatico giornaliero alle <strong>06:00</strong> attraverso aggregazione RSS:
+            le notizie più rilevanti sugli infortuni sul lavoro nel nostro paese, con classificazione
+            automatica della gravità. Ogni voce rimanda alla fonte originale.
+          </p>
+        </div>
+        <NewsInfortuniWidget />
+      </section>
+
+      {/* 3. Serie Storica Decennale 2014-2024 */}
+      <section className="card" aria-label="Serie Storica Decennale">
+        <div className="card-header">
+          <h2 className="card-title">Serie Storica Decennale (2014 – 2024)</h2>
+          <p className="card-desc">
+            Dieci anni di denunce INAIL e casi mortali confrontati con gli <strong>occupati ISTAT/Eurostat</strong>:
+            una lettura del rischio separata dalle oscillazioni della platea occupazionale, dal picco
+            COVID del 2020 al consolidamento post-pandemia.
+          </p>
+        </div>
+        <SerieDecennaleWidget />
       </section>
 
       {/* 3. Trend Storico a Doppia Scala: Volumi Assoluti vs Tasso di Incidenza */}
@@ -125,6 +154,19 @@ export default function HomePage() {
         <DimensioniWidget />
         <div style={{ height: "var(--space-6)" }} />
         <StagionalitaWidget />
+      </section>
+
+      {/* 7bis. Benchmark Internazionale Eurostat */}
+      <section className="card" aria-label="Benchmark Internazionale">
+        <div className="card-header">
+          <h2 className="card-title">Benchmark Internazionale: il confronto con l&apos;Europa</h2>
+          <p className="card-desc">
+            Dove si colloca l&apos;Italia nella sicurezza sul lavoro rispetto agli altri grandi paesi europei?
+            Il tasso standardizzato Eurostat (ESAW) permette un confronto equo tra paesi, depurato dalle
+            differenze demografiche.
+          </p>
+        </div>
+        <BenchmarkEurostatWidget />
       </section>
 
       {/* 8. Serie Storica Multivariata Dettagliata con Filtri */}

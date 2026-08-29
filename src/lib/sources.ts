@@ -5,7 +5,11 @@ export type SourceId =
   | "inail-infortuni-mensile"
   | "inail-infortuni-semestrale"
   | "inail-malattie-mensile"
-  | "inail-malattie-semestrale";
+  | "inail-malattie-semestrale"
+  | "inail-serie-storica"
+  | "eurostat-esaw"
+  | "google-news-rss"
+  | "istat-eurostat-occupati";
 
 export interface SourceInfo {
   id: SourceId;
@@ -66,6 +70,54 @@ export const SOURCES: Record<SourceId, SourceInfo> = {
     coverage: "Data protocollo; esiste variante DataDec",
     frequency: "Semestrale",
     status: "planned",
+  },
+  "inail-serie-storica": {
+    id: "inail-serie-storica",
+    owner: "INAIL – Istituto Nazionale Assicurazione contro gli Infortuni sul Lavoro",
+    area: "Serie storica infortuni (2014-2024)",
+    landingUrl: "https://dati.inail.it/portale/it/dataset/infortuni-sul-lavoro.html",
+    apiUrl: "https://dati.inail.it/api/OpenData/DatiConCadenzaSemestraleInfortuni",
+    format: "PDF pubblicazioni + JSON (REST)",
+    coverage: "Denunce totali e casi mortali nazionali 2014-2019 (serie storica ufficiale); microdati 2020-2024",
+    frequency: "Annuale",
+    status: "active",
+    notes: "Serie consolidata per la vista decennale; il dato 2020 include i casi COVID riconosciuti come infortunio",
+  },
+  "eurostat-esaw": {
+    id: "eurostat-esaw",
+    owner: "Eurostat – European Statistics on Accidents at Work (ESAW)",
+    area: "Benchmark internazionale infortuni mortali",
+    landingUrl: "https://ec.europa.eu/eurostat/databrowser/view/hsw_mi01/default/table?lang=it",
+    apiUrl: "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hsw_mi01",
+    format: "JSON (JSON-stat API)",
+    coverage: "Tasso di incidenza standardizzato per 100.000 occupati, infortuni mortali, EU-27 e stati membri",
+    frequency: "Annuale",
+    status: "active",
+    notes: "La standardizzazione elimina l'effetto della struttura demografica: confronto equo tra paesi",
+  },
+  "google-news-rss": {
+    id: "google-news-rss",
+    owner: "Google News RSS (aggregazione automatica)",
+    area: "Cronaca infortuni mortali e gravi",
+    landingUrl: "https://news.google.com/",
+    apiUrl: "https://news.google.com/rss/search",
+    format: "XML (RSS)",
+    coverage: "Ultimi 7 giorni, query su infortuni sul lavoro in Italia",
+    frequency: "Giornaliero (06:00)",
+    status: "active",
+    notes: "Classificazione automatica per parole chiave; ogni voce rimanda alla fonte originale. Non sostituisce i dati ufficiali INAIL.",
+  },
+  "istat-eurostat-occupati": {
+    id: "istat-eurostat-occupati",
+    owner: "ISTAT / Eurostat – Labour Force Survey",
+    area: "Denominatori occupati 15-64",
+    landingUrl: "https://ec.europa.eu/eurostat/databrowser/view/lfst_r_lfe2emp/default/table?lang=it",
+    apiUrl: "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lfst_r_lfe2emp",
+    format: "JSON (JSON-stat API)",
+    coverage: "Occupati 15-64 Italia 2014-2024 (migliaia)",
+    frequency: "Trimestrale/annuale",
+    status: "active",
+    notes: "Usati come denominatore per indici di incidenza e serie storica",
   },
 };
 
