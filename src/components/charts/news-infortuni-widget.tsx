@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import newsRaw from "@/data/generated/news-infortuni.json";
 
 interface Notizia {
@@ -9,6 +9,8 @@ interface Notizia {
   link: string;
   data: string;
   categoria: string;
+  provincia?: string | null;
+  regione?: string | null;
 }
 
 interface NewsPayload {
@@ -20,11 +22,7 @@ interface NewsPayload {
   notizie: Notizia[];
 }
 
-const CATEGORY_META: Record<string, { label: string; color: string; bg: string }> = {
-  mortale: { label: "Mortale", color: "#ffffff", bg: "#b3261e" },
-  grave: { label: "Grave", color: "#ffffff", bg: "#c77d0a" },
-  altro: { label: "Infortunio", color: "#1d1b1a", bg: "#e8e3de" },
-};
+const ITEMS_PER_SLIDE = 5;
 
 function formatData(dataStr: string): string {
   try {
@@ -40,51 +38,99 @@ function formatData(dataStr: string): string {
 
 export function NewsInfortuniWidget() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
-  const notizie = dati.notizie || [];
+  const notizie = useMemo(
+    () => (dati.notizie || []).filter((n) => n.categoria === "mortale" || n.categoria === "grave"),
+    [dati]
+  );
 
-  const count = (cat: string) => notizie.filter((n) => n.categoria === cat).length;
+  const [slide, setSlide] = useState(0);
+  const totaleSlides = Math.max(1, Math.ceil(notizie.length / ITEMS_PER_SLIDE));
+  const slideSicura = Math.min(slide, totaleSlides - 1);
+  const visibili = notizie.slice(
+    slideSicura * ITEMS_PER_SLIDE,
+    slideSicura * ITEMS_PER_SLIDE + ITEMS_PER_SLIDE
+  );
+
+  const prev = () => setSlide((s) => (s <= 0 ? totaleSlides - 1 : s - 1));
+  const next = () => setSlide((s) => (s >= totaleSlides - 1 ? 0 : s + 1));
 
   return (
-    <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)", alignItems: "center" }}>
-        {(["mortale", "grave", "altro"] as const).map((cat) => {
-          const meta = CATEGORY_META[cat];
-          return (
-            <span
-              key={cat}
-              style={{
-                background: meta.bg,
-                color: meta.color,
-                fontSize: "0.78rem",
-                fontWeight: 700,
-                padding: "3px 10px",
-                borderRadius: "999px",
-              }}
-            >
-              {meta.label}: {count(cat)}
-            </span>
-          );
-        })}
-        <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginLeft: "auto" }}>
-          Aggiornato: {formatData(dati.generatedAt)}
+    <div style={{ display: "grid", gap: "var(--space-3)" }}>
+      {/* Intestazione compatta con contatore e navigazione */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "var(--space-2)",
+          flexWrap: "wrap",
+        }}
+      >
+        <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)" }}>
+          <strong>{notizie.length}</strong> episodi gravi o mortali negli ultimi 7 giorni
+          <span style={{ color: "var(--color-text-muted)" }}>
+            {" · Aggiornato: "}
+            {formatData(dati.generatedAt)}
+          </span>
         </span>
+
+        {/* Navigazione carosello */}
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+          <button
+            aria-label="Scorri indietro"
+            onClick={prev}
+            style={{
+              border: "1px solid var(--color-divider)",
+              background: "var(--color-surface-2)",
+              borderRadius: "999px",
+              width: 30,
+              height: 30,
+              cursor: "pointer",
+              fontSize: "0.95rem",
+              lineHeight: 1,
+            }}
+          >
+            {"\u25C0"}
+          </button>
+          <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", whiteSpace: "nowrap" }}>
+            {slideSicura + 1} / {totaleSlides}
+          </span>
+          <button
+            aria-label="Scorri avanti"
+            onClick={next}
+            style={{
+              border: "1px solid var(--color-divider)",
+              background: "var(--color-surface-2)",
+              borderRadius: "999px",
+              width: 30,
+              height: 30,
+              cursor: "pointer",
+              fontSize: "0.95rem",
+              lineHeight: 1,
+            }}
+          >
+            {"\u25B6"}
+          </button>
+        </div>
       </div>
 
+      {/* Elenco della slide corrente */}
       <div style={{ display: "grid", gap: "var(--space-2)" }}>
-        {notizie.slice(0, 12).map((n, i) => {
-          const meta = CATEGORY_META[n.categoria] || CATEGORY_META.altro;
+        {visibili.map((n, i) => {
+          const localitaParts = [n.provincia, n.regione].filter(Boolean);
+          const localita = localitaParts.length ? localitaParts.join(" · ") : null;
           return (
             <a
-              key={`${n.link}-${i}`}
+              key={`${n.link}-${slideSicura}-${i}`}
               href={n.link}
               target="_blank"
               rel="noreferrer"
               style={{
                 display: "grid",
-                gridTemplateColumns: "auto 1fr auto",
+                gridTemplateColumns: "1fr auto",
                 gap: "var(--space-3)",
                 alignItems: "center",
-                padding: "var(--space-3)",
+                padding: "var(--space-2) var(--space-3)",
                 borderRadius: "8px",
                 background: "var(--color-surface-2)",
                 textDecoration: "none",
@@ -92,24 +138,22 @@ export function NewsInfortuniWidget() {
                 border: "1px solid var(--color-divider)",
               }}
             >
-              <span
-                style={{
-                  background: meta.bg,
-                  color: meta.color,
-                  fontSize: "0.68rem",
-                  fontWeight: 700,
-                  padding: "2px 8px",
-                  borderRadius: "4px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.04em",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {meta.label}
-              </span>
-              <span style={{ fontSize: "0.9rem", lineHeight: 1.4 }}>
+              <span style={{ fontSize: "0.9rem", lineHeight: 1.35 }}>
                 {n.titolo}
-                <span style={{ display: "block", fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "0.75rem",
+                    color: "var(--color-text-muted)",
+                    marginTop: 2,
+                  }}
+                >
+                  {localita ? (
+                    <>
+                      <strong style={{ color: "var(--color-text-soft)" }}>{localita}</strong>
+                      {" · "}
+                    </>
+                  ) : null}
                   {n.fonte} · {formatData(n.data)}
                 </span>
               </span>
@@ -117,12 +161,17 @@ export function NewsInfortuniWidget() {
             </a>
           );
         })}
+        {visibili.length === 0 && (
+          <div style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
+            Nessun episodio grave o mortale rilevato negli ultimi 7 giorni.
+          </div>
+        )}
       </div>
 
       <p className="source-note">
-        Aggregazione automatica da Google News RSS (query su infortuni mortali e gravi sul lavoro in Italia,
-        ultimi 7 giorni). Ogni titolo rimanda all&apos;articolo originale. La classificazione è automatica
-        basata su parole chiave nel titolo: può non cogliere il 100% dei casi. I dati ufficiali restano quelli INAIL.
+        Aggregazione automatica da Google News RSS (query su infortuni sul lavoro in Italia,
+        ultimi 7 giorni). Ogni voce rimanda all&apos;articolo originale; la provincia e la regione
+        indicate sono estratte dal titolo, quando disponibili. I dati ufficiali restano quelli INAIL.
       </p>
     </div>
   );

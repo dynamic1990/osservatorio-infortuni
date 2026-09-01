@@ -88,6 +88,8 @@ def main():
             "lavoro": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
             "itinere": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
             "mortali": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
+            "mortaliLavoro": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
+            "mortaliItinere": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
             "occupati2024": sum(occ_reg[r]["2024"] * 1000 for r in occ_reg if occ_reg[r].get("2024")),
             "incidenzaSemestrale2025": 0.0,
             "incidenzaSemestrale2026": 0.0,
@@ -96,7 +98,7 @@ def main():
         "perRegione": {}
     }
     
-    mese_naz = {m: {"mese": m, "tot2025": 0, "tot2026": 0, "lav2025": 0, "lav2026": 0, "iti2025": 0, "iti2026": 0, "mor2025": 0, "mor2026": 0} for m in pari_mesi}
+    mese_naz = {m: {"mese": m, "tot2025": 0, "tot2026": 0, "lav2025": 0, "lav2026": 0, "iti2025": 0, "iti2026": 0, "mor2025": 0, "mor2026": 0, "morL2025": 0, "morL2026": 0, "morS2025": 0, "morS2026": 0} for m in pari_mesi}
     reg_congiuntura = {r: {"tot2025": 0, "tot2026": 0, "lav2025": 0, "lav2026": 0, "iti2025": 0, "iti2026": 0, "mor2025": 0, "mor2026": 0} for r in [f"{i:02d}" for i in range(1, 21)]}
     
     for row in mensile:
@@ -108,16 +110,24 @@ def main():
             l = row.get("lavoro", 0)
             it = row.get("itinere", 0)
             mor = row.get("mortali", 0)
+            mor_l = row.get("mortaliLavoro")
+            mor_s = row.get("mortaliItinere")
+            if mor_l is None or mor_s is None:
+                mor_l, mor_s = mor, 0
             
             if a == 2025:
                 congiuntura["nazionale"]["totale"]["anno2025"] += t
                 congiuntura["nazionale"]["lavoro"]["anno2025"] += l
                 congiuntura["nazionale"]["itinere"]["anno2025"] += it
                 congiuntura["nazionale"]["mortali"]["anno2025"] += mor
+                congiuntura["nazionale"]["mortaliLavoro"]["anno2025"] += mor_l
+                congiuntura["nazionale"]["mortaliItinere"]["anno2025"] += mor_s
                 mese_naz[m]["tot2025"] += t
                 mese_naz[m]["lav2025"] += l
                 mese_naz[m]["iti2025"] += it
                 mese_naz[m]["mor2025"] += mor
+                mese_naz[m]["morL2025"] += mor_l
+                mese_naz[m]["morS2025"] += mor_s
                 reg_congiuntura[r]["tot2025"] += t
                 reg_congiuntura[r]["lav2025"] += l
                 reg_congiuntura[r]["iti2025"] += it
@@ -127,17 +137,21 @@ def main():
                 congiuntura["nazionale"]["lavoro"]["anno2026"] += l
                 congiuntura["nazionale"]["itinere"]["anno2026"] += it
                 congiuntura["nazionale"]["mortali"]["anno2026"] += mor
+                congiuntura["nazionale"]["mortaliLavoro"]["anno2026"] += mor_l
+                congiuntura["nazionale"]["mortaliItinere"]["anno2026"] += mor_s
                 mese_naz[m]["tot2026"] += t
                 mese_naz[m]["lav2026"] += l
                 mese_naz[m]["iti2026"] += it
                 mese_naz[m]["mor2026"] += mor
+                mese_naz[m]["morL2026"] += mor_l
+                mese_naz[m]["morS2026"] += mor_s
                 reg_congiuntura[r]["tot2026"] += t
                 reg_congiuntura[r]["lav2026"] += l
                 reg_congiuntura[r]["iti2026"] += it
                 reg_congiuntura[r]["mor2026"] += mor
 
     # Calcolo delta
-    for k in ["totale", "lavoro", "itinere", "mortali"]:
+    for k in ["totale", "lavoro", "itinere", "mortali", "mortaliLavoro", "mortaliItinere"]:
         v25 = congiuntura["nazionale"][k]["anno2025"]
         v26 = congiuntura["nazionale"][k]["anno2026"]
         d = v26 - v25

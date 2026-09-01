@@ -143,7 +143,8 @@ def estrai_mensile() -> tuple[list, int]:
             mod = r.get("modalita", "N") or "N"
             per_chiave[ch][mod if mod in ("N", "S") else "ND"] += r["casi"]
 
-    # mortali mensili dai raw API (16 regioni)
+    # mortali mensili dai raw API (16 regioni), con divisione per modalita
+    # (N = in occasione di lavoro, S = in itinere)
     morti_raw: dict = defaultdict(int)
     for path in sorted(glob.glob(str(RAW / "infortuni-*.json"))):
         stem = Path(path).stem.split("-")
@@ -164,15 +165,23 @@ def estrai_mensile() -> tuple[list, int]:
             continue
         for r in rec:
             if (r.get("DataMorte") or "").strip():
-                morti_raw[(str(r.get("Regione", "")).zfill(2), anno, mese)] += 1
+                mod = r.get("ModalitaAccadimento") or ""
+                if mod not in ("N", "S"):
+                    mod = "ND"
+                morti_raw[(str(r.get("Regione", "")).zfill(2), anno, mese, mod)] += 1
 
     serie = []
     for (reg, anno, mese), d in sorted(per_chiave.items()):
+        morti = sum(
+            morti_raw.get((reg, anno, mese, mod), 0) for mod in ("N", "S", "ND")
+        )
         serie.append({
             "regione": reg, "anno": anno, "mese": mese,
             "totale": d["N"] + d["S"] + d["ND"],
             "lavoro": d["N"], "itinere": d["S"],
-            "mortali": morti_raw.get((reg, anno, mese), 0),
+            "mortali": morti,
+            "mortaliLavoro": morti_raw.get((reg, anno, mese, "N"), 0),
+            "mortaliItinere": morti_raw.get((reg, anno, mese, "S"), 0),
         })
     return serie, len(per_chiave)
 

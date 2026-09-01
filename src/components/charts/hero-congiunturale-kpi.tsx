@@ -28,7 +28,12 @@ export function HeroCongiunturaleKpi() {
     return data.nazionale.totale;
   }, [data, filtroMod]);
 
-  const mortali = data.nazionale.mortali;
+  // Esiti mortali coerenti con l'ambito selezionato
+  const mortali = useMemo(() => {
+    if (filtroMod === "lavoro") return data.nazionale.mortaliLavoro;
+    if (filtroMod === "itinere") return data.nazionale.mortaliItinere;
+    return data.nazionale.mortali;
+  }, [data, filtroMod]);
   const occMln = (data.nazionale.occupati2024 / 1_000_000).toFixed(1);
 
   // Calcolo incidenza semestrale per la modalita

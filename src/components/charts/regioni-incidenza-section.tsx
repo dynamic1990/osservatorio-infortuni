@@ -34,9 +34,18 @@ export function RegioniIncidenzaSection() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2024");
   const [metrica, setMetrica] = useState<"incidenza" | "mortaliInc" | "gravita" | "totale">("incidenza");
+  const [ambito, setAmbito] = useState<"totale" | "lavoro" | "itinere">("totale");
   const [selectedReg, setSelectedReg] = useState<string | null>(null);
   const [hoverMapId, setHoverMapId] = useState<string | null>(null);
   const [mostraProvincePA, setMostraProvincePA] = useState<boolean>(true);
+
+  // Casi in base all'ambito selezionato
+  const casiAmbito = (r: { totale: number; lavoro: number; itinere: number }) =>
+    ambito === "lavoro" ? r.lavoro : ambito === "itinere" ? r.itinere : r.totale;
+
+  // Incidenza per 1.000 occupati ricalcolata sull'ambito
+  const incidenzaAmbito = (r: { occupati: number; totale: number; lavoro: number; itinere: number }) =>
+    r.occupati > 0 ? Number(((casiAmbito(r) / r.occupati) * 1000).toFixed(2)) : 0;
 
   // Dati dell'anno selezionato
   const annoData = useMemo(() => {
@@ -59,37 +68,37 @@ export function RegioniIncidenzaSection() {
     for (const r of annoData.regioni) {
       const val =
         metrica === "incidenza"
-          ? r.indiceIncidenza
+          ? incidenzaAmbito(r)
           : metrica === "mortaliInc"
           ? r.indiceMortali
           : metrica === "gravita"
           ? (r.indiceGravita ?? 0)
-          : r.totale;
+          : casiAmbito(r);
       if (val < min) min = val;
       if (val > max) max = val;
     }
     const media =
       metrica === "incidenza"
-        ? annoData.indiceIncidenza
+        ? incidenzaAmbito(annoData)
         : metrica === "mortaliInc"
         ? annoData.indiceMortali
         : metrica === "gravita"
         ? (annoData.indiceGravita ?? 0)
-        : Math.round(annoData.totale / 20);
+        : Math.round(casiAmbito(annoData) / 20);
     return { minVal: min === Infinity ? 0 : min, maxVal: max === -Infinity ? 1 : max, mediaNazionale: media };
-  }, [annoData, metrica]);
+  }, [annoData, metrica, ambito]);
 
   // Colore per regione sulla mappa
   const colorForRegion = (code?: string): string => {
     if (!code || !regMap[code]) return "#e2e0de";
     const val =
       metrica === "incidenza"
-        ? regMap[code].indiceIncidenza
+        ? incidenzaAmbito(regMap[code])
         : metrica === "mortaliInc"
         ? regMap[code].indiceMortali
         : metrica === "gravita"
         ? (regMap[code].indiceGravita ?? 0)
-        : regMap[code].totale;
+        : casiAmbito(regMap[code]);
 
     const range = maxVal - minVal || 1;
     const ratio = Math.max(0, Math.min(1, (val - minVal) / range));
@@ -123,12 +132,12 @@ export function RegioniIncidenzaSection() {
         for (const pa of annoData.provinceAutonome) {
           const val =
             metrica === "incidenza"
-              ? pa.indiceIncidenza
+              ? incidenzaAmbito(pa)
               : metrica === "mortaliInc"
               ? pa.indiceMortali
               : metrica === "gravita"
               ? (pa.indiceGravita ?? 0)
-              : pa.totale;
+              : casiAmbito(pa);
           items.push({
             code: pa.codice,
             name: pa.nome,
@@ -149,12 +158,12 @@ export function RegioniIncidenzaSection() {
       } else {
         const val =
           metrica === "incidenza"
-            ? r.indiceIncidenza
+            ? incidenzaAmbito(r)
             : metrica === "mortaliInc"
             ? r.indiceMortali
             : metrica === "gravita"
             ? (r.indiceGravita ?? 0)
-            : r.totale;
+            : casiAmbito(r);
         items.push({
           code: r.regione,
           name: regioneName(r.regione),
@@ -221,6 +230,20 @@ export function RegioniIncidenzaSection() {
           ))}
         </div>
 
+        {/* Filtro Ambito: totale / occasione di lavoro / itinere */}
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
+          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Ambito:</span>
+          {(["totale", "lavoro", "itinere"] as const).map((a) => (
+            <button
+              key={a}
+              onClick={() => setAmbito(a)}
+              className={`btn-pill ${ambito === a ? "btn-pill-accent active" : ""}`}
+            >
+              {a === "totale" ? "Tutti gli infortuni" : a === "lavoro" ? "Occasione di lavoro" : "In itinere"}
+            </button>
+          ))}
+        </div>
+
         {/* Selettore Metrica Visualizzata */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
           <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Visualizza per:</span>
@@ -273,10 +296,14 @@ export function RegioniIncidenzaSection() {
                 ? "Indice di Gravità (giornate perse / 1.000 occupati)"
                 : metrica === "mortaliInc"
                 ? "Tasso Infortuni Mortali (per 1.000 occupati)"
+                : ambito === "lavoro"
+                ? "Volume infortuni in occasione di lavoro"
+                : ambito === "itinere"
+                ? "Volume infortuni in itinere"
                 : "Volume totale infortuni denunciati"}
             </div>
             <div style={{ fontSize: "0.82rem", color: "var(--color-text)", background: "var(--color-raised)", padding: "2px 8px", borderRadius: "4px", border: "1px solid var(--color-divider)" }}>
-              Media Nazionale: <strong>{metrica === "incidenza" ? `${mediaNazionale}‰` : metrica === "gravita" ? `${mediaNazionale} gg` : metrica === "mortaliInc" ? `${mediaNazionale}‰` : compactNumber(annoData.totale)}</strong>
+              Media Nazionale: <strong>{metrica === "incidenza" ? `${mediaNazionale}‰` : metrica === "gravita" ? `${mediaNazionale} gg` : metrica === "mortaliInc" ? `${mediaNazionale}‰` : compactNumber(casiAmbito(annoData))}</strong>
             </div>
           </div>
 

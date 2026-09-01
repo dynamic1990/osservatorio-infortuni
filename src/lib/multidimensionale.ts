@@ -97,6 +97,8 @@ export interface CongiunturaleDataset {
     lavoro: { anno2025: number; anno2026: number; delta: number; deltaPerc: number };
     itinere: { anno2025: number; anno2026: number; delta: number; deltaPerc: number };
     mortali: { anno2025: number; anno2026: number; delta: number; deltaPerc: number };
+    mortaliLavoro: { anno2025: number; anno2026: number; delta: number; deltaPerc: number };
+    mortaliItinere: { anno2025: number; anno2026: number; delta: number; deltaPerc: number };
     occupati2024: number;
     incidenzaSemestrale2025: number;
     incidenzaSemestrale2026: number;
