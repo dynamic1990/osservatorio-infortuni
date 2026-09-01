@@ -17,6 +17,12 @@ import { MODAL_COLORS } from "@/lib/palette";
 
 const MESI_NOMI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu"];
 
+// Giorni complessivi nel I semestre (gen-giu) per anno, gestendo i bisestili
+function giorniSemestre(anno: number): number {
+  const giorniMesi = [31, anno % 4 === 0 ? 29 : 28, 31, 30, 31, 30];
+  return giorniMesi.reduce((a, b) => a + b, 0);
+}
+
 export function HeroCongiunturaleKpi() {
   const data = useMemo(() => getCongiunturaleData(), []);
   const [filtroMod, setFiltroMod] = useState<"totale" | "lavoro" | "itinere">("totale");
@@ -34,6 +40,13 @@ export function HeroCongiunturaleKpi() {
     if (filtroMod === "itinere") return data.nazionale.mortaliItinere;
     return data.nazionale.mortali;
   }, [data, filtroMod]);
+
+  // Media YTD: morti sul lavoro al giorno nel periodo coperto
+  const giorni25 = giorniSemestre(2025);
+  const giorni26 = giorniSemestre(2026);
+  const mediaMortali25 = mortali.anno2025 / giorni25;
+  const mediaMortali26 = mortali.anno2026 / giorni26;
+  const deltaMedia = mediaMortali26 - mediaMortali25;
   const occMln = (data.nazionale.occupati2024 / 1_000_000).toFixed(1);
 
   // Calcolo incidenza semestrale per la modalita
@@ -183,6 +196,40 @@ export function HeroCongiunturaleKpi() {
               {mortali.deltaPerc > 0 ? `+${mortali.deltaPerc}%` : `${mortali.deltaPerc}%`}
             </span>
             )
+          </div>
+        </div>
+
+        {/* KPI 3: Incidenza semestrale per 1.000 occupati */}
+        {/* Media YTD morti al giorno */}
+        <div
+          style={{
+            background: "var(--color-surface)",
+            padding: "var(--space-3)",
+            borderRadius: "6px",
+            border: "1px solid var(--color-divider)",
+          }}
+        >
+          <div className="metric-label">Media YTD morti sul lavoro al giorno</div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-2)", marginTop: "var(--space-1)" }}>
+            <span className="metric" style={{ fontSize: "1.7rem", color: "var(--color-accent)" }}>
+              {mediaMortali26.toFixed(2)}
+            </span>
+            <span style={{ fontSize: "0.88rem", color: "var(--color-text-soft)" }}>al giorno nel 2026</span>
+          </div>
+          <div style={{ fontSize: "0.82rem", marginTop: "var(--space-1)", color: "var(--color-text-soft)" }}>
+            vs {mediaMortali25.toFixed(2)} nel 2025 (
+            <span
+              style={{
+                fontWeight: 700,
+                color: deltaMedia <= 0 ? "#1a6b34" : "var(--color-accent)",
+              }}
+            >
+              {deltaMedia > 0 ? `+${deltaMedia.toFixed(2)}` : deltaMedia.toFixed(2)} al giorno
+            </span>
+            )
+          </div>
+          <div style={{ fontSize: "0.78rem", marginTop: "var(--space-1)", color: "var(--color-text-muted)" }}>
+            {modLabel.toLowerCase()} · {mortali.anno2026} esiti su {giorni26} giorni (gen-giu)
           </div>
         </div>
 
