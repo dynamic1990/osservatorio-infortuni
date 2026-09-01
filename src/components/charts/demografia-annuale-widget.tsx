@@ -14,18 +14,27 @@ import {
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
+import { FiltroModalita, type ModalitaState } from "./filtro-modalita";
 
 export function DemografiaAnnualeWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2024");
+  const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
 
   const annoData = useMemo(() => {
     return multidim.perAnno[anno] || multidim.consolidatoTotale;
   }, [multidim, anno]);
 
-  // Dati Genere
+  // Dati Genere (split per modalità: generiLavoro + generiItinere)
   const genereData = useMemo(() => {
-    const totalGen = (annoData.generi["M"] || 0) + (annoData.generi["F"] || 0);
+    const casiM =
+      (modalita.lavoro ? annoData.generiLavoro?.["M"] || 0 : 0) +
+      (modalita.itinere ? annoData.generiItinere?.["M"] || 0 : 0);
+    const casiF =
+      (modalita.lavoro ? annoData.generiLavoro?.["F"] || 0 : 0) +
+      (modalita.itinere ? annoData.generiItinere?.["F"] || 0 : 0);
+    const totalGen = casiM + casiF;
+    // Nota: gli esiti mortali non sono splittati per modalità nel dataset multidimensionale
     const mortaliM = annoData.generiMortali?.["M"] || 0;
     const mortaliF = annoData.generiMortali?.["F"] || 0;
 
@@ -33,29 +42,33 @@ export function DemografiaAnnualeWidget() {
       {
         key: "M",
         name: "Uomini",
-        casi: annoData.generi["M"] || 0,
+        casi: casiM,
         mortali: mortaliM,
-        quota: totalGen > 0 ? ((annoData.generi["M"] || 0) / totalGen) * 100 : 0,
+        quota: totalGen > 0 ? (casiM / totalGen) * 100 : 0,
         fill: "#1f6fb2",
       },
       {
         key: "F",
         name: "Donne",
-        casi: annoData.generi["F"] || 0,
+        casi: casiF,
         mortali: mortaliF,
-        quota: totalGen > 0 ? ((annoData.generi["F"] || 0) / totalGen) * 100 : 0,
+        quota: totalGen > 0 ? (casiF / totalGen) * 100 : 0,
         fill: "#b0336b",
       },
     ];
-  }, [annoData]);
+  }, [annoData, modalita]);
 
-  // Dati Fasce d'Età
+  // Dati Fasce d'Età (fasce ETA reali: 0-14, 15-24, 25-34, 35-44, 45-54, 55-64, 65+)
   const etaData = useMemo(() => {
-    const order = ["0-14", "15-24", "25-34", "35-49", "50-64", "65+"];
-    const totalEta = Object.values(annoData.fasceEta || {}).reduce((a, b) => a + b, 0);
+    const order = ["0-14", "15-24", "25-34", "35-44", "45-54", "55-64", "65+"];
+    const casiFascia = (f: string) =>
+      (modalita.lavoro ? annoData.fasceEtaLavoro?.[f] || 0 : 0) +
+      (modalita.itinere ? annoData.fasceEtaItinere?.[f] || 0 : 0);
+    // Nota: gli esiti mortali per fascia non sono splittati per modalità
+    const totalEta = order.reduce((a, f) => a + casiFascia(f), 0);
 
     return order.map((f, i) => {
-      const casi = annoData.fasceEta?.[f] || 0;
+      const casi = casiFascia(f);
       const mort = annoData.fasceEtaMortali?.[f] || 0;
       return {
         fascia: f,
@@ -65,11 +78,11 @@ export function DemografiaAnnualeWidget() {
         fill: PALETTE[i % PALETTE.length],
       };
     });
-  }, [annoData]);
+  }, [anno, modalita, annoData]);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      {/* Selettore Anno */}
+      {/* Selettore Anno e Modalità */}
       <div
         style={{
           display: "flex",
@@ -95,6 +108,7 @@ export function DemografiaAnnualeWidget() {
               {a}
             </button>
           ))}
+          <FiltroModalita value={modalita} onChange={setModalita} size="sm" label="Modalità" />
         </div>
       </div>
 
@@ -214,13 +228,20 @@ export function DemografiaAnnualeWidget() {
           </div>
 
           <div style={{ fontSize: "0.78rem", color: "var(--color-text-soft)", marginTop: "var(--space-2)" }}>
-            La concentrazione maggiore si registra nelle fasce centrali (35-49 e 50-64 anni), coerentemente con la composizione anagrafica della forza lavoro italiana.
+            La concentrazione maggiore si registra nelle fasce centrali (35-44, 45-54 e 55-64 anni), coerentemente con la composizione anagrafica della forza lavoro italiana.
           </div>
         </div>
       </div>
 
+      {/*
+        TODO: Incidenza per 1.000 occupati per genere/età non disponibile.
+        Non esiste un file `occupati-demografia.json` (né una fonte ISTAT/Eurostat
+        per occupati per genere × fascia d'età importata nel progetto). Non
+        inventare denominatori: se serve l'incidenza, va prima aggiunta una fonte
+        dati approvata (nessuna chiamata API senza consenso).
+      */}
       <p className="source-note">
-        Dati demografici consolidati INAIL anno {anno}. La lettura corretta della frequenza infortunistica richiede il confronto con la popolazione occupata per genere ed età censita da ISTAT.
+        Dati demografici consolidati INAIL anno {anno} (sono la somma delle modalità lavoro e itinere selezionate). Gli esiti mortali non sono splittati per modalità nel dataset multidimensionale. La lettura corretta della frequenza infortunistica richiederebbe il confronto con la popolazione occupata per genere ed età censita da ISTAT.
       </p>
     </div>
   );

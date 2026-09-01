@@ -12,8 +12,10 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import { getApprofondimenti, GRAVITA_LABEL, DURATA_LABEL, labelOf } from "@/lib/approfondimenti";
+import { getMultidimensionaleData } from "@/lib/multidimensionale";
+import { GRAVITA_LABEL, DURATA_LABEL, labelOf } from "@/lib/approfondimenti";
 import { PALETTE } from "@/lib/palette";
+import { FiltroModalita, type ModalitaState } from "./filtro-modalita";
 
 type Dim = "gravita" | "durata";
 
@@ -22,51 +24,72 @@ const DIM_LABEL: Record<Dim, string> = {
   durata: "Durata dell'assenza (giorni indennizzati)",
 };
 
+// Chiavi presenti nei dati multidimensionali (perAnno[anno].gravita* / .durata*)
 const ORDINE_GRAVITA = ["nessuna", "franchigia", "capitale", "rendita"];
-const ORDINE_DURATA = ["nessuna", "breve", "media", "lunga", "lunga90"];
+const ORDINE_DURATA = ["zero", "breve", "media", "lunga", "grave90"];
 
 export function GravitaDurataWidget() {
-  const d = useMemo(() => getApprofondimenti(), []);
+  const d = useMemo(() => getMultidimensionaleData(), []);
   const [dim, setDim] = useState<Dim>("gravita");
+  const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
 
   const ordine = dim === "gravita" ? ORDINE_GRAVITA : ORDINE_DURATA;
+  const labelMap = dim === "gravita" ? GRAVITA_LABEL : DURATA_LABEL;
+
   const data = useMemo(() => {
-    return d.dimensioni[dim].map((r) => {
-      const out: Record<string, number | string> = { anno: r.anno };
-      for (const k of ordine) out[k] = r[k] ?? 0;
+    return d.anniDisponibili.map((anno) => {
+      const row = d.perAnno[anno];
+      const serieLavoro = dim === "gravita" ? row.gravitaLavoro : row.durataLavoro;
+      const serieItinere = dim === "gravita" ? row.gravitaItinere : row.durataItinere;
+      const out: Record<string, number | string> = { anno };
+      for (const k of ordine) {
+        out[k] =
+          (modalita.lavoro ? serieLavoro[k] ?? 0 : 0) +
+          (modalita.itinere ? serieItinere[k] ?? 0 : 0);
+      }
       return out;
     });
-  }, [d, dim, ordine]);
+  }, [d, dim, modalita, ordine]);
 
-  // totale per anno (per la linea di contesto)
-  const conTotale = data.map((r) => {
-    let tot = 0;
-    for (const k of ordine) tot += Number(r[k] ?? 0);
-    return { ...r, totale: tot };
-  });
+  // totale per anno (per la linea di contesto) = somma delle modalità selezionate
+  const conTotale = useMemo(
+    () =>
+      data.map((r) => {
+        let tot = 0;
+        for (const k of ordine) tot += Number(r[k] ?? 0);
+        return { ...r, totale: tot };
+      }),
+    [data, ordine]
+  );
 
-  const palette = dim === "gravita" ? PALETTE.slice(0, 4) : ["#2f8f5b", "#c77d0a", "#d45b2c", "#b3261e", "#6e1c14"];
+  const palette =
+    dim === "gravita"
+      ? PALETTE.slice(0, 4)
+      : ["#2f8f5b", "#c77d0a", "#d45b2c", "#b3261e", "#6e1c14"];
 
   return (
     <div>
-      <div style={{ marginBottom: "var(--space-3)", display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
-        {(["gravita", "durata"] as Dim[]).map((k) => (
-          <button
-            key={k}
-            onClick={() => setDim(k)}
-            style={{
-              border: "1px solid var(--color-divider)",
-              borderRadius: 999,
-              padding: "6px 12px",
-              fontSize: "0.85rem",
-              cursor: "pointer",
-              background: dim === k ? "var(--color-accent)" : "transparent",
-              color: dim === k ? "#fff" : "inherit",
-            }}
-          >
-            {DIM_LABEL[k]}
-          </button>
-        ))}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)", marginBottom: "var(--space-3)" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
+          {(["gravita", "durata"] as Dim[]).map((k) => (
+            <button
+              key={k}
+              onClick={() => setDim(k)}
+              style={{
+                border: "1px solid var(--color-divider)",
+                borderRadius: 999,
+                padding: "6px 12px",
+                fontSize: "0.85rem",
+                cursor: "pointer",
+                background: dim === k ? "var(--color-accent)" : "transparent",
+                color: dim === k ? "#fff" : "inherit",
+              }}
+            >
+              {DIM_LABEL[k]}
+            </button>
+          ))}
+        </div>
+        <FiltroModalita value={modalita} onChange={setModalita} size="sm" />
       </div>
 
       <div style={{ width: "100%", height: 360 }}>
@@ -81,7 +104,7 @@ export function GravitaDurataWidget() {
               <Bar
                 key={k}
                 dataKey={k}
-                name={labelOf(dim === "gravita" ? GRAVITA_LABEL : DURATA_LABEL, k)}
+                name={labelOf(labelMap, k)}
                 fill={palette[i]}
                 stackId="a"
                 isAnimationActive={false}

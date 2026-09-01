@@ -73,8 +73,14 @@ export interface AnnualMultidimData {
   fasceEtaMortali: Record<string, number>;
   modalita: Record<string, number>;
   gestione: Record<string, number>;
+  gestioneLavoro: Record<string, number>;
+  gestioneItinere: Record<string, number>;
   esito: Record<string, number>;
+  esitoLavoro: Record<string, number>;
+  esitoItinere: Record<string, number>;
   indennizzo: Record<string, number>;
+  indennizzoLavoro: Record<string, number>;
+  indennizzoItinere: Record<string, number>;
   gravita: Record<string, number>;
   gravitaLavoro: Record<string, number>;
   gravitaItinere: Record<string, number>;
@@ -82,7 +88,11 @@ export interface AnnualMultidimData {
   durataLavoro: Record<string, number>;
   durataItinere: Record<string, number>;
   nascita: Record<string, number>;
+  nascitaLavoro: Record<string, number>;
+  nascitaItinere: Record<string, number>;
   mezzo: Record<string, number>;
+  mezzoLavoro: Record<string, number>;
+  mezzoItinere: Record<string, number>;
   mensile: Record<string, number>;
   mensileLavoro: Record<string, number>;
   mensileItinere: Record<string, number>;

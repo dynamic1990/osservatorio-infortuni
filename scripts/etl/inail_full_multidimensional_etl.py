@@ -73,6 +73,14 @@ def main():
     print("1. Caricamento dati occupati regionali...")
     occupati_data = json.loads((GEN_DIR / "occupati-regione.json").read_text(encoding="utf-8"))
     occ_reg = occupati_data["regioni"]
+
+    occ_sett_data = json.loads((GEN_DIR / "occupati-settore.json").read_text(encoding="utf-8"))
+    occ_sett = occ_sett_data["settori"]
+
+    occ_prov_pa = {
+        "021": {"2020": 242.8, "2021": 241.1, "2022": 250.7, "2023": 250.6, "2024": 253.1},
+        "022": {"2020": 233.6, "2021": 231.6, "2022": 240.7, "2023": 241.5, "2024": 243.3}
+    }
     
     # 2. Elaborazione Congiuntura 2025 vs 2026 a pari perimetro
     print("2. Elaborazione congiuntura 2025 vs 2026 (mesi 1..6 a pari perimetro)...")
@@ -188,7 +196,8 @@ def main():
     
     def new_dimension_container():
         return {
-            "totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0,
+            "totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0,
+            "casi_con_giorni": 0, "menomati": 0,
             "generi": defaultdict(int),
             "generiLavoro": defaultdict(int),
             "generiItinere": defaultdict(int),
@@ -219,7 +228,7 @@ def main():
             "mezzo": defaultdict(int),
             "mezzoLavoro": defaultdict(int),
             "mezzoItinere": defaultdict(int),
-            "atecoMacro": defaultdict(int),
+            "atecoMacro": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0}),
             "atecoMacroLavoro": defaultdict(int),
             "atecoMacroItinere": defaultdict(int),
             "atecoMacroMortali": defaultdict(int),
@@ -229,7 +238,8 @@ def main():
             "mensile": defaultdict(int),
             "mensileLavoro": defaultdict(int),
             "mensileItinere": defaultdict(int),
-            "regioni": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0})
+            "regioni": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0}),
+            "provinceAutonome": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0})
         }
 
     dataset_by_year = {y: new_dimension_container() for y in YEARS}
@@ -260,6 +270,7 @@ def main():
                     idx_ln = idx["LuogoNascita"]
                     idx_mz = idx["ConSenzaMezzoTrasporto"]
                     idx_ateco = idx["SettoreAttivitaEconomica"]
+                    idx_luogo = idx["LuogoAccadimento"]
                     
                     for row in reader:
                         if not row or len(row) < len(header): continue
@@ -360,10 +371,20 @@ def main():
                             T["gravita"][gr] += 1
                             if is_menomato: T["menomati"] += 1
                             T["durata"][dur] += 1
-                            if g_val > 0: T["giorni"] += g_val
+                            if g_val > 0:
+                                T["giorni"] += g_val
+                                T["casi_con_giorni"] += 1
                             T["nascita"][nascita_key] += 1
                             T["mezzo"][mezzo_key] += 1
-                            T["atecoMacro"][macro] += 1
+                            m_stat = T["atecoMacro"][macro]
+                            m_stat["totale"] += 1
+                            if is_mortale: m_stat["mortali"] += 1
+                            if is_itinere: m_stat["itinere"] += 1
+                            else: m_stat["lavoro"] += 1
+                            if is_menomato: m_stat["menomati"] += 1
+                            if g_val > 0:
+                                m_stat["giorni"] += g_val
+                                m_stat["casi_con_giorni"] += 1
                             T["atecoDivisione"][div] += 1
                             if 1 <= mese_num <= 12: T["mensile"][mese_num] += 1
                             
@@ -373,7 +394,23 @@ def main():
                             if is_itinere: r_stat["itinere"] += 1
                             else: r_stat["lavoro"] += 1
                             if is_menomato: r_stat["menomati"] += 1
-                            if g_val > 0: r_stat["giorni"] += g_val
+                            if g_val > 0:
+                                r_stat["giorni"] += g_val
+                                r_stat["casi_con_giorni"] += 1
+
+                            # Province Autonome per Trentino-Alto Adige (021 Bolzano, 022 Trento)
+                            if reg_cod == "04":
+                                luogo_cod = row[idx_luogo].strip()
+                                if luogo_cod in ("021", "022"):
+                                    p_stat = T["provinceAutonome"][luogo_cod]
+                                    p_stat["totale"] += 1
+                                    if is_mortale: p_stat["mortali"] += 1
+                                    if is_itinere: p_stat["itinere"] += 1
+                                    else: p_stat["lavoro"] += 1
+                                    if is_menomato: p_stat["menomati"] += 1
+                                    if g_val > 0:
+                                        p_stat["giorni"] += g_val
+                                        p_stat["casi_con_giorni"] += 1
 
     # Costruzione JSON strutturato
     def format_container(c, anno_label):
@@ -391,6 +428,8 @@ def main():
             
             inc = round(r_data["totale"] / occ_k, 2) if occ_k else 0.0
             inc_mor = round(r_data["mortali"] / occ_k, 3) if occ_k else 0.0
+            durata_media = round(r_data["giorni"] / r_data["casi_con_giorni"], 1) if r_data["casi_con_giorni"] > 0 else 0.0
+            indice_gravita = round(r_data["giorni"] / occ_k, 1) if occ_k else 0.0
             reg_list.append({
                 "regione": r_cod,
                 "totale": r_data["totale"],
@@ -399,11 +438,44 @@ def main():
                 "mortali": r_data["mortali"],
                 "menomati": r_data["menomati"],
                 "giorni": r_data["giorni"],
+                "casiConGiorni": r_data["casi_con_giorni"],
+                "durataMedia": durata_media,
+                "indiceGravita": indice_gravita,
                 "occupati": int(occ_k * 1000),
                 "indiceIncidenza": inc,
                 "indiceMortali": inc_mor
             })
-            
+
+        # Province Autonome Bolzano (021) e Trento (022) per il Trentino-Alto Adige
+        prov_list = []
+        for p_cod, p_name in [("021", "P.A. Bolzano / Bozen"), ("022", "P.A. Trento")]:
+            p_data = c["provinceAutonome"][p_cod]
+            if anno_label == "ALL":
+                occ_vals = [occ_prov_pa[p_cod].get(y, 0) for y in YEARS]
+                occ_k = sum(occ_vals) / len(occ_vals) if occ_vals else 1
+            else:
+                occ_k = occ_prov_pa[p_cod].get(anno_label, 1)
+            inc = round(p_data["totale"] / occ_k, 2) if occ_k else 0.0
+            inc_mor = round(p_data["mortali"] / occ_k, 3) if occ_k else 0.0
+            durata_media = round(p_data["giorni"] / p_data["casi_con_giorni"], 1) if p_data["casi_con_giorni"] > 0 else 0.0
+            indice_gravita = round(p_data["giorni"] / occ_k, 1) if occ_k else 0.0
+            prov_list.append({
+                "codice": p_cod,
+                "nome": p_name,
+                "totale": p_data["totale"],
+                "lavoro": p_data["lavoro"],
+                "itinere": p_data["itinere"],
+                "mortali": p_data["mortali"],
+                "menomati": p_data["menomati"],
+                "giorni": p_data["giorni"],
+                "casiConGiorni": p_data["casi_con_giorni"],
+                "durataMedia": durata_media,
+                "indiceGravita": indice_gravita,
+                "occupati": int(occ_k * 1000),
+                "indiceIncidenza": inc,
+                "indiceMortali": inc_mor
+            })
+
         # Nazionale
         if anno_label == "ALL":
             occ_tot_k = sum(sum(occ_reg.get(r, {}).get(y, 0) for y in YEARS) / len(YEARS) for r in occ_reg)
@@ -412,6 +484,8 @@ def main():
             
         inc_naz = round(c["totale"] / occ_tot_k, 2) if occ_tot_k else 0.0
         inc_mor_naz = round(c["mortali"] / occ_tot_k, 3) if occ_tot_k else 0.0
+        durata_media_naz = round(c["giorni"] / c["casi_con_giorni"], 1) if c["casi_con_giorni"] > 0 else 0.0
+        indice_gravita_naz = round(c["giorni"] / occ_tot_k, 1) if occ_tot_k else 0.0
 
         # Top ATECO divisioni
         top_div = sorted(
@@ -420,12 +494,43 @@ def main():
             reverse=True
         )[:20]
         
-        # ATECO Macro list
-        macro_list = sorted(
-            [{"key": k, "casi": v, "mortali": c["atecoMacroMortali"].get(k, 0)} for k, v in c["atecoMacro"].items()],
-            key=lambda x: x["casi"],
-            reverse=True
-        )
+        # ATECO Macro list con occupati settoriali e tassi (incidenza, gravita')
+        macro_list = []
+        for m_key, m_stat in c["atecoMacro"].items():
+            if m_key == "ND":
+                occ_k = 0
+                inc = 0.0
+                inc_mor = 0.0
+                ind_grav = 0.0
+                nome_sett = "Settore non attribuito (ND)"
+            else:
+                s_info = occ_sett.get(m_key, {})
+                nome_sett = s_info.get("nome", m_key)
+                if anno_label == "ALL":
+                    occ_vals = [s_info.get(y, 0) for y in YEARS if s_info.get(y)]
+                    occ_k = sum(occ_vals) / len(occ_vals) if occ_vals else 0
+                else:
+                    occ_k = s_info.get(anno_label, 0)
+                inc = round(m_stat["totale"] / occ_k, 2) if occ_k > 0 else 0.0
+                inc_mor = round(m_stat["mortali"] / occ_k, 3) if occ_k > 0 else 0.0
+                ind_grav = round(m_stat["giorni"] / occ_k, 1) if occ_k > 0 else 0.0
+            dur_m = round(m_stat["giorni"] / m_stat["casi_con_giorni"], 1) if m_stat["casi_con_giorni"] > 0 else 0.0
+            macro_list.append({
+                "key": m_key,
+                "nome": nome_sett,
+                "casi": m_stat["totale"],
+                "mortali": m_stat["mortali"],
+                "lavoro": m_stat["lavoro"],
+                "itinere": m_stat["itinere"],
+                "menomati": m_stat["menomati"],
+                "giorni": m_stat["giorni"],
+                "durataMedia": dur_m,
+                "indiceGravita": ind_grav,
+                "occupati": int(occ_k * 1000) if occ_k else 0,
+                "indiceIncidenza": inc,
+                "indiceMortali": inc_mor
+            })
+        macro_list.sort(key=lambda x: x["casi"], reverse=True)
 
         return {
             "anno": anno_label,
@@ -434,6 +539,9 @@ def main():
             "lavoro": c["lavoro"],
             "itinere": c["itinere"],
             "giorni": c["giorni"],
+            "casiConGiorni": c["casi_con_giorni"],
+            "durataMedia": durata_media_naz,
+            "indiceGravita": indice_gravita_naz,
             "menomati": c["menomati"],
             "occupati": int(occ_tot_k * 1000),
             "indiceIncidenza": inc_naz,
@@ -475,11 +583,12 @@ def main():
             "atecoMacroLavoro": dict(c["atecoMacroLavoro"]),
             "atecoMacroItinere": dict(c["atecoMacroItinere"]),
             "atecoDivisioni": top_div,
-            "regioni": reg_list
+            "regioni": reg_list,
+            "provinceAutonome": prov_list
         }
 
     output_multidim = {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "anniDisponibili": YEARS,
         "perAnno": {y: format_container(dataset_by_year[y], y) for y in YEARS},
         "consolidatoTotale": format_container(dataset_all, "ALL")

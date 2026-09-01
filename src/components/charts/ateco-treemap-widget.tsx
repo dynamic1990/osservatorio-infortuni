@@ -220,8 +220,9 @@ export function AtecoTreemapWidget() {
             </span>
           </div>
 
-          <div className="chart-scroll-wrapper" style={{ height: 380 }}>
-            <div style={{ width: "100%", height: macroData.length * 28 + 30 }}>
+          <div className="chart-scroll-wrapper" style={{ height: 380, overflow: "auto" }}>
+            {/* minWidth 520px + overflow: mobile: barre con etichette leggibili tramite scroll orizzontale */}
+            <div style={{ minWidth: 520, width: "100%", height: macroData.length * 28 + 30 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={macroData}

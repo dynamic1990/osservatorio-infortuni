@@ -63,22 +63,28 @@ export const GRAVITA_LABEL: Record<string, string> = {
 
 export const DURATA_LABEL: Record<string, string> = {
   nessuna: "Nessun giorno indennizzato",
+  zero: "Nessun giorno indennizzato",
   breve: "1-7 giorni",
   media: "8-30 giorni",
   lunga: "31-90 giorni",
   lunga90: "Oltre 90 giorni",
+  grave90: "Oltre 90 giorni",
   nda: "Non disponibile",
 };
 
 export const NASCITA_LABEL: Record<string, string> = {
   Italia: "Nati in Italia",
   Estero: "Nati all'estero",
+  ITAL: "Nati in Italia",
+  ESTERO: "Nati all'estero",
   ND: "Non disponibile",
 };
 
 export const MEZZO_LABEL: Record<string, string> = {
   "Con mezzo": "Con mezzo di trasporto",
   "Senza mezzo": "Senza mezzo di trasporto",
+  CON_MEZZO: "Con mezzo di trasporto",
+  SENZA_MEZZO: "Senza mezzo di trasporto",
   ND: "Non disponibile",
 };
 
