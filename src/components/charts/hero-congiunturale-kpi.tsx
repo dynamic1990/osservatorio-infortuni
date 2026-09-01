@@ -18,7 +18,7 @@ import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-m
 
 const MESI_NOMI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu"];
 
-// Giorni complessivi nel I semestre (gen-giu) per anno, gestendo i bisestili
+// Giorni effettivi dei dati YTD disponibili, gestendo i bisestili.
 function giorniSemestre(anno: number): number {
   const giorniMesi = [31, anno % 4 === 0 ? 29 : 28, 31, 30, 31, 30];
   return giorniMesi.reduce((a, b) => a + b, 0);
@@ -106,10 +106,10 @@ export function HeroCongiunturaleKpi() {
       >
         <div>
           <div style={{ fontSize: "0.82rem", color: "var(--color-accent)", fontWeight: 650, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-            Monitoraggio Congiunturale a Pari Perimetro
+            Monitoraggio YTD a pari perimetro
           </div>
           <div style={{ fontSize: "1.15rem", fontWeight: 700 }}>
-            I Semestre 2026 vs I Semestre 2025 (Gennaio – Giugno)
+            Dati da inizio anno (YTD), aggiornati a giugno 2026
           </div>
         </div>
 
@@ -134,7 +134,7 @@ export function HeroCongiunturaleKpi() {
             border: "1px solid var(--color-divider)",
           }}
         >
-          <div className="metric-label">{modLabel} (6 mesi)</div>
+          <div className="metric-label">{modLabel} · dati YTD</div>
           <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-2)", marginTop: "var(--space-1)" }}>
             <span className="metric" style={{ fontSize: "1.7rem" }}>{exactNumber(kpiMod.anno2026)}</span>
             <span style={{ fontSize: "0.88rem", color: "var(--color-text-soft)" }}>nel 2026</span>
@@ -215,7 +215,7 @@ export function HeroCongiunturaleKpi() {
             )
           </div>
           <div style={{ fontSize: "0.78rem", marginTop: "var(--space-1)", color: "var(--color-text-muted)" }}>
-            {modLabel.toLowerCase()} · {mortali.anno2026} esiti su {giorni26} giorni (gen-giu)
+            {modLabel.toLowerCase()} · {mortali.anno2026} esiti sui giorni effettivi disponibili fino a giugno 2026
           </div>
         </div>
 
@@ -265,7 +265,7 @@ export function HeroCongiunturaleKpi() {
       {/* Grafico a barre mensile a confronto 2025 vs 2026 */}
       <div style={{ marginTop: "var(--space-2)" }}>
         <div style={{ fontSize: "0.9rem", fontWeight: 650, marginBottom: "var(--space-2)" }}>
-          Andamento mensile a confronto: Gennaio – Giugno ({modLabel.toLowerCase()})
+          Andamento mensile dei dati YTD fino a giugno ({modLabel.toLowerCase()})
         </div>
         <div style={{ width: "100%", height: 230 }}>
           <ResponsiveContainer width="100%" height="100%">
@@ -280,13 +280,13 @@ export function HeroCongiunturaleKpi() {
                 ]}
               />
               <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 6, fontSize: "0.82rem" }} />
-              <Bar dataKey="2025" name="I Sem. 2025" fill="#8c8884" isAnimationActive={false} radius={[2, 2, 0, 0]} />
-              <Bar dataKey="2026" name="I Sem. 2026" fill={MODAL_COLORS.lavoro} isAnimationActive={false} radius={[2, 2, 0, 0]} />
+              <Bar dataKey="2025" name="Dati YTD 2025" fill="#8c8884" isAnimationActive={false} radius={[2, 2, 0, 0]} />
+              <Bar dataKey="2026" name="Dati YTD 2026" fill={MODAL_COLORS.lavoro} isAnimationActive={false} radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
         <div className="source-note" style={{ marginTop: "var(--space-2)" }}>
-          Nota metodologica di confronto: rilevazione a parità di finestra temporale (primi 6 mesi). I dati 2025 e 2026 sono di natura congiunturale (denunce mensili provvisorie soggette a consolidamento) e non sono sommati alle serie storiche consolidate 2020-2024.
+          Nota metodologica: confronto a pari periodo da inizio anno. L&apos;ultimo mese disponibile è giugno 2026; i dati 2025 e 2026 sono denunce mensili provvisorie soggette a consolidamento e non sono sommati alle serie storiche consolidate 2020-2024.
         </div>
       </div>
     </div>

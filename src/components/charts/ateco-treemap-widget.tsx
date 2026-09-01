@@ -220,9 +220,9 @@ export function AtecoTreemapWidget() {
             </span>
           </div>
 
-          <div className="chart-scroll-wrapper" style={{ height: 380, overflow: "auto" }}>
-            {/* minWidth 520px + overflow: mobile: barre con etichette leggibili tramite scroll orizzontale */}
-            <div style={{ minWidth: 520, width: "100%", height: macroData.length * 28 + 30 }}>
+          <div className="chart-scroll-wrapper ateco-chart-scroll" style={{ height: 380 }}>
+            {/* Il grafico resta entro la viewport: solo l'elenco verticale scorre su mobile. */}
+            <div className="ateco-chart-inner" style={{ width: "100%", height: macroData.length * 28 + 30 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={macroData}
@@ -231,7 +231,7 @@ export function AtecoTreemapWidget() {
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
                   <XAxis type="number" tick={{ fontSize: 11 }} />
-                  <YAxis type="category" dataKey="label" tick={{ fontSize: 11 }} width={180} interval={0} />
+                  <YAxis type="category" dataKey="label" tick={{ fontSize: 10 }} width={132} interval={0} />
                   <Tooltip
                     content={({ active, payload }) => {
                       if (!active || !payload || !payload.length) return null;

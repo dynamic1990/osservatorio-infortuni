@@ -17,10 +17,12 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -89,7 +91,19 @@ ALIAS_COMUNI = {
     "polesine": ("Parma", "Emilia-Romagna"),
     "petrignano": ("Perugia", "Umbria"),
     "bivona": ("Agrigento", "Sicilia"),
+    "santo stefano quisquina": ("Agrigento", "Sicilia"),
     "origgio": ("Varese", "Lombardia"),
+}
+
+# Alcune testate non riportano il luogo nel titolo, ma lo rendono evidente
+# nel nome della fonte. Serve come informazione ausiliaria per la deduplica.
+SOURCE_PLACES = {
+    "agrigento": "agrigento",
+    "agrigentonotizie": "agrigento",
+    "agrigentooggi": "agrigento",
+    "sciacca": "agrigento",
+    "corrieredisciacca": "agrigento",
+    "trapanioggi": "agrigento",
 }
 
 REGIONI_NOMI = [
@@ -211,11 +225,195 @@ def estrai_luogo(titolo: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def dedupe(items: list[dict]) -> list[dict]:
+def news_datetime(item: dict) -> datetime:
+    """Converte pubDate RSS in una data confrontabile, con fallback stabile."""
+    try:
+        dt = parsedate_to_datetime(item.get("data", ""))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except (TypeError, ValueError, OverflowError):
+        return datetime.min.replace(tzinfo=timezone.utc)
+
+
+EVENT_STOPWORDS = {
+    "incidente", "infortunio", "infortuni", "lavoro", "operaio", "operaia",
+    "operai", "lavoratore", "lavoratrice", "lavoratori", "morto", "morta",
+    "morti", "morte", "muore", "muoiono", "deceduto", "deceduta", "tragedia",
+    "grave", "gravissimo", "gravissima", "ferito", "ferita", "feriti", "ferite",
+    "cantiere", "azienda", "ditta", "impresa", "edile", "soccorso", "soccorso",
+    "sicurezza", "sindacati", "controlli", "carabinieri", "vigili", "fuoco",
+    "polizia", "sanita", "san", "ospedale", "ospedali", "cronaca", "oggi",
+    "ieri", "titolare", "carpentiere", "muratore", "giovane", "uomo", "donna",
+    "anni", "anno", "sul", "sulla", "sullo", "nel", "nella", "della", "delle",
+    "degli", "dell", "del", "di", "da", "un", "una", "uno", "il", "lo", "la",
+    "i", "gli", "e", "ed", "a", "al", "alla", "con", "per", "che", "chi", "si",
+}
+
+EVENT_ANCHORS = {
+    "muro", "parete", "soletta", "blocco", "cemento", "escavatore", "ponteggio",
+    "ponteggi", "tetto", "tetti", "volo", "precipita", "precipitato", "folgorato",
+    "folgorata", "bancale", "capannone", "macchinario", "macchina", "trattore",
+    "impalcatura", "gru", "terrapieno", "crollo", "crolla", "crollato", "crollata",
+    "sbriciola", "sbriciolato", "schiacciato", "schiacciata", "travolge", "travolto",
+    "travolta", "caduto", "caduta", "cadde", "amputazione", "ribaltato", "ribaltata",
+}
+
+FOLLOWUP_MARKERS = {
+    "lutto", "cordoglio", "ricordo", "chi era", "sindacati", "sicurezza",
+    "controlli", "funerali", "funerale", "comune", "cittadino",
+}
+
+
+def normalized_tokens(text: str) -> set[str]:
+    """Token normalizzati, utili per confrontare titoli di fonti diverse."""
+    ascii_text = unicodedata.normalize("NFKD", text.lower()).encode("ascii", "ignore").decode()
+    return set(re.findall(r"[a-z0-9]{3,}", ascii_text))
+
+
+def event_tokens(item: dict) -> set[str]:
+    return normalized_tokens(item.get("titolo", "")) - EVENT_STOPWORDS
+
+
+def event_anchors(item: dict) -> set[str]:
+    tokens = event_tokens(item)
+    anchors = set()
+    for token in tokens:
+        if token in EVENT_ANCHORS:
+            anchors.add(token)
+        elif token.startswith(("croll", "sbriciol", "schiacci", "travolg", "precipit", "folgor", "cadut")):
+            anchors.add(token[:6])
+    return anchors
+
+
+def is_followup(item: dict) -> bool:
+    titolo = item.get("titolo", "").lower()
+    return any(marker in titolo for marker in FOLLOWUP_MARKERS)
+
+
+def normalize_place(value: str) -> str:
+    return unicodedata.normalize("NFKD", value.lower()).encode("ascii", "ignore").decode()
+
+
+def event_places(item: dict) -> set[str]:
+    """Restituisce tutti i livelli geografici utili al confronto evento."""
+    titolo = normalize_place(item.get("titolo", ""))
+    places: set[str] = set()
+
+    # Comune, provincia e regione del titolo. Conserviamo tutti i livelli:
+    # Bivona deve poter combaciare con un articolo che cita solo Agrigento.
+    for alias in sorted(ALIAS_COMUNI, key=len, reverse=True):
+        alias_norm = normalize_place(alias)
+        if re.search(rf"(?<![a-z]){re.escape(alias_norm)}(?![a-z])", titolo):
+            provincia, regione = ALIAS_COMUNI[alias]
+            places.update({alias_norm, normalize_place(provincia), normalize_place(regione)})
+
+    for provincia, regione in PROVINCE:
+        provincia_norm = normalize_place(provincia)
+        if re.search(rf"(?<![a-z]){re.escape(provincia_norm)}(?![a-z])", titolo):
+            places.update({provincia_norm, normalize_place(regione)})
+
+    for regione in REGIONI_NOMI:
+        regione_norm = normalize_place(regione)
+        if re.search(rf"(?<![a-z]){re.escape(regione_norm)}(?![a-z])", titolo):
+            places.add(regione_norm)
+
+    if item.get("provincia"):
+        places.add(normalize_place(item["provincia"]))
+    if item.get("regione"):
+        places.add(normalize_place(item["regione"]))
+
+    source = normalize_place(item.get("fonte", ""))
+    for marker, place in SOURCE_PLACES.items():
+        if marker in source:
+            places.add(place)
+
+    return places
+
+
+def is_same_event(a: dict, b: dict) -> bool:
+    """Confronto prudente tra articoli sullo stesso evento.
+
+    Non usa il titolo identico come unico criterio: combina luogo, vicinanza
+    temporale e dettagli concreti (persona, età, oggetto o dinamica). In questo
+    modo tre titoli diversi sul crollo del muro di Bivona vengono accorpati,
+    mentre due eventi generici nella stessa regione restano distinti.
+    """
+    delta_days = abs((news_datetime(a) - news_datetime(b)).total_seconds()) / 86400
+    if delta_days > 4:
+        return False
+
+    places_a = event_places(a)
+    places_b = event_places(b)
+    same_place = bool(places_a & places_b)
+
+    tokens_a = event_tokens(a)
+    tokens_b = event_tokens(b)
+    common = tokens_a & tokens_b
+    anchors = event_anchors(a) & event_anchors(b)
+
+    # Un nome, un'età o un dettaglio concreto condiviso è un forte indicatore.
+    numbers = {t for t in common if t.isdigit()}
+    concrete = common - {"sicilia", "agrigento", "lombardia", "varese", "veneto"}
+    if same_place and (numbers or len(concrete) >= 2):
+        return True
+
+    # Per le cronache dello stesso giorno è sufficiente una dinamica comune
+    # chiaramente identificabile: muro/parete, escavatore, folgorazione, ecc.
+    if same_place and anchors and delta_days <= 2:
+        return True
+
+    # Alcune fonti riprendono l'evento senza ripetere il comune o la
+    # provincia nel titolo. Per collegarle in modo prudente richiediamo una
+    # dinamica concreta e almeno un altro dettaglio comune, oppure due
+    # elementi della dinamica, nello stesso arco di 48 ore.
+    if not same_place and delta_days <= 2:
+        if len(anchors) >= 2:
+            return True
+        if anchors and (numbers or len(concrete) >= 2):
+            return True
+
+    # Due articoli che citano lo stesso comune nello stesso arco di 48 ore
+    # descrivono normalmente lo stesso fatto anche quando uno dei titoli è
+    # una semplice scheda di aggiornamento e non ripete la dinamica.
+    alias_places = {normalize_place(alias) for alias in ALIAS_COMUNI}
+    if places_a & places_b & alias_places and delta_days <= 2:
+        return True
+
+    # Le fonti pubblicano spesso un secondo pezzo sul lutto, sulla vittima o
+    # sulle richieste di sicurezza senza ripetere luogo e dinamica. Se il
+    # seguito è nella stessa provincia e nello stesso arco di 48 ore di un
+    # articolo che contiene una dinamica concreta o un'età, è lo stesso evento
+    # con elevata probabilità. È il caso Bivona/Santo Stefano Quisquina del
+    # 1 settembre 2026.
+    if delta_days <= 2 and same_place:
+        if is_followup(a) != is_followup(b):
+            other = b if is_followup(a) else a
+            if event_anchors(other) or any(t.isdigit() for t in event_tokens(other)):
+                return True
+
+    return False
+
+
+def dedupe_eventi(items: list[dict]) -> list[dict]:
+    """Riduce i diversi articoli dello stesso incidente a una sola voce."""
+    ordinati = sorted(items, key=news_datetime, reverse=True)
+    gruppi: list[list[dict]] = []
+    for item in ordinati:
+        gruppo = next((g for g in gruppi if any(is_same_event(item, other) for other in g)), None)
+        if gruppo is None:
+            gruppi.append([item])
+        else:
+            gruppo.append(item)
+    return [gruppo[0] for gruppo in gruppi]
+
+
+def dedupe_titoli(items: list[dict]) -> list[dict]:
+    """Elimina duplicati tecnici prima della deduplicazione per evento."""
     seen = set()
     out = []
-    for it in sorted(items, key=lambda x: x["data"], reverse=True):
-        key = re.sub(r"[^a-z0-9]+", "", it["titolo"].lower())[:60]
+    for it in sorted(items, key=news_datetime, reverse=True):
+        key = re.sub(r"[^a-z0-9]+", "", it["titolo"].lower())
         if key in seen:
             continue
         seen.add(key)
@@ -232,7 +430,7 @@ def main() -> int:
             print(f"[warn] query '{q}' fallita: {exc}")
 
     filtrate: list[dict] = []
-    for n in dedupe(tutti):
+    for n in dedupe_titoli(tutti):
         n["categoria"] = classify(n["titolo"])
         if n["categoria"] not in ("mortale", "grave"):
             continue
@@ -242,6 +440,9 @@ def main() -> int:
         n["provincia"] = prov
         n["regione"] = reg
         filtrate.append(n)
+
+    filtrate = dedupe_eventi(filtrate)
+    filtrate.sort(key=news_datetime, reverse=True)
 
     payload = {
         "schemaVersion": 2,

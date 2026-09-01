@@ -69,6 +69,7 @@ body {
   border-radius: var(--radius-md);
   padding: var(--space-4);
   box-shadow: var(--shadow-sm);
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
@@ -216,6 +217,7 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-6);
+  min-width: 0;
 }
 
 @media (min-width: 860px) {
@@ -228,6 +230,33 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-6);
+  min-width: 0;
+}
+
+/* Nessun grafico deve allargare la pagina oltre la viewport del telefono. */
+.ateco-chart-scroll {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.ateco-chart-inner {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
+  .card,
+  .chart-scroll-wrapper,
+  .ateco-chart-inner {
+    max-width: 100%;
+  }
+
+  .ateco-chart-scroll {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 @media (min-width: 820px) {
