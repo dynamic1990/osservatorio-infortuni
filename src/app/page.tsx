@@ -56,7 +56,7 @@ export default function HomePage() {
 
         <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "80ch", fontSize: "0.95rem" }}>
           Piattaforma di trasparenza e monitoraggio statistico: dati ufficiali congiunturali a pari perimetro (2026 vs 2025),
-          tassi di incidenza e indici di gravità normalizzati sugli occupati residenti, mappe territoriali, durata delle assenze indennizzate e comparti produttivi ATECO.
+          tassi di incidenza e indici di gravità normalizzati sugli occupati, mappe territoriali, durata delle assenze indennizzate e comparti produttivi ATECO.
         </p>
       </header>
 
