@@ -40,7 +40,7 @@ export default function HomePage() {
                   letterSpacing: "0.05em",
                 }}
               >
-                Statistiche Ufficiali
+                Statistiche pubbliche
               </span>
               <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
                 Open Data INAIL &middot; ISTAT &middot; Eurostat
@@ -49,15 +49,20 @@ export default function HomePage() {
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
               Osservatorio Infortuni sul Lavoro
             </h1>
+            <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+              Piattaforma indipendente di trasparenza e monitoraggio statistico: dati congiunturali
+              a parita di periodo (2026 vs 2025), media giornaliera dei morti sul lavoro, tassi di
+              incidenza e gravita normalizzati sugli occupati, serie storica 2014-2024, benchmark
+              europeo, mappa del rischio territoriale e comparti produttivi ATECO.
+            </p>
+            <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+              Progetto e realizzazione a cura di{" "}
+              <strong style={{ color: "var(--color-text)" }}>Ing. Damiano Salvati</strong> &middot;
+              aggiornamento automatico giornaliero
+            </div>
           </div>
-          
           <InfoModalButton />
         </div>
-
-        <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "80ch", fontSize: "0.95rem" }}>
-          Piattaforma di trasparenza e monitoraggio statistico: dati ufficiali congiunturali a pari perimetro (2026 vs 2025),
-          tassi di incidenza e indici di gravità normalizzati sugli occupati, mappe territoriali, durata delle assenze indennizzate e comparti produttivi ATECO.
-        </p>
       </header>
 
       {/* 2. Sezione Apertura: Monitoraggio Congiunturale 2026 vs 2025 a Pari Perimetro */}

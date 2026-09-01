@@ -14,6 +14,7 @@ import {
 import { getCongiunturaleData } from "@/lib/multidimensionale";
 import { compactNumber, exactNumber, percent } from "@/lib/format";
 import { MODAL_COLORS } from "@/lib/palette";
+import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
 
 const MESI_NOMI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu"];
 
@@ -25,7 +26,13 @@ function giorniSemestre(anno: number): number {
 
 export function HeroCongiunturaleKpi() {
   const data = useMemo(() => getCongiunturaleData(), []);
-  const [filtroMod, setFiltroMod] = useState<"totale" | "lavoro" | "itinere">("totale");
+  const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
+  const filtroMod: "totale" | "lavoro" | "itinere" =
+    modalita.lavoro && modalita.itinere
+      ? "totale"
+      : modalita.lavoro
+      ? "lavoro"
+      : "itinere";
 
   // Calcolo KPI in base alla modalita selezionata
   const kpiMod = useMemo(() => {
@@ -106,29 +113,8 @@ export function HeroCongiunturaleKpi() {
           </div>
         </div>
 
-        {/* Filtro Tipo Infortunio */}
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Ambito:</span>
-          {(["totale", "lavoro", "itinere"] as const).map((mode) => (
-            <button
-              key={mode}
-              onClick={() => setFiltroMod(mode)}
-              style={{
-                border: "1px solid var(--color-divider)",
-                borderRadius: "999px",
-                padding: "4px 12px",
-                fontSize: "0.82rem",
-                fontWeight: filtroMod === mode ? 650 : 500,
-                cursor: "pointer",
-                background: filtroMod === mode ? "var(--color-text)" : "var(--color-surface)",
-                color: filtroMod === mode ? "#ffffff" : "var(--color-text)",
-                transition: "all 0.15s ease",
-              }}
-            >
-              {mode === "totale" ? "Tutti i casi" : mode === "lavoro" ? "Occasione di lavoro" : "In itinere"}
-            </button>
-          ))}
-        </div>
+        {/* Filtro multiselezione modalità */}
+        <FiltroModalita value={modalita} onChange={setModalita} label="Ambito" />
       </div>
 
       {/* Griglia KPI Principali */}

@@ -41,8 +41,9 @@ def fascia_eta(eta_str):
         if e < 15: return "0-14"
         if e <= 24: return "15-24"
         if e <= 34: return "25-34"
-        if e <= 49: return "35-49"
-        if e <= 64: return "50-64"
+        if e <= 44: return "35-44"
+        if e <= 54: return "45-54"
+        if e <= 64: return "55-64"
         return "65+"
     except:
         return "ND"
@@ -189,21 +190,45 @@ def main():
         return {
             "totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0,
             "generi": defaultdict(int),
+            "generiLavoro": defaultdict(int),
+            "generiItinere": defaultdict(int),
             "generiMortali": defaultdict(int),
             "fasceEta": defaultdict(int),
+            "fasceEtaLavoro": defaultdict(int),
+            "fasceEtaItinere": defaultdict(int),
             "fasceEtaMortali": defaultdict(int),
             "modalita": defaultdict(int),
             "gestione": defaultdict(int),
+            "gestioneLavoro": defaultdict(int),
+            "gestioneItinere": defaultdict(int),
             "esito": defaultdict(int),
+            "esitoLavoro": defaultdict(int),
+            "esitoItinere": defaultdict(int),
             "indennizzo": defaultdict(int),
+            "indennizzoLavoro": defaultdict(int),
+            "indennizzoItinere": defaultdict(int),
             "gravita": defaultdict(int),
+            "gravitaLavoro": defaultdict(int),
+            "gravitaItinere": defaultdict(int),
             "durata": defaultdict(int),
+            "durataLavoro": defaultdict(int),
+            "durataItinere": defaultdict(int),
             "nascita": defaultdict(int),
+            "nascitaLavoro": defaultdict(int),
+            "nascitaItinere": defaultdict(int),
             "mezzo": defaultdict(int),
+            "mezzoLavoro": defaultdict(int),
+            "mezzoItinere": defaultdict(int),
             "atecoMacro": defaultdict(int),
+            "atecoMacroLavoro": defaultdict(int),
+            "atecoMacroItinere": defaultdict(int),
             "atecoMacroMortali": defaultdict(int),
             "atecoDivisione": defaultdict(int),
+            "atecoDivisioneLavoro": defaultdict(int),
+            "atecoDivisioneItinere": defaultdict(int),
             "mensile": defaultdict(int),
+            "mensileLavoro": defaultdict(int),
+            "mensileItinere": defaultdict(int),
             "regioni": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0})
         }
 
@@ -298,12 +323,38 @@ def main():
                             if is_itinere:
                                 T["itinere"] += 1
                                 T["modalita"]["itinere"] += 1
+                                T["generiItinere"][gen] += 1
+                                T["fasceEtaItinere"][f_eta] += 1
+                                T["gravitaItinere"][gr] += 1
+                                T["durataItinere"][dur] += 1
+                                T["atecoMacroItinere"][macro] += 1
+                                T["atecoDivisioneItinere"][div] += 1
+                                if 1 <= mese_num <= 12: T["mensileItinere"][mese_num] += 1
                             else:
                                 T["lavoro"] += 1
                                 T["modalita"]["lavoro"] += 1
+                                T["generiLavoro"][gen] += 1
+                                T["fasceEtaLavoro"][f_eta] += 1
+                                T["gravitaLavoro"][gr] += 1
+                                T["durataLavoro"][dur] += 1
+                                T["atecoMacroLavoro"][macro] += 1
+                                T["atecoDivisioneLavoro"][div] += 1
+                                if 1 <= mese_num <= 12: T["mensileLavoro"][mese_num] += 1
                             T["generi"][gen] += 1
                             T["fasceEta"][f_eta] += 1
                             T["gestione"][gest] += 1
+                            if is_itinere:
+                                T["gestioneItinere"][gest] += 1
+                                T["esitoItinere"][es] += 1
+                                T["indennizzoItinere"][ind] += 1
+                                T["nascitaItinere"][nascita_key] += 1
+                                T["mezzoItinere"][mezzo_key] += 1
+                            else:
+                                T["gestioneLavoro"][gest] += 1
+                                T["esitoLavoro"][es] += 1
+                                T["indennizzoLavoro"][ind] += 1
+                                T["nascitaLavoro"][nascita_key] += 1
+                                T["mezzoLavoro"][mezzo_key] += 1
                             T["esito"][es] += 1
                             T["indennizzo"][ind] += 1
                             T["gravita"][gr] += 1
@@ -388,19 +439,41 @@ def main():
             "indiceIncidenza": inc_naz,
             "indiceMortali": inc_mor_naz,
             "generi": dict(c["generi"]),
+            "generiLavoro": dict(c["generiLavoro"]),
+            "generiItinere": dict(c["generiItinere"]),
             "generiMortali": dict(c["generiMortali"]),
             "fasceEta": dict(c["fasceEta"]),
+            "fasceEtaLavoro": dict(c["fasceEtaLavoro"]),
+            "fasceEtaItinere": dict(c["fasceEtaItinere"]),
             "fasceEtaMortali": dict(c["fasceEtaMortali"]),
             "modalita": dict(c["modalita"]),
             "gestione": dict(c["gestione"]),
+            "gestioneLavoro": dict(c["gestioneLavoro"]),
+            "gestioneItinere": dict(c["gestioneItinere"]),
             "esito": dict(c["esito"]),
+            "esitoLavoro": dict(c["esitoLavoro"]),
+            "esitoItinere": dict(c["esitoItinere"]),
             "indennizzo": dict(c["indennizzo"]),
+            "indennizzoLavoro": dict(c["indennizzoLavoro"]),
+            "indennizzoItinere": dict(c["indennizzoItinere"]),
             "gravita": dict(c["gravita"]),
+            "gravitaLavoro": dict(c["gravitaLavoro"]),
+            "gravitaItinere": dict(c["gravitaItinere"]),
             "durata": dict(c["durata"]),
+            "durataLavoro": dict(c["durataLavoro"]),
+            "durataItinere": dict(c["durataItinere"]),
             "nascita": dict(c["nascita"]),
+            "nascitaLavoro": dict(c["nascitaLavoro"]),
+            "nascitaItinere": dict(c["nascitaItinere"]),
             "mezzo": dict(c["mezzo"]),
+            "mezzoLavoro": dict(c["mezzoLavoro"]),
+            "mezzoItinere": dict(c["mezzoItinere"]),
             "mensile": {str(m): c["mensile"].get(m, 0) for m in range(1, 13)},
+            "mensileLavoro": {str(m): c["mensileLavoro"].get(m, 0) for m in range(1, 13)},
+            "mensileItinere": {str(m): c["mensileItinere"].get(m, 0) for m in range(1, 13)},
             "atecoMacro": macro_list,
+            "atecoMacroLavoro": dict(c["atecoMacroLavoro"]),
+            "atecoMacroItinere": dict(c["atecoMacroItinere"]),
             "atecoDivisioni": top_div,
             "regioni": reg_list
         }

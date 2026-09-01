@@ -11,6 +11,7 @@ import {
   Tooltip,
   CartesianGrid,
   Legend,
+  Brush,
 } from "recharts";
 import serieDecennale from "@/data/generated/inail-serie-decennale.json";
 
@@ -129,8 +130,21 @@ export function SerieDecennaleWidget() {
                 <Line yAxisId="right" type="monotone" dataKey="indiceMortali" name="Incidenza mortalità ‰ (asse des.)" stroke="#1d1b1a" strokeWidth={3} dot={{ r: 4, fill: "#1d1b1a" }} isAnimationActive={false} />
               </>
             )}
+            <Brush
+              dataKey="anno"
+              height={26}
+              stroke="#b3261e"
+              fill="var(--color-surface-2)"
+              travellerWidth={12}
+              startIndex={0}
+              endIndex={Math.min(chartData.length - 1, 6)}
+            />
           </ComposedChart>
         </ResponsiveContainer>
+        {/* Slider di esplorazione: trascinare per zoomare/sfogliare gli anni */}
+        <div style={{ marginTop: "var(--space-1)", fontSize: "0.78rem", color: "var(--color-text-muted)", textAlign: "center" }}>
+          Usa lo slider per esplorare il periodo con più dettaglio (trascina le maniglie o la barra).
+        </div>
       </div>
 
       <p className="source-note">

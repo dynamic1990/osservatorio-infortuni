@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 2,
   "anniDisponibili": [
     "2020",
     "2021",
@@ -15,9 +15,6 @@
       "lavoro": 506495,
       "itinere": 65908,
       "giorni": 13436352,
-      "casiConGiorni": 367945,
-      "durataMedia": 36.5,
-      "indiceGravita": 612.3,
       "menomati": 58098,
       "occupati": 21943200,
       "indiceIncidenza": 26.09,
@@ -26,23 +23,51 @@
         "F": 244976,
         "M": 327427
       },
+      "generiLavoro": {
+        "F": 212704,
+        "M": 293791
+      },
+      "generiItinere": {
+        "F": 32272,
+        "M": 33636
+      },
       "generiMortali": {
         "M": 1546,
         "F": 196
       },
       "fasceEta": {
-        "35-49": 197351,
-        "50-64": 199991,
+        "35-44": 116307,
+        "55-64": 114358,
+        "45-54": 166677,
         "25-34": 99079,
         "65+": 12550,
         "15-24": 44883,
         "0-14": 18549
       },
+      "fasceEtaLavoro": {
+        "35-44": 102047,
+        "55-64": 101888,
+        "45-54": 149372,
+        "25-34": 85430,
+        "65+": 11507,
+        "15-24": 38125,
+        "0-14": 18126
+      },
+      "fasceEtaItinere": {
+        "35-44": 14260,
+        "15-24": 6758,
+        "45-54": 17305,
+        "25-34": 13649,
+        "55-64": 12470,
+        "65+": 1043,
+        "0-14": 423
+      },
       "fasceEtaMortali": {
         "25-34": 114,
-        "50-64": 1021,
+        "55-64": 736,
+        "45-54": 452,
         "65+": 222,
-        "35-49": 331,
+        "35-44": 164,
         "15-24": 51,
         "0-14": 3
       },
@@ -55,11 +80,33 @@
         "A": 26731,
         "S": 41637
       },
+      "gestioneLavoro": {
+        "I": 444678,
+        "A": 25452,
+        "S": 36365
+      },
+      "gestioneItinere": {
+        "I": 59357,
+        "S": 5272,
+        "A": 1279
+      },
       "esito": {
         "F": 67859,
         "P": 400115,
         "N": 100057,
         "I": 4372
+      },
+      "esitoLavoro": {
+        "F": 62642,
+        "P": 359052,
+        "N": 80673,
+        "I": 4128
+      },
+      "esitoItinere": {
+        "P": 41063,
+        "N": 19384,
+        "F": 5217,
+        "I": 244
       },
       "indennizzo": {
         "NE": 202657,
@@ -68,11 +115,37 @@
         "RD": 6275,
         "RS": 900
       },
+      "indennizzoLavoro": {
+        "NE": 174897,
+        "TE": 307561,
+        "CA": 18076,
+        "RD": 5178,
+        "RS": 783
+      },
+      "indennizzoItinere": {
+        "TE": 32813,
+        "CA": 4121,
+        "NE": 27760,
+        "RS": 117,
+        "RD": 1097
+      },
       "gravita": {
         "nessuna": 514305,
         "capitale": 22197,
         "franchigia": 29602,
         "rendita": 6299
+      },
+      "gravitaLavoro": {
+        "nessuna": 458617,
+        "capitale": 18076,
+        "franchigia": 24605,
+        "rendita": 5197
+      },
+      "gravitaItinere": {
+        "nessuna": 55688,
+        "capitale": 4121,
+        "rendita": 1102,
+        "franchigia": 4997
       },
       "durata": {
         "zero": 204458,
@@ -81,13 +154,43 @@
         "lunga": 92948,
         "breve": 72969
       },
+      "durataLavoro": {
+        "zero": 176203,
+        "media": 156400,
+        "grave90": 26959,
+        "lunga": 82913,
+        "breve": 64020
+      },
+      "durataItinere": {
+        "media": 13398,
+        "grave90": 5271,
+        "lunga": 10035,
+        "zero": 28255,
+        "breve": 8949
+      },
       "nascita": {
         "ITAL": 472835,
         "ESTERO": 99568
       },
+      "nascitaLavoro": {
+        "ITAL": 418763,
+        "ESTERO": 87732
+      },
+      "nascitaItinere": {
+        "ITAL": 54072,
+        "ESTERO": 11836
+      },
       "mezzo": {
         "SENZA_MEZZO": 512401,
         "CON_MEZZO": 60002
+      },
+      "mezzoLavoro": {
+        "SENZA_MEZZO": 493002,
+        "CON_MEZZO": 13493
+      },
+      "mezzoItinere": {
+        "CON_MEZZO": 46509,
+        "SENZA_MEZZO": 19399
       },
       "mensile": {
         "1": 52045,
@@ -103,338 +206,194 @@
         "11": 73168,
         "12": 57958
       },
+      "mensileLavoro": {
+        "1": 43548,
+        "2": 43774,
+        "3": 47585,
+        "4": 30413,
+        "5": 26709,
+        "6": 30365,
+        "7": 36346,
+        "8": 28690,
+        "9": 37535,
+        "10": 60719,
+        "11": 68503,
+        "12": 52308
+      },
+      "mensileItinere": {
+        "1": 8497,
+        "2": 7477,
+        "3": 2866,
+        "4": 1743,
+        "5": 3769,
+        "6": 5290,
+        "7": 6767,
+        "8": 4886,
+        "9": 7351,
+        "10": 6947,
+        "11": 4665,
+        "12": 5650
+      },
       "atecoMacro": [
         {
           "key": "Q",
-          "nome": "Sanità e assistenza sociale",
           "casi": 167375,
-          "mortali": 217,
-          "lavoro": 157359,
-          "itinere": 10016,
-          "menomati": 6976,
-          "giorni": 4143693,
-          "durataMedia": 29.8,
-          "indiceGravita": 2169.5,
-          "occupati": 1910000,
-          "indiceIncidenza": 87.63,
-          "indiceMortali": 0.114
+          "mortali": 217
         },
         {
           "key": "ND",
-          "nome": "Settore non attribuito (ND)",
           "casi": 132679,
-          "mortali": 327,
-          "lavoro": 122278,
-          "itinere": 10401,
-          "menomati": 9126,
-          "giorni": 1131091,
-          "durataMedia": 46.5,
-          "indiceGravita": 0.0,
-          "occupati": 0,
-          "indiceIncidenza": 0.0,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "C",
-          "nome": "Attività manifatturiere",
           "casi": 74872,
-          "mortali": 247,
-          "lavoro": 64230,
-          "itinere": 10642,
-          "menomati": 11184,
-          "giorni": 2116113,
-          "durataMedia": 36.3,
-          "indiceGravita": 551.0,
-          "occupati": 3840500,
-          "indiceIncidenza": 19.5,
-          "indiceMortali": 0.064
+          "mortali": 247
         },
         {
           "key": "H",
-          "nome": "Trasporto e magazzinaggio",
           "casi": 38736,
-          "mortali": 222,
-          "lavoro": 33586,
-          "itinere": 5150,
-          "menomati": 5763,
-          "giorni": 1225599,
-          "durataMedia": 41.9,
-          "indiceGravita": 1093.8,
-          "occupati": 1120500,
-          "indiceIncidenza": 34.57,
-          "indiceMortali": 0.198
+          "mortali": 222
         },
         {
           "key": "G",
-          "nome": "Commercio all'ingrosso e dettaglio",
           "casi": 36197,
-          "mortali": 155,
-          "lavoro": 28236,
-          "itinere": 7961,
-          "menomati": 5287,
-          "giorni": 1021959,
-          "durataMedia": 37.0,
-          "indiceGravita": 313.4,
-          "occupati": 3260400,
-          "indiceIncidenza": 11.1,
-          "indiceMortali": 0.048
+          "mortali": 155
         },
         {
           "key": "F",
-          "nome": "Costruzioni",
           "casi": 32824,
-          "mortali": 210,
-          "lavoro": 30211,
-          "itinere": 2613,
-          "menomati": 7203,
-          "giorni": 1284378,
-          "durataMedia": 50.0,
-          "indiceGravita": 980.3,
-          "occupati": 1310200,
-          "indiceIncidenza": 25.05,
-          "indiceMortali": 0.16
+          "mortali": 210
         },
         {
           "key": "N",
-          "nome": "Servizi di supporto alle imprese",
           "casi": 24326,
-          "mortali": 64,
-          "lavoro": 19454,
-          "itinere": 4872,
-          "menomati": 3121,
-          "giorni": 700974,
-          "durataMedia": 39.2,
-          "indiceGravita": 667.5,
-          "occupati": 1050200,
-          "indiceIncidenza": 23.16,
-          "indiceMortali": 0.061
+          "mortali": 64
         },
         {
           "key": "I",
-          "nome": "Alloggio e ristorazione",
           "casi": 18194,
-          "mortali": 59,
-          "lavoro": 14155,
-          "itinere": 4039,
-          "menomati": 2329,
-          "giorni": 468950,
-          "durataMedia": 35.5,
-          "indiceGravita": 356.6,
-          "occupati": 1315000,
-          "indiceIncidenza": 13.84,
-          "indiceMortali": 0.045
+          "mortali": 59
         },
         {
           "key": "O",
-          "nome": "Pubblica amministrazione e difesa",
           "casi": 11302,
-          "mortali": 73,
-          "lavoro": 9123,
-          "itinere": 2179,
-          "menomati": 1534,
-          "giorni": 302033,
-          "durataMedia": 40.2,
-          "indiceGravita": 239.7,
-          "occupati": 1260000,
-          "indiceIncidenza": 8.97,
-          "indiceMortali": 0.058
+          "mortali": 73
         },
         {
           "key": "E",
-          "nome": "Acqua, reti fognarie e rifiuti",
           "casi": 10605,
-          "mortali": 47,
-          "lavoro": 9738,
-          "itinere": 867,
-          "menomati": 1640,
-          "giorni": 348997,
-          "durataMedia": 41.6,
-          "indiceGravita": 1367.0,
-          "occupati": 255300,
-          "indiceIncidenza": 41.54,
-          "indiceMortali": 0.184
+          "mortali": 47
         },
         {
           "key": "S",
-          "nome": "Altri servizi",
           "casi": 4460,
-          "mortali": 26,
-          "lavoro": 3318,
-          "itinere": 1142,
-          "menomati": 795,
-          "giorni": 138598,
-          "durataMedia": 43.1,
-          "indiceGravita": 177.7,
-          "occupati": 780000,
-          "indiceIncidenza": 5.72,
-          "indiceMortali": 0.033
+          "mortali": 26
         },
         {
           "key": "M",
-          "nome": "Attività professionali e tecniche",
           "casi": 4040,
-          "mortali": 23,
-          "lavoro": 2418,
-          "itinere": 1622,
-          "menomati": 676,
-          "giorni": 118408,
-          "durataMedia": 41.1,
-          "indiceGravita": 81.1,
-          "occupati": 1460000,
-          "indiceIncidenza": 2.77,
-          "indiceMortali": 0.016
+          "mortali": 23
         },
         {
           "key": "J",
-          "nome": "Informazione e comunicazione",
           "casi": 3690,
-          "mortali": 9,
-          "lavoro": 2498,
-          "itinere": 1192,
-          "menomati": 495,
-          "giorni": 86017,
-          "durataMedia": 39.7,
-          "indiceGravita": 134.4,
-          "occupati": 640200,
-          "indiceIncidenza": 5.76,
-          "indiceMortali": 0.014
+          "mortali": 9
         },
         {
           "key": "R",
-          "nome": "Arte, sport e intrattenimento",
           "casi": 3354,
-          "mortali": 5,
-          "lavoro": 2880,
-          "itinere": 474,
-          "menomati": 607,
-          "giorni": 106639,
-          "durataMedia": 40.3,
-          "indiceGravita": 344.0,
-          "occupati": 310000,
-          "indiceIncidenza": 10.82,
-          "indiceMortali": 0.016
+          "mortali": 5
         },
         {
           "key": "P",
-          "nome": "Istruzione",
           "casi": 3325,
-          "mortali": 11,
-          "lavoro": 2795,
-          "itinere": 530,
-          "menomati": 243,
-          "giorni": 54020,
-          "durataMedia": 34.7,
-          "indiceGravita": 33.6,
-          "occupati": 1610000,
-          "indiceIncidenza": 2.07,
-          "indiceMortali": 0.007
+          "mortali": 11
         },
         {
           "key": "K",
-          "nome": "Attività finanziarie e assicurative",
           "casi": 2910,
-          "mortali": 21,
-          "lavoro": 1365,
-          "itinere": 1545,
-          "menomati": 435,
-          "giorni": 72650,
-          "durataMedia": 41.2,
-          "indiceGravita": 116.2,
-          "occupati": 625000,
-          "indiceIncidenza": 4.66,
-          "indiceMortali": 0.034
+          "mortali": 21
         },
         {
           "key": "A",
-          "nome": "Agricoltura, silvicoltura e pesca",
           "casi": 1247,
-          "mortali": 10,
-          "lavoro": 1130,
-          "itinere": 117,
-          "menomati": 252,
-          "giorni": 43396,
-          "durataMedia": 44.6,
-          "indiceGravita": 47.4,
-          "occupati": 915200,
-          "indiceIncidenza": 1.36,
-          "indiceMortali": 0.011
+          "mortali": 10
         },
         {
           "key": "L",
-          "nome": "Attività immobiliari",
           "casi": 1186,
-          "mortali": 10,
-          "lavoro": 873,
-          "itinere": 313,
-          "menomati": 206,
-          "giorni": 35449,
-          "durataMedia": 40.4,
-          "indiceGravita": 253.2,
-          "occupati": 140000,
-          "indiceIncidenza": 8.47,
-          "indiceMortali": 0.071
+          "mortali": 10
         },
         {
           "key": "D",
-          "nome": "Energia elettrica e gas",
           "casi": 671,
-          "mortali": 4,
-          "lavoro": 483,
-          "itinere": 188,
-          "menomati": 118,
-          "giorni": 20129,
-          "durataMedia": 41.0,
-          "indiceGravita": 185.7,
-          "occupati": 108400,
-          "indiceIncidenza": 6.19,
-          "indiceMortali": 0.037
+          "mortali": 4
         },
         {
           "key": "B",
-          "nome": "Estrazione di minerali",
           "casi": 327,
-          "mortali": 2,
-          "lavoro": 308,
-          "itinere": 19,
-          "menomati": 85,
-          "giorni": 14187,
-          "durataMedia": 51.4,
-          "indiceGravita": 543.6,
-          "occupati": 26100,
-          "indiceIncidenza": 12.53,
-          "indiceMortali": 0.077
+          "mortali": 2
         },
         {
           "key": "U",
-          "nome": "Organizzazioni extraterritoriali",
           "casi": 60,
-          "mortali": 0,
-          "lavoro": 38,
-          "itinere": 22,
-          "menomati": 15,
-          "giorni": 2014,
-          "durataMedia": 46.8,
-          "indiceGravita": 167.8,
-          "occupati": 12000,
-          "indiceIncidenza": 5.0,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "T",
-          "nome": "Attività di famiglie e convivenze",
           "casi": 23,
-          "mortali": 0,
-          "lavoro": 19,
-          "itinere": 4,
-          "menomati": 8,
-          "giorni": 1058,
-          "durataMedia": 58.8,
-          "indiceGravita": 1.4,
-          "occupati": 760000,
-          "indiceIncidenza": 0.03,
-          "indiceMortali": 0.0
+          "mortali": 0
         }
       ],
+      "atecoMacroLavoro": {
+        "I": 14155,
+        "Q": 157359,
+        "E": 9738,
+        "C": 64230,
+        "ND": 122278,
+        "H": 33586,
+        "O": 9123,
+        "G": 28236,
+        "F": 30211,
+        "R": 2880,
+        "N": 19454,
+        "B": 308,
+        "A": 1130,
+        "S": 3318,
+        "K": 1365,
+        "J": 2498,
+        "M": 2418,
+        "P": 2795,
+        "L": 873,
+        "D": 483,
+        "U": 38,
+        "T": 19
+      },
+      "atecoMacroItinere": {
+        "N": 4872,
+        "C": 10642,
+        "S": 1142,
+        "H": 5150,
+        "Q": 10016,
+        "L": 313,
+        "I": 4039,
+        "G": 7961,
+        "E": 867,
+        "K": 1545,
+        "F": 2613,
+        "ND": 10401,
+        "P": 530,
+        "M": 1622,
+        "R": 474,
+        "O": 2179,
+        "J": 1192,
+        "A": 117,
+        "B": 19,
+        "D": 188,
+        "U": 22,
+        "T": 4
+      },
       "atecoDivisioni": [
         {
           "key": "Q 86",
@@ -526,9 +485,6 @@
           "mortali": 147,
           "menomati": 3814,
           "giorni": 1178437,
-          "casiConGiorni": 36117,
-          "durataMedia": 32.6,
-          "indiceGravita": 688.7,
           "occupati": 1711000,
           "indiceIncidenza": 29.61,
           "indiceMortali": 0.086
@@ -541,9 +497,6 @@
           "mortali": 2,
           "menomati": 173,
           "giorni": 40548,
-          "casiConGiorni": 1198,
-          "durataMedia": 33.8,
-          "indiceGravita": 775.3,
           "occupati": 52300,
           "indiceIncidenza": 32.52,
           "indiceMortali": 0.038
@@ -556,9 +509,6 @@
           "mortali": 345,
           "menomati": 7934,
           "giorni": 2617679,
-          "casiConGiorni": 77424,
-          "durataMedia": 33.8,
-          "indiceGravita": 617.2,
           "occupati": 4240900,
           "indiceIncidenza": 27.13,
           "indiceMortali": 0.081
@@ -571,9 +521,6 @@
           "mortali": 26,
           "menomati": 1544,
           "giorni": 386039,
-          "casiConGiorni": 13249,
-          "durataMedia": 29.1,
-          "indiceGravita": 810.3,
           "occupati": 476400,
           "indiceIncidenza": 47.02,
           "indiceMortali": 0.055
@@ -586,9 +533,6 @@
           "mortali": 110,
           "menomati": 6108,
           "giorni": 1388478,
-          "casiConGiorni": 43650,
-          "durataMedia": 31.8,
-          "indiceGravita": 681.5,
           "occupati": 2037300,
           "indiceIncidenza": 33.83,
           "indiceMortali": 0.054
@@ -601,9 +545,6 @@
           "mortali": 29,
           "menomati": 1302,
           "giorni": 382976,
-          "casiConGiorni": 10188,
-          "durataMedia": 37.6,
-          "indiceGravita": 773.5,
           "occupati": 495100,
           "indiceIncidenza": 31.72,
           "indiceMortali": 0.059
@@ -616,9 +557,6 @@
           "mortali": 60,
           "menomati": 2612,
           "giorni": 500246,
-          "casiConGiorni": 12789,
-          "durataMedia": 39.1,
-          "indiceGravita": 879.2,
           "occupati": 569000,
           "indiceIncidenza": 33.88,
           "indiceMortali": 0.105
@@ -631,9 +569,6 @@
           "mortali": 149,
           "menomati": 6425,
           "giorni": 1553151,
-          "casiConGiorni": 44204,
-          "durataMedia": 35.1,
-          "indiceGravita": 810.3,
           "occupati": 1916700,
           "indiceIncidenza": 36.79,
           "indiceMortali": 0.078
@@ -646,9 +581,6 @@
           "mortali": 83,
           "menomati": 5129,
           "giorni": 987788,
-          "casiConGiorni": 25625,
-          "durataMedia": 38.5,
-          "indiceGravita": 657.4,
           "occupati": 1502600,
           "indiceIncidenza": 27.53,
           "indiceMortali": 0.055
@@ -661,9 +593,6 @@
           "mortali": 13,
           "menomati": 1131,
           "giorni": 202330,
-          "casiConGiorni": 5469,
-          "durataMedia": 37.0,
-          "indiceGravita": 595.8,
           "occupati": 339600,
           "indiceIncidenza": 23.63,
           "indiceMortali": 0.038
@@ -676,9 +605,6 @@
           "mortali": 54,
           "menomati": 2012,
           "giorni": 414845,
-          "casiConGiorni": 10729,
-          "durataMedia": 38.7,
-          "indiceGravita": 689.8,
           "occupati": 601400,
           "indiceIncidenza": 26.62,
           "indiceMortali": 0.09
@@ -691,9 +617,6 @@
           "mortali": 161,
           "menomati": 4683,
           "giorni": 975962,
-          "casiConGiorni": 23327,
-          "durataMedia": 41.8,
-          "indiceGravita": 439.5,
           "occupati": 2220500,
           "indiceIncidenza": 16.71,
           "indiceMortali": 0.073
@@ -706,9 +629,6 @@
           "mortali": 46,
           "menomati": 1604,
           "giorni": 299704,
-          "casiConGiorni": 7592,
-          "durataMedia": 39.5,
-          "indiceGravita": 642.9,
           "occupati": 466200,
           "indiceIncidenza": 23.78,
           "indiceMortali": 0.099
@@ -721,9 +641,6 @@
           "mortali": 17,
           "menomati": 305,
           "giorni": 48760,
-          "casiConGiorni": 916,
-          "durataMedia": 53.2,
-          "indiceGravita": 482.8,
           "occupati": 101000,
           "indiceIncidenza": 15.25,
           "indiceMortali": 0.168
@@ -736,9 +653,6 @@
           "mortali": 188,
           "menomati": 3300,
           "giorni": 541751,
-          "casiConGiorni": 12533,
-          "durataMedia": 43.2,
-          "indiceGravita": 352.9,
           "occupati": 1535200,
           "indiceIncidenza": 14.58,
           "indiceMortali": 0.122
@@ -751,9 +665,6 @@
           "mortali": 113,
           "menomati": 3347,
           "giorni": 612878,
-          "casiConGiorni": 15379,
-          "durataMedia": 39.9,
-          "indiceGravita": 522.9,
           "occupati": 1172000,
           "indiceIncidenza": 21.54,
           "indiceMortali": 0.096
@@ -766,9 +677,6 @@
           "mortali": 10,
           "menomati": 552,
           "giorni": 143277,
-          "casiConGiorni": 2533,
-          "durataMedia": 56.6,
-          "indiceGravita": 794.7,
           "occupati": 180300,
           "indiceIncidenza": 21.9,
           "indiceMortali": 0.055
@@ -781,9 +689,6 @@
           "mortali": 50,
           "menomati": 1618,
           "giorni": 222589,
-          "casiConGiorni": 4323,
-          "durataMedia": 51.5,
-          "indiceGravita": 444.2,
           "occupati": 501100,
           "indiceIncidenza": 14.54,
           "indiceMortali": 0.1
@@ -796,9 +701,6 @@
           "mortali": 105,
           "menomati": 3034,
           "giorni": 639978,
-          "casiConGiorni": 13860,
-          "durataMedia": 46.2,
-          "indiceGravita": 498.7,
           "occupati": 1283300,
           "indiceIncidenza": 17.66,
           "indiceMortali": 0.082
@@ -811,46 +713,9 @@
           "mortali": 34,
           "menomati": 1471,
           "giorni": 298936,
-          "casiConGiorni": 6840,
-          "durataMedia": 43.7,
-          "indiceGravita": 552.3,
           "occupati": 541300,
           "indiceIncidenza": 21.26,
           "indiceMortali": 0.063
-        }
-      ],
-      "provinceAutonome": [
-        {
-          "codice": "021",
-          "nome": "P.A. Bolzano / Bozen",
-          "totale": 13931,
-          "lavoro": 13082,
-          "itinere": 849,
-          "mortali": 11,
-          "menomati": 963,
-          "giorni": 218122,
-          "casiConGiorni": 7814,
-          "durataMedia": 27.9,
-          "indiceGravita": 898.4,
-          "occupati": 242800,
-          "indiceIncidenza": 57.38,
-          "indiceMortali": 0.045
-        },
-        {
-          "codice": "022",
-          "nome": "P.A. Trento",
-          "totale": 8469,
-          "lavoro": 7739,
-          "itinere": 730,
-          "mortali": 15,
-          "menomati": 581,
-          "giorni": 167917,
-          "casiConGiorni": 5435,
-          "durataMedia": 30.9,
-          "indiceGravita": 718.8,
-          "occupati": 233600,
-          "indiceIncidenza": 36.25,
-          "indiceMortali": 0.064
         }
       ]
     },
@@ -861,9 +726,6 @@
       "lavoro": 479558,
       "itinere": 84880,
       "giorni": 11963198,
-      "casiConGiorni": 323209,
-      "durataMedia": 37.0,
-      "indiceGravita": 547.5,
       "menomati": 66787,
       "occupati": 21849200,
       "indiceIncidenza": 25.83,
@@ -872,22 +734,50 @@
         "F": 205652,
         "M": 358786
       },
+      "generiLavoro": {
+        "F": 164482,
+        "M": 315076
+      },
+      "generiItinere": {
+        "F": 41170,
+        "M": 43710
+      },
       "generiMortali": {
         "M": 1316,
         "F": 156
       },
       "fasceEta": {
-        "35-49": 179875,
-        "50-64": 178229,
+        "45-54": 145841,
+        "35-44": 108852,
+        "55-64": 103411,
         "15-24": 60261,
         "65+": 12168,
         "25-34": 102005,
         "0-14": 31900
       },
+      "fasceEtaLavoro": {
+        "45-54": 124630,
+        "35-44": 91373,
+        "55-64": 88173,
+        "15-24": 50104,
+        "65+": 10882,
+        "25-34": 83226,
+        "0-14": 31170
+      },
+      "fasceEtaItinere": {
+        "45-54": 21211,
+        "35-44": 17479,
+        "25-34": 18779,
+        "55-64": 15238,
+        "15-24": 10157,
+        "65+": 1286,
+        "0-14": 730
+      },
       "fasceEtaMortali": {
-        "35-49": 386,
-        "50-64": 765,
+        "45-54": 432,
+        "55-64": 520,
         "25-34": 113,
+        "35-44": 199,
         "65+": 151,
         "15-24": 55,
         "0-14": 2
@@ -901,11 +791,33 @@
         "A": 27242,
         "S": 64562
       },
+      "gestioneLavoro": {
+        "I": 397901,
+        "A": 25629,
+        "S": 56028
+      },
+      "gestioneItinere": {
+        "I": 74733,
+        "S": 8534,
+        "A": 1613
+      },
       "esito": {
         "P": 366522,
         "N": 115461,
         "F": 77499,
         "I": 4956
+      },
+      "esitoLavoro": {
+        "P": 314186,
+        "N": 90616,
+        "F": 70206,
+        "I": 4550
+      },
+      "esitoItinere": {
+        "N": 24845,
+        "P": 52336,
+        "F": 7293,
+        "I": 406
       },
       "indennizzo": {
         "TE": 293074,
@@ -914,11 +826,37 @@
         "RD": 7008,
         "RS": 696
       },
+      "indennizzoLavoro": {
+        "TE": 252072,
+        "CA": 19502,
+        "NE": 201834,
+        "RD": 5587,
+        "RS": 563
+      },
+      "indennizzoItinere": {
+        "NE": 37037,
+        "TE": 41002,
+        "RD": 1421,
+        "CA": 5287,
+        "RS": 133
+      },
       "gravita": {
         "nessuna": 497651,
         "capitale": 24789,
         "franchigia": 34978,
         "rendita": 7020
+      },
+      "gravitaLavoro": {
+        "nessuna": 425763,
+        "capitale": 19502,
+        "franchigia": 28695,
+        "rendita": 5598
+      },
+      "gravitaItinere": {
+        "nessuna": 71888,
+        "franchigia": 6283,
+        "rendita": 1422,
+        "capitale": 5287
       },
       "durata": {
         "media": 132381,
@@ -927,13 +865,43 @@
         "grave90": 33265,
         "zero": 241229
       },
+      "durataLavoro": {
+        "media": 115774,
+        "breve": 72872,
+        "lunga": 60632,
+        "grave90": 26879,
+        "zero": 203401
+      },
+      "durataItinere": {
+        "zero": 37828,
+        "media": 16607,
+        "lunga": 12102,
+        "grave90": 6386,
+        "breve": 11957
+      },
       "nascita": {
         "ITAL": 461744,
         "ESTERO": 102694
       },
+      "nascitaLavoro": {
+        "ITAL": 392491,
+        "ESTERO": 87067
+      },
+      "nascitaItinere": {
+        "ITAL": 69253,
+        "ESTERO": 15627
+      },
       "mezzo": {
         "SENZA_MEZZO": 486460,
         "CON_MEZZO": 77978
+      },
+      "mezzoLavoro": {
+        "SENZA_MEZZO": 463161,
+        "CON_MEZZO": 16397
+      },
+      "mezzoItinere": {
+        "CON_MEZZO": 61581,
+        "SENZA_MEZZO": 23299
       },
       "mensile": {
         "1": 48552,
@@ -949,338 +917,194 @@
         "11": 54330,
         "12": 54040
       },
+      "mensileLavoro": {
+        "1": 43040,
+        "2": 37322,
+        "3": 39749,
+        "4": 37144,
+        "5": 40491,
+        "6": 37783,
+        "7": 38837,
+        "8": 29811,
+        "9": 39726,
+        "10": 44464,
+        "11": 45068,
+        "12": 46123
+      },
+      "mensileItinere": {
+        "1": 5512,
+        "2": 5440,
+        "3": 5273,
+        "4": 5749,
+        "5": 7521,
+        "6": 7779,
+        "7": 7642,
+        "8": 5653,
+        "9": 8432,
+        "10": 8700,
+        "11": 9262,
+        "12": 7917
+      },
       "atecoMacro": [
         {
           "key": "ND",
-          "nome": "Settore non attribuito (ND)",
           "casi": 158697,
-          "mortali": 326,
-          "lavoro": 143651,
-          "itinere": 15046,
-          "menomati": 11065,
-          "giorni": 1165557,
-          "durataMedia": 46.7,
-          "indiceGravita": 0.0,
-          "occupati": 0,
-          "indiceIncidenza": 0.0,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "C",
-          "nome": "Attività manifatturiere",
           "casi": 89703,
-          "mortali": 221,
-          "lavoro": 75560,
-          "itinere": 14143,
-          "menomati": 13333,
-          "giorni": 2450594,
-          "durataMedia": 35.5,
-          "indiceGravita": 641.5,
-          "occupati": 3820100,
-          "indiceIncidenza": 23.48,
-          "indiceMortali": 0.058
+          "mortali": 221
         },
         {
           "key": "Q",
-          "nome": "Sanità e assistenza sociale",
           "casi": 81027,
-          "mortali": 61,
-          "lavoro": 69298,
-          "itinere": 11729,
-          "menomati": 5923,
-          "giorni": 1654469,
-          "durataMedia": 27.7,
-          "indiceGravita": 848.4,
-          "occupati": 1950000,
-          "indiceIncidenza": 41.55,
-          "indiceMortali": 0.031
+          "mortali": 61
         },
         {
           "key": "H",
-          "nome": "Trasporto e magazzinaggio",
           "casi": 49601,
-          "mortali": 199,
-          "lavoro": 43084,
-          "itinere": 6517,
-          "menomati": 6641,
-          "giorni": 1342421,
-          "durataMedia": 38.8,
-          "indiceGravita": 1182.7,
-          "occupati": 1135000,
-          "indiceIncidenza": 43.7,
-          "indiceMortali": 0.175
+          "mortali": 199
         },
         {
           "key": "G",
-          "nome": "Commercio all'ingrosso e dettaglio",
           "casi": 42128,
-          "mortali": 125,
-          "lavoro": 32189,
-          "itinere": 9939,
-          "menomati": 6159,
-          "giorni": 1127214,
-          "durataMedia": 35.4,
-          "indiceGravita": 351.1,
-          "occupati": 3210500,
-          "indiceIncidenza": 13.12,
-          "indiceMortali": 0.039
+          "mortali": 125
         },
         {
           "key": "F",
-          "nome": "Costruzioni",
           "casi": 40984,
-          "mortali": 237,
-          "lavoro": 37305,
-          "itinere": 3679,
-          "menomati": 8969,
-          "giorni": 1524632,
-          "durataMedia": 47.9,
-          "indiceGravita": 1100.5,
-          "occupati": 1385400,
-          "indiceIncidenza": 29.58,
-          "indiceMortali": 0.171
+          "mortali": 237
         },
         {
           "key": "N",
-          "nome": "Servizi di supporto alle imprese",
           "casi": 26897,
-          "mortali": 78,
-          "lavoro": 20705,
-          "itinere": 6192,
-          "menomati": 3638,
-          "giorni": 746424,
-          "durataMedia": 38.3,
-          "indiceGravita": 717.4,
-          "occupati": 1040500,
-          "indiceIncidenza": 25.85,
-          "indiceMortali": 0.075
+          "mortali": 78
         },
         {
           "key": "I",
-          "nome": "Alloggio e ristorazione",
           "casi": 22403,
-          "mortali": 46,
-          "lavoro": 17132,
-          "itinere": 5271,
-          "menomati": 2891,
-          "giorni": 545436,
-          "durataMedia": 33.8,
-          "indiceGravita": 422.7,
-          "occupati": 1290400,
-          "indiceIncidenza": 17.36,
-          "indiceMortali": 0.036
+          "mortali": 46
         },
         {
           "key": "O",
-          "nome": "Pubblica amministrazione e difesa",
           "casi": 12068,
-          "mortali": 44,
-          "lavoro": 9528,
-          "itinere": 2540,
-          "menomati": 1691,
-          "giorni": 299119,
-          "durataMedia": 39.2,
-          "indiceGravita": 235.5,
-          "occupati": 1270000,
-          "indiceIncidenza": 9.5,
-          "indiceMortali": 0.035
+          "mortali": 44
         },
         {
           "key": "E",
-          "nome": "Acqua, reti fognarie e rifiuti",
           "casi": 11564,
-          "mortali": 31,
-          "lavoro": 10527,
-          "itinere": 1037,
-          "menomati": 1820,
-          "giorni": 368602,
-          "durataMedia": 40.2,
-          "indiceGravita": 1428.7,
-          "occupati": 258000,
-          "indiceIncidenza": 44.82,
-          "indiceMortali": 0.12
+          "mortali": 31
         },
         {
           "key": "S",
-          "nome": "Altri servizi",
           "casi": 5084,
-          "mortali": 20,
-          "lavoro": 3642,
-          "itinere": 1442,
-          "menomati": 900,
-          "giorni": 148788,
-          "durataMedia": 40.9,
-          "indiceGravita": 192.0,
-          "occupati": 775000,
-          "indiceIncidenza": 6.56,
-          "indiceMortali": 0.026
+          "mortali": 20
         },
         {
           "key": "M",
-          "nome": "Attività professionali e tecniche",
           "casi": 4712,
-          "mortali": 22,
-          "lavoro": 2731,
-          "itinere": 1981,
-          "menomati": 776,
-          "giorni": 119663,
-          "durataMedia": 36.4,
-          "indiceGravita": 80.6,
-          "occupati": 1485000,
-          "indiceIncidenza": 3.17,
-          "indiceMortali": 0.015
+          "mortali": 22
         },
         {
           "key": "P",
-          "nome": "Istruzione",
           "casi": 4546,
-          "mortali": 6,
-          "lavoro": 3646,
-          "itinere": 900,
-          "menomati": 347,
-          "giorni": 50779,
-          "durataMedia": 31.4,
-          "indiceGravita": 31.2,
-          "occupati": 1630000,
-          "indiceIncidenza": 2.79,
-          "indiceMortali": 0.004
+          "mortali": 6
         },
         {
           "key": "J",
-          "nome": "Informazione e comunicazione",
           "casi": 4483,
-          "mortali": 20,
-          "lavoro": 3087,
-          "itinere": 1396,
-          "menomati": 634,
-          "giorni": 101699,
-          "durataMedia": 38.6,
-          "indiceGravita": 152.9,
-          "occupati": 665000,
-          "indiceIncidenza": 6.74,
-          "indiceMortali": 0.03
+          "mortali": 20
         },
         {
           "key": "R",
-          "nome": "Arte, sport e intrattenimento",
           "casi": 3939,
-          "mortali": 7,
-          "lavoro": 3334,
-          "itinere": 605,
-          "menomati": 707,
-          "giorni": 114936,
-          "durataMedia": 37.1,
-          "indiceGravita": 376.8,
-          "occupati": 305000,
-          "indiceIncidenza": 12.91,
-          "indiceMortali": 0.023
+          "mortali": 7
         },
         {
           "key": "K",
-          "nome": "Attività finanziarie e assicurative",
           "casi": 2915,
-          "mortali": 7,
-          "lavoro": 1198,
-          "itinere": 1717,
-          "menomati": 537,
-          "giorni": 76219,
-          "durataMedia": 39.9,
-          "indiceGravita": 122.9,
-          "occupati": 620400,
-          "indiceIncidenza": 4.7,
-          "indiceMortali": 0.011
+          "mortali": 7
         },
         {
           "key": "A",
-          "nome": "Agricoltura, silvicoltura e pesca",
           "casi": 1259,
-          "mortali": 11,
-          "lavoro": 1145,
-          "itinere": 114,
-          "menomati": 288,
-          "giorni": 44526,
-          "durataMedia": 45.5,
-          "indiceGravita": 49.5,
-          "occupati": 899400,
-          "indiceIncidenza": 1.4,
-          "indiceMortali": 0.012
+          "mortali": 11
         },
         {
           "key": "L",
-          "nome": "Attività immobiliari",
           "casi": 1194,
-          "mortali": 8,
-          "lavoro": 842,
-          "itinere": 352,
-          "menomati": 207,
-          "giorni": 36694,
-          "durataMedia": 41.2,
-          "indiceGravita": 252.7,
-          "occupati": 145200,
-          "indiceIncidenza": 8.22,
-          "indiceMortali": 0.055
+          "mortali": 8
         },
         {
           "key": "D",
-          "nome": "Energia elettrica e gas",
           "casi": 761,
-          "mortali": 2,
-          "lavoro": 543,
-          "itinere": 218,
-          "menomati": 142,
-          "giorni": 24429,
-          "durataMedia": 42.9,
-          "indiceGravita": 221.7,
-          "occupati": 110200,
-          "indiceIncidenza": 6.91,
-          "indiceMortali": 0.018
+          "mortali": 2
         },
         {
           "key": "B",
-          "nome": "Estrazione di minerali",
           "casi": 387,
-          "mortali": 1,
-          "lavoro": 349,
-          "itinere": 38,
-          "menomati": 106,
-          "giorni": 18596,
-          "durataMedia": 58.3,
-          "indiceGravita": 732.1,
-          "occupati": 25400,
-          "indiceIncidenza": 15.24,
-          "indiceMortali": 0.039
+          "mortali": 1
         },
         {
           "key": "U",
-          "nome": "Organizzazioni extraterritoriali",
           "casi": 62,
-          "mortali": 0,
-          "lavoro": 43,
-          "itinere": 19,
-          "menomati": 10,
-          "giorni": 1836,
-          "durataMedia": 45.9,
-          "indiceGravita": 153.0,
-          "occupati": 12000,
-          "indiceIncidenza": 5.17,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "T",
-          "nome": "Attività di famiglie e convivenze",
           "casi": 24,
-          "mortali": 0,
-          "lavoro": 19,
-          "itinere": 5,
-          "menomati": 3,
-          "giorni": 565,
-          "durataMedia": 29.7,
-          "indiceGravita": 0.8,
-          "occupati": 740000,
-          "indiceIncidenza": 0.03,
-          "indiceMortali": 0.0
+          "mortali": 0
         }
       ],
+      "atecoMacroLavoro": {
+        "Q": 69298,
+        "H": 43084,
+        "O": 9528,
+        "ND": 143651,
+        "C": 75560,
+        "N": 20705,
+        "F": 37305,
+        "J": 3087,
+        "E": 10527,
+        "G": 32189,
+        "R": 3334,
+        "S": 3642,
+        "I": 17132,
+        "M": 2731,
+        "L": 842,
+        "D": 543,
+        "K": 1198,
+        "A": 1145,
+        "B": 349,
+        "P": 3646,
+        "U": 43,
+        "T": 19
+      },
+      "atecoMacroItinere": {
+        "Q": 11729,
+        "ND": 15046,
+        "O": 2540,
+        "N": 6192,
+        "C": 14143,
+        "F": 3679,
+        "I": 5271,
+        "H": 6517,
+        "G": 9939,
+        "S": 1442,
+        "K": 1717,
+        "M": 1981,
+        "L": 352,
+        "P": 900,
+        "E": 1037,
+        "R": 605,
+        "J": 1396,
+        "B": 38,
+        "A": 114,
+        "D": 218,
+        "U": 19,
+        "T": 5
+      },
       "atecoDivisioni": [
         {
           "key": "Q 86",
@@ -1372,9 +1196,6 @@
           "mortali": 120,
           "menomati": 4345,
           "giorni": 838527,
-          "casiConGiorni": 24234,
-          "durataMedia": 34.6,
-          "indiceGravita": 490.9,
           "occupati": 1708200,
           "indiceIncidenza": 24.5,
           "indiceMortali": 0.07
@@ -1387,9 +1208,6 @@
           "mortali": 5,
           "menomati": 176,
           "giorni": 32270,
-          "casiConGiorni": 821,
-          "durataMedia": 39.3,
-          "indiceGravita": 625.4,
           "occupati": 51600,
           "indiceIncidenza": 25.78,
           "indiceMortali": 0.097
@@ -1402,9 +1220,6 @@
           "mortali": 204,
           "menomati": 9215,
           "giorni": 2023321,
-          "casiConGiorni": 60871,
-          "durataMedia": 33.2,
-          "indiceGravita": 480.3,
           "occupati": 4212500,
           "indiceIncidenza": 25.13,
           "indiceMortali": 0.048
@@ -1417,9 +1232,6 @@
           "mortali": 31,
           "menomati": 1613,
           "giorni": 332183,
-          "casiConGiorni": 10963,
-          "durataMedia": 30.3,
-          "indiceGravita": 702.7,
           "occupati": 472700,
           "indiceIncidenza": 45.76,
           "indiceMortali": 0.066
@@ -1432,9 +1244,6 @@
           "mortali": 122,
           "menomati": 6818,
           "giorni": 1243651,
-          "casiConGiorni": 38486,
-          "durataMedia": 32.3,
-          "indiceGravita": 615.2,
           "occupati": 2021600,
           "indiceIncidenza": 34.9,
           "indiceMortali": 0.06
@@ -1447,9 +1256,6 @@
           "mortali": 38,
           "menomati": 1403,
           "giorni": 359698,
-          "casiConGiorni": 9513,
-          "durataMedia": 37.8,
-          "indiceGravita": 726.1,
           "occupati": 495400,
           "indiceIncidenza": 32.25,
           "indiceMortali": 0.077
@@ -1462,9 +1268,6 @@
           "mortali": 43,
           "menomati": 2969,
           "giorni": 411996,
-          "casiConGiorni": 11222,
-          "durataMedia": 36.7,
-          "indiceGravita": 717.8,
           "occupati": 574000,
           "indiceIncidenza": 33.44,
           "indiceMortali": 0.075
@@ -1477,9 +1280,6 @@
           "mortali": 126,
           "menomati": 7490,
           "giorni": 1445510,
-          "casiConGiorni": 41940,
-          "durataMedia": 34.5,
-          "indiceGravita": 759.2,
           "occupati": 1904100,
           "indiceIncidenza": 39.38,
           "indiceMortali": 0.066
@@ -1492,9 +1292,6 @@
           "mortali": 77,
           "menomati": 6002,
           "giorni": 984674,
-          "casiConGiorni": 25738,
-          "durataMedia": 38.3,
-          "indiceGravita": 661.8,
           "occupati": 1487900,
           "indiceIncidenza": 29.29,
           "indiceMortali": 0.052
@@ -1507,9 +1304,6 @@
           "mortali": 28,
           "menomati": 1327,
           "giorni": 219304,
-          "casiConGiorni": 5837,
-          "durataMedia": 37.6,
-          "indiceGravita": 642.4,
           "occupati": 341400,
           "indiceIncidenza": 26.62,
           "indiceMortali": 0.082
@@ -1522,9 +1316,6 @@
           "mortali": 37,
           "menomati": 2344,
           "giorni": 402770,
-          "casiConGiorni": 10693,
-          "durataMedia": 37.7,
-          "indiceGravita": 674.5,
           "occupati": 597100,
           "indiceIncidenza": 27.57,
           "indiceMortali": 0.062
@@ -1537,9 +1328,6 @@
           "mortali": 137,
           "menomati": 5286,
           "giorni": 934857,
-          "casiConGiorni": 22313,
-          "durataMedia": 41.9,
-          "indiceGravita": 426.7,
           "occupati": 2191000,
           "indiceIncidenza": 17.21,
           "indiceMortali": 0.063
@@ -1552,9 +1340,6 @@
           "mortali": 49,
           "menomati": 1984,
           "giorni": 317469,
-          "casiConGiorni": 7269,
-          "durataMedia": 43.7,
-          "indiceGravita": 680.0,
           "occupati": 466900,
           "indiceIncidenza": 24.59,
           "indiceMortali": 0.105
@@ -1567,9 +1352,6 @@
           "mortali": 19,
           "menomati": 325,
           "giorni": 52307,
-          "casiConGiorni": 983,
-          "durataMedia": 53.2,
-          "indiceGravita": 539.2,
           "occupati": 97000,
           "indiceIncidenza": 17.9,
           "indiceMortali": 0.196
@@ -1582,9 +1364,6 @@
           "mortali": 152,
           "menomati": 3753,
           "giorni": 497474,
-          "casiConGiorni": 10793,
-          "durataMedia": 46.1,
-          "indiceGravita": 322.0,
           "occupati": 1545100,
           "indiceIncidenza": 13.17,
           "indiceMortali": 0.098
@@ -1597,9 +1376,6 @@
           "mortali": 108,
           "menomati": 3895,
           "giorni": 589547,
-          "casiConGiorni": 14158,
-          "durataMedia": 41.6,
-          "indiceGravita": 501.4,
           "occupati": 1175700,
           "indiceIncidenza": 21.14,
           "indiceMortali": 0.092
@@ -1612,9 +1388,6 @@
           "mortali": 26,
           "menomati": 745,
           "giorni": 150309,
-          "casiConGiorni": 2621,
-          "durataMedia": 57.3,
-          "indiceGravita": 816.9,
           "occupati": 184000,
           "indiceIncidenza": 22.67,
           "indiceMortali": 0.141
@@ -1627,9 +1400,6 @@
           "mortali": 29,
           "menomati": 1857,
           "giorni": 218832,
-          "casiConGiorni": 4344,
-          "durataMedia": 50.4,
-          "indiceGravita": 434.3,
           "occupati": 503900,
           "indiceIncidenza": 15.8,
           "indiceMortali": 0.058
@@ -1642,9 +1412,6 @@
           "mortali": 86,
           "menomati": 3592,
           "giorni": 610903,
-          "casiConGiorni": 13856,
-          "durataMedia": 44.1,
-          "indiceGravita": 479.6,
           "occupati": 1273700,
           "indiceIncidenza": 18.96,
           "indiceMortali": 0.068
@@ -1657,46 +1424,9 @@
           "mortali": 35,
           "menomati": 1648,
           "giorni": 297596,
-          "casiConGiorni": 6554,
-          "durataMedia": 45.4,
-          "indiceGravita": 545.6,
           "occupati": 545400,
           "indiceIncidenza": 21.08,
           "indiceMortali": 0.064
-        }
-      ],
-      "provinceAutonome": [
-        {
-          "codice": "021",
-          "nome": "P.A. Bolzano / Bozen",
-          "totale": 14085,
-          "lavoro": 13055,
-          "itinere": 1030,
-          "mortali": 14,
-          "menomati": 952,
-          "giorni": 197006,
-          "casiConGiorni": 6807,
-          "durataMedia": 28.9,
-          "indiceGravita": 817.1,
-          "occupati": 241100,
-          "indiceIncidenza": 58.42,
-          "indiceMortali": 0.058
-        },
-        {
-          "codice": "022",
-          "nome": "P.A. Trento",
-          "totale": 7548,
-          "lavoro": 6608,
-          "itinere": 940,
-          "mortali": 17,
-          "menomati": 661,
-          "giorni": 135177,
-          "casiConGiorni": 4156,
-          "durataMedia": 32.5,
-          "indiceGravita": 583.7,
-          "occupati": 231600,
-          "indiceIncidenza": 32.59,
-          "indiceMortali": 0.073
         }
       ]
     },
@@ -1707,9 +1437,6 @@
       "lavoro": 608110,
       "itinere": 95463,
       "giorni": 12212516,
-      "casiConGiorni": 383798,
-      "durataMedia": 31.8,
-      "indiceGravita": 544.9,
       "menomati": 68839,
       "occupati": 22412500,
       "indiceIncidenza": 31.39,
@@ -1718,23 +1445,51 @@
         "F": 288838,
         "M": 414735
       },
+      "generiLavoro": {
+        "F": 242922,
+        "M": 365188
+      },
+      "generiItinere": {
+        "F": 45916,
+        "M": 49547
+      },
       "generiMortali": {
         "M": 1168,
         "F": 136
       },
       "fasceEta": {
-        "50-64": 227353,
-        "35-49": 216679,
+        "45-54": 179094,
+        "35-44": 130395,
+        "55-64": 134543,
         "25-34": 123549,
         "65+": 15014,
         "15-24": 76900,
         "0-14": 44078
       },
+      "fasceEtaLavoro": {
+        "45-54": 155526,
+        "35-44": 111195,
+        "55-64": 117237,
+        "25-34": 102645,
+        "65+": 13529,
+        "15-24": 64827,
+        "0-14": 43151
+      },
+      "fasceEtaItinere": {
+        "55-64": 17306,
+        "45-54": 23568,
+        "15-24": 12073,
+        "35-44": 19200,
+        "25-34": 20904,
+        "65+": 1485,
+        "0-14": 927
+      },
       "fasceEtaMortali": {
-        "50-64": 644,
+        "55-64": 438,
+        "45-54": 350,
         "15-24": 61,
         "65+": 110,
-        "35-49": 354,
+        "35-44": 210,
         "0-14": 2,
         "25-34": 133
       },
@@ -1747,11 +1502,33 @@
         "S": 94247,
         "A": 26500
       },
+      "gestioneLavoro": {
+        "I": 498916,
+        "S": 84243,
+        "A": 24951
+      },
+      "gestioneItinere": {
+        "S": 10004,
+        "I": 83910,
+        "A": 1549
+      },
       "esito": {
         "N": 162615,
         "F": 82830,
         "P": 448853,
         "I": 9275
+      },
+      "esitoLavoro": {
+        "N": 132641,
+        "F": 73950,
+        "P": 392905,
+        "I": 8614
+      },
+      "esitoItinere": {
+        "P": 55948,
+        "N": 29974,
+        "F": 8880,
+        "I": 661
       },
       "indennizzo": {
         "NE": 317384,
@@ -1760,11 +1537,37 @@
         "RD": 6922,
         "RS": 595
       },
+      "indennizzoLavoro": {
+        "NE": 272880,
+        "TE": 309505,
+        "CA": 19895,
+        "RD": 5385,
+        "RS": 445
+      },
+      "indennizzoItinere": {
+        "NE": 44504,
+        "TE": 43746,
+        "RD": 1537,
+        "CA": 5526,
+        "RS": 150
+      },
       "gravita": {
         "nessuna": 634734,
         "capitale": 25421,
         "franchigia": 36484,
         "rendita": 6934
+      },
+      "gravitaLavoro": {
+        "nessuna": 553284,
+        "capitale": 19895,
+        "franchigia": 29536,
+        "rendita": 5395
+      },
+      "gravitaItinere": {
+        "nessuna": 81450,
+        "rendita": 1539,
+        "capitale": 5526,
+        "franchigia": 6948
       },
       "durata": {
         "zero": 319775,
@@ -1773,13 +1576,43 @@
         "lunga": 71377,
         "breve": 135385
       },
+      "durataLavoro": {
+        "zero": 274476,
+        "media": 125875,
+        "grave90": 26747,
+        "lunga": 58745,
+        "breve": 122267
+      },
+      "durataItinere": {
+        "zero": 45299,
+        "media": 17730,
+        "grave90": 6684,
+        "breve": 13118,
+        "lunga": 12632
+      },
       "nascita": {
         "ESTERO": 122757,
         "ITAL": 580816
       },
+      "nascitaLavoro": {
+        "ESTERO": 104262,
+        "ITAL": 503848
+      },
+      "nascitaItinere": {
+        "ITAL": 76968,
+        "ESTERO": 18495
+      },
       "mezzo": {
         "SENZA_MEZZO": 618664,
         "CON_MEZZO": 84909
+      },
+      "mezzoLavoro": {
+        "SENZA_MEZZO": 591038,
+        "CON_MEZZO": 17072
+      },
+      "mezzoItinere": {
+        "CON_MEZZO": 67837,
+        "SENZA_MEZZO": 27626
       },
       "mensile": {
         "1": 72513,
@@ -1795,338 +1628,193 @@
         "11": 56997,
         "12": 44129
       },
+      "mensileLavoro": {
+        "1": 66537,
+        "2": 53464,
+        "3": 64570,
+        "4": 54389,
+        "5": 56984,
+        "6": 49940,
+        "7": 51006,
+        "8": 33106,
+        "9": 42592,
+        "10": 50904,
+        "11": 47670,
+        "12": 36948
+      },
+      "mensileItinere": {
+        "1": 5976,
+        "2": 7070,
+        "3": 7919,
+        "4": 7042,
+        "5": 9507,
+        "6": 8956,
+        "7": 8265,
+        "8": 6207,
+        "9": 9269,
+        "10": 8744,
+        "11": 9327,
+        "12": 7181
+      },
       "atecoMacro": [
         {
           "key": "ND",
-          "nome": "Settore non attribuito (ND)",
           "casi": 188424,
-          "mortali": 279,
-          "lavoro": 171308,
-          "itinere": 17116,
-          "menomati": 11310,
-          "giorni": 1143855,
-          "durataMedia": 46.0,
-          "indiceGravita": 0.0,
-          "occupati": 0,
-          "indiceIncidenza": 0.0,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "Q",
-          "nome": "Sanità e assistenza sociale",
           "casi": 147005,
-          "mortali": 51,
-          "lavoro": 134949,
-          "itinere": 12056,
-          "menomati": 5678,
-          "giorni": 1647451,
-          "durataMedia": 15.9,
-          "indiceGravita": 832.0,
-          "occupati": 1980000,
-          "indiceIncidenza": 74.24,
-          "indiceMortali": 0.026
+          "mortali": 51
         },
         {
           "key": "C",
-          "nome": "Attività manifatturiere",
           "casi": 94307,
-          "mortali": 194,
-          "lavoro": 78826,
-          "itinere": 15481,
-          "menomati": 13457,
-          "giorni": 2479677,
-          "durataMedia": 34.3,
-          "indiceGravita": 639.0,
-          "occupati": 3880400,
-          "indiceIncidenza": 24.3,
-          "indiceMortali": 0.05
+          "mortali": 194
         },
         {
           "key": "H",
-          "nome": "Trasporto e magazzinaggio",
           "casi": 66058,
-          "mortali": 188,
-          "lavoro": 58820,
-          "itinere": 7238,
-          "menomati": 6766,
-          "giorni": 1345281,
-          "durataMedia": 36.5,
-          "indiceGravita": 1149.6,
-          "occupati": 1170200,
-          "indiceIncidenza": 56.45,
-          "indiceMortali": 0.161
+          "mortali": 188
         },
         {
           "key": "F",
-          "nome": "Costruzioni",
           "casi": 45529,
-          "mortali": 226,
-          "lavoro": 41332,
-          "itinere": 4197,
-          "menomati": 9737,
-          "giorni": 1653351,
-          "durataMedia": 47.3,
-          "indiceGravita": 1087.7,
-          "occupati": 1520100,
-          "indiceIncidenza": 29.95,
-          "indiceMortali": 0.149
+          "mortali": 226
         },
         {
           "key": "G",
-          "nome": "Commercio all'ingrosso e dettaglio",
           "casi": 45321,
-          "mortali": 114,
-          "lavoro": 34422,
-          "itinere": 10899,
-          "menomati": 6216,
-          "giorni": 1137311,
-          "durataMedia": 34.5,
-          "indiceGravita": 349.9,
-          "occupati": 3250000,
-          "indiceIncidenza": 13.94,
-          "indiceMortali": 0.035
+          "mortali": 114
         },
         {
           "key": "N",
-          "nome": "Servizi di supporto alle imprese",
           "casi": 28949,
-          "mortali": 66,
-          "lavoro": 22252,
-          "itinere": 6697,
-          "menomati": 3828,
-          "giorni": 769485,
-          "durataMedia": 37.0,
-          "indiceGravita": 705.9,
-          "occupati": 1090000,
-          "indiceIncidenza": 26.56,
-          "indiceMortali": 0.061
+          "mortali": 66
         },
         {
           "key": "I",
-          "nome": "Alloggio e ristorazione",
           "casi": 28861,
-          "mortali": 68,
-          "lavoro": 21769,
-          "itinere": 7092,
-          "menomati": 3364,
-          "giorni": 608257,
-          "durataMedia": 31.2,
-          "indiceGravita": 428.2,
-          "occupati": 1420500,
-          "indiceIncidenza": 20.32,
-          "indiceMortali": 0.048
+          "mortali": 68
         },
         {
           "key": "O",
-          "nome": "Pubblica amministrazione e difesa",
           "casi": 15167,
-          "mortali": 15,
-          "lavoro": 12024,
-          "itinere": 3143,
-          "menomati": 1657,
-          "giorni": 285474,
-          "durataMedia": 33.8,
-          "indiceGravita": 222.2,
-          "occupati": 1285000,
-          "indiceIncidenza": 11.8,
-          "indiceMortali": 0.012
+          "mortali": 15
         },
         {
           "key": "E",
-          "nome": "Acqua, reti fognarie e rifiuti",
           "casi": 12186,
-          "mortali": 25,
-          "lavoro": 11018,
-          "itinere": 1168,
-          "menomati": 1871,
-          "giorni": 375898,
-          "durataMedia": 39.0,
-          "indiceGravita": 1434.2,
-          "occupati": 262100,
-          "indiceIncidenza": 46.49,
-          "indiceMortali": 0.095
+          "mortali": 25
         },
         {
           "key": "S",
-          "nome": "Altri servizi",
           "casi": 5401,
-          "mortali": 11,
-          "lavoro": 3856,
-          "itinere": 1545,
-          "menomati": 935,
-          "giorni": 146750,
-          "durataMedia": 40.7,
-          "indiceGravita": 185.8,
-          "occupati": 790000,
-          "indiceIncidenza": 6.84,
-          "indiceMortali": 0.014
+          "mortali": 11
         },
         {
           "key": "P",
-          "nome": "Istruzione",
           "casi": 5372,
-          "mortali": 3,
-          "lavoro": 4380,
-          "itinere": 992,
-          "menomati": 399,
-          "giorni": 51330,
-          "durataMedia": 30.2,
-          "indiceGravita": 30.9,
-          "occupati": 1660000,
-          "indiceIncidenza": 3.24,
-          "indiceMortali": 0.002
+          "mortali": 3
         },
         {
           "key": "M",
-          "nome": "Attività professionali e tecniche",
           "casi": 5224,
-          "mortali": 12,
-          "lavoro": 2934,
-          "itinere": 2290,
-          "menomati": 811,
-          "giorni": 120687,
-          "durataMedia": 34.2,
-          "indiceGravita": 78.4,
-          "occupati": 1540200,
-          "indiceIncidenza": 3.39,
-          "indiceMortali": 0.008
+          "mortali": 12
         },
         {
           "key": "R",
-          "nome": "Arte, sport e intrattenimento",
           "casi": 4723,
-          "mortali": 8,
-          "lavoro": 3854,
-          "itinere": 869,
-          "menomati": 754,
-          "giorni": 134128,
-          "durataMedia": 37.4,
-          "indiceGravita": 388.8,
-          "occupati": 345000,
-          "indiceIncidenza": 13.69,
-          "indiceMortali": 0.023
+          "mortali": 8
         },
         {
           "key": "J",
-          "nome": "Informazione e comunicazione",
           "casi": 4076,
-          "mortali": 12,
-          "lavoro": 2234,
-          "itinere": 1842,
-          "menomati": 749,
-          "giorni": 110508,
-          "durataMedia": 41.2,
-          "indiceGravita": 158.9,
-          "occupati": 695400,
-          "indiceIncidenza": 5.86,
-          "indiceMortali": 0.017
+          "mortali": 12
         },
         {
           "key": "K",
-          "nome": "Attività finanziarie e assicurative",
           "casi": 3215,
-          "mortali": 8,
-          "lavoro": 1212,
-          "itinere": 2003,
-          "menomati": 526,
-          "giorni": 73669,
-          "durataMedia": 37.6,
-          "indiceGravita": 119.2,
-          "occupati": 618000,
-          "indiceIncidenza": 5.2,
-          "indiceMortali": 0.013
+          "mortali": 8
         },
         {
           "key": "A",
-          "nome": "Agricoltura, silvicoltura e pesca",
           "casi": 1351,
-          "mortali": 11,
-          "lavoro": 1187,
-          "itinere": 164,
-          "menomati": 296,
-          "giorni": 48245,
-          "durataMedia": 47.5,
-          "indiceGravita": 53.5,
-          "occupati": 902100,
-          "indiceIncidenza": 1.5,
-          "indiceMortali": 0.012
+          "mortali": 11
         },
         {
           "key": "L",
-          "nome": "Attività immobiliari",
           "casi": 1141,
-          "mortali": 9,
-          "lavoro": 787,
-          "itinere": 354,
-          "menomati": 226,
-          "giorni": 34931,
-          "durataMedia": 42.4,
-          "indiceGravita": 229.8,
-          "occupati": 152000,
-          "indiceIncidenza": 7.51,
-          "indiceMortali": 0.059
+          "mortali": 9
         },
         {
           "key": "D",
-          "nome": "Energia elettrica e gas",
           "casi": 795,
-          "mortali": 3,
-          "lavoro": 526,
-          "itinere": 269,
-          "menomati": 139,
-          "giorni": 21901,
-          "durataMedia": 39.0,
-          "indiceGravita": 194.7,
-          "occupati": 112500,
-          "indiceIncidenza": 7.07,
-          "indiceMortali": 0.027
+          "mortali": 3
         },
         {
           "key": "B",
-          "nome": "Estrazione di minerali",
           "casi": 374,
-          "mortali": 1,
-          "lavoro": 348,
-          "itinere": 26,
-          "menomati": 111,
-          "giorni": 22336,
-          "durataMedia": 71.1,
-          "indiceGravita": 900.6,
-          "occupati": 24800,
-          "indiceIncidenza": 15.08,
-          "indiceMortali": 0.04
+          "mortali": 1
         },
         {
           "key": "U",
-          "nome": "Organizzazioni extraterritoriali",
           "casi": 81,
-          "mortali": 0,
-          "lavoro": 59,
-          "itinere": 22,
-          "menomati": 9,
-          "giorni": 1853,
-          "durataMedia": 37.1,
-          "indiceGravita": 142.5,
-          "occupati": 13000,
-          "indiceIncidenza": 6.23,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "T",
-          "nome": "Attività di famiglie e convivenze",
           "casi": 13,
-          "mortali": 0,
-          "lavoro": 13,
-          "itinere": 0,
-          "menomati": 0,
-          "giorni": 138,
-          "durataMedia": 13.8,
-          "indiceGravita": 0.2,
-          "occupati": 710000,
-          "indiceIncidenza": 0.02,
-          "indiceMortali": 0.0
+          "mortali": 0
         }
       ],
+      "atecoMacroLavoro": {
+        "Q": 134949,
+        "ND": 171308,
+        "C": 78826,
+        "H": 58820,
+        "F": 41332,
+        "O": 12024,
+        "G": 34422,
+        "N": 22252,
+        "I": 21769,
+        "B": 348,
+        "E": 11018,
+        "S": 3856,
+        "K": 1212,
+        "R": 3854,
+        "A": 1187,
+        "M": 2934,
+        "P": 4380,
+        "J": 2234,
+        "L": 787,
+        "D": 526,
+        "U": 59,
+        "T": 13
+      },
+      "atecoMacroItinere": {
+        "ND": 17116,
+        "C": 15481,
+        "O": 3143,
+        "Q": 12056,
+        "G": 10899,
+        "E": 1168,
+        "N": 6697,
+        "H": 7238,
+        "R": 869,
+        "I": 7092,
+        "F": 4197,
+        "A": 164,
+        "S": 1545,
+        "J": 1842,
+        "K": 2003,
+        "L": 354,
+        "M": 2290,
+        "D": 269,
+        "P": 992,
+        "B": 26,
+        "U": 22
+      },
       "atecoDivisioni": [
         {
           "key": "Q 86",
@@ -2218,9 +1906,6 @@
           "mortali": 101,
           "menomati": 4564,
           "giorni": 849089,
-          "casiConGiorni": 31438,
-          "durataMedia": 27.0,
-          "indiceGravita": 490.4,
           "occupati": 1731400,
           "indiceIncidenza": 31.45,
           "indiceMortali": 0.058
@@ -2233,9 +1918,6 @@
           "mortali": 7,
           "menomati": 168,
           "giorni": 34170,
-          "casiConGiorni": 1023,
-          "durataMedia": 33.4,
-          "indiceGravita": 635.1,
           "occupati": 53800,
           "indiceIncidenza": 31.02,
           "indiceMortali": 0.13
@@ -2248,9 +1930,6 @@
           "mortali": 213,
           "menomati": 9458,
           "giorni": 2094710,
-          "casiConGiorni": 73716,
-          "durataMedia": 28.4,
-          "indiceGravita": 485.4,
           "occupati": 4315000,
           "indiceIncidenza": 30.69,
           "indiceMortali": 0.049
@@ -2263,9 +1942,6 @@
           "mortali": 38,
           "menomati": 1545,
           "giorni": 335834,
-          "casiConGiorni": 11052,
-          "durataMedia": 30.4,
-          "indiceGravita": 683.4,
           "occupati": 491400,
           "indiceIncidenza": 47.07,
           "indiceMortali": 0.077
@@ -2278,9 +1954,6 @@
           "mortali": 131,
           "menomati": 6857,
           "giorni": 1252775,
-          "casiConGiorni": 46698,
-          "durataMedia": 26.8,
-          "indiceGravita": 601.1,
           "occupati": 2084000,
           "indiceIncidenza": 40.6,
           "indiceMortali": 0.063
@@ -2293,9 +1966,6 @@
           "mortali": 14,
           "menomati": 1379,
           "giorni": 332336,
-          "casiConGiorni": 9489,
-          "durataMedia": 35.0,
-          "indiceGravita": 660.2,
           "occupati": 503400,
           "indiceIncidenza": 33.53,
           "indiceMortali": 0.028
@@ -2308,9 +1978,6 @@
           "mortali": 28,
           "menomati": 2932,
           "giorni": 419138,
-          "casiConGiorni": 16651,
-          "durataMedia": 25.2,
-          "indiceGravita": 704.3,
           "occupati": 595100,
           "indiceIncidenza": 47.58,
           "indiceMortali": 0.047
@@ -2323,9 +1990,6 @@
           "mortali": 105,
           "menomati": 7438,
           "giorni": 1468164,
-          "casiConGiorni": 43595,
-          "durataMedia": 33.7,
-          "indiceGravita": 758.3,
           "occupati": 1936100,
           "indiceIncidenza": 42.29,
           "indiceMortali": 0.054
@@ -2338,9 +2002,6 @@
           "mortali": 91,
           "menomati": 6417,
           "giorni": 1037245,
-          "casiConGiorni": 29658,
-          "durataMedia": 35.0,
-          "indiceGravita": 666.1,
           "occupati": 1557200,
           "indiceIncidenza": 34.13,
           "indiceMortali": 0.058
@@ -2353,9 +2014,6 @@
           "mortali": 24,
           "menomati": 1320,
           "giorni": 215388,
-          "casiConGiorni": 6200,
-          "durataMedia": 34.7,
-          "indiceGravita": 631.8,
           "occupati": 340900,
           "indiceIncidenza": 31.48,
           "indiceMortali": 0.07
@@ -2368,9 +2026,6 @@
           "mortali": 41,
           "menomati": 2257,
           "giorni": 390746,
-          "casiConGiorni": 11533,
-          "durataMedia": 33.9,
-          "indiceGravita": 633.2,
           "occupati": 617100,
           "indiceIncidenza": 30.64,
           "indiceMortali": 0.066
@@ -2383,9 +2038,6 @@
           "mortali": 121,
           "menomati": 6026,
           "giorni": 980426,
-          "casiConGiorni": 30037,
-          "durataMedia": 32.6,
-          "indiceGravita": 434.9,
           "occupati": 2254400,
           "indiceIncidenza": 24.14,
           "indiceMortali": 0.054
@@ -2398,9 +2050,6 @@
           "mortali": 28,
           "menomati": 2107,
           "giorni": 332881,
-          "casiConGiorni": 10118,
-          "durataMedia": 32.9,
-          "indiceGravita": 714.0,
           "occupati": 466200,
           "indiceIncidenza": 33.83,
           "indiceMortali": 0.06
@@ -2413,9 +2062,6 @@
           "mortali": 8,
           "menomati": 399,
           "giorni": 58081,
-          "casiConGiorni": 1176,
-          "durataMedia": 49.4,
-          "indiceGravita": 583.7,
           "occupati": 99500,
           "indiceIncidenza": 24.44,
           "indiceMortali": 0.08
@@ -2428,9 +2074,6 @@
           "mortali": 113,
           "menomati": 4108,
           "giorni": 545883,
-          "casiConGiorni": 15603,
-          "durataMedia": 35.0,
-          "indiceGravita": 343.0,
           "occupati": 1591600,
           "indiceIncidenza": 21.01,
           "indiceMortali": 0.071
@@ -2443,9 +2086,6 @@
           "mortali": 81,
           "menomati": 4035,
           "giorni": 583533,
-          "casiConGiorni": 14751,
-          "durataMedia": 39.6,
-          "indiceGravita": 473.0,
           "occupati": 1233800,
           "indiceIncidenza": 24.03,
           "indiceMortali": 0.066
@@ -2458,9 +2098,6 @@
           "mortali": 14,
           "menomati": 666,
           "giorni": 126589,
-          "casiConGiorni": 2330,
-          "durataMedia": 54.3,
-          "indiceGravita": 693.3,
           "occupati": 182600,
           "indiceIncidenza": 23.53,
           "indiceMortali": 0.077
@@ -2473,9 +2110,6 @@
           "mortali": 36,
           "menomati": 1791,
           "giorni": 228995,
-          "casiConGiorni": 5426,
-          "durataMedia": 42.2,
-          "indiceGravita": 449.6,
           "occupati": 509300,
           "indiceIncidenza": 20.18,
           "indiceMortali": 0.071
@@ -2488,9 +2122,6 @@
           "mortali": 77,
           "menomati": 3881,
           "giorni": 607032,
-          "casiConGiorni": 15783,
-          "durataMedia": 38.5,
-          "indiceGravita": 466.4,
           "occupati": 1301600,
           "indiceIncidenza": 25.17,
           "indiceMortali": 0.059
@@ -2503,46 +2134,9 @@
           "mortali": 33,
           "menomati": 1491,
           "giorni": 319501,
-          "casiConGiorni": 7521,
-          "durataMedia": 42.5,
-          "indiceGravita": 582.9,
           "occupati": 548100,
           "indiceIncidenza": 26.19,
           "indiceMortali": 0.06
-        }
-      ],
-      "provinceAutonome": [
-        {
-          "codice": "021",
-          "nome": "P.A. Bolzano / Bozen",
-          "totale": 14900,
-          "lavoro": 13785,
-          "itinere": 1115,
-          "mortali": 24,
-          "menomati": 837,
-          "giorni": 195247,
-          "casiConGiorni": 6628,
-          "durataMedia": 29.5,
-          "indiceGravita": 778.8,
-          "occupati": 250700,
-          "indiceIncidenza": 59.43,
-          "indiceMortali": 0.096
-        },
-        {
-          "codice": "022",
-          "nome": "P.A. Trento",
-          "totale": 8228,
-          "lavoro": 7250,
-          "itinere": 978,
-          "mortali": 14,
-          "menomati": 708,
-          "giorni": 140587,
-          "casiConGiorni": 4424,
-          "durataMedia": 31.8,
-          "indiceGravita": 584.1,
-          "occupati": 240700,
-          "indiceIncidenza": 34.18,
-          "indiceMortali": 0.058
         }
       ]
     },
@@ -2553,9 +2147,6 @@
       "lavoro": 490209,
       "itinere": 100120,
       "giorni": 11819712,
-      "casiConGiorni": 321249,
-      "durataMedia": 36.8,
-      "indiceGravita": 517.6,
       "menomati": 71878,
       "occupati": 22834900,
       "indiceIncidenza": 25.85,
@@ -2564,24 +2155,52 @@
         "M": 381121,
         "F": 209208
       },
+      "generiLavoro": {
+        "M": 329613,
+        "F": 160596
+      },
+      "generiItinere": {
+        "F": 48612,
+        "M": 51508
+      },
       "generiMortali": {
         "M": 1110,
         "F": 98
       },
       "fasceEta": {
-        "50-64": 179794,
-        "35-49": 167844,
+        "55-64": 107975,
+        "45-54": 136699,
+        "35-44": 102964,
         "65+": 13597,
         "25-34": 102604,
         "15-24": 75595,
         "0-14": 50895
       },
+      "fasceEtaLavoro": {
+        "55-64": 88937,
+        "45-54": 112640,
+        "35-44": 83035,
+        "65+": 11866,
+        "25-34": 80762,
+        "15-24": 62979,
+        "0-14": 49990
+      },
+      "fasceEtaItinere": {
+        "55-64": 19038,
+        "45-54": 24059,
+        "25-34": 21842,
+        "35-44": 19929,
+        "15-24": 12616,
+        "65+": 1731,
+        "0-14": 905
+      },
       "fasceEtaMortali": {
-        "50-64": 591,
-        "35-49": 287,
+        "55-64": 412,
+        "35-44": 180,
         "65+": 135,
         "15-24": 70,
         "25-34": 122,
+        "45-54": 286,
         "0-14": 3
       },
       "modalita": {
@@ -2593,11 +2212,33 @@
         "A": 26558,
         "S": 95981
       },
+      "gestioneLavoro": {
+        "I": 379949,
+        "A": 25016,
+        "S": 85244
+      },
+      "gestioneItinere": {
+        "I": 87841,
+        "S": 10737,
+        "A": 1542
+      },
       "esito": {
         "P": 389179,
         "N": 102368,
         "F": 89559,
         "I": 9223
+      },
+      "esitoLavoro": {
+        "P": 330745,
+        "N": 72044,
+        "F": 79439,
+        "I": 7981
+      },
+      "esitoItinere": {
+        "P": 58434,
+        "N": 30324,
+        "I": 1242,
+        "F": 10120
       },
       "indennizzo": {
         "CA": 26197,
@@ -2606,11 +2247,37 @@
         "RD": 6927,
         "RS": 537
       },
+      "indennizzoLavoro": {
+        "CA": 20294,
+        "NE": 219367,
+        "TE": 244719,
+        "RD": 5405,
+        "RS": 424
+      },
+      "indennizzoItinere": {
+        "TE": 45310,
+        "NE": 47272,
+        "CA": 5903,
+        "RD": 1522,
+        "RS": 113
+      },
       "gravita": {
         "capitale": 26197,
         "nessuna": 518451,
         "franchigia": 38745,
         "rendita": 6936
+      },
+      "gravitaLavoro": {
+        "capitale": 20294,
+        "nessuna": 433017,
+        "franchigia": 31485,
+        "rendita": 5413
+      },
+      "gravitaItinere": {
+        "nessuna": 85434,
+        "franchigia": 7260,
+        "capitale": 5903,
+        "rendita": 1523
       },
       "durata": {
         "lunga": 72572,
@@ -2619,13 +2286,43 @@
         "media": 119006,
         "breve": 95442
       },
+      "durataLavoro": {
+        "lunga": 59748,
+        "zero": 220991,
+        "grave90": 27258,
+        "media": 100574,
+        "breve": 81638
+      },
+      "durataItinere": {
+        "breve": 13804,
+        "zero": 48089,
+        "grave90": 6971,
+        "lunga": 12824,
+        "media": 18432
+      },
       "nascita": {
         "ITAL": 471135,
         "ESTERO": 119194
       },
+      "nascitaLavoro": {
+        "ITAL": 390965,
+        "ESTERO": 99244
+      },
+      "nascitaItinere": {
+        "ITAL": 80170,
+        "ESTERO": 19950
+      },
       "mezzo": {
         "SENZA_MEZZO": 503905,
         "CON_MEZZO": 86424
+      },
+      "mezzoLavoro": {
+        "SENZA_MEZZO": 473250,
+        "CON_MEZZO": 16959
+      },
+      "mezzoItinere": {
+        "CON_MEZZO": 69465,
+        "SENZA_MEZZO": 30655
       },
       "mensile": {
         "1": 46308,
@@ -2641,338 +2338,194 @@
         "11": 53653,
         "12": 40521
       },
+      "mensileLavoro": {
+        "1": 38396,
+        "2": 40102,
+        "3": 48570,
+        "4": 36460,
+        "5": 48376,
+        "6": 40768,
+        "7": 39938,
+        "8": 30699,
+        "9": 41269,
+        "10": 47913,
+        "11": 44368,
+        "12": 33350
+      },
+      "mensileItinere": {
+        "1": 7912,
+        "2": 7093,
+        "3": 8728,
+        "4": 7196,
+        "5": 9702,
+        "6": 8822,
+        "7": 8922,
+        "8": 6466,
+        "9": 8807,
+        "10": 10016,
+        "11": 9285,
+        "12": 7171
+      },
       "atecoMacro": [
         {
           "key": "ND",
-          "nome": "Settore non attribuito (ND)",
           "casi": 190274,
-          "mortali": 251,
-          "lavoro": 171878,
-          "itinere": 18396,
-          "menomati": 12196,
-          "giorni": 1146226,
-          "durataMedia": 45.7,
-          "indiceGravita": 0.0,
-          "occupati": 0,
-          "indiceIncidenza": 0.0,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "C",
-          "nome": "Attività manifatturiere",
           "casi": 94157,
-          "mortali": 179,
-          "lavoro": 78120,
-          "itinere": 16037,
-          "menomati": 13647,
-          "giorni": 2474825,
-          "durataMedia": 34.3,
-          "indiceGravita": 632.9,
-          "occupati": 3910200,
-          "indiceIncidenza": 24.08,
-          "indiceMortali": 0.046
+          "mortali": 179
         },
         {
           "key": "Q",
-          "nome": "Sanità e assistenza sociale",
           "casi": 56391,
-          "mortali": 28,
-          "lavoro": 44364,
-          "itinere": 12027,
-          "menomati": 5684,
-          "giorni": 1164398,
-          "durataMedia": 29.5,
-          "indiceGravita": 579.3,
-          "occupati": 2010000,
-          "indiceIncidenza": 28.06,
-          "indiceMortali": 0.014
+          "mortali": 28
         },
         {
           "key": "F",
-          "nome": "Costruzioni",
           "casi": 45559,
-          "mortali": 230,
-          "lavoro": 41113,
-          "itinere": 4446,
-          "menomati": 10084,
-          "giorni": 1665977,
-          "durataMedia": 46.6,
-          "indiceGravita": 1067.4,
-          "occupati": 1560800,
-          "indiceIncidenza": 29.19,
-          "indiceMortali": 0.147
+          "mortali": 230
         },
         {
           "key": "H",
-          "nome": "Trasporto e magazzinaggio",
           "casi": 45017,
-          "mortali": 158,
-          "lavoro": 37418,
-          "itinere": 7599,
-          "menomati": 6951,
-          "giorni": 1312881,
-          "durataMedia": 38.0,
-          "indiceGravita": 1102.9,
-          "occupati": 1190400,
-          "indiceIncidenza": 37.82,
-          "indiceMortali": 0.133
+          "mortali": 158
         },
         {
           "key": "G",
-          "nome": "Commercio all'ingrosso e dettaglio",
           "casi": 44995,
-          "mortali": 110,
-          "lavoro": 33545,
-          "itinere": 11450,
-          "menomati": 6707,
-          "giorni": 1165556,
-          "durataMedia": 34.2,
-          "indiceGravita": 355.3,
-          "occupati": 3280500,
-          "indiceIncidenza": 13.72,
-          "indiceMortali": 0.034
+          "mortali": 110
         },
         {
           "key": "I",
-          "nome": "Alloggio e ristorazione",
           "casi": 30245,
-          "mortali": 53,
-          "lavoro": 22550,
-          "itinere": 7695,
-          "menomati": 3744,
-          "giorni": 665021,
-          "durataMedia": 30.7,
-          "indiceGravita": 446.3,
-          "occupati": 1490000,
-          "indiceIncidenza": 20.3,
-          "indiceMortali": 0.036
+          "mortali": 53
         },
         {
           "key": "N",
-          "nome": "Servizi di supporto alle imprese",
           "casi": 28893,
-          "mortali": 74,
-          "lavoro": 21826,
-          "itinere": 7067,
-          "menomati": 4152,
-          "giorni": 791334,
-          "durataMedia": 37.5,
-          "indiceGravita": 706.3,
-          "occupati": 1120400,
-          "indiceIncidenza": 25.79,
-          "indiceMortali": 0.066
+          "mortali": 74
         },
         {
           "key": "E",
-          "nome": "Acqua, reti fognarie e rifiuti",
           "casi": 12399,
-          "mortali": 28,
-          "lavoro": 11210,
-          "itinere": 1189,
-          "menomati": 2058,
-          "giorni": 397313,
-          "durataMedia": 39.9,
-          "indiceGravita": 1497.0,
-          "occupati": 265400,
-          "indiceIncidenza": 46.72,
-          "indiceMortali": 0.106
+          "mortali": 28
         },
         {
           "key": "O",
-          "nome": "Pubblica amministrazione e difesa",
           "casi": 10767,
-          "mortali": 16,
-          "lavoro": 7615,
-          "itinere": 3152,
-          "menomati": 1608,
-          "giorni": 268472,
-          "durataMedia": 37.0,
-          "indiceGravita": 207.3,
-          "occupati": 1295000,
-          "indiceIncidenza": 8.31,
-          "indiceMortali": 0.012
+          "mortali": 16
         },
         {
           "key": "P",
-          "nome": "Istruzione",
           "casi": 5551,
-          "mortali": 4,
-          "lavoro": 4504,
-          "itinere": 1047,
-          "menomati": 383,
-          "giorni": 50185,
-          "durataMedia": 31.8,
-          "indiceGravita": 29.9,
-          "occupati": 1680000,
-          "indiceIncidenza": 3.3,
-          "indiceMortali": 0.002
+          "mortali": 4
         },
         {
           "key": "M",
-          "nome": "Attività professionali e tecniche",
           "casi": 5348,
-          "mortali": 14,
-          "lavoro": 2757,
-          "itinere": 2591,
-          "menomati": 864,
-          "giorni": 132170,
-          "durataMedia": 36.0,
-          "indiceGravita": 83.9,
-          "occupati": 1575000,
-          "indiceIncidenza": 3.4,
-          "indiceMortali": 0.009
+          "mortali": 14
         },
         {
           "key": "S",
-          "nome": "Altri servizi",
           "casi": 4994,
-          "mortali": 10,
-          "lavoro": 3362,
-          "itinere": 1632,
-          "menomati": 935,
-          "giorni": 149295,
-          "durataMedia": 41.1,
-          "indiceGravita": 185.5,
-          "occupati": 805000,
-          "indiceIncidenza": 6.2,
-          "indiceMortali": 0.012
+          "mortali": 10
         },
         {
           "key": "R",
-          "nome": "Arte, sport e intrattenimento",
           "casi": 4729,
-          "mortali": 9,
-          "lavoro": 3920,
-          "itinere": 809,
-          "menomati": 801,
-          "giorni": 139716,
-          "durataMedia": 38.0,
-          "indiceGravita": 382.8,
-          "occupati": 365000,
-          "indiceIncidenza": 12.96,
-          "indiceMortali": 0.025
+          "mortali": 9
         },
         {
           "key": "J",
-          "nome": "Informazione e comunicazione",
           "casi": 4226,
-          "mortali": 12,
-          "lavoro": 2204,
-          "itinere": 2022,
-          "menomati": 742,
-          "giorni": 104228,
-          "durataMedia": 37.3,
-          "indiceGravita": 144.7,
-          "occupati": 720100,
-          "indiceIncidenza": 5.87,
-          "indiceMortali": 0.017
+          "mortali": 12
         },
         {
           "key": "K",
-          "nome": "Attività finanziarie e assicurative",
           "casi": 3117,
-          "mortali": 6,
-          "lavoro": 1001,
-          "itinere": 2116,
-          "menomati": 609,
-          "giorni": 77823,
-          "durataMedia": 38.0,
-          "indiceGravita": 124.5,
-          "occupati": 625200,
-          "indiceIncidenza": 4.99,
-          "indiceMortali": 0.01
+          "mortali": 6
         },
         {
           "key": "A",
-          "nome": "Agricoltura, silvicoltura e pesca",
           "casi": 1279,
-          "mortali": 9,
-          "lavoro": 1155,
-          "itinere": 124,
-          "menomati": 261,
-          "giorni": 40462,
-          "durataMedia": 41.6,
-          "indiceGravita": 45.6,
-          "occupati": 887300,
-          "indiceIncidenza": 1.44,
-          "indiceMortali": 0.01
+          "mortali": 9
         },
         {
           "key": "L",
-          "nome": "Attività immobiliari",
           "casi": 1159,
-          "mortali": 7,
-          "lavoro": 787,
-          "itinere": 372,
-          "menomati": 213,
-          "giorni": 32769,
-          "durataMedia": 39.3,
-          "indiceGravita": 210.9,
-          "occupati": 155400,
-          "indiceIncidenza": 7.46,
-          "indiceMortali": 0.045
+          "mortali": 7
         },
         {
           "key": "D",
-          "nome": "Energia elettrica e gas",
           "casi": 756,
-          "mortali": 3,
-          "lavoro": 471,
-          "itinere": 285,
-          "menomati": 125,
-          "giorni": 20247,
-          "durataMedia": 37.7,
-          "indiceGravita": 177.6,
-          "occupati": 114000,
-          "indiceIncidenza": 6.63,
-          "indiceMortali": 0.026
+          "mortali": 3
         },
         {
           "key": "B",
-          "nome": "Estrazione di minerali",
           "casi": 361,
-          "mortali": 6,
-          "lavoro": 327,
-          "itinere": 34,
-          "menomati": 96,
-          "giorni": 17491,
-          "durataMedia": 58.3,
-          "indiceGravita": 696.9,
-          "occupati": 25100,
-          "indiceIncidenza": 14.38,
-          "indiceMortali": 0.239
+          "mortali": 6
         },
         {
           "key": "U",
-          "nome": "Organizzazioni extraterritoriali",
           "casi": 91,
-          "mortali": 1,
-          "lavoro": 66,
-          "itinere": 25,
-          "menomati": 13,
-          "giorni": 1955,
-          "durataMedia": 30.5,
-          "indiceGravita": 150.4,
-          "occupati": 13000,
-          "indiceIncidenza": 7.0,
-          "indiceMortali": 0.077
+          "mortali": 1
         },
         {
           "key": "T",
-          "nome": "Attività di famiglie e convivenze",
           "casi": 21,
-          "mortali": 0,
-          "lavoro": 16,
-          "itinere": 5,
-          "menomati": 5,
-          "giorni": 1368,
-          "durataMedia": 72.0,
-          "indiceGravita": 2.0,
-          "occupati": 690000,
-          "indiceIncidenza": 0.03,
-          "indiceMortali": 0.0
+          "mortali": 0
         }
       ],
+      "atecoMacroLavoro": {
+        "Q": 44364,
+        "C": 78120,
+        "F": 41113,
+        "ND": 171878,
+        "S": 3362,
+        "G": 33545,
+        "O": 7615,
+        "M": 2757,
+        "A": 1155,
+        "E": 11210,
+        "H": 37418,
+        "J": 2204,
+        "R": 3920,
+        "D": 471,
+        "N": 21826,
+        "I": 22550,
+        "B": 327,
+        "L": 787,
+        "K": 1001,
+        "P": 4504,
+        "U": 66,
+        "T": 16
+      },
+      "atecoMacroItinere": {
+        "H": 7599,
+        "G": 11450,
+        "ND": 18396,
+        "C": 16037,
+        "Q": 12027,
+        "I": 7695,
+        "F": 4446,
+        "O": 3152,
+        "M": 2591,
+        "K": 2116,
+        "N": 7067,
+        "S": 1632,
+        "E": 1189,
+        "J": 2022,
+        "P": 1047,
+        "R": 809,
+        "L": 372,
+        "D": 285,
+        "B": 34,
+        "A": 124,
+        "U": 25,
+        "T": 5
+      },
       "atecoDivisioni": [
         {
           "key": "Q 86",
@@ -3064,9 +2617,6 @@
           "mortali": 86,
           "menomati": 4545,
           "giorni": 752514,
-          "casiConGiorni": 22652,
-          "durataMedia": 33.2,
-          "indiceGravita": 430.4,
           "occupati": 1748500,
           "indiceIncidenza": 24.66,
           "indiceMortali": 0.049
@@ -3079,9 +2629,6 @@
           "mortali": 1,
           "menomati": 123,
           "giorni": 32371,
-          "casiConGiorni": 770,
-          "durataMedia": 42.0,
-          "indiceGravita": 587.5,
           "occupati": 55100,
           "indiceIncidenza": 24.85,
           "indiceMortali": 0.018
@@ -3094,9 +2641,6 @@
           "mortali": 193,
           "menomati": 9761,
           "giorni": 2019588,
-          "casiConGiorni": 59039,
-          "durataMedia": 34.2,
-          "indiceGravita": 461.2,
           "occupati": 4379400,
           "indiceIncidenza": 25.2,
           "indiceMortali": 0.044
@@ -3109,9 +2653,6 @@
           "mortali": 25,
           "menomati": 1369,
           "giorni": 304065,
-          "casiConGiorni": 10275,
-          "durataMedia": 29.6,
-          "indiceGravita": 617.9,
           "occupati": 492100,
           "indiceIncidenza": 45.9,
           "indiceMortali": 0.051
@@ -3124,9 +2665,6 @@
           "mortali": 112,
           "menomati": 7215,
           "giorni": 1188050,
-          "casiConGiorni": 36752,
-          "durataMedia": 32.3,
-          "indiceGravita": 551.2,
           "occupati": 2155300,
           "indiceIncidenza": 32.57,
           "indiceMortali": 0.052
@@ -3139,9 +2677,6 @@
           "mortali": 23,
           "menomati": 1419,
           "giorni": 304177,
-          "casiConGiorni": 8438,
-          "durataMedia": 36.0,
-          "indiceGravita": 604.8,
           "occupati": 502900,
           "indiceIncidenza": 31.46,
           "indiceMortali": 0.046
@@ -3154,9 +2689,6 @@
           "mortali": 27,
           "menomati": 2959,
           "giorni": 382387,
-          "casiConGiorni": 10873,
-          "durataMedia": 35.2,
-          "indiceGravita": 629.8,
           "occupati": 607200,
           "indiceIncidenza": 31.98,
           "indiceMortali": 0.044
@@ -3169,9 +2701,6 @@
           "mortali": 104,
           "menomati": 7502,
           "giorni": 1449449,
-          "casiConGiorni": 41499,
-          "durataMedia": 34.9,
-          "indiceGravita": 739.2,
           "occupati": 1960800,
           "indiceIncidenza": 39.48,
           "indiceMortali": 0.053
@@ -3184,9 +2713,6 @@
           "mortali": 59,
           "menomati": 6695,
           "giorni": 1032242,
-          "casiConGiorni": 27317,
-          "durataMedia": 37.8,
-          "indiceGravita": 660.0,
           "occupati": 1563900,
           "indiceIncidenza": 30.22,
           "indiceMortali": 0.038
@@ -3199,9 +2725,6 @@
           "mortali": 26,
           "menomati": 1378,
           "giorni": 216284,
-          "casiConGiorni": 6002,
-          "durataMedia": 36.0,
-          "indiceGravita": 622.8,
           "occupati": 347300,
           "indiceIncidenza": 29.06,
           "indiceMortali": 0.075
@@ -3214,9 +2737,6 @@
           "mortali": 28,
           "menomati": 2519,
           "giorni": 404684,
-          "casiConGiorni": 10447,
-          "durataMedia": 38.7,
-          "indiceGravita": 654.4,
           "occupati": 618400,
           "indiceIncidenza": 27.59,
           "indiceMortali": 0.045
@@ -3229,9 +2749,6 @@
           "mortali": 109,
           "menomati": 6308,
           "giorni": 932236,
-          "casiConGiorni": 23254,
-          "durataMedia": 40.1,
-          "indiceGravita": 405.5,
           "occupati": 2299200,
           "indiceIncidenza": 17.83,
           "indiceMortali": 0.047
@@ -3244,9 +2761,6 @@
           "mortali": 49,
           "menomati": 2317,
           "giorni": 308488,
-          "casiConGiorni": 7744,
-          "durataMedia": 39.8,
-          "indiceGravita": 633.6,
           "occupati": 486900,
           "indiceIncidenza": 25.01,
           "indiceMortali": 0.101
@@ -3259,9 +2773,6 @@
           "mortali": 7,
           "menomati": 338,
           "giorni": 51592,
-          "casiConGiorni": 1002,
-          "durataMedia": 51.5,
-          "indiceGravita": 502.8,
           "occupati": 102600,
           "indiceIncidenza": 17.41,
           "indiceMortali": 0.068
@@ -3274,9 +2785,6 @@
           "mortali": 107,
           "menomati": 4325,
           "giorni": 530682,
-          "casiConGiorni": 11935,
-          "durataMedia": 44.5,
-          "indiceGravita": 326.5,
           "occupati": 1625200,
           "indiceIncidenza": 13.34,
           "indiceMortali": 0.066
@@ -3289,9 +2797,6 @@
           "mortali": 87,
           "menomati": 4088,
           "giorni": 576565,
-          "casiConGiorni": 14507,
-          "durataMedia": 39.7,
-          "indiceGravita": 458.4,
           "occupati": 1257900,
           "indiceIncidenza": 22.13,
           "indiceMortali": 0.069
@@ -3304,9 +2809,6 @@
           "mortali": 15,
           "menomati": 858,
           "giorni": 143314,
-          "casiConGiorni": 2434,
-          "durataMedia": 58.9,
-          "indiceGravita": 767.6,
           "occupati": 186700,
           "indiceIncidenza": 22.09,
           "indiceMortali": 0.08
@@ -3319,9 +2821,6 @@
           "mortali": 38,
           "menomati": 1879,
           "giorni": 225780,
-          "casiConGiorni": 4762,
-          "durataMedia": 47.4,
-          "indiceGravita": 434.5,
           "occupati": 519600,
           "indiceIncidenza": 16.71,
           "indiceMortali": 0.073
@@ -3334,9 +2833,6 @@
           "mortali": 82,
           "menomati": 4577,
           "giorni": 640591,
-          "casiConGiorni": 14590,
-          "durataMedia": 43.9,
-          "indiceGravita": 468.0,
           "occupati": 1368800,
           "indiceIncidenza": 19.13,
           "indiceMortali": 0.06
@@ -3349,46 +2845,9 @@
           "mortali": 30,
           "menomati": 1703,
           "giorni": 324653,
-          "casiConGiorni": 6957,
-          "durataMedia": 46.7,
-          "indiceGravita": 582.8,
           "occupati": 557100,
           "indiceIncidenza": 21.8,
           "indiceMortali": 0.054
-        }
-      ],
-      "provinceAutonome": [
-        {
-          "codice": "021",
-          "nome": "P.A. Bolzano / Bozen",
-          "totale": 14372,
-          "lavoro": 13206,
-          "itinere": 1166,
-          "mortali": 16,
-          "menomati": 716,
-          "giorni": 175847,
-          "casiConGiorni": 6122,
-          "durataMedia": 28.7,
-          "indiceGravita": 701.7,
-          "occupati": 250600,
-          "indiceIncidenza": 57.35,
-          "indiceMortali": 0.064
-        },
-        {
-          "codice": "022",
-          "nome": "P.A. Trento",
-          "totale": 8214,
-          "lavoro": 7207,
-          "itinere": 1007,
-          "mortali": 9,
-          "menomati": 653,
-          "giorni": 128218,
-          "casiConGiorni": 4153,
-          "durataMedia": 30.9,
-          "indiceGravita": 530.9,
-          "occupati": 241500,
-          "indiceIncidenza": 34.01,
-          "indiceMortali": 0.037
         }
       ]
     },
@@ -3399,9 +2858,6 @@
       "lavoro": 489796,
       "itinere": 103831,
       "giorni": 11406773,
-      "casiConGiorni": 314913,
-      "durataMedia": 36.2,
-      "indiceGravita": 492.7,
       "menomati": 69148,
       "occupati": 23150000,
       "indiceIncidenza": 25.64,
@@ -3410,23 +2866,51 @@
         "M": 381039,
         "F": 212588
       },
+      "generiLavoro": {
+        "M": 327146,
+        "F": 162650
+      },
+      "generiItinere": {
+        "M": 53893,
+        "F": 49938
+      },
       "generiMortali": {
         "M": 1124,
         "F": 104
       },
       "fasceEta": {
-        "50-64": 178270,
-        "35-49": 161373,
+        "55-64": 108517,
+        "45-54": 130839,
+        "35-44": 100287,
         "25-34": 103210,
         "65+": 14413,
         "15-24": 75881,
         "0-14": 60480
       },
+      "fasceEtaLavoro": {
+        "55-64": 88611,
+        "45-54": 106680,
+        "35-44": 80114,
+        "25-34": 80047,
+        "65+": 12413,
+        "15-24": 62315,
+        "0-14": 59616
+      },
+      "fasceEtaItinere": {
+        "55-64": 19906,
+        "45-54": 24159,
+        "25-34": 23163,
+        "65+": 2000,
+        "35-44": 20173,
+        "15-24": 13566,
+        "0-14": 864
+      },
       "fasceEtaMortali": {
-        "50-64": 608,
+        "55-64": 418,
+        "45-54": 320,
         "65+": 134,
         "25-34": 120,
-        "35-49": 289,
+        "35-44": 159,
         "15-24": 69,
         "0-14": 8
       },
@@ -3439,11 +2923,33 @@
         "A": 26128,
         "S": 102461
       },
+      "gestioneLavoro": {
+        "I": 373895,
+        "A": 24403,
+        "S": 91498
+      },
+      "gestioneItinere": {
+        "I": 91143,
+        "S": 10963,
+        "A": 1725
+      },
       "esito": {
         "N": 84874,
         "P": 396854,
         "I": 15578,
         "F": 96321
+      },
+      "esitoLavoro": {
+        "P": 337077,
+        "N": 55176,
+        "I": 12595,
+        "F": 84948
+      },
+      "esitoItinere": {
+        "N": 29698,
+        "I": 2983,
+        "P": 59777,
+        "F": 11373
       },
       "indennizzo": {
         "NE": 276348,
@@ -3452,11 +2958,37 @@
         "RD": 5848,
         "RS": 510
       },
+      "indennizzoLavoro": {
+        "CA": 19409,
+        "NE": 226575,
+        "TE": 238808,
+        "RD": 4605,
+        "RS": 399
+      },
+      "indennizzoItinere": {
+        "NE": 49773,
+        "TE": 46843,
+        "CA": 5861,
+        "RD": 1243,
+        "RS": 111
+      },
       "gravita": {
         "nessuna": 524479,
         "capitale": 25270,
         "rendita": 5853,
         "franchigia": 38025
+      },
+      "gravitaLavoro": {
+        "capitale": 19409,
+        "nessuna": 435135,
+        "rendita": 4610,
+        "franchigia": 30642
+      },
+      "gravitaItinere": {
+        "nessuna": 89344,
+        "capitale": 5861,
+        "rendita": 1243,
+        "franchigia": 7383
       },
       "durata": {
         "zero": 278714,
@@ -3465,13 +2997,43 @@
         "grave90": 33550,
         "media": 118313
       },
+      "durataLavoro": {
+        "lunga": 59043,
+        "zero": 228166,
+        "breve": 76454,
+        "grave90": 26695,
+        "media": 99438
+      },
+      "durataItinere": {
+        "zero": 50548,
+        "media": 18875,
+        "lunga": 13202,
+        "grave90": 6855,
+        "breve": 14351
+      },
       "nascita": {
         "ITAL": 470146,
         "ESTERO": 123481
       },
+      "nascitaLavoro": {
+        "ITAL": 388334,
+        "ESTERO": 101462
+      },
+      "nascitaItinere": {
+        "ITAL": 81812,
+        "ESTERO": 22019
+      },
       "mezzo": {
         "CON_MEZZO": 88467,
         "SENZA_MEZZO": 505160
+      },
+      "mezzoLavoro": {
+        "SENZA_MEZZO": 472808,
+        "CON_MEZZO": 16988
+      },
+      "mezzoItinere": {
+        "CON_MEZZO": 71479,
+        "SENZA_MEZZO": 32352
       },
       "mensile": {
         "1": 47925,
@@ -3487,338 +3049,194 @@
         "11": 52440,
         "12": 43314
       },
+      "mensileLavoro": {
+        "1": 39614,
+        "2": 42781,
+        "3": 43506,
+        "4": 41178,
+        "5": 48520,
+        "6": 39248,
+        "7": 40847,
+        "8": 28889,
+        "9": 38634,
+        "10": 48035,
+        "11": 43068,
+        "12": 35476
+      },
+      "mensileItinere": {
+        "1": 8311,
+        "2": 7908,
+        "3": 8205,
+        "4": 8219,
+        "5": 9575,
+        "6": 8875,
+        "7": 9570,
+        "8": 6376,
+        "9": 9142,
+        "10": 10440,
+        "11": 9372,
+        "12": 7838
+      },
       "atecoMacro": [
         {
           "key": "ND",
-          "nome": "Settore non attribuito (ND)",
           "casi": 197428,
-          "mortali": 247,
-          "lavoro": 178115,
-          "itinere": 19313,
-          "menomati": 12153,
-          "giorni": 1095228,
-          "durataMedia": 44.2,
-          "indiceGravita": 0.0,
-          "occupati": 0,
-          "indiceIncidenza": 0.0,
-          "indiceMortali": 0.0
+          "mortali": 0
         },
         {
           "key": "C",
-          "nome": "Attività manifatturiere",
           "casi": 89683,
-          "mortali": 176,
-          "lavoro": 73783,
-          "itinere": 15900,
-          "menomati": 12767,
-          "giorni": 2300559,
-          "durataMedia": 33.6,
-          "indiceGravita": 582.4,
-          "occupati": 3950000,
-          "indiceIncidenza": 22.7,
-          "indiceMortali": 0.045
+          "mortali": 176
         },
         {
           "key": "Q",
-          "nome": "Sanità e assistenza sociale",
           "casi": 50281,
-          "mortali": 31,
-          "lavoro": 38208,
-          "itinere": 12073,
-          "menomati": 5423,
-          "giorni": 1116120,
-          "durataMedia": 31.6,
-          "indiceGravita": 547.1,
-          "occupati": 2040000,
-          "indiceIncidenza": 24.65,
-          "indiceMortali": 0.015
+          "mortali": 31
         },
         {
           "key": "G",
-          "nome": "Commercio all'ingrosso e dettaglio",
           "casi": 46695,
-          "mortali": 104,
-          "lavoro": 34684,
-          "itinere": 12011,
-          "menomati": 6354,
-          "giorni": 1134380,
-          "durataMedia": 32.5,
-          "indiceGravita": 342.7,
-          "occupati": 3310000,
-          "indiceIncidenza": 14.11,
-          "indiceMortali": 0.031
+          "mortali": 104
         },
         {
           "key": "H",
-          "nome": "Trasporto e magazzinaggio",
           "casi": 45001,
-          "mortali": 173,
-          "lavoro": 37290,
-          "itinere": 7711,
-          "menomati": 6498,
-          "giorni": 1276818,
-          "durataMedia": 37.4,
-          "indiceGravita": 1055.2,
-          "occupati": 1210000,
-          "indiceIncidenza": 37.19,
-          "indiceMortali": 0.143
+          "mortali": 173
         },
         {
           "key": "F",
-          "nome": "Costruzioni",
           "casi": 44755,
-          "mortali": 220,
-          "lavoro": 40056,
-          "itinere": 4699,
-          "menomati": 9410,
-          "giorni": 1570297,
-          "durataMedia": 45.2,
-          "indiceGravita": 984.5,
-          "occupati": 1595000,
-          "indiceIncidenza": 28.06,
-          "indiceMortali": 0.138
+          "mortali": 220
         },
         {
           "key": "I",
-          "nome": "Alloggio e ristorazione",
           "casi": 30836,
-          "mortali": 57,
-          "lavoro": 22637,
-          "itinere": 8199,
-          "menomati": 3762,
-          "giorni": 681031,
-          "durataMedia": 30.9,
-          "indiceGravita": 445.1,
-          "occupati": 1530000,
-          "indiceIncidenza": 20.15,
-          "indiceMortali": 0.037
+          "mortali": 57
         },
         {
           "key": "N",
-          "nome": "Servizi di supporto alle imprese",
           "casi": 30183,
-          "mortali": 72,
-          "lavoro": 22651,
-          "itinere": 7532,
-          "menomati": 4145,
-          "giorni": 774413,
-          "durataMedia": 35.4,
-          "indiceGravita": 673.4,
-          "occupati": 1150000,
-          "indiceIncidenza": 26.25,
-          "indiceMortali": 0.063
+          "mortali": 72
         },
         {
           "key": "E",
-          "nome": "Acqua, reti fognarie e rifiuti",
           "casi": 12988,
-          "mortali": 28,
-          "lavoro": 11733,
-          "itinere": 1255,
-          "menomati": 1952,
-          "giorni": 395681,
-          "durataMedia": 37.9,
-          "indiceGravita": 1470.9,
-          "occupati": 269000,
-          "indiceIncidenza": 48.28,
-          "indiceMortali": 0.104
+          "mortali": 28
         },
         {
           "key": "O",
-          "nome": "Pubblica amministrazione e difesa",
           "casi": 11049,
-          "mortali": 22,
-          "lavoro": 7848,
-          "itinere": 3201,
-          "menomati": 1584,
-          "giorni": 264510,
-          "durataMedia": 36.6,
-          "indiceGravita": 201.9,
-          "occupati": 1310000,
-          "indiceIncidenza": 8.43,
-          "indiceMortali": 0.017
+          "mortali": 22
         },
         {
           "key": "P",
-          "nome": "Istruzione",
           "casi": 7281,
-          "mortali": 6,
-          "lavoro": 6094,
-          "itinere": 1187,
-          "menomati": 448,
-          "giorni": 54601,
-          "durataMedia": 30.8,
-          "indiceGravita": 32.1,
-          "occupati": 1700000,
-          "indiceIncidenza": 4.28,
-          "indiceMortali": 0.004
+          "mortali": 6
         },
         {
           "key": "M",
-          "nome": "Attività professionali e tecniche",
           "casi": 5634,
-          "mortali": 17,
-          "lavoro": 2935,
-          "itinere": 2699,
-          "menomati": 878,
-          "giorni": 131911,
-          "durataMedia": 34.4,
-          "indiceGravita": 81.9,
-          "occupati": 1610000,
-          "indiceIncidenza": 3.5,
-          "indiceMortali": 0.011
+          "mortali": 17
         },
         {
           "key": "R",
-          "nome": "Arte, sport e intrattenimento",
           "casi": 5188,
-          "mortali": 11,
-          "lavoro": 4203,
-          "itinere": 985,
-          "menomati": 805,
-          "giorni": 154083,
-          "durataMedia": 38.2,
-          "indiceGravita": 405.5,
-          "occupati": 380000,
-          "indiceIncidenza": 13.65,
-          "indiceMortali": 0.029
+          "mortali": 11
         },
         {
           "key": "S",
-          "nome": "Altri servizi",
           "casi": 5054,
-          "mortali": 12,
-          "lavoro": 3358,
-          "itinere": 1696,
-          "menomati": 934,
-          "giorni": 149511,
-          "durataMedia": 40.8,
-          "indiceGravita": 182.3,
-          "occupati": 820000,
-          "indiceIncidenza": 6.16,
-          "indiceMortali": 0.015
+          "mortali": 12
         },
         {
           "key": "J",
-          "nome": "Informazione e comunicazione",
           "casi": 4361,
-          "mortali": 22,
-          "lavoro": 2199,
-          "itinere": 2162,
-          "menomati": 727,
-          "giorni": 106847,
-          "durataMedia": 37.5,
-          "indiceGravita": 143.4,
-          "occupati": 745000,
-          "indiceIncidenza": 5.85,
-          "indiceMortali": 0.03
+          "mortali": 22
         },
         {
           "key": "K",
-          "nome": "Attività finanziarie e assicurative",
           "casi": 3228,
-          "mortali": 9,
-          "lavoro": 1048,
-          "itinere": 2180,
-          "menomati": 537,
-          "giorni": 70963,
-          "durataMedia": 34.6,
-          "indiceGravita": 112.6,
-          "occupati": 630000,
-          "indiceIncidenza": 5.12,
-          "indiceMortali": 0.014
+          "mortali": 9
         },
         {
           "key": "A",
-          "nome": "Agricoltura, silvicoltura e pesca",
           "casi": 1345,
-          "mortali": 8,
-          "lavoro": 1177,
-          "itinere": 168,
-          "menomati": 257,
-          "giorni": 44648,
-          "durataMedia": 44.1,
-          "indiceGravita": 50.8,
-          "occupati": 878500,
-          "indiceIncidenza": 1.53,
-          "indiceMortali": 0.009
+          "mortali": 8
         },
         {
           "key": "L",
-          "nome": "Attività immobiliari",
           "casi": 1235,
-          "mortali": 3,
-          "lavoro": 820,
-          "itinere": 415,
-          "menomati": 245,
-          "giorni": 39802,
-          "durataMedia": 45.0,
-          "indiceGravita": 251.9,
-          "occupati": 158000,
-          "indiceIncidenza": 7.82,
-          "indiceMortali": 0.019
+          "mortali": 3
         },
         {
           "key": "D",
-          "nome": "Energia elettrica e gas",
           "casi": 928,
-          "mortali": 6,
-          "lavoro": 554,
-          "itinere": 374,
-          "menomati": 154,
-          "giorni": 25818,
-          "durataMedia": 39.4,
-          "indiceGravita": 222.2,
-          "occupati": 116200,
-          "indiceIncidenza": 7.99,
-          "indiceMortali": 0.052
+          "mortali": 6
         },
         {
           "key": "B",
-          "nome": "Estrazione di minerali",
           "casi": 358,
-          "mortali": 3,
-          "lavoro": 323,
-          "itinere": 35,
-          "menomati": 97,
-          "giorni": 16886,
-          "durataMedia": 56.7,
-          "indiceGravita": 662.2,
-          "occupati": 25500,
-          "indiceIncidenza": 14.04,
-          "indiceMortali": 0.118
+          "mortali": 3
         },
         {
           "key": "U",
-          "nome": "Organizzazioni extraterritoriali",
           "casi": 90,
-          "mortali": 1,
-          "lavoro": 60,
-          "itinere": 30,
-          "menomati": 14,
-          "giorni": 2005,
-          "durataMedia": 34.6,
-          "indiceGravita": 143.2,
-          "occupati": 14000,
-          "indiceIncidenza": 6.43,
-          "indiceMortali": 0.071
+          "mortali": 1
         },
         {
           "key": "T",
-          "nome": "Attività di famiglie e convivenze",
           "casi": 26,
-          "mortali": 0,
-          "lavoro": 20,
-          "itinere": 6,
-          "menomati": 4,
-          "giorni": 661,
-          "durataMedia": 44.1,
-          "indiceGravita": 1.0,
-          "occupati": 675000,
-          "indiceIncidenza": 0.04,
-          "indiceMortali": 0.0
+          "mortali": 0
         }
       ],
+      "atecoMacroLavoro": {
+        "F": 40056,
+        "Q": 38208,
+        "S": 3358,
+        "C": 73783,
+        "ND": 178115,
+        "H": 37290,
+        "N": 22651,
+        "G": 34684,
+        "A": 1177,
+        "O": 7848,
+        "E": 11733,
+        "R": 4203,
+        "I": 22637,
+        "J": 2199,
+        "L": 820,
+        "K": 1048,
+        "M": 2935,
+        "P": 6094,
+        "D": 554,
+        "B": 323,
+        "U": 60,
+        "T": 20
+      },
+      "atecoMacroItinere": {
+        "C": 15900,
+        "ND": 19313,
+        "H": 7711,
+        "Q": 12073,
+        "G": 12011,
+        "M": 2699,
+        "O": 3201,
+        "E": 1255,
+        "N": 7532,
+        "F": 4699,
+        "K": 2180,
+        "S": 1696,
+        "J": 2162,
+        "I": 8199,
+        "R": 985,
+        "L": 415,
+        "P": 1187,
+        "D": 374,
+        "A": 168,
+        "B": 35,
+        "U": 30,
+        "T": 6
+      },
       "atecoDivisioni": [
         {
           "key": "Q 86",
@@ -3910,9 +3328,6 @@
           "mortali": 77,
           "menomati": 4467,
           "giorni": 728682,
-          "casiConGiorni": 22163,
-          "durataMedia": 32.9,
-          "indiceGravita": 404.2,
           "occupati": 1802700,
           "indiceIncidenza": 24.3,
           "indiceMortali": 0.043
@@ -3925,9 +3340,6 @@
           "mortali": 7,
           "menomati": 101,
           "giorni": 31719,
-          "casiConGiorni": 766,
-          "durataMedia": 41.4,
-          "indiceGravita": 571.5,
           "occupati": 55500,
           "indiceIncidenza": 25.21,
           "indiceMortali": 0.126
@@ -3940,9 +3352,6 @@
           "mortali": 206,
           "menomati": 9564,
           "giorni": 1953040,
-          "casiConGiorni": 57521,
-          "durataMedia": 34.0,
-          "indiceGravita": 442.7,
           "occupati": 4411700,
           "indiceIncidenza": 25.06,
           "indiceMortali": 0.047
@@ -3955,9 +3364,6 @@
           "mortali": 31,
           "menomati": 1245,
           "giorni": 303227,
-          "casiConGiorni": 10333,
-          "durataMedia": 29.3,
-          "indiceGravita": 610.9,
           "occupati": 496400,
           "indiceIncidenza": 48.79,
           "indiceMortali": 0.062
@@ -3970,9 +3376,6 @@
           "mortali": 91,
           "menomati": 6688,
           "giorni": 1122520,
-          "casiConGiorni": 35620,
-          "durataMedia": 31.5,
-          "indiceGravita": 521.5,
           "occupati": 2152500,
           "indiceIncidenza": 32.81,
           "indiceMortali": 0.042
@@ -3985,9 +3388,6 @@
           "mortali": 23,
           "menomati": 1277,
           "giorni": 296873,
-          "casiConGiorni": 8313,
-          "durataMedia": 35.7,
-          "indiceGravita": 580.4,
           "occupati": 511500,
           "indiceIncidenza": 31.13,
           "indiceMortali": 0.045
@@ -4000,9 +3400,6 @@
           "mortali": 32,
           "menomati": 2955,
           "giorni": 369254,
-          "casiConGiorni": 10589,
-          "durataMedia": 34.9,
-          "indiceGravita": 606.6,
           "occupati": 608700,
           "indiceIncidenza": 31.23,
           "indiceMortali": 0.053
@@ -4015,9 +3412,6 @@
           "mortali": 104,
           "menomati": 7187,
           "giorni": 1322487,
-          "casiConGiorni": 39308,
-          "durataMedia": 33.6,
-          "indiceGravita": 673.9,
           "occupati": 1962500,
           "indiceIncidenza": 38.96,
           "indiceMortali": 0.053
@@ -4030,9 +3424,6 @@
           "mortali": 74,
           "menomati": 6450,
           "giorni": 1035207,
-          "casiConGiorni": 27525,
-          "durataMedia": 37.6,
-          "indiceGravita": 644.8,
           "occupati": 1605500,
           "indiceIncidenza": 29.63,
           "indiceMortali": 0.046
@@ -4045,9 +3436,6 @@
           "mortali": 26,
           "menomati": 1287,
           "giorni": 221204,
-          "casiConGiorni": 6025,
-          "durataMedia": 36.7,
-          "indiceGravita": 621.4,
           "occupati": 356000,
           "indiceIncidenza": 29.41,
           "indiceMortali": 0.073
@@ -4060,9 +3448,6 @@
           "mortali": 25,
           "menomati": 2420,
           "giorni": 367639,
-          "casiConGiorni": 9976,
-          "durataMedia": 36.9,
-          "indiceGravita": 594.8,
           "occupati": 618100,
           "indiceIncidenza": 27.16,
           "indiceMortali": 0.04
@@ -4075,9 +3460,6 @@
           "mortali": 125,
           "menomati": 6048,
           "giorni": 927781,
-          "casiConGiorni": 23061,
-          "durataMedia": 40.2,
-          "indiceGravita": 397.5,
           "occupati": 2334200,
           "indiceIncidenza": 17.95,
           "indiceMortali": 0.054
@@ -4090,9 +3472,6 @@
           "mortali": 26,
           "menomati": 2160,
           "giorni": 278811,
-          "casiConGiorni": 7604,
-          "durataMedia": 36.7,
-          "indiceGravita": 565.5,
           "occupati": 493000,
           "indiceIncidenza": 24.09,
           "indiceMortali": 0.053
@@ -4105,9 +3484,6 @@
           "mortali": 4,
           "menomati": 305,
           "giorni": 45007,
-          "casiConGiorni": 932,
-          "durataMedia": 48.3,
-          "indiceGravita": 431.1,
           "occupati": 104400,
           "indiceIncidenza": 17.03,
           "indiceMortali": 0.038
@@ -4120,9 +3496,6 @@
           "mortali": 118,
           "menomati": 4229,
           "giorni": 518301,
-          "casiConGiorni": 11716,
-          "durataMedia": 44.2,
-          "indiceGravita": 311.9,
           "occupati": 1661600,
           "indiceIncidenza": 12.79,
           "indiceMortali": 0.071
@@ -4135,9 +3508,6 @@
           "mortali": 81,
           "menomati": 4021,
           "giorni": 590239,
-          "casiConGiorni": 14900,
-          "durataMedia": 39.6,
-          "indiceGravita": 465.7,
           "occupati": 1267400,
           "indiceIncidenza": 22.34,
           "indiceMortali": 0.064
@@ -4150,9 +3520,6 @@
           "mortali": 17,
           "menomati": 776,
           "giorni": 122393,
-          "casiConGiorni": 2208,
-          "durataMedia": 55.4,
-          "indiceGravita": 645.2,
           "occupati": 189700,
           "indiceIncidenza": 20.53,
           "indiceMortali": 0.09
@@ -4165,9 +3532,6 @@
           "mortali": 30,
           "menomati": 1872,
           "giorni": 224688,
-          "casiConGiorni": 4856,
-          "durataMedia": 46.3,
-          "indiceGravita": 431.3,
           "occupati": 521000,
           "indiceIncidenza": 17.13,
           "indiceMortali": 0.058
@@ -4180,9 +3544,6 @@
           "mortali": 95,
           "menomati": 4406,
           "giorni": 632593,
-          "casiConGiorni": 14703,
-          "durataMedia": 43.0,
-          "indiceGravita": 443.6,
           "occupati": 1426100,
           "indiceIncidenza": 18.69,
           "indiceMortali": 0.067
@@ -4195,46 +3556,9 @@
           "mortali": 36,
           "menomati": 1690,
           "giorni": 315108,
-          "casiConGiorni": 6794,
-          "durataMedia": 46.4,
-          "indiceGravita": 551.4,
           "occupati": 571500,
           "indiceIncidenza": 21.34,
           "indiceMortali": 0.063
-        }
-      ],
-      "provinceAutonome": [
-        {
-          "codice": "021",
-          "nome": "P.A. Bolzano / Bozen",
-          "totale": 14843,
-          "lavoro": 13741,
-          "itinere": 1102,
-          "mortali": 17,
-          "menomati": 564,
-          "giorni": 170634,
-          "casiConGiorni": 6049,
-          "durataMedia": 28.2,
-          "indiceGravita": 674.2,
-          "occupati": 253100,
-          "indiceIncidenza": 58.64,
-          "indiceMortali": 0.067
-        },
-        {
-          "codice": "022",
-          "nome": "P.A. Trento",
-          "totale": 9375,
-          "lavoro": 8378,
-          "itinere": 997,
-          "mortali": 14,
-          "menomati": 681,
-          "giorni": 132593,
-          "casiConGiorni": 4284,
-          "durataMedia": 31.0,
-          "indiceGravita": 545.0,
-          "occupati": 243300,
-          "indiceIncidenza": 38.53,
-          "indiceMortali": 0.058
         }
       ]
     }
@@ -4246,9 +3570,6 @@
     "lavoro": 2574168,
     "itinere": 450202,
     "giorni": 60838551,
-    "casiConGiorni": 1711114,
-    "durataMedia": 35.6,
-    "indiceGravita": 2711.4,
     "menomati": 334750,
     "occupati": 22437960,
     "indiceIncidenza": 134.79,
@@ -4257,23 +3578,51 @@
       "F": 1161262,
       "M": 1863108
     },
+    "generiLavoro": {
+      "F": 943354,
+      "M": 1630814
+    },
+    "generiItinere": {
+      "M": 232294,
+      "F": 217908
+    },
     "generiMortali": {
       "M": 6264,
       "F": 690
     },
     "fasceEta": {
-      "35-49": 923122,
-      "50-64": 963637,
+      "35-44": 558805,
+      "55-64": 568804,
+      "45-54": 759150,
       "25-34": 530447,
       "65+": 67742,
       "15-24": 333520,
       "0-14": 205902
     },
+    "fasceEtaLavoro": {
+      "35-44": 467764,
+      "55-64": 484846,
+      "45-54": 648848,
+      "25-34": 432110,
+      "65+": 60197,
+      "15-24": 278350,
+      "0-14": 202053
+    },
+    "fasceEtaItinere": {
+      "55-64": 83958,
+      "35-44": 91041,
+      "45-54": 110302,
+      "15-24": 55170,
+      "25-34": 98337,
+      "65+": 7545,
+      "0-14": 3849
+    },
     "fasceEtaMortali": {
       "25-34": 602,
-      "50-64": 3629,
-      "35-49": 1647,
+      "55-64": 2524,
+      "45-54": 1840,
       "15-24": 306,
+      "35-44": 912,
       "65+": 752,
       "0-14": 18
     },
@@ -4286,11 +3635,33 @@
       "A": 133159,
       "S": 398888
     },
+    "gestioneLavoro": {
+      "I": 2095339,
+      "A": 125451,
+      "S": 353378
+    },
+    "gestioneItinere": {
+      "I": 396984,
+      "S": 45510,
+      "A": 7708
+    },
     "esito": {
       "F": 414068,
       "P": 2001523,
       "N": 565375,
       "I": 43404
+    },
+    "esitoLavoro": {
+      "F": 371185,
+      "P": 1733965,
+      "N": 431150,
+      "I": 37868
+    },
+    "esitoItinere": {
+      "N": 134225,
+      "P": 267558,
+      "I": 5536,
+      "F": 42883
     },
     "indennizzo": {
       "NE": 1301899,
@@ -4299,11 +3670,37 @@
       "RD": 32980,
       "RS": 3238
     },
+    "indennizzoLavoro": {
+      "NE": 1095553,
+      "CA": 97176,
+      "TE": 1352665,
+      "RD": 26160,
+      "RS": 2614
+    },
+    "indennizzoItinere": {
+      "NE": 206346,
+      "TE": 209714,
+      "CA": 26698,
+      "RD": 6820,
+      "RS": 624
+    },
     "gravita": {
       "nessuna": 2689620,
       "capitale": 123874,
       "rendita": 33042,
       "franchigia": 177834
+    },
+    "gravitaLavoro": {
+      "nessuna": 2305816,
+      "capitale": 97176,
+      "rendita": 26213,
+      "franchigia": 144963
+    },
+    "gravitaItinere": {
+      "nessuna": 383804,
+      "capitale": 26698,
+      "franchigia": 32871,
+      "rendita": 6829
     },
     "durata": {
       "zero": 1313256,
@@ -4312,13 +3709,43 @@
       "grave90": 166705,
       "breve": 479430
     },
+    "durataLavoro": {
+      "zero": 1103237,
+      "lunga": 321081,
+      "media": 598061,
+      "grave90": 134538,
+      "breve": 417251
+    },
+    "durataItinere": {
+      "zero": 210019,
+      "media": 85042,
+      "grave90": 32167,
+      "breve": 62179,
+      "lunga": 60795
+    },
     "nascita": {
       "ITAL": 2456676,
       "ESTERO": 567694
     },
+    "nascitaLavoro": {
+      "ITAL": 2094401,
+      "ESTERO": 479767
+    },
+    "nascitaItinere": {
+      "ITAL": 362275,
+      "ESTERO": 87927
+    },
     "mezzo": {
       "SENZA_MEZZO": 2626590,
       "CON_MEZZO": 397780
+    },
+    "mezzoLavoro": {
+      "SENZA_MEZZO": 2493259,
+      "CON_MEZZO": 80909
+    },
+    "mezzoItinere": {
+      "CON_MEZZO": 316871,
+      "SENZA_MEZZO": 133331
     },
     "mensile": {
       "1": 267343,
@@ -4334,338 +3761,194 @@
       "11": 290588,
       "12": 239962
     },
+    "mensileLavoro": {
+      "1": 231135,
+      "2": 217443,
+      "3": 243980,
+      "4": 199584,
+      "5": 221080,
+      "6": 198104,
+      "7": 206974,
+      "8": 151195,
+      "9": 199756,
+      "10": 252035,
+      "11": 248677,
+      "12": 204205
+    },
+    "mensileItinere": {
+      "1": 36208,
+      "2": 34988,
+      "3": 32991,
+      "4": 29949,
+      "5": 40074,
+      "6": 39722,
+      "7": 41166,
+      "8": 29588,
+      "9": 43001,
+      "10": 44847,
+      "11": 41911,
+      "12": 35757
+    },
     "atecoMacro": [
       {
         "key": "ND",
-        "nome": "Settore non attribuito (ND)",
         "casi": 867502,
-        "mortali": 1430,
-        "lavoro": 787230,
-        "itinere": 80272,
-        "menomati": 55850,
-        "giorni": 5681957,
-        "durataMedia": 45.8,
-        "indiceGravita": 0.0,
-        "occupati": 0,
-        "indiceIncidenza": 0.0,
-        "indiceMortali": 0.0
+        "mortali": 0
       },
       {
         "key": "Q",
-        "nome": "Sanità e assistenza sociale",
         "casi": 502079,
-        "mortali": 388,
-        "lavoro": 444178,
-        "itinere": 57901,
-        "menomati": 29684,
-        "giorni": 9726131,
-        "durataMedia": 25.8,
-        "indiceGravita": 4917.2,
-        "occupati": 1978000,
-        "indiceIncidenza": 253.83,
-        "indiceMortali": 0.196
+        "mortali": 388
       },
       {
         "key": "C",
-        "nome": "Attività manifatturiere",
         "casi": 442722,
-        "mortali": 1017,
-        "lavoro": 370519,
-        "itinere": 72203,
-        "menomati": 64388,
-        "giorni": 11821768,
-        "durataMedia": 34.8,
-        "indiceGravita": 3046.7,
-        "occupati": 3880240,
-        "indiceIncidenza": 114.1,
-        "indiceMortali": 0.262
+        "mortali": 1017
       },
       {
         "key": "H",
-        "nome": "Trasporto e magazzinaggio",
         "casi": 244413,
-        "mortali": 940,
-        "lavoro": 210198,
-        "itinere": 34215,
-        "menomati": 32619,
-        "giorni": 6503000,
-        "durataMedia": 38.4,
-        "indiceGravita": 5580.9,
-        "occupati": 1165220,
-        "indiceIncidenza": 209.76,
-        "indiceMortali": 0.807
+        "mortali": 940
       },
       {
         "key": "G",
-        "nome": "Commercio all'ingrosso e dettaglio",
         "casi": 215336,
-        "mortali": 608,
-        "lavoro": 163076,
-        "itinere": 52260,
-        "menomati": 30723,
-        "giorni": 5586420,
-        "durataMedia": 34.6,
-        "indiceGravita": 1712.4,
-        "occupati": 3262279,
-        "indiceIncidenza": 66.01,
-        "indiceMortali": 0.186
+        "mortali": 608
       },
       {
         "key": "F",
-        "nome": "Costruzioni",
         "casi": 209651,
-        "mortali": 1123,
-        "lavoro": 190017,
-        "itinere": 19634,
-        "menomati": 45403,
-        "giorni": 7698635,
-        "durataMedia": 47.3,
-        "indiceGravita": 5221.9,
-        "occupati": 1474300,
-        "indiceIncidenza": 142.2,
-        "indiceMortali": 0.762
+        "mortali": 1123
       },
       {
         "key": "N",
-        "nome": "Servizi di supporto alle imprese",
         "casi": 139248,
-        "mortali": 354,
-        "lavoro": 106888,
-        "itinere": 32360,
-        "menomati": 18884,
-        "giorni": 3782630,
-        "durataMedia": 37.4,
-        "indiceGravita": 3469.6,
-        "occupati": 1090220,
-        "indiceIncidenza": 127.72,
-        "indiceMortali": 0.325
+        "mortali": 354
       },
       {
         "key": "I",
-        "nome": "Alloggio e ristorazione",
         "casi": 130539,
-        "mortali": 283,
-        "lavoro": 98243,
-        "itinere": 32296,
-        "menomati": 16090,
-        "giorni": 2968695,
-        "durataMedia": 32.1,
-        "indiceGravita": 2106.7,
-        "occupati": 1409179,
-        "indiceIncidenza": 92.63,
-        "indiceMortali": 0.201
+        "mortali": 283
       },
       {
         "key": "O",
-        "nome": "Pubblica amministrazione e difesa",
         "casi": 60353,
-        "mortali": 170,
-        "lavoro": 46138,
-        "itinere": 14215,
-        "menomati": 8074,
-        "giorni": 1419608,
-        "durataMedia": 37.3,
-        "indiceGravita": 1105.6,
-        "occupati": 1284000,
-        "indiceIncidenza": 47.0,
-        "indiceMortali": 0.132
+        "mortali": 170
       },
       {
         "key": "E",
-        "nome": "Acqua, reti fognarie e rifiuti",
         "casi": 59742,
-        "mortali": 159,
-        "lavoro": 54226,
-        "itinere": 5516,
-        "menomati": 9341,
-        "giorni": 1886491,
-        "durataMedia": 39.6,
-        "indiceGravita": 7201.4,
-        "occupati": 261959,
-        "indiceIncidenza": 228.06,
-        "indiceMortali": 0.607
+        "mortali": 159
       },
       {
         "key": "P",
-        "nome": "Istruzione",
         "casi": 26075,
-        "mortali": 30,
-        "lavoro": 21419,
-        "itinere": 4656,
-        "menomati": 1820,
-        "giorni": 260915,
-        "durataMedia": 31.7,
-        "indiceGravita": 157.6,
-        "occupati": 1656000,
-        "indiceIncidenza": 15.75,
-        "indiceMortali": 0.018
+        "mortali": 30
       },
       {
         "key": "S",
-        "nome": "Altri servizi",
         "casi": 24993,
-        "mortali": 79,
-        "lavoro": 17536,
-        "itinere": 7457,
-        "menomati": 4499,
-        "giorni": 732942,
-        "durataMedia": 41.3,
-        "indiceGravita": 923.1,
-        "occupati": 794000,
-        "indiceIncidenza": 31.48,
-        "indiceMortali": 0.099
+        "mortali": 79
       },
       {
         "key": "M",
-        "nome": "Attività professionali e tecniche",
         "casi": 24958,
-        "mortali": 88,
-        "lavoro": 13775,
-        "itinere": 11183,
-        "menomati": 4005,
-        "giorni": 622839,
-        "durataMedia": 36.2,
-        "indiceGravita": 406.0,
-        "occupati": 1534040,
-        "indiceIncidenza": 16.27,
-        "indiceMortali": 0.057
+        "mortali": 88
       },
       {
         "key": "R",
-        "nome": "Arte, sport e intrattenimento",
         "casi": 21933,
-        "mortali": 40,
-        "lavoro": 18191,
-        "itinere": 3742,
-        "menomati": 3674,
-        "giorni": 649502,
-        "durataMedia": 38.1,
-        "indiceGravita": 1904.7,
-        "occupati": 341000,
-        "indiceIncidenza": 64.32,
-        "indiceMortali": 0.117
+        "mortali": 40
       },
       {
         "key": "J",
-        "nome": "Informazione e comunicazione",
         "casi": 20836,
-        "mortali": 75,
-        "lavoro": 12222,
-        "itinere": 8614,
-        "menomati": 3347,
-        "giorni": 509299,
-        "durataMedia": 38.8,
-        "indiceGravita": 734.8,
-        "occupati": 693140,
-        "indiceIncidenza": 30.06,
-        "indiceMortali": 0.108
+        "mortali": 75
       },
       {
         "key": "K",
-        "nome": "Attività finanziarie e assicurative",
         "casi": 15385,
-        "mortali": 51,
-        "lavoro": 5824,
-        "itinere": 9561,
-        "menomati": 2644,
-        "giorni": 371324,
-        "durataMedia": 38.2,
-        "indiceGravita": 595.3,
-        "occupati": 623720,
-        "indiceIncidenza": 24.67,
-        "indiceMortali": 0.082
+        "mortali": 51
       },
       {
         "key": "A",
-        "nome": "Agricoltura, silvicoltura e pesca",
         "casi": 6481,
-        "mortali": 49,
-        "lavoro": 5794,
-        "itinere": 687,
-        "menomati": 1354,
-        "giorni": 221277,
-        "durataMedia": 44.7,
-        "indiceGravita": 246.8,
-        "occupati": 896500,
-        "indiceIncidenza": 7.23,
-        "indiceMortali": 0.055
+        "mortali": 49
       },
       {
         "key": "L",
-        "nome": "Attività immobiliari",
         "casi": 5915,
-        "mortali": 37,
-        "lavoro": 4109,
-        "itinere": 1806,
-        "menomati": 1097,
-        "giorni": 179645,
-        "durataMedia": 41.7,
-        "indiceGravita": 1196.7,
-        "occupati": 150120,
-        "indiceIncidenza": 39.4,
-        "indiceMortali": 0.246
+        "mortali": 37
       },
       {
         "key": "D",
-        "nome": "Energia elettrica e gas",
         "casi": 3911,
-        "mortali": 18,
-        "lavoro": 2577,
-        "itinere": 1334,
-        "menomati": 678,
-        "giorni": 112524,
-        "durataMedia": 40.0,
-        "indiceGravita": 1002.4,
-        "occupati": 112259,
-        "indiceIncidenza": 34.84,
-        "indiceMortali": 0.16
+        "mortali": 18
       },
       {
         "key": "B",
-        "nome": "Estrazione di minerali",
         "casi": 1807,
-        "mortali": 13,
-        "lavoro": 1655,
-        "itinere": 152,
-        "menomati": 495,
-        "giorni": 89496,
-        "durataMedia": 59.4,
-        "indiceGravita": 3526.2,
-        "occupati": 25380,
-        "indiceIncidenza": 71.2,
-        "indiceMortali": 0.512
+        "mortali": 13
       },
       {
         "key": "U",
-        "nome": "Organizzazioni extraterritoriali",
         "casi": 384,
-        "mortali": 2,
-        "lavoro": 266,
-        "itinere": 118,
-        "menomati": 61,
-        "giorni": 9663,
-        "durataMedia": 37.9,
-        "indiceGravita": 754.9,
-        "occupati": 12800,
-        "indiceIncidenza": 30.0,
-        "indiceMortali": 0.156
+        "mortali": 2
       },
       {
         "key": "T",
-        "nome": "Attività di famiglie e convivenze",
         "casi": 107,
-        "mortali": 0,
-        "lavoro": 87,
-        "itinere": 20,
-        "menomati": 20,
-        "giorni": 3790,
-        "durataMedia": 46.8,
-        "indiceGravita": 5.3,
-        "occupati": 715000,
-        "indiceIncidenza": 0.15,
-        "indiceMortali": 0.0
+        "mortali": 0
       }
     ],
+    "atecoMacroLavoro": {
+      "I": 98243,
+      "Q": 444178,
+      "F": 190017,
+      "C": 370519,
+      "E": 54226,
+      "S": 17536,
+      "ND": 787230,
+      "H": 210198,
+      "O": 46138,
+      "G": 163076,
+      "N": 106888,
+      "R": 18191,
+      "J": 12222,
+      "M": 13775,
+      "A": 5794,
+      "B": 1655,
+      "K": 5824,
+      "D": 2577,
+      "P": 21419,
+      "L": 4109,
+      "U": 266,
+      "T": 87
+    },
+    "atecoMacroItinere": {
+      "C": 72203,
+      "N": 32360,
+      "ND": 80272,
+      "H": 34215,
+      "S": 7457,
+      "O": 14215,
+      "G": 52260,
+      "Q": 57901,
+      "L": 1806,
+      "I": 32296,
+      "M": 11183,
+      "F": 19634,
+      "E": 5516,
+      "K": 9561,
+      "R": 3742,
+      "P": 4656,
+      "J": 8614,
+      "A": 687,
+      "D": 1334,
+      "B": 152,
+      "U": 118,
+      "T": 20
+    },
     "atecoDivisioni": [
       {
         "key": "Q 86",
@@ -4757,9 +4040,6 @@
         "mortali": 531,
         "menomati": 21735,
         "giorni": 4347249,
-        "casiConGiorni": 136604,
-        "durataMedia": 31.8,
-        "indiceGravita": 2497.9,
         "occupati": 1740360,
         "indiceIncidenza": 134.4,
         "indiceMortali": 0.305
@@ -4772,9 +4052,6 @@
         "mortali": 22,
         "menomati": 741,
         "giorni": 171078,
-        "casiConGiorni": 4578,
-        "durataMedia": 37.4,
-        "indiceGravita": 3188.2,
         "occupati": 53660,
         "indiceIncidenza": 139.17,
         "indiceMortali": 0.41
@@ -4787,9 +4064,6 @@
         "mortali": 1161,
         "menomati": 45932,
         "giorni": 10708338,
-        "casiConGiorni": 328571,
-        "durataMedia": 32.6,
-        "indiceGravita": 2483.4,
         "occupati": 4311900,
         "indiceIncidenza": 133.19,
         "indiceMortali": 0.269
@@ -4802,9 +4076,6 @@
         "mortali": 151,
         "menomati": 7316,
         "giorni": 1661348,
-        "casiConGiorni": 55872,
-        "durataMedia": 29.7,
-        "indiceGravita": 3419.8,
         "occupati": 485800,
         "indiceIncidenza": 234.59,
         "indiceMortali": 0.311
@@ -4817,9 +4088,6 @@
         "mortali": 566,
         "menomati": 33686,
         "giorni": 6195474,
-        "casiConGiorni": 201206,
-        "durataMedia": 30.8,
-        "indiceGravita": 2964.1,
         "occupati": 2090140,
         "indiceIncidenza": 174.59,
         "indiceMortali": 0.271
@@ -4832,9 +4100,6 @@
         "mortali": 127,
         "menomati": 6780,
         "giorni": 1676060,
-        "casiConGiorni": 45941,
-        "durataMedia": 36.5,
-        "indiceGravita": 3341.0,
         "occupati": 501660,
         "indiceIncidenza": 160.08,
         "indiceMortali": 0.253
@@ -4847,9 +4112,6 @@
         "mortali": 190,
         "menomati": 14427,
         "giorni": 2083021,
-        "casiConGiorni": 62124,
-        "durataMedia": 33.5,
-        "indiceGravita": 3525.8,
         "occupati": 590800,
         "indiceIncidenza": 178.1,
         "indiceMortali": 0.322
@@ -4862,9 +4124,6 @@
         "mortali": 588,
         "menomati": 36042,
         "giorni": 7238761,
-        "casiConGiorni": 210546,
-        "durataMedia": 34.4,
-        "indiceGravita": 3739.0,
         "occupati": 1936040,
         "indiceIncidenza": 196.93,
         "indiceMortali": 0.304
@@ -4877,9 +4136,6 @@
         "mortali": 384,
         "menomati": 30693,
         "giorni": 5077156,
-        "casiConGiorni": 135863,
-        "durataMedia": 37.4,
-        "indiceGravita": 3289.5,
         "occupati": 1543420,
         "indiceIncidenza": 150.91,
         "indiceMortali": 0.249
@@ -4892,9 +4148,6 @@
         "mortali": 117,
         "menomati": 6443,
         "giorni": 1074510,
-        "casiConGiorni": 29533,
-        "durataMedia": 36.4,
-        "indiceGravita": 3114.2,
         "occupati": 345040,
         "indiceIncidenza": 140.29,
         "indiceMortali": 0.339
@@ -4907,9 +4160,6 @@
         "mortali": 185,
         "menomati": 11552,
         "giorni": 1980684,
-        "casiConGiorni": 53378,
-        "durataMedia": 37.1,
-        "indiceGravita": 3244.8,
         "occupati": 610420,
         "indiceIncidenza": 139.62,
         "indiceMortali": 0.303
@@ -4922,9 +4172,6 @@
         "mortali": 653,
         "menomati": 28351,
         "giorni": 4751262,
-        "casiConGiorni": 121992,
-        "durataMedia": 38.9,
-        "indiceGravita": 2102.5,
         "occupati": 2259859,
         "indiceIncidenza": 93.86,
         "indiceMortali": 0.289
@@ -4937,9 +4184,6 @@
         "mortali": 198,
         "menomati": 10172,
         "giorni": 1537353,
-        "casiConGiorni": 40327,
-        "durataMedia": 38.1,
-        "indiceGravita": 3230.8,
         "occupati": 475840,
         "indiceIncidenza": 131.11,
         "indiceMortali": 0.416
@@ -4952,9 +4196,6 @@
         "mortali": 55,
         "menomati": 1672,
         "giorni": 255747,
-        "casiConGiorni": 5009,
-        "durataMedia": 51.1,
-        "indiceGravita": 2534.7,
         "occupati": 100900,
         "indiceIncidenza": 91.89,
         "indiceMortali": 0.545
@@ -4967,9 +4208,6 @@
         "mortali": 678,
         "menomati": 19715,
         "giorni": 2634091,
-        "casiConGiorni": 62580,
-        "durataMedia": 42.1,
-        "indiceGravita": 1654.9,
         "occupati": 1591740,
         "indiceIncidenza": 74.83,
         "indiceMortali": 0.426
@@ -4982,9 +4220,6 @@
         "mortali": 470,
         "menomati": 19386,
         "giorni": 2952762,
-        "casiConGiorni": 73695,
-        "durataMedia": 40.1,
-        "indiceGravita": 2417.6,
         "occupati": 1221360,
         "indiceIncidenza": 111.26,
         "indiceMortali": 0.385
@@ -4997,9 +4232,6 @@
         "mortali": 82,
         "menomati": 3597,
         "giorni": 685882,
-        "casiConGiorni": 12126,
-        "durataMedia": 56.6,
-        "indiceGravita": 3714.3,
         "occupati": 184660,
         "indiceIncidenza": 110.66,
         "indiceMortali": 0.444
@@ -5012,9 +4244,6 @@
         "mortali": 183,
         "menomati": 9017,
         "giorni": 1120884,
-        "casiConGiorni": 23711,
-        "durataMedia": 47.3,
-        "indiceGravita": 2193.6,
         "occupati": 510980,
         "indiceIncidenza": 84.41,
         "indiceMortali": 0.358
@@ -5027,9 +4256,6 @@
         "mortali": 445,
         "menomati": 19490,
         "giorni": 3131097,
-        "casiConGiorni": 72792,
-        "durataMedia": 43.0,
-        "indiceGravita": 2353.0,
         "occupati": 1330700,
         "indiceIncidenza": 99.52,
         "indiceMortali": 0.334
@@ -5042,46 +4268,9 @@
         "mortali": 168,
         "menomati": 8003,
         "giorni": 1555794,
-        "casiConGiorni": 34666,
-        "durataMedia": 44.9,
-        "indiceGravita": 2815.0,
         "occupati": 552680,
         "indiceIncidenza": 111.65,
         "indiceMortali": 0.304
-      }
-    ],
-    "provinceAutonome": [
-      {
-        "codice": "021",
-        "nome": "P.A. Bolzano / Bozen",
-        "totale": 72131,
-        "lavoro": 66869,
-        "itinere": 5262,
-        "mortali": 82,
-        "menomati": 4032,
-        "giorni": 956856,
-        "casiConGiorni": 33420,
-        "durataMedia": 28.6,
-        "indiceGravita": 3863.6,
-        "occupati": 247660,
-        "indiceIncidenza": 291.25,
-        "indiceMortali": 0.331
-      },
-      {
-        "codice": "022",
-        "nome": "P.A. Trento",
-        "totale": 41834,
-        "lavoro": 37182,
-        "itinere": 4652,
-        "mortali": 69,
-        "menomati": 3284,
-        "giorni": 704492,
-        "casiConGiorni": 22452,
-        "durataMedia": 31.4,
-        "indiceGravita": 2958.3,
-        "occupati": 238140,
-        "indiceIncidenza": 175.67,
-        "indiceMortali": 0.29
       }
     ]
   }

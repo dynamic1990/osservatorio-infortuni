@@ -18,6 +18,7 @@ import { regioneName } from "@/lib/labels";
 import { MAP_ID_REGIONE } from "@/lib/regioni-map";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
+import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
 
 // Scala allerta rischio (giallo -> arancio -> rosso intenso)
 const RISK_COLOR_SCALE = [
@@ -34,10 +35,13 @@ export function RegioniIncidenzaSection() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2024");
   const [metrica, setMetrica] = useState<"incidenza" | "mortaliInc" | "gravita" | "totale">("incidenza");
-  const [ambito, setAmbito] = useState<"totale" | "lavoro" | "itinere">("totale");
+  const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
   const [selectedReg, setSelectedReg] = useState<string | null>(null);
   const [hoverMapId, setHoverMapId] = useState<string | null>(null);
   const [mostraProvincePA, setMostraProvincePA] = useState<boolean>(true);
+
+  const ambito: "totale" | "lavoro" | "itinere" =
+    modalita.lavoro && modalita.itinere ? "totale" : modalita.lavoro ? "lavoro" : "itinere";
 
   // Casi in base all'ambito selezionato
   const casiAmbito = (r: { totale: number; lavoro: number; itinere: number }) =>
@@ -230,19 +234,8 @@ export function RegioniIncidenzaSection() {
           ))}
         </div>
 
-        {/* Filtro Ambito: totale / occasione di lavoro / itinere */}
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Ambito:</span>
-          {(["totale", "lavoro", "itinere"] as const).map((a) => (
-            <button
-              key={a}
-              onClick={() => setAmbito(a)}
-              className={`btn-pill ${ambito === a ? "btn-pill-accent active" : ""}`}
-            >
-              {a === "totale" ? "Tutti gli infortuni" : a === "lavoro" ? "Occasione di lavoro" : "In itinere"}
-            </button>
-          ))}
-        </div>
+        {/* Filtro multiselezione modalità */}
+        <FiltroModalita value={modalita} onChange={setModalita} label="Ambito" />
 
         {/* Selettore Metrica Visualizzata */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>

@@ -34,7 +34,7 @@ export function FiltroModalita({ value, onChange, size = "md", label = "Modalit√
     cursor: "pointer",
     transition: "all 0.15s ease",
     fontWeight: 600,
-    fontSize: fontSize,
+    fontSize: fontsize,
     padding,
   };
 

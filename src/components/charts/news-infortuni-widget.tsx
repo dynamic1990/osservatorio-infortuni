@@ -38,10 +38,15 @@ function formatData(dataStr: string): string {
 
 export function NewsInfortuniWidget() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
-  const notizie = useMemo(
-    () => (dati.notizie || []).filter((n) => n.categoria === "mortale" || n.categoria === "grave"),
-    [dati]
-  );
+  const notizie = useMemo(() => {
+    return (dati.notizie || [])
+      .filter((n) => n.categoria === "mortale" || n.categoria === "grave")
+      .sort((a, b) => {
+        const ta = new Date(a.data).getTime() || 0;
+        const tb = new Date(b.data).getTime() || 0;
+        return tb - ta; // più recenti per prime
+      });
+  }, [dati]);
 
   const [slide, setSlide] = useState(0);
   const totaleSlides = Math.max(1, Math.ceil(notizie.length / ITEMS_PER_SLIDE));

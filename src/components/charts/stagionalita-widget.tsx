@@ -13,6 +13,7 @@ import {
   Legend,
 } from "recharts";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
+import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
 
 const MESI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
 
@@ -27,15 +28,23 @@ export function StagionalitaWidget() {
   }, [multidim]);
 
   const [annoSel, setAnnoSel] = useState<string>(anni[anni.length - 1] || "2024");
+  const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
 
   const data = useMemo(() => {
     const anno = multidim.perAnno[annoSel];
     if (!anno?.mensile) return [];
+    const soloLavoro = modalita.lavoro && !modalita.itinere;
+    const soloItinere = modalita.itinere && !modalita.lavoro;
     return MESI.map((mese, i) => ({
       mese,
-      casi: anno.mensile[String(i + 1)] ?? 0,
+      casi:
+        soloLavoro
+          ? (anno.mensileLavoro?.[String(i + 1)] ?? 0)
+          : soloItinere
+          ? (anno.mensileItinere?.[String(i + 1)] ?? 0)
+          : (anno.mensile[String(i + 1)] ?? 0),
     }));
-  }, [multidim, annoSel]);
+  }, [multidim, annoSel, modalita]);
 
   const max = Math.max(...data.map((x) => x.casi), 0);
   const min = Math.min(...data.map((x) => x.casi), 0);
@@ -62,6 +71,7 @@ export function StagionalitaWidget() {
               {a}
             </button>
           ))}
+          <FiltroModalita value={modalita} onChange={setModalita} size="sm" />
         </div>
       </div>
 
