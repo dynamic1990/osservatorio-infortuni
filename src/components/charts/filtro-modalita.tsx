@@ -9,10 +9,9 @@ interface Props {
   value: ModalitaState;
   onChange: (next: ModalitaState) => void;
   size?: "sm" | "md";
-  label?: string;
 }
 
-export function FiltroModalita({ value, onChange, size = "md", label = "Modalit√†" }: Props) {
+export function FiltroModalita({ value, onChange, size = "md" }: Props) {
   const fontsize = size === "sm" ? "0.78rem" : "0.85rem";
   const padding = size === "sm" ? "4px 10px" : "6px 14px";
   const nienteAttivo = !value.lavoro && !value.itinere;
@@ -52,15 +51,6 @@ export function FiltroModalita({ value, onChange, size = "md", label = "Modalit√
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-      <span
-        style={{
-          fontSize: size === "sm" ? "0.74rem" : "0.82rem",
-          color: "var(--color-text-soft)",
-          fontWeight: 600,
-        }}
-      >
-        {label}:
-      </span>
       <button
         type="button"
         onClick={() => toggle("lavoro")}
