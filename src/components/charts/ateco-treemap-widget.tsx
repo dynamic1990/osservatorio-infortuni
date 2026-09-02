@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import {
   ResponsiveContainer,
   Treemap,
@@ -11,9 +11,10 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  LabelList,
 } from "recharts";
 import { getMultidimensionaleData, AtecoMacroData } from "@/lib/multidimensionale";
-import { atecoLabel, atecoShort } from "@/lib/ateco";
+import { atecoShort } from "@/lib/ateco";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
 import { FiltroModalita, ModalitaState } from "./filtro-modalita";
@@ -36,25 +37,35 @@ const BLOCK_COLORS = [
   "#343a40",
 ];
 
+// Scala di rischio per le barre del ranking: dal rosso tenue al rosso scuro in base all'intensità
+const RISK_START = [243, 204, 200];
+const RISK_END = [127, 29, 22];
+
+function riskColor(t: number) {
+  const v = Math.max(0, Math.min(1, t));
+  const c = RISK_START.map((s, i) => Math.round(s + (RISK_END[i] - s) * v));
+  return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+}
+
 function CustomizedTreemapContent(props: any) {
-  const { x = 0, y = 0, width = 0, height = 0, index = 0, name = "", casi = 0, mortali = 0, color } = props;
+  const { x = 0, y = 0, width = 0, height = 0, index = 0, name = "", casi = 0, mortali = 0, quota = 0, onSelect } = props;
 
-  if (width < 30 || height < 20) return null;
+  if (width < 34 || height < 24) return null;
 
-  const isBig = width > 110 && height > 50;
-  const isMedium = width > 65 && height > 35;
+  const isBig = width > 120 && height > 56;
+  const isMedium = width > 70 && height > 38;
   const displayName = String(name || "");
-  const shortName = displayName.length > 18 ? displayName.slice(0, 16) + "…" : displayName;
+  const shortName = displayName.length > 20 ? displayName.slice(0, 18) + "…" : displayName;
 
   return (
-    <g>
+    <g onClick={() => onSelect && onSelect(props)} role="button" tabIndex={0} style={{ cursor: "pointer" }}>
       <rect
         x={x}
         y={y}
         width={width}
         height={height}
         style={{
-          fill: color || BLOCK_COLORS[index % BLOCK_COLORS.length],
+          fill: props.color || BLOCK_COLORS[index % BLOCK_COLORS.length],
           stroke: "#ffffff",
           strokeWidth: 2,
           strokeOpacity: 0.9,
@@ -66,9 +77,9 @@ function CustomizedTreemapContent(props: any) {
       {isMedium && (
         <text
           x={x + 6}
-          y={y + 16}
+          y={y + 14}
           fill="#ffffff"
-          fontSize={isBig ? 12 : 11}
+          fontSize={isBig ? 12 : 10.5}
           fontWeight={650}
           style={{ textShadow: "0 1px 2px rgba(0,0,0,0.7)", pointerEvents: "none" }}
         >
@@ -78,17 +89,40 @@ function CustomizedTreemapContent(props: any) {
       {isBig && (
         <text
           x={x + 6}
-          y={y + 32}
+          y={y + 30}
           fill="rgba(255,255,255,0.95)"
           fontSize={11}
           fontWeight={400}
           style={{ pointerEvents: "none" }}
         >
-          {compactNumber(casi)} casi {mortali > 0 ? `(${mortali} mort.)` : ""}
+          {compactNumber(casi)} casi · {(quota || 0).toFixed(1)}%
+        </text>
+      )}
+      {isBig && mortali > 0 && (
+        <text
+          x={x + 6}
+          y={y + 46}
+          fill="rgba(255,255,255,0.9)"
+          fontSize={10}
+          fontWeight={400}
+          style={{ pointerEvents: "none" }}
+        >
+          {exactNumber(mortali)} mortali
         </text>
       )}
     </g>
   );
+}
+
+interface DettaglioRiga {
+  label: string;
+  valore: string;
+}
+
+interface Dettaglio {
+  titolo: string;
+  sottoTitolo?: string;
+  righe: DettaglioRiga[];
 }
 
 export function AtecoTreemapWidget() {
@@ -96,6 +130,12 @@ export function AtecoTreemapWidget() {
   const [anno, setAnno] = useState<string>("2024");
   const [vista, setVista] = useState<"incidenza" | "gravita" | "treemap" | "divisioni">("incidenza");
   const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
+  const [dettaglio, setDettaglio] = useState<Dettaglio | null>(null);
+  const dettaglioRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setDettaglio(null);
+  }, [anno, vista, modalita]);
 
   const annoData = useMemo(() => {
     return multidim.perAnno[anno] || multidim.consolidatoTotale;
@@ -151,6 +191,8 @@ export function AtecoTreemapWidget() {
           key: item.key,
           size: item.casi,
           casi: item.casi,
+          lavoro: item.lavoro,
+          itinere: item.itinere,
           quota: totNoti > 0 ? (item.casi / totNoti) * 100 : 0,
           color: BLOCK_COLORS[idx % BLOCK_COLORS.length],
         };
@@ -164,7 +206,12 @@ export function AtecoTreemapWidget() {
         key: item.key,
         size: item.casi,
         casi: item.casi,
+        lavoro: item.lavoro,
+        itinere: item.itinere,
         mortali: item.mortali || 0,
+        giorni: item.giorni || 0,
+        indiceIncidenza: item.indiceIncidenza || 0,
+        indiceGravita: item.indiceGravita || 0,
         quota: totNoti > 0 ? (item.casi / totNoti) * 100 : 0,
         color: BLOCK_COLORS[idx % BLOCK_COLORS.length],
       }));
@@ -176,6 +223,33 @@ export function AtecoTreemapWidget() {
   const casiND = ndFiltrato?.casi || 0;
   const totFiltrato = (modalita.lavoro && modalita.itinere) ? (annoData.totale || 0) : casiND + macroData.reduce((acc, x) => acc + x.casi, 0);
   const percND = ((casiND / (totFiltrato || 1)) * 100).toFixed(1);
+
+  // Costruisce il pannello dettaglio per un item (usato da barre e treemap)
+  const apriDettaglio = (p: any) => {
+    if (!p) return;
+    const righe: DettaglioRiga[] = [];
+    righe.push({ label: "Infortuni denunciati", valore: `${exactNumber(p.casi)}` });
+    if (modalita.lavoro && modalita.itinere) {
+      righe.push({ label: "Ripartizione", valore: `${exactNumber(p.lavoro ?? 0)} in occasione di lavoro · ${exactNumber(p.itinere ?? 0)} in itinere` });
+    } else if (modalita.lavoro) {
+      righe.push({ label: "Modalità", valore: "Solo in occasione di lavoro" });
+    } else {
+      righe.push({ label: "Modalità", valore: "Solo in itinere" });
+    }
+    righe.push({ label: "Esiti mortali", valore: `${exactNumber(p.mortali ?? 0)}` });
+    if (p.giorni !== undefined) righe.push({ label: "Giornate di inabilità", valore: `${compactNumber(p.giorni)} gg` });
+    if (p.indiceIncidenza !== undefined) righe.push({ label: "Incidenza", valore: `${p.indiceIncidenza} per 1.000 occupati` });
+    if (p.indiceGravita !== undefined) righe.push({ label: "Indice gravità", valore: `${p.indiceGravita} gg per 1.000 occupati` });
+    if (p.quota !== undefined) righe.push({ label: "Quota sul totale", valore: `${(p.quota || 0).toFixed(1)}%` });
+    if (p.occupati !== undefined) righe.push({ label: "Occupati", valore: `${exactNumber(p.occupati)}` });
+    setDettaglio({ titolo: p.fullName || p.name || p.key, sottoTitolo: `Anno ${anno}`, righe });
+    setTimeout(() => {
+      dettaglioRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 60);
+  };
+
+  const valoreBarra = (p: any) => (vista === "incidenza" ? p.indiceIncidenza : p.indiceGravita);
+  const maxValore = Math.max(...macroData.map((m) => valoreBarra(m) || 0), 0.0001);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
@@ -244,23 +318,23 @@ export function AtecoTreemapWidget() {
                 : "Indice di Gravità per Settore ATECO (Giornate di inabilità ogni 1.000 occupati)"}
             </span>
             <span style={{ fontSize: "0.78rem", color: "var(--color-text-soft)", fontWeight: 400 }}>
-              Scorri l&apos;elenco per visualizzare tutte le categorie
+              Tocca una barra per il dettaglio
             </span>
           </div>
 
           <div className="chart-scroll-wrapper ateco-chart-scroll" style={{ height: 380 }}>
-            {/* Il grafico resta entro la viewport: solo l'elenco verticale scorre su mobile. */}
             <div className="ateco-chart-inner" style={{ width: "100%", height: macroData.length * 28 + 30 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={macroData}
                   layout="vertical"
-                  margin={{ top: 8, right: 30, bottom: 4, left: 10 }}
+                  margin={{ top: 8, right: 46, bottom: 4, left: 10 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
                   <XAxis type="number" tick={{ fontSize: 11 }} />
                   <YAxis type="category" dataKey="label" tick={{ fontSize: 10 }} width={132} interval={0} />
                   <Tooltip
+                    cursor={{ fill: "rgba(127,29,22,0.08)" }}
                     content={({ active, payload }) => {
                       if (!active || !payload || !payload.length) return null;
                       const p = payload[0].payload as AtecoMacroData & { fullName: string };
@@ -305,8 +379,18 @@ export function AtecoTreemapWidget() {
                     radius={[0, 3, 3, 0]}
                   >
                     {macroData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={riskColor((valoreBarra(entry) || 0) / maxValore)}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => apriDettaglio(entry)}
+                      />
                     ))}
+                    <LabelList
+                      dataKey={(p: any) => (vista === "incidenza" ? `${p.indiceIncidenza}‰` : `${p.indiceGravita} gg`)}
+                      position="right"
+                      style={{ fontSize: 10, fill: "var(--color-text-soft)" }}
+                    />
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
@@ -315,14 +399,17 @@ export function AtecoTreemapWidget() {
         </div>
       ) : (
         <div style={{ width: "100%", height: 380, background: "var(--color-surface)", borderRadius: "var(--radius-md)", padding: "var(--space-2)" }}>
-          <ResponsiveContainer width="100%" height="100%">
+          <div style={{ fontSize: "0.8rem", color: "var(--color-text-soft)", textAlign: "center", marginBottom: 4 }}>
+            Tocca un blocco per il dettaglio completo
+          </div>
+          <ResponsiveContainer width="100%" height="95%">
             <Treemap
               data={treemapData}
               dataKey="size"
               aspectRatio={4 / 3}
               stroke="#ffffff"
               isAnimationActive={false}
-              content={<CustomizedTreemapContent />}
+              content={<CustomizedTreemapContent onSelect={(p: any) => apriDettaglio(p)} />}
             >
               <Tooltip
                 content={({ active, payload }) => {
@@ -360,6 +447,61 @@ export function AtecoTreemapWidget() {
         </div>
       )}
 
+      {/* Pannello dettaglio (tap su mobile, click su desktop) */}
+      {dettaglio && (
+        <div
+          ref={dettaglioRef}
+          style={{
+            background: "var(--color-raised)",
+            border: "1px solid var(--color-divider)",
+            borderLeft: "4px solid var(--color-accent)",
+            borderRadius: "var(--radius-md)",
+            padding: "var(--space-3) var(--space-4)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "var(--space-2)" }}>
+            <div>
+              <div style={{ fontSize: "0.95rem", fontWeight: 750 }}>{dettaglio.titolo}</div>
+              {dettaglio.sottoTitolo && (
+                <div style={{ fontSize: "0.75rem", color: "var(--color-text-soft)" }}>{dettaglio.sottoTitolo}</div>
+              )}
+            </div>
+            <button
+              onClick={() => setDettaglio(null)}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: "var(--color-text-soft)",
+                cursor: "pointer",
+                fontSize: "1.2rem",
+                lineHeight: 1,
+                padding: "2px 6px",
+              }}
+              aria-label="Chiudi dettaglio"
+            >
+              &times;
+            </button>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gap: "var(--space-2)",
+              marginTop: "var(--space-2)",
+            }}
+          >
+            {dettaglio.righe.map((r) => (
+              <div key={r.label} style={{ fontSize: "0.82rem" }}>
+                <div style={{ fontSize: "0.7rem", color: "var(--color-text-soft)", textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                  {r.label}
+                </div>
+                <div style={{ fontWeight: 650, fontVariantNumeric: "tabular-nums" }}>{r.valore}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Sintesi Settori Chiave */}
       <div
         style={{
@@ -379,7 +521,7 @@ export function AtecoTreemapWidget() {
               padding: "6px 10px",
               background: "var(--color-surface)",
               borderRadius: "4px",
-              borderLeft: `4px solid ${item.color}`,
+              borderLeft: `4px solid ${riskColor((valoreBarra(item) || 0) / maxValore)}`,
             }}
           >
             <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "60%" }}>
