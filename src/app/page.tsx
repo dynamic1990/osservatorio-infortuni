@@ -7,7 +7,6 @@ import { DemografiaAnnualeWidget } from "@/components/charts/demografia-annuale-
 import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
 import { DimensioniWidget } from "@/components/charts/dimensioni-widget";
 import { StagionalitaWidget } from "@/components/charts/stagionalita-widget";
-import { SerieTemporaleWidget } from "@/components/charts/serie-temporale-widget";
 import { SerieDecennaleWidget } from "@/components/charts/serie-decennale-widget";
 import { NewsInfortuniWidget } from "@/components/charts/news-infortuni-widget";
 import { BenchmarkEurostatWidget } from "@/components/charts/benchmark-eurostat-widget";
@@ -174,17 +173,6 @@ export default function HomePage() {
         <BenchmarkEurostatWidget />
       </section>
 
-      {/* 8. Serie Storica Multivariata Dettagliata con Filtri */}
-      <section className="card" aria-label="Serie Storica Multivariata">
-        <div className="card-header">
-          <h2 className="card-title">Esplorazione Multivariata Territoriale e Tipologia Infortunistica</h2>
-          <p className="card-desc">
-            Confronto storico per verificare l&apos;andamento di infortuni in occasione di lavoro vs in itinere,
-            esiti mortali, eventi con menomazione permanente e giornate perse su scala nazionale e regionale.
-          </p>
-        </div>
-        <SerieTemporaleWidget />
-      </section>
     </div>
   );
 }

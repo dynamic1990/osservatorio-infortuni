@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { getMultidimensionaleData, RegioneAnnualData, ProvinciaAutonomaData } from "@/lib/multidimensionale";
 import { regioneName } from "@/lib/labels";
+import { getTemporale } from "@/lib/temporale";
 import { MAP_ID_REGIONE } from "@/lib/regioni-map";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
@@ -39,6 +40,7 @@ export function RegioniIncidenzaSection() {
   const [selectedReg, setSelectedReg] = useState<string | null>(null);
   const [hoverMapId, setHoverMapId] = useState<string | null>(null);
   const [mostraProvincePA, setMostraProvincePA] = useState<boolean>(true);
+  const temporale = useMemo(() => getTemporale(), []);
 
   const ambito: "totale" | "lavoro" | "itinere" =
     modalita.lavoro && modalita.itinere ? "totale" : modalita.lavoro ? "lavoro" : "itinere";
@@ -205,6 +207,21 @@ export function RegioniIncidenzaSection() {
       trento: annoData.provinceAutonome.find((p) => p.codice === "022"),
     };
   }, [annoData]);
+
+  // Serie storica annuale 2020-2024 della regione attiva (per l'andamento nella scheda dettaglio)
+  const serieRegione = useMemo(() => {
+    if (!activeRegData) return [];
+    const reg = activeRegData.regione;
+    return temporale.serieAnnuale
+      .filter((r) => r.regione === reg)
+      .sort((a, b) => a.anno - b.anno);
+  }, [temporale, activeRegData]);
+
+  // Riga della serie dell'anno selezionato (per dettagli mortali per modalità)
+  const rigaSerieAnno = useMemo(() => {
+    if (!serieRegione.length) return null;
+    return serieRegione.find((r) => r.anno === Number(anno)) || serieRegione[serieRegione.length - 1];
+  }, [serieRegione, anno]);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
@@ -418,6 +435,72 @@ export function RegioniIncidenzaSection() {
                   </div>
                 </div>
               </div>
+
+              {/* Riga esiti: mortali e danno permanente (dettaglio per modalità se il filtro lo consente) */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "var(--space-2)",
+                  marginTop: "var(--space-2)",
+                  paddingTop: "var(--space-2)",
+                  borderTop: "1px dashed var(--color-divider)",
+                  fontSize: "0.8rem",
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase" }}>Esiti Mortali</div>
+                  <div style={{ fontSize: "1.15rem", fontWeight: 750, color: "var(--color-accent)" }}>
+                    {exactNumber(ambito === "lavoro" ? (rigaSerieAnno?.mortaliLavoro ?? activeRegData.mortali) : ambito === "itinere" ? (rigaSerieAnno?.mortaliItinere ?? activeRegData.mortali) : activeRegData.mortali)}
+                  </div>
+                  <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
+                    {ambito === "totale" && rigaSerieAnno
+                      ? `${exactNumber(rigaSerieAnno.mortaliLavoro)} lav · ${exactNumber(rigaSerieAnno.mortaliItinere)} iti`
+                      : ambito === "lavoro" && rigaSerieAnno
+                      ? `${exactNumber(rigaSerieAnno.mortaliLavoro)} in occasione di lavoro`
+                      : ambito === "itinere" && rigaSerieAnno
+                      ? `${exactNumber(rigaSerieAnno.mortaliItinere)} in itinere`
+                      : "anno di riferimento"}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase" }}>Danno Permanente</div>
+                  <div style={{ fontSize: "1.15rem", fontWeight: 750 }}>
+                    {exactNumber(activeRegData.menomati)}
+                  </div>
+                  <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
+                    casi con menomazione ≥ 6%{ambito !== "totale" ? " (totale)" : ""}
+                  </div>
+                </div>
+              </div>
+
+              {/* Andamento annuale 2020-2024 della regione */}
+              {serieRegione.length > 0 && (
+                <div style={{ marginTop: "var(--space-2)", paddingTop: "var(--space-2)", borderTop: "1px dashed var(--color-divider)" }}>
+                  <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase", marginBottom: 4 }}>
+                    Andamento denunce {serieRegione[0].anno} – {serieRegione[serieRegione.length - 1].anno}
+                  </div>
+                  <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
+                    {serieRegione.map((r) => (
+                      <div
+                        key={r.anno}
+                        style={{
+                          background: r.anno === Number(anno) ? "var(--color-accent)" : "var(--color-surface)",
+                          color: r.anno === Number(anno) ? "#fff" : "inherit",
+                          padding: "4px 8px",
+                          borderRadius: 4,
+                          fontSize: "0.78rem",
+                          textAlign: "center",
+                          minWidth: 58,
+                        }}
+                      >
+                        <div style={{ fontWeight: 700 }}>{r.anno}</div>
+                        <div>{compactNumber(r.totale)}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Dettaglio Province Autonome se è Trentino-Alto Adige */}
               {activeRegData.regione === "04" && provDetails && provDetails.bolzano && provDetails.trento && (
