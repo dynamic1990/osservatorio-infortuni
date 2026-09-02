@@ -137,7 +137,7 @@ export function SerieDecennaleWidget() {
               fill="var(--color-surface)"
               travellerWidth={2}
               startIndex={0}
-              endIndex={Math.min(chartData.length - 1, 6)}
+              endIndex={chartData.length - 1}
             />
           </ComposedChart>
         </ResponsiveContainer>

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-2)" }}>
+    <div className="container" style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-2)" }}>
       {/* 1. Header Istituzionale */}
       <header
         style={{
