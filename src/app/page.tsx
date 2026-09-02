@@ -61,7 +61,7 @@ export default function HomePage() {
               europeo, mappa del rischio territoriale e comparti produttivi ATECO.
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-              Progetto e realizzazione a cura di{" "}
+              Progetto a cura di{" "}
               <strong style={{ color: "var(--color-text)" }}>Ing. Damiano Salvati</strong> &middot;
               aggiornamento automatico giornaliero
             </div>
