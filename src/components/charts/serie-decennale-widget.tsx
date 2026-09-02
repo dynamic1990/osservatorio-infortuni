@@ -132,10 +132,10 @@ export function SerieDecennaleWidget() {
             )}
             <Brush
               dataKey="anno"
-              height={26}
-              stroke="#b3261e"
-              fill="var(--color-surface-2)"
-              travellerWidth={12}
+              height={28}
+              stroke="var(--color-text-muted)"
+              fill="var(--color-surface)"
+              travellerWidth={2}
               startIndex={0}
               endIndex={Math.min(chartData.length - 1, 6)}
             />

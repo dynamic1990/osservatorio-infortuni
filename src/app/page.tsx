@@ -23,7 +23,13 @@ export default function HomePage() {
   return (
     <div style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-2)" }}>
       {/* 1. Header Istituzionale */}
-      <header>
+      <header
+        style={{
+          background: "var(--color-raised)",
+          border: "1px solid var(--color-divider)",
+          padding: "var(--space-6)",
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "var(--space-3)", marginBottom: "var(--space-2)" }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: "var(--space-1)" }}>
