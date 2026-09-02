@@ -109,8 +109,7 @@ a:hover {
   backdrop-filter: blur(4px);
   z-index: 9999;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow-y: auto;
   padding: var(--space-4);
 }
 
@@ -122,6 +121,7 @@ a:hover {
   max-width: 780px;
   width: 100%;
   max-height: 88vh;
+  margin: auto;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -236,7 +236,7 @@ a:hover {
 
 .modal-grid-definitions {
   display: grid;
-  grid-templateColumns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
   font-size: 0.82rem;
   line-height: 1.4;
@@ -275,4 +275,30 @@ a:hover {
 }
 .chart-scroll-wrapper::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent);
+}
+
+/* Modal: adattamento schermi piccoli */
+@media (max-width: 700px) {
+  .modal-backdrop {
+    padding: var(--space-2);
+  }
+  .modal-content {
+    max-height: calc(100dvh - 16px);
+  }
+  .modal-header {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+  .modal-body {
+    padding: var(--space-3);
+  }
+  .modal-footer {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+  }
+  .modal-grid-definitions {
+    grid-template-columns: 1fr;
+  }
 }
