@@ -228,7 +228,7 @@ def main():
             "mezzo": defaultdict(int),
             "mezzoLavoro": defaultdict(int),
             "mezzoItinere": defaultdict(int),
-            "atecoMacro": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0}),
+            "atecoMacro": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0, "mortaliLavoro": 0, "mortaliItinere": 0, "giorniLavoro": 0, "giorniItinere": 0, "casi_giorni_lavoro": 0, "casi_giorni_itinere": 0}),
             "atecoMacroLavoro": defaultdict(int),
             "atecoMacroItinere": defaultdict(int),
             "atecoMacroMortali": defaultdict(int),
@@ -378,13 +378,22 @@ def main():
                             T["mezzo"][mezzo_key] += 1
                             m_stat = T["atecoMacro"][macro]
                             m_stat["totale"] += 1
-                            if is_mortale: m_stat["mortali"] += 1
+                            if is_mortale:
+                                m_stat["mortali"] += 1
+                                if is_itinere: m_stat["mortaliItinere"] += 1
+                                else: m_stat["mortaliLavoro"] += 1
                             if is_itinere: m_stat["itinere"] += 1
                             else: m_stat["lavoro"] += 1
                             if is_menomato: m_stat["menomati"] += 1
                             if g_val > 0:
                                 m_stat["giorni"] += g_val
                                 m_stat["casi_con_giorni"] += 1
+                                if is_itinere:
+                                    m_stat["giorniItinere"] += g_val
+                                    m_stat["casi_giorni_itinere"] += 1
+                                else:
+                                    m_stat["giorniLavoro"] += g_val
+                                    m_stat["casi_giorni_lavoro"] += 1
                             T["atecoDivisione"][div] += 1
                             if 1 <= mese_num <= 12: T["mensile"][mese_num] += 1
                             
@@ -489,7 +498,7 @@ def main():
 
         # Top ATECO divisioni
         top_div = sorted(
-            [{"key": k, "casi": v} for k, v in c["atecoDivisione"].items() if k != "ND"],
+            [{"key": k, "casi": v, "lavoro": c["atecoDivisioneLavoro"].get(k, 0), "itinere": c["atecoDivisioneItinere"].get(k, 0)} for k, v in c["atecoDivisione"].items() if k != "ND"],
             key=lambda x: x["casi"],
             reverse=True
         )[:20]
@@ -515,17 +524,32 @@ def main():
                 inc_mor = round(m_stat["mortali"] / occ_k, 3) if occ_k > 0 else 0.0
                 ind_grav = round(m_stat["giorni"] / occ_k, 1) if occ_k > 0 else 0.0
             dur_m = round(m_stat["giorni"] / m_stat["casi_con_giorni"], 1) if m_stat["casi_con_giorni"] > 0 else 0.0
+            dur_m_lav = round(m_stat["giorniLavoro"] / m_stat["casi_giorni_lavoro"], 1) if m_stat["casi_giorni_lavoro"] > 0 else 0.0
+            dur_m_iti = round(m_stat["giorniItinere"] / m_stat["casi_giorni_itinere"], 1) if m_stat["casi_giorni_itinere"] > 0 else 0.0
+            ind_grav_lav = round(m_stat["giorniLavoro"] / occ_k, 1) if occ_k > 0 else 0.0
+            ind_grav_iti = round(m_stat["giorniItinere"] / occ_k, 1) if occ_k > 0 else 0.0
             macro_list.append({
                 "key": m_key,
                 "nome": nome_sett,
                 "casi": m_stat["totale"],
                 "mortali": m_stat["mortali"],
+                "mortaliLavoro": m_stat["mortaliLavoro"],
+                "mortaliItinere": m_stat["mortaliItinere"],
                 "lavoro": m_stat["lavoro"],
                 "itinere": m_stat["itinere"],
                 "menomati": m_stat["menomati"],
                 "giorni": m_stat["giorni"],
+                "giorniLavoro": m_stat["giorniLavoro"],
+                "giorniItinere": m_stat["giorniItinere"],
+                "casiConGiorni": m_stat["casi_con_giorni"],
+                "casiConGiorniLavoro": m_stat["casi_giorni_lavoro"],
+                "casiConGiorniItinere": m_stat["casi_giorni_itinere"],
                 "durataMedia": dur_m,
+                "durataMediaLavoro": dur_m_lav,
+                "durataMediaItinere": dur_m_iti,
                 "indiceGravita": ind_grav,
+                "indiceGravitaLavoro": ind_grav_lav,
+                "indiceGravitaItinere": ind_grav_iti,
                 "occupati": int(occ_k * 1000) if occ_k else 0,
                 "indiceIncidenza": inc,
                 "indiceMortali": inc_mor

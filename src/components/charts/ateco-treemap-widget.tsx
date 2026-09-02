@@ -16,6 +16,7 @@ import { getMultidimensionaleData, AtecoMacroData } from "@/lib/multidimensional
 import { atecoLabel, atecoShort } from "@/lib/ateco";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
+import { FiltroModalita, ModalitaState } from "./filtro-modalita";
 
 const BLOCK_COLORS = [
   "#2b5b8a",
@@ -94,14 +95,37 @@ export function AtecoTreemapWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2024");
   const [vista, setVista] = useState<"incidenza" | "gravita" | "treemap" | "divisioni">("incidenza");
+  const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
 
   const annoData = useMemo(() => {
     return multidim.perAnno[anno] || multidim.consolidatoTotale;
   }, [multidim, anno]);
 
+  // Filtro per modalità: se entrambe attive => totale; altrimenti solo la modalità selezionata
+  const filtraItem = useMemo(() => {
+    return <T extends { casi: number; lavoro?: number; itinere?: number; mortali?: number; mortaliLavoro?: number; mortaliItinere?: number; giorni?: number; giorniLavoro?: number; giorniItinere?: number; casiConGiorni?: number; casiConGiorniLavoro?: number; casiConGiorniItinere?: number; occupati?: number; indiceIncidenza?: number; indiceGravita?: number }>(item: T): T => {
+      if (modalita.lavoro && modalita.itinere) return item;
+      const soloLavoro = modalita.lavoro;
+      const casi = soloLavoro ? item.lavoro ?? item.casi : item.itinere ?? item.casi;
+      const mortali = soloLavoro ? item.mortaliLavoro ?? item.mortali ?? 0 : item.mortaliItinere ?? item.mortali ?? 0;
+      const giorni = soloLavoro ? item.giorniLavoro ?? item.giorni ?? 0 : item.giorniItinere ?? item.giorni ?? 0;
+      const casiConGiorni = soloLavoro ? item.casiConGiorniLavoro ?? item.casiConGiorni ?? 0 : item.casiConGiorniItinere ?? item.casiConGiorni ?? 0;
+      const occupati = item.occupati ?? 0;
+      return {
+        ...item,
+        casi,
+        mortali,
+        giorni,
+        casiConGiorni,
+        indiceIncidenza: occupati > 0 ? Number(((casi / occupati) * 1000).toFixed(2)) : 0,
+        indiceGravita: occupati > 0 ? Number(((giorni / occupati) * 1000).toFixed(1)) : 0,
+      };
+    };
+  }, [modalita]);
+
   // Dati per i macro-settori ordinati per incidenza o gravità
   const macroData = useMemo(() => {
-    const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND");
+    const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND").map(filtraItem);
     return [...items].sort((a, b) => {
       if (vista === "incidenza") return (b.indiceIncidenza || 0) - (a.indiceIncidenza || 0);
       if (vista === "gravita") return (b.indiceGravita || 0) - (a.indiceGravita || 0);
@@ -112,12 +136,12 @@ export function AtecoTreemapWidget() {
       fullName: `${item.key} · ${item.nome}`,
       color: PALETTE[idx % PALETTE.length],
     }));
-  }, [annoData, vista]);
+  }, [annoData, vista, filtraItem]);
 
   // Treemap data
   const treemapData = useMemo(() => {
     if (vista === "divisioni") {
-      const items = (annoData.atecoDivisioni || []).filter((d) => d.key !== "ND").slice(0, 18);
+      const items = (annoData.atecoDivisioni || []).filter((d) => d.key !== "ND").map(filtraItem).slice(0, 18);
       const totNoti = items.reduce((acc, curr) => acc + curr.casi, 0);
 
       return items.map((item, idx) => {
@@ -132,7 +156,7 @@ export function AtecoTreemapWidget() {
         };
       });
     } else {
-      const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND");
+      const items = (annoData.atecoMacro || []).filter((m) => m.key !== "ND").map(filtraItem);
       const totNoti = items.reduce((acc, curr) => acc + curr.casi, 0);
 
       return items.map((item, idx) => ({
@@ -145,10 +169,13 @@ export function AtecoTreemapWidget() {
         color: BLOCK_COLORS[idx % BLOCK_COLORS.length],
       }));
     }
-  }, [annoData, vista]);
+  }, [annoData, vista, filtraItem]);
 
-  const casiND = (annoData.atecoMacro || []).find((m) => m.key === "ND")?.casi || 0;
-  const percND = ((casiND / (annoData.totale || 1)) * 100).toFixed(1);
+  const ndItem = (annoData.atecoMacro || []).find((m) => m.key === "ND");
+  const ndFiltrato = ndItem ? filtraItem(ndItem) : null;
+  const casiND = ndFiltrato?.casi || 0;
+  const totFiltrato = (modalita.lavoro && modalita.itinere) ? (annoData.totale || 0) : casiND + macroData.reduce((acc, x) => acc + x.casi, 0);
+  const percND = ((casiND / (totFiltrato || 1)) * 100).toFixed(1);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
@@ -175,6 +202,8 @@ export function AtecoTreemapWidget() {
             </button>
           ))}
         </div>
+
+        <FiltroModalita value={modalita} onChange={setModalita} size="sm" />
 
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
           <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Visualizzazione:</span>
@@ -252,7 +281,10 @@ export function AtecoTreemapWidget() {
                           </div>
                           <div className="tooltip-row">
                             <span>Infortuni denunciati:</span>
-                            <strong>{exactNumber(p.casi)} ({exactNumber(p.lavoro)} lav · {exactNumber(p.itinere)} iti)</strong>
+                            <strong>
+                              {exactNumber(p.casi)}
+                              {modalita.lavoro && modalita.itinere ? ` (${exactNumber(p.lavoro)} lav · ${exactNumber(p.itinere)} iti)` : modalita.lavoro ? " (in occasione di lavoro)" : " (in itinere)"}
+                            </strong>
                           </div>
                           <div className="tooltip-row">
                             <span>Infortuni mortali:</span>
@@ -307,6 +339,12 @@ export function AtecoTreemapWidget() {
                         <span>Quota sui settori noti:</span>
                         <strong>{(p.quota || 0).toFixed(1)}%</strong>
                       </div>
+                      {modalita.lavoro && modalita.itinere && (
+                        <div className="tooltip-row">
+                          <span>Ripartizione:</span>
+                          <strong>{exactNumber(p.lavoro ?? 0)} lav · {exactNumber(p.itinere ?? 0)} iti</strong>
+                        </div>
+                      )}
                       {p.mortali > 0 && (
                         <div className="tooltip-row">
                           <span>Esiti mortali:</span>
@@ -355,7 +393,7 @@ export function AtecoTreemapWidget() {
       </div>
 
       <p className="source-note">
-        Classificazione ATECO 2007: l&apos;incidenza settoriale è calcolata rapportando gli infortuni INAIL per macro-sezione (A–U) agli occupati effettivi rilevati da ISTAT (Rilevazione Forze di Lavoro). Casi non attribuiti a specifico settore (ND): {exactNumber(casiND)} ({percND}% del totale).
+        Classificazione ATECO 2007: l&apos;incidenza settoriale è calcolata rapportando gli infortuni INAIL per macro-sezione (A–U) agli occupati effettivi rilevati da ISTAT (Rilevazione Forze di Lavoro). Il filtro modalità consente di separare gli infortuni in occasione di lavoro da quelli in itinere per ciascun comparto. Casi non attribuiti a specifico settore (ND): {exactNumber(casiND)} ({percND}% del totale {modalita.lavoro && modalita.itinere ? "complessivo" : "della modalità selezionata"}).
       </p>
     </div>
   );

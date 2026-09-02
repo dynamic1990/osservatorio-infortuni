@@ -47,6 +47,17 @@ export interface AtecoMacroData {
   occupati: number;
   indiceIncidenza: number;
   indiceMortali: number;
+  mortaliLavoro?: number;
+  mortaliItinere?: number;
+  giorniLavoro?: number;
+  giorniItinere?: number;
+  casiConGiorni?: number;
+  casiConGiorniLavoro?: number;
+  casiConGiorniItinere?: number;
+  durataMediaLavoro?: number;
+  durataMediaItinere?: number;
+  indiceGravitaLavoro?: number;
+  indiceGravitaItinere?: number;
 }
 
 export interface AnnualMultidimData {
@@ -97,7 +108,7 @@ export interface AnnualMultidimData {
   mensileLavoro: Record<string, number>;
   mensileItinere: Record<string, number>;
   atecoMacro: AtecoMacroData[];
-  atecoDivisioni: { key: string; casi: number }[];
+  atecoDivisioni: { key: string; casi: number; lavoro?: number; itinere?: number }[];
   regioni: RegioneAnnualData[];
   provinceAutonome?: ProvinciaAutonomaData[];
 }
