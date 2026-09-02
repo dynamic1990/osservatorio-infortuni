@@ -148,10 +148,14 @@ export function SerieDecennaleWidget() {
       </div>
 
       <p className="source-note">
-        Numeratore INAIL (denunce, serie storica ufficiale 2014-2019 e microdati Open Data 2020-2024);
-        denominatore occupati 15-64 ISTAT/Eurostat (lfst_r_lfe2emp). Il dato 2020 include i casi COVID
-        riconosciuti come infortunio (picco dei casi mortali). La serie consente di leggere il rischio
-        reale separandolo dalle oscillazioni della platea occupazionale.
+        Il periodo 2014-2019 deriva dalla serie storica ufficiale INAIL, che pubblica il dato
+        complessivo delle denunce senza distinguere tra infortuni in occasione di lavoro e in
+        itinere. Per questi anni la ripartizione tra le due modalità non è disponibile. Dal 2020
+        la serie si basa sui microdati Open Data INAIL, che consentono la distinzione tra lavoro
+        e itinere: i filtri della dashboard su questa modalità si applicano quindi al solo periodo
+        2020-2024. Il denominatore occupati 15-64 è ISTAT/Eurostat (lfst_r_lfe2emp). Il dato 2020
+        include i casi COVID riconosciuti come infortunio (picco dei casi mortali). La serie
+        consente di leggere il rischio reale separandolo dalle oscillazioni della platea occupazionale.
       </p>
     </div>
   );
