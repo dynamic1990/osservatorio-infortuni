@@ -61,7 +61,6 @@ export function StagionalitaWidget() {
           Andamento mensile infortuni ({annoSel})
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-1)", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Anno:</span>
           {anni.map((a) => (
             <button
               key={a}

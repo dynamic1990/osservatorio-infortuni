@@ -54,7 +54,7 @@ export function TrendDoppiaScalaWidget() {
         <div style={{ fontSize: "0.95rem", fontWeight: 700 }}>
           Volumi assoluti e Tasso di Incidenza normalizzato (2020 – 2024)
         </div>
-        <FiltroModalita value={modalita} onChange={setModalita} size="sm" label="Modalità" />
+        <FiltroModalita value={modalita} onChange={setModalita} size="sm" />
       </div>
 
       {/* Grafico cartesiano a doppia scala */}

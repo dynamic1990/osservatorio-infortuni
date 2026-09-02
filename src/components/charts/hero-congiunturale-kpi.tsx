@@ -114,7 +114,7 @@ export function HeroCongiunturaleKpi() {
         </div>
 
         {/* Filtro multiselezione modalità */}
-        <FiltroModalita value={modalita} onChange={setModalita} label="Ambito" />
+        <FiltroModalita value={modalita} onChange={setModalita} />
       </div>
 
       {/* Griglia KPI Principali */}

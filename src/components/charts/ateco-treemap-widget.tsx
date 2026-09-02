@@ -165,7 +165,6 @@ export function AtecoTreemapWidget() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Anno:</span>
           {multidim.anniDisponibili.map((a) => (
             <button
               key={a}
