@@ -28,7 +28,7 @@ export function FiltroModalita({ value, onChange, size = "md" }: Props) {
   };
 
   const base: CSSProperties = {
-    border: "1px solid var(--color-divider)",
+    border: "1px solid var(--color-blue)",
     borderRadius: 999,
     cursor: "pointer",
     transition: "all 0.15s ease",
@@ -39,14 +39,15 @@ export function FiltroModalita({ value, onChange, size = "md" }: Props) {
 
   const activeStyle: CSSProperties = {
     ...base,
-    background: "var(--color-text)",
+    background: "var(--color-blue)",
     color: "#ffffff",
-    borderColor: "var(--color-text)",
+    borderColor: "var(--color-blue)",
   };
   const inactiveStyle: CSSProperties = {
     ...base,
-    background: "var(--color-surface)",
-    color: "var(--color-text)",
+    background: "var(--color-raised)",
+    color: "var(--color-blue)",
+    borderColor: "var(--color-blue)",
   };
 
   return (

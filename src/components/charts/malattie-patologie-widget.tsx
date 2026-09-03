@@ -70,22 +70,24 @@ export function MalattiePatologieWidget() {
                 type="button"
                 onClick={() => toggle(c.key)}
                 aria-expanded={isOpen}
-                style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", width: "100%", padding: "10px 12px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left", font: "inherit", color: "var(--color-text)" }}
+                className="pat-row"
+                style={{ padding: "10px 12px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left", font: "inherit", color: "var(--color-text)" }}
               >
-                <span style={{ minWidth: 22, fontSize: "0.72rem", fontWeight: 650, color: "var(--color-text-soft)", fontVariantNumeric: "tabular-nums" }}>{idx + 1}</span>
-                <span style={{ minWidth: 30, height: 30, display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: 6, background: colorFor(idx), color: "#ffffff", fontWeight: 750, fontSize: "0.6rem", padding: "0 4px" }}>{c.key.slice(0, 6)}</span>
-                <span style={{ flex: 1, minWidth: 0 }}>
-                  <span style={{ display: "block", fontWeight: 650, fontSize: "0.82rem" }}>{c.nome}</span>
-                  <span style={{ display: "block", height: 4, borderRadius: 2, marginTop: 5, background: `linear-gradient(to right, ${colorFor(idx)} ${larghezza}%, rgba(0,0,0,0.07) ${larghezza}%)` }} />
+                <span className="pat-num" style={{ minWidth: 22, fontSize: "0.72rem", fontWeight: 650, color: "var(--color-text-soft)", fontVariantNumeric: "tabular-nums" }}>{idx + 1}</span>
+                <span className="pat-codice" style={{ minWidth: 30, height: 30, display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: 6, background: colorFor(idx), color: "#ffffff", fontWeight: 750, fontSize: "0.6rem", padding: "0 5px", flexShrink: 0 }}>{c.key.slice(0, 6)}</span>
+                <span className="pat-main">
+                  <span className="pat-nome">{c.nome}</span>
+                  <span className="pat-bar" style={{ display: "block", height: 4, borderRadius: 2, marginTop: 5, background: `linear-gradient(to right, ${colorFor(idx)} ${larghezza}%, rgba(0,0,0,0.07) ${larghezza}%)` }} />
                 </span>
-                <span style={{ fontWeight: 750, fontVariantNumeric: "tabular-nums", fontSize: "0.88rem", whiteSpace: "nowrap" }}>{exactNumber(v)}</span>
+                <span className="pat-valore" style={{ fontWeight: 750, fontVariantNumeric: "tabular-nums", fontSize: "0.88rem", whiteSpace: "nowrap", flexShrink: 0 }}>{exactNumber(v)}</span>
                 <span
+                  className="pat-delta"
                   style={{
                     fontSize: "0.7rem",
                     fontWeight: 700,
                     whiteSpace: "nowrap",
-                    color: deltaPos ? "var(--color-success)" : "var(--color-accent)",
-                    background: deltaPos ? "var(--color-success-soft)" : "var(--color-accent-soft)",
+                    color: deltaPos ? "var(--color-accent)" : "var(--color-success)",
+                    background: deltaPos ? "var(--color-accent-soft)" : "var(--color-success-soft)",
                     border: "1px solid transparent",
                     borderRadius: 999,
                     padding: "2px 8px",
@@ -93,7 +95,7 @@ export function MalattiePatologieWidget() {
                 >
                   {deltaPos ? "+" : ""}{exactNumber(Math.abs(delta))} ({deltaPerc !== null ? (deltaPos ? "+" : "") + deltaPerc.toFixed(1) + "%" : "n.d."})
                 </span>
-                <span style={{ fontSize: "0.7rem", color: "var(--color-text-soft)", transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s ease" }} aria-hidden="true">▾</span>
+                <span className="pat-freccia" style={{ fontSize: "0.7rem", color: "var(--color-text-soft)", transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s ease", flexShrink: 0 }} aria-hidden="true">▾</span>
               </button>
 
               {isOpen && (
