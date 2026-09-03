@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { HeroCongiunturaleKpi } from "@/components/charts/hero-congiunturale-kpi";
 import { TrendDoppiaScalaWidget } from "@/components/charts/trend-doppia-scala-widget";
 import { RegioniIncidenzaSection } from "@/components/charts/regioni-incidenza-section";
-import { AtecoTreemapWidget } from "@/components/charts/ateco-treemap-widget";
+import { AtecoSettoriWidget } from "@/components/charts/ateco-settori-widget";
 import { DemografiaAnnualeWidget } from "@/components/charts/demografia-annuale-widget";
 import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
 import { DimensioniWidget } from "@/components/charts/dimensioni-widget";
@@ -126,16 +126,17 @@ export default function HomePage() {
         <RegioniIncidenzaSection />
       </section>
 
-      {/* 5. Comparti Produttivi ATECO: Incidenza, Gravità e Treemap */}
+      {/* 5. Comparti Produttivi ATECO: Incidenza e Gravità */}
       <section className="card" aria-label="Comparti Produttivi ATECO">
         <div className="card-header">
           <h2 className="card-title">Comparti Produttivi e Attività Economiche (Classificazione ATECO)</h2>
           <p className="card-desc">
             Analisi comparativa per macro-settori (Sezioni A–U) con <strong>tasso di incidenza su 1.000 occupati</strong>,
-            <strong>indice di gravità</strong> (giornate di assenza perse su occupati) e visualizzazione volumetrica Treemap con filtro annuale.
+            <strong>indice di gravità</strong> (giornate di assenza perse su occupati) e filtro annuale. I settori sono ordinati per
+            incidenza: tocca un box per aprire il dettaglio completo.
           </p>
         </div>
-        <AtecoTreemapWidget />
+        <AtecoSettoriWidget />
       </section>
 
       {/* 6. Profilo Demografico: Genere e Fasce d'Età con Selettore Anno */}
