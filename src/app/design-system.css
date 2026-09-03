@@ -1,23 +1,25 @@
-/* Design tokens e regole responsive per Osservatorio Infortuni */
+/* Design tokens e regole responsive per Osservatorio Infortuni
+   Restyling: direzione "editoriale dati" — carta calda, titoli serif, accento rosso inchiostro. */
 :root {
-  --color-bg: #f5f4f2;
-  --color-surface: #ebe9e6;
+  --color-bg: #faf9f7;
+  --color-surface: #f2f0ec;
   --color-raised: #ffffff;
-  --color-text: #1d1b1a;
-  --color-text-soft: #57534e;
-  --color-text-muted: #78716c;
-  --color-accent: #b3261e;
-  --color-accent-soft: #fbf2f1;
-  --color-success: #1b633e;
+  --color-text: #1a1817;
+  --color-text-soft: #52504b;
+  --color-text-muted: #75706a;
+  --color-accent: #c8102e;
+  --color-accent-soft: #fdf1f1;
+  --color-success: #1e7a4e;
   --color-success-soft: #edf7f0;
   --color-warning: #9a6700;
   --color-warning-soft: #fffbeb;
-  --color-divider: #d6d3d1;
-  --color-border: #e7e5e4;
-  
+  --color-divider: #e5e2dd;
+  --color-border: #ece9e5;
+
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
   --font-numeric: "SF Mono", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
-  
+
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -26,14 +28,14 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
-  
+
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-full: 9999px;
-  
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+
+  --shadow-sm: 0 1px 2px rgba(26, 24, 23, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(26, 24, 23, 0.07), 0 2px 4px -1px rgba(26, 24, 23, 0.05);
 }
 
 /* Regole globali di usabilità e responsive */
@@ -49,6 +51,13 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
 }
 
 .container {
@@ -83,7 +92,8 @@ body {
 }
 
 .card-title {
-  font-size: 1.2rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
   font-weight: 700;
   margin: 0 0 var(--space-1);
   color: var(--color-text);
@@ -102,7 +112,7 @@ body {
   font-weight: 650;
   color: var(--color-text-soft);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
 .metric-value {
@@ -134,7 +144,7 @@ body {
   margin-top: var(--space-3);
 }
 
-/* Pulsanti e Selettori touch-friendly */
+/* Pulsanti e Selettori touch-friendly — versione editoriale */
 .btn-pill {
   border: 1px solid var(--color-divider);
   border-radius: var(--radius-full);
@@ -142,7 +152,7 @@ body {
   font-size: 0.82rem;
   font-weight: 550;
   cursor: pointer;
-  background: var(--color-surface);
+  background: var(--color-raised);
   color: var(--color-text);
   transition: all 0.15s ease;
   min-height: 34px;
@@ -152,7 +162,9 @@ body {
 }
 
 .btn-pill:hover {
-  background: var(--color-border);
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .btn-pill.active {
@@ -170,7 +182,7 @@ body {
 
 /* Tooltip grafici personalizzato e isolato */
 .custom-chart-tooltip {
-  background: rgba(29, 27, 26, 0.94);
+  background: rgba(26, 24, 23, 0.94);
   color: #ffffff;
   padding: 8px 12px;
   border-radius: var(--radius-sm);

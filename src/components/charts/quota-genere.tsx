@@ -27,12 +27,12 @@ export function QuotaGenere({
           background: "var(--color-divider)",
         }}
       >
-        <div style={{ width: `${pM}%`, background: "#1f6fb2" }} />
-        <div style={{ width: `${pF}%`, background: "#b3261e" }} />
+        <div style={{ width: `${pM}%`, background: "#1d4ed8" }} />
+        <div style={{ width: `${pF}%`, background: "#c8102e" }} />
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: compact ? "0.72rem" : "0.78rem", color: "var(--color-text-soft)" }}>
-        <span><strong style={{ color: "#1f6fb2" }}>{maschi.toLocaleString("it-IT")}</strong> M ({pM}%)</span>
-        <span><strong style={{ color: "#b3261e" }}>{femmine.toLocaleString("it-IT")}</strong> F ({pF}%)</span>
+        <span><strong style={{ color: "#1d4ed8" }}>{maschi.toLocaleString("it-IT")}</strong> M ({pM}%)</span>
+        <span><strong style={{ color: "#c8102e" }}>{femmine.toLocaleString("it-IT")}</strong> F ({pF}%)</span>
       </div>
     </div>
   );

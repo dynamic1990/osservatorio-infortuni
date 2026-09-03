@@ -70,8 +70,8 @@ export function MalattieAndamentoWidget() {
             <Bar dataKey="anno2025" name="I sem 2025" fill="#c4bfba" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
               <LabelList dataKey="anno2025" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#78716c" }} />
             </Bar>
-            <Bar dataKey="anno2026" name="I sem 2026" fill="#b3261e" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
-              <LabelList dataKey="anno2026" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#b3261e", fontWeight: 650 }} />
+            <Bar dataKey="anno2026" name="I sem 2026" fill="#c8102e" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
+              <LabelList dataKey="anno2026" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#c8102e", fontWeight: 650 }} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

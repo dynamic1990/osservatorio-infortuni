@@ -8,7 +8,7 @@ export interface DistribuzionePoint {
   label: string;
 }
 
-const PALETTE = ["#b3261e", "#c74a36", "#4a4a4a", "#7a7a7a", "#a3a3a3", "#5c5855", "#8a6444", "#44546a", "#6a4454", "#446a5c"];
+const PALETTE = ["#c8102e", "#d45b2c", "#4a4a4a", "#7a7a7a", "#a3a3a3", "#5c5855", "#8a6444", "#44546a", "#6a4454", "#446a5c"];
 
 export function InfortuniDistribuzioneChart({ data }: { data: DistribuzionePoint[] }) {
   return (

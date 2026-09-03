@@ -144,7 +144,7 @@ export function HeroCongiunturaleKpi() {
             <span
               style={{
                 fontWeight: 700,
-                color: kpiMod.delta > 0 ? "var(--color-accent)" : "#1a6b34",
+                color: kpiMod.delta > 0 ? "var(--color-accent)" : "#1e7a4e",
               }}
             >
               {kpiMod.delta > 0 ? `+${exactNumber(kpiMod.delta)}` : exactNumber(kpiMod.delta)} casi,{" "}
@@ -175,7 +175,7 @@ export function HeroCongiunturaleKpi() {
             <span
               style={{
                 fontWeight: 700,
-                color: mortali.delta <= 0 ? "#1a6b34" : "var(--color-accent)",
+                color: mortali.delta <= 0 ? "#1e7a4e" : "var(--color-accent)",
               }}
             >
               {mortali.delta > 0 ? `+${mortali.delta}` : mortali.delta} casi,{" "}
@@ -207,7 +207,7 @@ export function HeroCongiunturaleKpi() {
             <span
               style={{
                 fontWeight: 700,
-                color: deltaMedia <= 0 ? "#1a6b34" : "var(--color-accent)",
+                color: deltaMedia <= 0 ? "#1e7a4e" : "var(--color-accent)",
               }}
             >
               {deltaMedia > 0 ? `+${deltaMedia.toFixed(2)}` : deltaMedia.toFixed(2)} al giorno
@@ -235,7 +235,7 @@ export function HeroCongiunturaleKpi() {
           </div>
           <div style={{ fontSize: "0.82rem", marginTop: "var(--space-1)", color: "var(--color-text-soft)" }}>
             vs {inc25} nel 2025 (
-            <span style={{ fontWeight: 700, color: Number(deltaInc) > 0 ? "var(--color-accent)" : "#1a6b34" }}>
+            <span style={{ fontWeight: 700, color: Number(deltaInc) > 0 ? "var(--color-accent)" : "#1e7a4e" }}>
               {Number(deltaInc) > 0 ? `+${deltaInc}` : deltaInc} per mille
             </span>
             )

@@ -65,7 +65,7 @@ export function GravitaDurataWidget() {
   const palette =
     dim === "gravita"
       ? PALETTE.slice(0, 4)
-      : ["#2f8f5b", "#c77d0a", "#d45b2c", "#b3261e", "#6e1c14"];
+      : ["#1e7a4e", "#c77d0a", "#d45b2c", "#c8102e", "#8c2d1f"];
 
   return (
     <div>

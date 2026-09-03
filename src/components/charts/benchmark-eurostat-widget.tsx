@@ -60,10 +60,10 @@ export function BenchmarkEurostatWidget() {
   }, [dati]);
 
   const colori: Record<string, string> = {
-    IT: "#b3261e",
+    IT: "#c8102e",
     EU27_2020: "#1d1b1a",
-    DE: "#1f6fb2",
-    FR: "#2f8f5b",
+    DE: "#1d4ed8",
+    FR: "#1e7a4e",
     ES: "#c77d0a",
   };
 
@@ -89,14 +89,14 @@ export function BenchmarkEurostatWidget() {
               padding: "var(--space-3)",
               borderRadius: "8px",
               background: p.isItaly ? "#fbe9e7" : p.isEU ? "#f1efec" : "var(--color-surface-2)",
-              border: p.isItaly ? "1.5px solid #b3261e" : "1px solid var(--color-divider)",
+              border: p.isItaly ? "1.5px solid #c8102e" : "1px solid var(--color-divider)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "var(--space-2)" }}>
               <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
                 {p.isItaly ? "🇮🇹 Italia" : p.isEU ? "🇪🇺 UE-27" : p.nome}
               </span>
-              <span style={{ fontWeight: 800, fontSize: "1.05rem", color: p.isItaly ? "#b3261e" : "inherit" }}>
+              <span style={{ fontWeight: 800, fontSize: "1.05rem", color: p.isItaly ? "#c8102e" : "inherit" }}>
                 {p.tassoIncidenzaStandardizzato.toLocaleString("it-IT")}
               </span>
             </div>

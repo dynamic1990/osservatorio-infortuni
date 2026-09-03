@@ -623,7 +623,7 @@ export function RegioniIncidenzaSection() {
                     />
                     <ReferenceLine
                       x={mediaNazionale}
-                      stroke="#b3261e"
+                      stroke="#c8102e"
                       strokeDasharray="4 4"
                       strokeWidth={1.8}
                     />

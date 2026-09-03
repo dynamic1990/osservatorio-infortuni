@@ -45,7 +45,7 @@ export function DemografiaAnnualeWidget() {
         casi: casiM,
         mortali: mortaliM,
         quota: totalGen > 0 ? (casiM / totalGen) * 100 : 0,
-        fill: "#1f6fb2",
+        fill: "#1d4ed8",
       },
       {
         key: "F",
