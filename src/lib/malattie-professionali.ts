@@ -15,6 +15,8 @@ export interface SerieMensileItem {
   mese: number;
   meseNome: string;
   casi: number;
+  maschi: number;
+  femmine: number;
 }
 
 export interface TopCodice {
@@ -27,6 +29,11 @@ export interface CategoriaPatologia {
   nome: string;
   casi: number;
   quota: number;
+  anno2025: number;
+  anno2026: number;
+  maschi: number;
+  femmine: number;
+  quotaMaschi: number | null;
   topCodici: TopCodice[];
 }
 
@@ -37,12 +44,17 @@ export interface RegioneMalattie {
   anno2025: number;
   anno2026: number;
   deltaPerc: number | null;
+  maschi: number;
+  femmine: number;
+  quotaMaschi: number | null;
 }
 
 export interface DecessiPerAnno {
   anno: string;
   casi: number;
   silicosiAsbestosi: number;
+  maschi: number;
+  femmine: number;
 }
 
 export interface DecessiPerRegione {
@@ -71,6 +83,7 @@ export interface DatasetMalattieProfessionali {
     totale: number;
     perAnno: DecessiPerAnno[];
     perRegione: DecessiPerRegione[];
+    perRegioneAnno: Record<string, DecessiPerRegione[]>;
     perGenere: Record<string, number>;
     etaMedia: number | null;
   };

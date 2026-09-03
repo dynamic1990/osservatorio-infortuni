@@ -123,11 +123,15 @@ def main():
     # ---- Denunce mensili ----
     # perMese[anno][mese] = conta
     per_mese = defaultdict(lambda: defaultdict(int))
+    per_mese_genere = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))  # anno -> mese -> genere
     per_genere = Counter()
     per_anno = Counter()
     per_regione = Counter()          # codice -> totale
     per_regione_anno = defaultdict(Counter)  # codice -> anno -> totale
     per_categoria = Counter()        # key -> casi
+    per_categoria_anno = defaultdict(Counter)   # key -> anno -> casi
+    per_categoria_genere = defaultdict(Counter) # key -> genere -> casi
+    per_regione_genere = defaultdict(Counter)   # codice -> genere -> casi
     categoria_top_icd = defaultdict(Counter)
     totale = 0
 
@@ -144,6 +148,7 @@ def main():
                 continue
             anno, mese = dp[6:10], dp[3:5]
             per_mese[anno][int(mese)] += 1
+            per_mese_genere[anno][int(mese)][r.get("Genere", "?")] += 1
             per_anno[anno] += 1
             per_genere[r.get("Genere", "?")] += 1
             per_regione[codice] += 1
@@ -151,6 +156,9 @@ def main():
             icd = r.get("ICD10denunciato", "")
             key, nome = mappa_categoria(icd)
             per_categoria[key] += 1
+            per_categoria_anno[key][anno] += 1
+            per_categoria_genere[key][r.get("Genere", "?")] += 1
+            per_regione_genere[codice][r.get("Genere", "?")] += 1
             if icd.strip() and icd.strip().upper() not in {"ND"}:
                 categoria_top_icd[key][icd.strip().upper()] += 1
             totale += 1
@@ -163,7 +171,13 @@ def main():
     serie_mensile = []
     for anno in sorted(per_mese):
         for m in range(1, 7):
-            serie_mensile.append({"anno": anno, "mese": m, "meseNome": mesi_nomi[m - 1], "casi": per_mese[anno].get(m, 0)})
+            g = per_mese_genere[anno][m]
+            serie_mensile.append({
+                "anno": anno, "mese": m, "meseNome": mesi_nomi[m - 1],
+                "casi": per_mese[anno].get(m, 0),
+                "maschi": g.get("M", 0),
+                "femmine": g.get("F", 0),
+            })
 
     # Confronto I semestre
     s1_2025 = sum(per_mese["2025"].get(m, 0) for m in range(1, 7))
@@ -200,11 +214,18 @@ def main():
             "ND": "Codice non indicato",
         }.get(key, "Altre patologie")
         top = [{"codice": c, "casi": n} for c, n in categoria_top_icd[key].most_common(5)]
+        g = per_categoria_genere[key]
+        gM = g.get("M", 0); gF = g.get("F", 0)
         categorie.append({
             "key": key,
             "nome": nome,
             "casi": casi,
             "quota": round(casi / totale * 100, 2) if totale else 0,
+            "anno2025": per_categoria_anno[key].get("2025", 0),
+            "anno2026": per_categoria_anno[key].get("2026", 0),
+            "maschi": gM,
+            "femmine": gF,
+            "quotaMaschi": round(gM / (gM + gF) * 100, 1) if (gM + gF) else None,
             "topCodici": top,
         })
 
@@ -215,6 +236,8 @@ def main():
         a25 = per_regione_anno[codice].get("2025", 0)
         a26 = per_regione_anno[codice].get("2026", 0)
         d = (a26 + a25) if False else None
+        g = per_regione_genere[codice]
+        gM = g.get("M", 0); gF = g.get("F", 0)
         regioni.append({
             "codice": codice,
             "nome": NOMI[codice],
@@ -222,6 +245,9 @@ def main():
             "anno2025": a25,
             "anno2026": a26,
             "deltaPerc": round((a26 - a25) / a25 * 100, 1) if a25 else None,
+            "maschi": gM,
+            "femmine": gF,
+            "quotaMaschi": round(gM / (gM + gF) * 100, 1) if (gM + gF) else None,
         })
     regioni.sort(key=lambda r: r["totale"], reverse=True)
 
@@ -230,7 +256,9 @@ def main():
     decessi_tot = 0
     decessi_per_anno = Counter()
     decessi_per_anno_sa = Counter()  # silicosi/asbestosi
+    decessi_per_anno_genere = defaultdict(Counter)
     decessi_per_regione = Counter()
+    decessi_per_regione_anno = defaultdict(Counter)
     decessi_per_genere = Counter()
     decessi_eta = []
 
@@ -249,7 +277,9 @@ def main():
             if (r.get("MalattiaSilicosiAsbestosi") or "").strip().upper() == "S":
                 decessi_per_anno_sa[anno_morte] += 1
             decessi_per_regione[codice] += 1
+            decessi_per_regione_anno[codice][anno_morte] += 1
             decessi_per_genere[r.get("Genere", "?")] += 1
+            decessi_per_anno_genere[anno_morte][r.get("Genere", "?")] += 1
             eta = (r.get("EtaMorte") or "").strip()
             if eta.isdigit():
                 decessi_eta.append(int(eta))
@@ -261,6 +291,8 @@ def main():
                 "anno": a,
                 "casi": decessi_per_anno[a],
                 "silicosiAsbestosi": decessi_per_anno_sa.get(a, 0),
+                "maschi": decessi_per_anno_genere[a].get("M", 0),
+                "femmine": decessi_per_anno_genere[a].get("F", 0),
             }
             for a in sorted(decessi_per_anno)
         ],
@@ -272,6 +304,14 @@ def main():
         "etaMedia": round(sum(decessi_eta) / len(decessi_eta), 1) if decessi_eta else None,
     }
     decessi["perRegione"].sort(key=lambda r: r["casi"], reverse=True)
+    decessi["perRegioneAnno"] = {
+        anno: sorted(
+            [{"codice": c, "nome": NOMI[c], "casi": decessi_per_regione_anno[c].get(anno, 0)}
+             for c in decessi_per_regione_anno if decessi_per_regione_anno[c].get(anno, 0)],
+            key=lambda r: r["casi"], reverse=True,
+        )
+        for anno in sorted(decessi_per_anno)
+    }
 
     print(f"   decessi totali: {decessi_tot}")
 
