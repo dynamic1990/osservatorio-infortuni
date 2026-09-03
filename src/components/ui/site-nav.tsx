@@ -31,7 +31,11 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 borderColor: "var(--color-text)",
                 fontWeight: 650,
               }
-            : {}),
+            : {
+                background: "var(--color-raised)",
+                color: "var(--color-text)",
+                borderColor: "var(--color-divider)",
+              }),
         }}
       >
         {v.label}
