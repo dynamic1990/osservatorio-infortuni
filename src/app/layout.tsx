@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./design-system.css";
+import { SiteNav } from "@/components/ui/site-nav";
 
 const SITO_URL = "https://damianosalvati.cloud";
 
@@ -87,6 +88,7 @@ export default function RootLayout({
             }),
           }}
         />
+        <SiteNav />
         {children}
       </body>
     </html>
