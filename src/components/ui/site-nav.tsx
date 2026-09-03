@@ -26,9 +26,9 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
           whiteSpace: "nowrap",
           ...(attiva
             ? {
-                background: "var(--color-text)",
+                background: "var(--color-blue)",
                 color: "#ffffff",
-                borderColor: "var(--color-text)",
+                borderColor: "var(--color-blue)",
                 fontWeight: 650,
               }
             : {

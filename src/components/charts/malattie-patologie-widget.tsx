@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useRef } from "react";
 import { getMalattieProfessionaliData } from "@/lib/malattie-professionali";
 import { exactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
@@ -14,24 +14,25 @@ interface RigaDettaglio {
 export function MalattiePatologieWidget() {
   const dati = useMemo(() => getMalattieProfessionaliData(), []);
   const [aperto, setAperto] = useState<string | null>(null);
-  const [anno, setAnno] = useState<"2025" | "2026">("2026");
   const dettaglioRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    setAperto(null);
-  }, [anno]);
 
   const categorie = useMemo(() => {
     return dati.categorie.filter((c) => c.key !== "ND" && c.key !== "ALTRO");
   }, [dati]);
 
-  const maxCasi = Math.max(...categorie.map((c) => c[anno === "2025" ? "anno2025" : "anno2026"]), 1);
+  const maxCasi = Math.max(...categorie.map((c) => c.anno2026), 1);
 
   const colorFor = (idx: number) => PALETTE[idx % PALETTE.length];
 
   const righeDettaglio = (c: (typeof categorie)[number]): RigaDettaglio[] => {
+    const delta = c.anno2026 - c.anno2025;
+    const deltaPerc = c.anno2025 > 0 ? (delta / c.anno2025) * 100 : null;
     const righe: RigaDettaglio[] = [];
     righe.push({ label: "Denunce I semestre", valore: `${exactNumber(c.anno2025)} (2025) · ${exactNumber(c.anno2026)} (2026)` });
+    righe.push({
+      label: "Variazione vs I sem 2025",
+      valore: `${delta >= 0 ? "+" : ""}${exactNumber(delta)} (${deltaPerc !== null ? (deltaPerc >= 0 ? "+" : "") + deltaPerc.toFixed(1) + "%" : "n.d."})`,
+    });
     righe.push({ label: "Quota sul totale", valore: `${(c.quota ?? 0).toLocaleString("it-IT", { maximumFractionDigits: 1 })}%` });
     righe.push({ label: "Codici ICD-10 più frequenti", valore: c.topCodici.map((t) => `${t.codice} (${exactNumber(t.casi)})`).join(" · ") || "n.d." });
     return righe;
@@ -51,21 +52,17 @@ export function MalattiePatologieWidget() {
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)" }}>
-        <div style={{ fontSize: "0.88rem", fontWeight: 700 }}>Patologie denunciate per gruppo clinico (ICD-10)</div>
-        <div style={{ display: "flex", gap: "var(--space-1)" }}>
-          {(["2025", "2026"] as const).map((a) => (
-            <button key={a} onClick={() => setAnno(a)} className={`btn-pill ${anno === a ? "btn-pill-accent active" : ""}`}>
-              I sem {a}
-            </button>
-          ))}
-        </div>
+      <div style={{ fontSize: "0.88rem", fontWeight: 700 }}>
+        Patologie denunciate per gruppo clinico (ICD-10): I semestre 2026, variazione vs I sem 2025
       </div>
 
       <div style={{ display: "grid", gap: "var(--space-2)" }}>
         {categorie.map((c, idx) => {
           const isOpen = aperto === c.key;
-          const v = c[anno === "2025" ? "anno2025" : "anno2026"];
+          const v = c.anno2026;
+          const delta = c.anno2026 - c.anno2025;
+          const deltaPerc = c.anno2025 > 0 ? (delta / c.anno2025) * 100 : null;
+          const deltaPos = delta >= 0;
           const larghezza = Math.max(6, Math.round((v / maxCasi) * 100));
           return (
             <div key={c.key} style={{ background: "var(--color-surface)", borderRadius: "6px", border: "1px solid var(--color-divider)", overflow: "hidden" }}>
@@ -82,6 +79,20 @@ export function MalattiePatologieWidget() {
                   <span style={{ display: "block", height: 4, borderRadius: 2, marginTop: 5, background: `linear-gradient(to right, ${colorFor(idx)} ${larghezza}%, rgba(0,0,0,0.07) ${larghezza}%)` }} />
                 </span>
                 <span style={{ fontWeight: 750, fontVariantNumeric: "tabular-nums", fontSize: "0.88rem", whiteSpace: "nowrap" }}>{exactNumber(v)}</span>
+                <span
+                  style={{
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    whiteSpace: "nowrap",
+                    color: deltaPos ? "var(--color-success)" : "var(--color-accent)",
+                    background: deltaPos ? "var(--color-success-soft)" : "var(--color-accent-soft)",
+                    border: "1px solid transparent",
+                    borderRadius: 999,
+                    padding: "2px 8px",
+                  }}
+                >
+                  {deltaPos ? "+" : ""}{exactNumber(Math.abs(delta))} ({deltaPerc !== null ? (deltaPos ? "+" : "") + deltaPerc.toFixed(1) + "%" : "n.d."})
+                </span>
                 <span style={{ fontSize: "0.7rem", color: "var(--color-text-soft)", transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s ease" }} aria-hidden="true">▾</span>
               </button>
 
@@ -110,9 +121,10 @@ export function MalattiePatologieWidget() {
       </div>
 
       <p className="source-note">
-        Raggruppamento clinico dei codici ICD-10 presenti nel dataset INAIL delle denunce protocollate. Le patologie
-        muscolo-scheletriche (capitolo M) dominano il quadro; i tumori professionali e le patologie da polveri emergono
-        per gravità anche se numericamente minori. I valori mostrati nelle barre si riferiscono al semestre selezionato.
+        Raggruppamento clinico dei codici ICD-10 presenti nel dataset INAIL delle denunce protocollate. Le barre
+        mostrano le denunce del I semestre 2026; il badge accanto riporta la variazione assoluta e percentuale
+        rispetto allo stesso semestre del 2025. Le patologie muscolo-scheletriche (capitolo M) dominano il quadro;
+        i tumori professionali e le patologie da polveri emergono per gravità anche se numericamente minori.
       </p>
     </div>
   );

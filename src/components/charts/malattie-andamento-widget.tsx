@@ -15,8 +15,6 @@ import {
 import { getMalattieProfessionaliData } from "@/lib/malattie-professionali";
 import { exactNumber } from "@/lib/format";
 
-const MESI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu"];
-
 const formatEtichetta = (v: unknown): string => {
   const n = Number(v ?? 0);
   if (Number.isNaN(n)) return "";
@@ -31,20 +29,31 @@ export function MalattieAndamentoWidget() {
 
   const chartData = useMemo(() => {
     const serie = dati.nazionale.serieMensile;
-    const perMese: Record<string, { anno2025: number; anno2026: number }> = {};
+    const perMese: Record<string, { anno2025: number; anno2026: number; mese: number }> = {};
     for (const m of serie) {
-      if (!perMese[m.meseNome]) perMese[m.meseNome] = { anno2025: 0, anno2026: 0 };
+      if (!perMese[m.meseNome]) {
+        perMese[m.meseNome] = { anno2025: 0, anno2026: 0, mese: m.mese };
+      }
       const val = vista === "maschi" ? m.maschi : vista === "femmine" ? m.femmine : m.casi;
       perMese[m.meseNome][m.anno === "2025" ? "anno2025" : "anno2026"] = val;
     }
-    return MESI.map((nome) => ({ mese: nome, ...perMese[nome] }));
+    return Object.entries(perMese)
+      .map(([nome, v]) => ({
+        mese: nome.charAt(0).toUpperCase() + nome.slice(1),
+        anno2025: v.anno2025,
+        anno2026: v.anno2026,
+      }))
+      .sort((a, b) => {
+        const order = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu"];
+        return order.indexOf(a.mese) - order.indexOf(b.mese);
+      });
   }, [dati, vista]);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)" }}>
         <div style={{ fontSize: "0.95rem", fontWeight: 700 }}>
-          Denunce di malattia professionale: I semestre 2025 vs 2026
+          Denunce di malattia professionale: I semestre  2025 vs  2026
         </div>
         <div style={{ display: "flex", gap: "var(--space-1)" }}>
           {(["totale", "maschi", "femmine"] as const).map((v) => (
@@ -81,6 +90,7 @@ export function MalattieAndamentoWidget() {
         Fonte: INAIL Open Data, dataset <em>DatiMensiliMalattieProfessionaliDataProt</em> (denunce protocollate nel
         mese). I CSV ufficiali coprono i primi due semestri: gennaio-giugno 2025 e gennaio-giugno 2026. Il confronto
         è a pari periodo e non va esteso all&apos;intero anno. Il toggle consente di isolare la componente di genere.
+
       </p>
     </div>
   );

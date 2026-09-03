@@ -8,6 +8,7 @@
   --color-text-soft: #52504b;
   --color-text-muted: #75706a;
   --color-accent: #c8102e;
+  --color-blue: #1d4ed8;
   --color-accent-soft: #fdf1f1;
   --color-success: #1e7a4e;
   --color-success-soft: #edf7f0;
@@ -168,17 +169,13 @@ h3 {
   color: var(--color-accent);
 }
 
-.btn-pill.active {
-  background: var(--color-text);
-  color: #ffffff;
-  border-color: var(--color-text);
-  font-weight: 650;
-}
 
+.btn-pill.active,
 .btn-pill-accent.active {
-  background: var(--color-accent);
+  background: var(--color-blue);
   color: #ffffff;
-  border-color: var(--color-accent);
+  border-color: var(--color-blue);
+  font-weight: 650;
 }
 
 /* Tooltip grafici personalizzato e isolato */
