@@ -152,8 +152,9 @@ h3 {
   font-size: 0.82rem;
   font-weight: 550;
   cursor: pointer;
-  background: var(--color-raised);
-  color: var(--color-text);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  border-color: #ecc8c8;
   transition: all 0.15s ease;
   min-height: 34px;
   display: inline-flex;
@@ -162,7 +163,7 @@ h3 {
 }
 
 .btn-pill:hover {
-  background: var(--color-accent-soft);
+  background: #f9dddd;
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
