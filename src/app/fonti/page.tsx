@@ -10,13 +10,40 @@ export default function FontiPage() {
   const fonti = listSources();
   return (
     <div style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-4)" }}>
-      <section>
-        <h1 style={{ fontSize: "1.6rem", margin: "0 0 var(--space-2)" }}>Fonti</h1>
-        <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "70ch" }}>
+      <header
+        style={{
+          background: "var(--color-raised)",
+          border: "1px solid var(--color-divider)",
+          padding: "var(--space-6)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: "var(--space-1)" }}>
+          <span
+            style={{
+              background: "var(--color-accent)",
+              color: "#ffffff",
+              fontSize: "0.72rem",
+              fontWeight: 750,
+              padding: "2px 8px",
+              borderRadius: "4px",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+            }}
+          >
+            Registro delle fonti
+          </span>
+          <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+            Open Data &middot; Istituzioni &middot; Report ufficiali
+          </span>
+        </div>
+        <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
+          Fonti
+        </h1>
+        <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
           Ogni numero pubblicato ha una fonte, una data di estrazione e dei limiti dichiarati.
           Questo è il registro delle fonti integrate e del loro stato.
         </p>
-      </section>
+      </header>
 
       {fonti.map((fonte) => (
         <section className="card" key={fonte.id}>
