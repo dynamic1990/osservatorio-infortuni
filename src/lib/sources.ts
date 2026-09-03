@@ -9,7 +9,8 @@ export type SourceId =
   | "inail-serie-storica"
   | "eurostat-esaw"
   | "google-news-rss"
-  | "istat-eurostat-occupati";
+  | "istat-eurostat-occupati"
+  | "inl-rapporti-vigilanza";
 
 export interface SourceInfo {
   id: SourceId;
@@ -120,6 +121,18 @@ export const SOURCES: Record<SourceId, SourceInfo> = {
     frequency: "Trimestrale/annuale",
     status: "active",
     notes: "Usati come denominatore per indici di incidenza e serie storica",
+  },
+  "inl-rapporti-vigilanza": {
+    id: "inl-rapporti-vigilanza",
+    owner: "INL – Ispettorato Nazionale del Lavoro",
+    area: "Vigilanza sul lavoro e previdenziale",
+    landingUrl: "https://www.ispettorato.gov.it/attivita-studi-e-statistiche/monitoraggio-e-report/rapporti-annuali-sullattivita-di-vigilanza-in-materia-di-lavoro-e-previdenziale/",
+    apiUrl: "https://www.ispettorato.gov.it/files/2026/04/INL-Relazione-annuale-e-rapporto-vigilanza-2025.pdf",
+    format: "PDF (rapporti annuali)",
+    coverage: "Controlli avviati INL/INPS/INAIL, ispezioni definite, tasso di irregolarità, lavoratori irregolari e in nero, sospensioni art. 14, violazioni sicurezza, recupero contributi 2021-2025",
+    frequency: "Annuale",
+    status: "active",
+    notes: "Rapporti redatti ai sensi dell'art. 20 Convenzione OIL n. 81 e art. 13 co. 7-bis D.Lgs. 81/2008. Il potenziamento della vigilanza dal 2023 incide sui volumi accertati.",
   },
 };
 

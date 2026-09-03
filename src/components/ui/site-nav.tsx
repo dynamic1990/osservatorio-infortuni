@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const VOCI = [
   { href: "/", label: "Infortuni" },
   { href: "/malattie-professionali", label: "Malattie professionali" },
+  { href: "/vigilanza", label: "Vigilanza" },
   { href: "/fonti", label: "Fonti" },
 ];
 
