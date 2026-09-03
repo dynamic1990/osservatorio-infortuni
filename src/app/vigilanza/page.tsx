@@ -3,6 +3,7 @@ import { VigilanzaKpi } from "@/components/charts/vigilanza-kpi";
 import { VigilanzaTrendWidget } from "@/components/charts/vigilanza-trend-widget";
 import { VigilanzaViolazioniWidget } from "@/components/charts/vigilanza-violazioni-widget";
 import { VigilanzaPanoramicaWidget } from "@/components/charts/vigilanza-panoramica-widget";
+import { VigilanzaTipologieWidget } from "@/components/charts/vigilanza-tipologie-widget";
 import { InfoModalVigilanza } from "@/components/ui/info-modal-vigilanza";
 
 export const revalidate = 86_400;
@@ -100,6 +101,19 @@ export default function VigilanzaPage() {
           </p>
         </div>
         <VigilanzaViolazioniWidget />
+      </section>
+
+      {/* 4bis. Tipologie di violazioni registrate */}
+      <section className="card" aria-label="Tipologie di Violazioni Registrate">
+        <div className="card-header">
+          <h2 className="card-title">Le tipologie di violazioni registrate</h2>
+          <p className="card-desc">
+            Il dettaglio dei fenomeni indagati negli atti ispettivi: lavoro nero, caporalato, interposizione
+            fittizia di manodopera, distacco transnazionale, tutela dei minori, orario di lavoro, violazioni
+            amministrative e penali per disciplina. Seleziona l&apos;anno per osservare la composizione.
+          </p>
+        </div>
+        <VigilanzaTipologieWidget />
       </section>
 
       {/* 5. Recuperi, Sommerso e Patente a Crediti */}

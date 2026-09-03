@@ -36,6 +36,23 @@ export interface PatenteCrediti {
   settore: string;
 }
 
+export interface TipologieViolazioni {
+  anno: number;
+  lavoroNero: number;
+  caporalato: number;
+  interpositori: number;
+  distacco: number;
+  minori: number;
+  riqualificazione: number;
+  madri: number;
+  orarioLavoro: number;
+  autotrasportoCE: number;
+  autotrasporto234: number;
+  violazioniSicurezza: number;
+  violazioniPenaliAltre: number;
+  violazioniAmministrative: number;
+}
+
 export interface DatasetVigilanza {
   schemaVersion: number;
   datasetId: string;
@@ -44,6 +61,7 @@ export interface DatasetVigilanza {
   nota: string;
   fonte: string;
   serie: AnnoVigilanza[];
+  tipologie?: TipologieViolazioni[];
   patenteCrediti: PatenteCrediti;
   fonti: FonteVigilanza[];
 }
