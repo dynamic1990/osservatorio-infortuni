@@ -206,7 +206,7 @@ export function AtecoSettoriWidget() {
                 >
                   {item.key}
                 </span>
-                <span style={{ flex: 1, fontWeight: 650, fontSize: "0.88rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ flex: 1, fontWeight: 650, fontSize: "0.8rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {item.nome}
                 </span>
                 <span style={{ fontWeight: 750, fontVariantNumeric: "tabular-nums", fontSize: "0.88rem", whiteSpace: "nowrap" }}>
@@ -234,6 +234,9 @@ export function AtecoSettoriWidget() {
                     background: "var(--color-raised)",
                   }}
                 >
+                  <div style={{ fontSize: "0.82rem", fontWeight: 700, marginBottom: "var(--space-2)" }}>
+                    <span style={{ color: "var(--color-accent)" }}>{item.key}</span> · {item.nome}
+                  </div>
                   <div
                     style={{
                       display: "grid",
