@@ -1,0 +1,835 @@
+{
+ "schemaVersion": 1,
+ "datasetId": "inail-malattie-professionali",
+ "generatedAt": "2026-09-03T13:32:14+00:00",
+ "periodo": "Gennaio - Giugno 2025 e Gennaio - Giugno 2026",
+ "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. I CSV ufficiali coprono i primi due semestri: gen-giu 2025 e gen-giu 2026.",
+ "fonte": "INAIL Open Data — DatiMensiliMalattieProfessionaliDataProt (denunce) + DatiSemestraliMalattieProfessionaliDataDec (decessi)",
+ "nazionale": {
+  "totale": 110466,
+  "perAnno": {
+   "2026": 59480,
+   "2025": 50986
+  },
+  "perGenere": {
+   "M": 82035,
+   "F": 28431
+  },
+  "confrontoPrimoSemestre": {
+   "anno2025": 50986,
+   "anno2026": 59480,
+   "delta": 8494,
+   "deltaPerc": 16.7
+  },
+  "serieMensile": [
+   {
+    "anno": "2025",
+    "mese": 1,
+    "meseNome": "gen",
+    "casi": 6531
+   },
+   {
+    "anno": "2025",
+    "mese": 2,
+    "meseNome": "feb",
+    "casi": 8296
+   },
+   {
+    "anno": "2025",
+    "mese": 3,
+    "meseNome": "mar",
+    "casi": 9488
+   },
+   {
+    "anno": "2025",
+    "mese": 4,
+    "meseNome": "apr",
+    "casi": 8720
+   },
+   {
+    "anno": "2025",
+    "mese": 5,
+    "meseNome": "mag",
+    "casi": 9285
+   },
+   {
+    "anno": "2025",
+    "mese": 6,
+    "meseNome": "giu",
+    "casi": 8666
+   },
+   {
+    "anno": "2026",
+    "mese": 1,
+    "meseNome": "gen",
+    "casi": 7474
+   },
+   {
+    "anno": "2026",
+    "mese": 2,
+    "meseNome": "feb",
+    "casi": 9476
+   },
+   {
+    "anno": "2026",
+    "mese": 3,
+    "meseNome": "mar",
+    "casi": 11448
+   },
+   {
+    "anno": "2026",
+    "mese": 4,
+    "meseNome": "apr",
+    "casi": 10512
+   },
+   {
+    "anno": "2026",
+    "mese": 5,
+    "meseNome": "mag",
+    "casi": 10550
+   },
+   {
+    "anno": "2026",
+    "mese": 6,
+    "meseNome": "giu",
+    "casi": 10020
+   }
+  ]
+ },
+ "categorie": [
+  {
+   "key": "RACHIDE",
+   "nome": "Ernie e discopatie del rachide",
+   "casi": 24527,
+   "quota": 22.2,
+   "topCodici": [
+    {
+     "codice": "M51.2",
+     "casi": 10359
+    },
+    {
+     "codice": "M51.1",
+     "casi": 8108
+    },
+    {
+     "codice": "M51.3",
+     "casi": 5050
+    },
+    {
+     "codice": "M50",
+     "casi": 468
+    },
+    {
+     "codice": "M50.2",
+     "casi": 140
+    }
+   ]
+  },
+  {
+   "key": "ND",
+   "nome": "Codice non indicato",
+   "casi": 23179,
+   "quota": 20.98,
+   "topCodici": []
+  },
+  {
+   "key": "SPALLA",
+   "nome": "Patologie della spalla (cuffia dei rotatori)",
+   "casi": 20702,
+   "quota": 18.74,
+   "topCodici": [
+    {
+     "codice": "M75.1",
+     "casi": 12449
+    },
+    {
+     "codice": "M75",
+     "casi": 5734
+    },
+    {
+     "codice": "M75.4",
+     "casi": 1090
+    },
+    {
+     "codice": "M75.3",
+     "casi": 712
+    },
+    {
+     "codice": "M75.2",
+     "casi": 451
+    }
+   ]
+  },
+  {
+   "key": "CANALICOLARI",
+   "nome": "Sindromi canalicolari (tunnel carpale)",
+   "casi": 10415,
+   "quota": 9.43,
+   "topCodici": [
+    {
+     "codice": "G56.0",
+     "casi": 9844
+    },
+    {
+     "codice": "G56.2",
+     "casi": 454
+    },
+    {
+     "codice": "G56",
+     "casi": 57
+    },
+    {
+     "codice": "G56.1",
+     "casi": 56
+    },
+    {
+     "codice": "G56.3",
+     "casi": 4
+    }
+   ]
+  },
+  {
+   "key": "TENDINOPATIE",
+   "nome": "Epicondiliti e tendinopatie",
+   "casi": 7637,
+   "quota": 6.91,
+   "topCodici": [
+    {
+     "codice": "M77.0",
+     "casi": 3934
+    },
+    {
+     "codice": "M77.1",
+     "casi": 3441
+    },
+    {
+     "codice": "M77",
+     "casi": 175
+    },
+    {
+     "codice": "M77.5",
+     "casi": 54
+    },
+    {
+     "codice": "M77.2",
+     "casi": 33
+    }
+   ]
+  },
+  {
+   "key": "IPOACUSIA",
+   "nome": "Ipoacusia da rumore",
+   "casi": 5286,
+   "quota": 4.79,
+   "topCodici": [
+    {
+     "codice": "H83.3",
+     "casi": 5286
+    }
+   ]
+  },
+  {
+   "key": "MENISCO",
+   "nome": "Lesioni del menisco",
+   "casi": 3345,
+   "quota": 3.03,
+   "topCodici": [
+    {
+     "codice": "M23.3",
+     "casi": 2601
+    },
+    {
+     "codice": "M23",
+     "casi": 744
+    }
+   ]
+  },
+  {
+   "key": "TENOSINOVITI",
+   "nome": "Tenosinoviti e patologie dei tendini",
+   "casi": 3320,
+   "quota": 3.01,
+   "topCodici": [
+    {
+     "codice": "M65.8",
+     "casi": 1095
+    },
+    {
+     "codice": "M65.4",
+     "casi": 922
+    },
+    {
+     "codice": "M65",
+     "casi": 862
+    },
+    {
+     "codice": "M65.3",
+     "casi": 441
+    }
+   ]
+  },
+  {
+   "key": "ARTROSI",
+   "nome": "Artrosi da sovraccarico",
+   "casi": 2589,
+   "quota": 2.34,
+   "topCodici": [
+    {
+     "codice": "M18",
+     "casi": 1204
+    },
+    {
+     "codice": "M17",
+     "casi": 1064
+    },
+    {
+     "codice": "M16",
+     "casi": 321
+    }
+   ]
+  },
+  {
+   "key": "SPONDILOSI",
+   "nome": "Spondilosi e artrosi vertebrale",
+   "casi": 2325,
+   "quota": 2.1,
+   "topCodici": [
+    {
+     "codice": "M47.8",
+     "casi": 2325
+    }
+   ]
+  },
+  {
+   "key": "ALTRO",
+   "nome": "Altre patologie",
+   "casi": 1829,
+   "quota": 1.66,
+   "topCodici": [
+    {
+     "codice": "G55.1",
+     "casi": 153
+    },
+    {
+     "codice": "H90.3",
+     "casi": 139
+    },
+    {
+     "codice": "J44",
+     "casi": 135
+    },
+    {
+     "codice": "J45",
+     "casi": 123
+    },
+    {
+     "codice": "J42",
+     "casi": 123
+    }
+   ]
+  },
+  {
+   "key": "MUSCOLOSCHELETRICO_ALTRO",
+   "nome": "Altre malattie muscolo-scheletriche",
+   "casi": 1349,
+   "quota": 1.22,
+   "topCodici": [
+    {
+     "codice": "M19.2",
+     "casi": 460
+    },
+    {
+     "codice": "M76.8",
+     "casi": 174
+    },
+    {
+     "codice": "M15",
+     "casi": 165
+    },
+    {
+     "codice": "M72.0",
+     "casi": 161
+    },
+    {
+     "codice": "M70.4",
+     "casi": 99
+    }
+   ]
+  },
+  {
+   "key": "POLVERI",
+   "nome": "Patologie pleuro-polmonari da polveri",
+   "casi": 914,
+   "quota": 0.83,
+   "topCodici": [
+    {
+     "codice": "J92",
+     "casi": 400
+    },
+    {
+     "codice": "J61",
+     "casi": 328
+    },
+    {
+     "codice": "J62.8",
+     "casi": 134
+    },
+    {
+     "codice": "J64",
+     "casi": 19
+    },
+    {
+     "codice": "J63",
+     "casi": 18
+    }
+   ]
+  },
+  {
+   "key": "MESOTELIOMA",
+   "nome": "Mesoteliomi (amianto)",
+   "casi": 728,
+   "quota": 0.66,
+   "topCodici": [
+    {
+     "codice": "C45.0",
+     "casi": 661
+    },
+    {
+     "codice": "C45",
+     "casi": 32
+    },
+    {
+     "codice": "C45.1",
+     "casi": 31
+    },
+    {
+     "codice": "C45.7",
+     "casi": 3
+    },
+    {
+     "codice": "C45.2",
+     "casi": 1
+    }
+   ]
+  },
+  {
+   "key": "STRESS",
+   "nome": "Disturbi psichici (stress lavoro-correlato)",
+   "casi": 596,
+   "quota": 0.54,
+   "topCodici": [
+    {
+     "codice": "F43.2",
+     "casi": 267
+    },
+    {
+     "codice": "F41",
+     "casi": 67
+    },
+    {
+     "codice": "F43",
+     "casi": 60
+    },
+    {
+     "codice": "F43.1",
+     "casi": 56
+    },
+    {
+     "codice": "F33",
+     "casi": 31
+    }
+   ]
+  },
+  {
+   "key": "TUMORE_POLMONE",
+   "nome": "Tumori del polmone",
+   "casi": 499,
+   "quota": 0.45,
+   "topCodici": [
+    {
+     "codice": "C34",
+     "casi": 499
+    }
+   ]
+  },
+  {
+   "key": "TUMORE_ALTRO",
+   "nome": "Altri tumori professionali",
+   "casi": 428,
+   "quota": 0.39,
+   "topCodici": [
+    {
+     "codice": "C32",
+     "casi": 50
+    },
+    {
+     "codice": "C18",
+     "casi": 42
+    },
+    {
+     "codice": "C30",
+     "casi": 40
+    },
+    {
+     "codice": "C43",
+     "casi": 39
+    },
+    {
+     "codice": "C64",
+     "casi": 24
+    }
+   ]
+  },
+  {
+   "key": "CUTE",
+   "nome": "Dermatosi professionali",
+   "casi": 426,
+   "quota": 0.39,
+   "topCodici": [
+    {
+     "codice": "L57.0",
+     "casi": 208
+    },
+    {
+     "codice": "L23",
+     "casi": 114
+    },
+    {
+     "codice": "L23.0",
+     "casi": 17
+    },
+    {
+     "codice": "L24",
+     "casi": 15
+    },
+    {
+     "codice": "L25",
+     "casi": 12
+    }
+   ]
+  },
+  {
+   "key": "TUMORE_VESCICA",
+   "nome": "Tumori della vescica",
+   "casi": 224,
+   "quota": 0.2,
+   "topCodici": [
+    {
+     "codice": "C67",
+     "casi": 224
+    }
+   ]
+  },
+  {
+   "key": "TUMORE_CUTE",
+   "nome": "Tumori della cute",
+   "casi": 148,
+   "quota": 0.13,
+   "topCodici": [
+    {
+     "codice": "C44",
+     "casi": 148
+    }
+   ]
+  }
+ ],
+ "regioni": [
+  {
+   "codice": "09",
+   "nome": "Toscana",
+   "totale": 18869,
+   "anno2025": 8435,
+   "anno2026": 10434,
+   "deltaPerc": 23.7
+  },
+  {
+   "codice": "16",
+   "nome": "Puglia",
+   "totale": 12822,
+   "anno2025": 5846,
+   "anno2026": 6976,
+   "deltaPerc": 19.3
+  },
+  {
+   "codice": "13",
+   "nome": "Abruzzo",
+   "totale": 9673,
+   "anno2025": 4645,
+   "anno2026": 5028,
+   "deltaPerc": 8.2
+  },
+  {
+   "codice": "11",
+   "nome": "Marche",
+   "totale": 9086,
+   "anno2025": 4116,
+   "anno2026": 4970,
+   "deltaPerc": 20.7
+  },
+  {
+   "codice": "08",
+   "nome": "EmiliaRomagna",
+   "totale": 9084,
+   "anno2025": 4152,
+   "anno2026": 4932,
+   "deltaPerc": 18.8
+  },
+  {
+   "codice": "20",
+   "nome": "Sardegna",
+   "totale": 7482,
+   "anno2025": 3525,
+   "anno2026": 3957,
+   "deltaPerc": 12.3
+  },
+  {
+   "codice": "05",
+   "nome": "Veneto",
+   "totale": 6681,
+   "anno2025": 2935,
+   "anno2026": 3746,
+   "deltaPerc": 27.6
+  },
+  {
+   "codice": "12",
+   "nome": "Lazio",
+   "totale": 6447,
+   "anno2025": 3055,
+   "anno2026": 3392,
+   "deltaPerc": 11.0
+  },
+  {
+   "codice": "03",
+   "nome": "Lombardia",
+   "totale": 5427,
+   "anno2025": 2562,
+   "anno2026": 2865,
+   "deltaPerc": 11.8
+  },
+  {
+   "codice": "10",
+   "nome": "Umbria",
+   "totale": 4673,
+   "anno2025": 2353,
+   "anno2026": 2320,
+   "deltaPerc": -1.4
+  },
+  {
+   "codice": "15",
+   "nome": "Campania",
+   "totale": 4014,
+   "anno2025": 1731,
+   "anno2026": 2283,
+   "deltaPerc": 31.9
+  },
+  {
+   "codice": "18",
+   "nome": "Calabria",
+   "totale": 3490,
+   "anno2025": 1651,
+   "anno2026": 1839,
+   "deltaPerc": 11.4
+  },
+  {
+   "codice": "07",
+   "nome": "Liguria",
+   "totale": 2582,
+   "anno2025": 1168,
+   "anno2026": 1414,
+   "deltaPerc": 21.1
+  },
+  {
+   "codice": "06",
+   "nome": "FriuliVeneziaGiulia",
+   "totale": 2231,
+   "anno2025": 1189,
+   "anno2026": 1042,
+   "deltaPerc": -12.4
+  },
+  {
+   "codice": "14",
+   "nome": "Molise",
+   "totale": 2125,
+   "anno2025": 1045,
+   "anno2026": 1080,
+   "deltaPerc": 3.3
+  },
+  {
+   "codice": "19",
+   "nome": "Sicilia",
+   "totale": 2046,
+   "anno2025": 866,
+   "anno2026": 1180,
+   "deltaPerc": 36.3
+  },
+  {
+   "codice": "01",
+   "nome": "Piemonte",
+   "totale": 2041,
+   "anno2025": 915,
+   "anno2026": 1126,
+   "deltaPerc": 23.1
+  },
+  {
+   "codice": "17",
+   "nome": "Basilicata",
+   "totale": 878,
+   "anno2025": 422,
+   "anno2026": 456,
+   "deltaPerc": 8.1
+  },
+  {
+   "codice": "04",
+   "nome": "TrentinoAltoAdige",
+   "totale": 749,
+   "anno2025": 339,
+   "anno2026": 410,
+   "deltaPerc": 20.9
+  },
+  {
+   "codice": "02",
+   "nome": "ValledAosta",
+   "totale": 66,
+   "anno2025": 36,
+   "anno2026": 30,
+   "deltaPerc": -16.7
+  }
+ ],
+ "decessi": {
+  "totale": 5244,
+  "perAnno": [
+   {
+    "anno": "2020",
+    "casi": 1269,
+    "silicosiAsbestosi": 273
+   },
+   {
+    "anno": "2021",
+    "casi": 1115,
+    "silicosiAsbestosi": 216
+   },
+   {
+    "anno": "2022",
+    "casi": 1090,
+    "silicosiAsbestosi": 226
+   },
+   {
+    "anno": "2023",
+    "casi": 951,
+    "silicosiAsbestosi": 177
+   },
+   {
+    "anno": "2024",
+    "casi": 819,
+    "silicosiAsbestosi": 120
+   }
+  ],
+  "perRegione": [
+   {
+    "codice": "03",
+    "nome": "Lombardia",
+    "casi": 806
+   },
+   {
+    "codice": "01",
+    "nome": "Piemonte",
+    "casi": 615
+   },
+   {
+    "codice": "09",
+    "nome": "Toscana",
+    "casi": 480
+   },
+   {
+    "codice": "07",
+    "nome": "Liguria",
+    "casi": 423
+   },
+   {
+    "codice": "16",
+    "nome": "Puglia",
+    "casi": 367
+   },
+   {
+    "codice": "06",
+    "nome": "FriuliVeneziaGiulia",
+    "casi": 338
+   },
+   {
+    "codice": "05",
+    "nome": "Veneto",
+    "casi": 333
+   },
+   {
+    "codice": "15",
+    "nome": "Campania",
+    "casi": 295
+   },
+   {
+    "codice": "19",
+    "nome": "Sicilia",
+    "casi": 269
+   },
+   {
+    "codice": "08",
+    "nome": "EmiliaRomagna",
+    "casi": 266
+   },
+   {
+    "codice": "20",
+    "nome": "Sardegna",
+    "casi": 221
+   },
+   {
+    "codice": "13",
+    "nome": "Abruzzo",
+    "casi": 181
+   },
+   {
+    "codice": "12",
+    "nome": "Lazio",
+    "casi": 174
+   },
+   {
+    "codice": "11",
+    "nome": "Marche",
+    "casi": 142
+   },
+   {
+    "codice": "10",
+    "nome": "Umbria",
+    "casi": 92
+   },
+   {
+    "codice": "18",
+    "nome": "Calabria",
+    "casi": 82
+   },
+   {
+    "codice": "04",
+    "nome": "TrentinoAltoAdige",
+    "casi": 69
+   },
+   {
+    "codice": "17",
+    "nome": "Basilicata",
+    "casi": 50
+   },
+   {
+    "codice": "02",
+    "nome": "ValledAosta",
+    "casi": 40
+   },
+   {
+    "codice": "14",
+    "nome": "Molise",
+    "casi": 1
+   }
+  ],
+  "perGenere": {
+   "M": 5036,
+   "F": 208
+  },
+  "etaMedia": 78.2
+ }
+}
