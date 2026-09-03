@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./design-system.css";
 import { SiteNav } from "@/components/ui/site-nav";
+import { Footer } from "@/components/ui/footer";
+import { BackToTop } from "@/components/ui/back-to-top";
 
 const SITO_URL = "https://damianosalvati.cloud";
 
@@ -90,7 +92,8 @@ export default function RootLayout({
         />
         <SiteNav />
         {children}
-        <SiteNav variant="bottom" />
+        <Footer />
+        <BackToTop />
       </body>
     </html>
   );
