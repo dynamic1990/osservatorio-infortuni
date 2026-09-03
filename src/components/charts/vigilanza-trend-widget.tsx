@@ -77,7 +77,7 @@ export function VigilanzaTrendWidget() {
               }}
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
-            <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 8, fontSize: "0.82rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             {isSospensioni ? (
               <>
                 <Bar yAxisId="bar" dataKey="sospensioni" name="Sospensioni totali" fill="#1f6fb2" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>

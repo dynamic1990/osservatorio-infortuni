@@ -279,7 +279,7 @@ export function HeroCongiunturaleKpi() {
                   `Anno ${name}`,
                 ]}
               />
-              <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 6, fontSize: "0.82rem" }} />
+              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
               <Bar dataKey="2025" name="Dati YTD 2025" fill="#8c8884" isAnimationActive={false} radius={[2, 2, 0, 0]} />
               <Bar dataKey="2026" name="Dati YTD 2026" fill={MODAL_COLORS.lavoro} isAnimationActive={false} radius={[2, 2, 0, 0]} />
             </BarChart>

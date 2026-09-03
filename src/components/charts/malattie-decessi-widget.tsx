@@ -18,18 +18,23 @@ import { exactNumber } from "@/lib/format";
 import { QuotaGenere } from "@/components/charts/quota-genere";
 
 type Vista = "totale" | "silicosi" | "genere";
-type AnnoSel = "tutti" | string;
+type AnnoSel = string;
 
 export function MalattieDecessiWidget() {
   const dati = useMemo(() => getMalattieProfessionaliData(), []);
   const decessi = dati.decessi;
   const anni = useMemo(() => decessi.perAnno.map((d) => d.anno).sort(), [decessi]);
   const [vista, setVista] = useState<Vista>("totale");
-  const [annoSel, setAnnoSel] = useState<AnnoSel>("tutti");
+  const [annoSel, setAnnoSel] = useState<AnnoSel>(anni[anni.length - 1] ?? "");
 
   const etaMedia = decessi.etaMedia ?? null;
-  const totM = decessi.perGenere.M ?? 0;
-  const totF = decessi.perGenere.F ?? 0;
+  const rigaAnno = useMemo(
+    () => decessi.perAnno.find((d) => d.anno === annoSel) ?? null,
+    [decessi, annoSel]
+  );
+  const totM = rigaAnno?.maschi ?? 0;
+  const totF = rigaAnno?.femmine ?? 0;
+  const totAnno = rigaAnno?.casi ?? 0;
 
   const chartData = useMemo(() => {
     return decessi.perAnno.map((d) => ({
@@ -43,7 +48,6 @@ export function MalattieDecessiWidget() {
   }, [decessi]);
 
   const regioniVista = useMemo(() => {
-    if (annoSel === "tutti") return decessi.perRegione;
     return decessi.perRegioneAnno[annoSel] ?? [];
   }, [decessi, annoSel]);
 
@@ -51,10 +55,10 @@ export function MalattieDecessiWidget() {
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)" }}>
         <div style={{ fontSize: "0.95rem", fontWeight: 700 }}>
-          Decessi per malattia professionale riconosciuta (2020 – 2024)
+          Decessi per malattia professionale riconosciuta ({anni[0]} – {anni[anni.length - 1]})
         </div>
         <div style={{ fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
-          {exactNumber(decessi.totale)} decessi nel quinquennio
+          {annoSel}: {exactNumber(totAnno)} decessi
           {etaMedia !== null && <> · età media {String(etaMedia).replace(".", ",")} anni</>}
         </div>
       </div>
@@ -73,7 +77,6 @@ export function MalattieDecessiWidget() {
         </div>
         <div style={{ display: "flex", gap: "var(--space-1)", flexWrap: "wrap", alignItems: "center" }}>
           <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Ranking regioni:</span>
-          <button onClick={() => setAnnoSel("tutti")} className={`btn-pill ${annoSel === "tutti" ? "active" : ""}`}>2020-24</button>
           {anni.map((a) => (
             <button key={a} onClick={() => setAnnoSel(a)} className={`btn-pill ${annoSel === a ? "active" : ""}`}>{a}</button>
           ))}
@@ -88,7 +91,7 @@ export function MalattieDecessiWidget() {
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-              <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 8, fontSize: "0.82rem" }} />
+              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
               <Bar dataKey="maschi" name="Maschi" stackId="g" fill="#1f6fb2" isAnimationActive={false} />
               <Bar dataKey="femmine" name="Femmine" stackId="g" fill="#b3261e" isAnimationActive={false} />
             </BarChart>
@@ -100,7 +103,7 @@ export function MalattieDecessiWidget() {
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-              <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 8, fontSize: "0.82rem" }} />
+              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
               {vista === "totale" ? (
                 <>
                   <Bar dataKey="casi" name="Decessi totali" fill="#b3261e" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false} />
@@ -133,9 +136,9 @@ export function MalattieDecessiWidget() {
       <p className="source-note">
         Fonte: INAIL Open Data, dataset <em>DatiSemestraliMalattieProfessionaliDataDec</em> (decessi per malattia
         professionale riconosciuta, esiti di casi protocollati). Serie per anno di morte nel quinquennio 2020-2024.
-        La vista "Amianto" isola i decessi da silicosi e asbestosi, malattie che emergono a distanza di decenni
-        dall&apos;esposizione; il dato di genere mostra la prevalenza storica maschile nelle esposizioni professionali
-        ({exactNumber(totM)} M su {exactNumber(decessi.totale)}).
+        La vista "Amianto" isola i decessi da silicosi e asbestosi, malattie che emergono a distanza di anni
+        dall&apos;esposizione. Ranking regionale e dato di genere si riferiscono all&apos;anno selezionato ({annoSel}),
+        per seguire l&apos;evoluzione senza appiattirla sull&apos;aggregato quinquennale.
       </p>
     </div>
   );

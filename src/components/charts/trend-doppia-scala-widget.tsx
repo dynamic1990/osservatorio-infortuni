@@ -115,11 +115,7 @@ export function TrendDoppiaScalaWidget() {
               }}
             />
 
-            <Legend
-              verticalAlign="top"
-              align="right"
-              wrapperStyle={{ paddingBottom: 10, fontSize: "0.82rem" }}
-            />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
 
             {/* Barra volume (scala sinistra) */}
             <Bar

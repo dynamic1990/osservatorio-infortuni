@@ -21,7 +21,7 @@ export function InfortuniDistribuzioneChart({ data }: { data: DistribuzionePoint
             ))}
           </Pie>
           <Tooltip formatter={(v) => Number(v ?? 0).toLocaleString("it-IT")} />
-          <Legend />
+          <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
         </PieChart>
       </ResponsiveContainer>
     </div>

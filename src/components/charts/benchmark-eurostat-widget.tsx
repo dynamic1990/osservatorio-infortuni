@@ -131,7 +131,7 @@ export function BenchmarkEurostatWidget() {
                 );
               }}
             />
-            <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 10, fontSize: "0.82rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             {PAESI_FOCUS.map((codice) => (
               <Line
                 key={codice}

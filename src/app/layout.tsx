@@ -88,8 +88,8 @@ export default function RootLayout({
             }),
           }}
         />
-        <SiteNav />
         {children}
+        <SiteNav variant="bottom" />
       </body>
     </html>
   );

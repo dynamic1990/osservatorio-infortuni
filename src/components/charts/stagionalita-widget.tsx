@@ -82,7 +82,7 @@ export function StagionalitaWidget() {
             <XAxis dataKey="mese" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={54} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : v)} />
             <Tooltip formatter={(val) => [Number(val ?? 0).toLocaleString("it-IT"), "Casi"]} />
-            <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 10, fontSize: "0.82rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             <ReferenceLine y={media} stroke="var(--color-text-soft)" strokeDasharray="4 4" label={{ value: "Media anno", position: "insideTopRight", fontSize: 11 }} />
             <Line type="monotone" dataKey="casi" name="Casi denunciati" stroke="#b3261e" strokeWidth={2.5} dot={{ r: 3, fill: "#b3261e" }} isAnimationActive={false} />
           </LineChart>

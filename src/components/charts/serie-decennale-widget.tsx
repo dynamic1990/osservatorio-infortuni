@@ -118,7 +118,7 @@ export function SerieDecennaleWidget() {
                 );
               }}
             />
-            <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 10, fontSize: "0.82rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             {modalita === "totale" ? (
               <>
                 <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="#b3261e" radius={[3, 3, 0, 0]} isAnimationActive={false} />

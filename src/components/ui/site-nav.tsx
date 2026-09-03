@@ -10,7 +10,7 @@ const VOCI = [
   { href: "/fonti", label: "Fonti" },
 ];
 
-export function SiteNav() {
+export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
   const pathname = usePathname();
 
   return (
@@ -18,10 +18,10 @@ export function SiteNav() {
       aria-label="Sezioni del sito"
       style={{
         background: "var(--color-raised)",
-        borderBottom: "1px solid var(--color-divider)",
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
+        borderBottom: variant === "top" ? "1px solid var(--color-divider)" : "none",
+        borderTop: variant === "bottom" ? "1px solid var(--color-divider)" : "none",
+        marginTop: variant === "bottom" ? "var(--space-8)" : 0,
+
       }}
     >
       <div

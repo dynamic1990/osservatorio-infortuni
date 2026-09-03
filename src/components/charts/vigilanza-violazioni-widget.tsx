@@ -69,7 +69,7 @@ export function VigilanzaViolazioniWidget() {
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={54} tickFormatter={formatEtichetta} />
             <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-            <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 8, fontSize: "0.82rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             <Bar dataKey="valore" name={v.nome} fill={v.colore} radius={[3, 3, 0, 0]} maxBarSize={64} isAnimationActive={false}>
               <LabelList dataKey="valore" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#78716c" }} />
             </Bar>

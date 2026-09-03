@@ -103,7 +103,7 @@ export function DimensioniWidget() {
             <XAxis dataKey="anno" tick={{ fontSize: 12 }} />
             <YAxis tick={{ fontSize: 11 }} width={64} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : v)} />
             <Tooltip formatter={(val, name) => [Number(val ?? 0).toLocaleString("it-IT"), String(name)]} />
-            <Legend />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             {ordine.map((k, i) => (
               <Bar
                 key={k}
