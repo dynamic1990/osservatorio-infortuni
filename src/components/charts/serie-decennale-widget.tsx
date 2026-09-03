@@ -122,12 +122,12 @@ export function SerieDecennaleWidget() {
             {modalita === "totale" ? (
               <>
                 <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="#c8102e" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Line yAxisId="right" type="monotone" dataKey="incidenza" name="Incidenza ‰ (asse des.)" stroke="#1d1b1a" strokeWidth={3} dot={{ r: 4, fill: "#1d1b1a" }} isAnimationActive={false} />
+                <Line yAxisId="right" type="monotone" dataKey="incidenza" name="Incidenza ‰ (asse des.)" stroke="var(--color-text)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-text)" }} isAnimationActive={false} />
               </>
             ) : (
               <>
-                <Bar yAxisId="left" dataKey="mortali" name="Casi mortali (asse sin.)" fill="#7f1d16" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Line yAxisId="right" type="monotone" dataKey="indiceMortali" name="Incidenza mortalità ‰ (asse des.)" stroke="#1d1b1a" strokeWidth={3} dot={{ r: 4, fill: "#1d1b1a" }} isAnimationActive={false} />
+                <Bar yAxisId="left" dataKey="mortali" name="Casi mortali (asse sin.)" fill="var(--color-accent)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Line yAxisId="right" type="monotone" dataKey="indiceMortali" name="Incidenza mortalità ‰ (asse des.)" stroke="var(--color-text)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-text)" }} isAnimationActive={false} />
               </>
             )}
             <Brush

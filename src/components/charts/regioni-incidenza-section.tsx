@@ -23,13 +23,12 @@ import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-m
 
 // Scala allerta rischio (giallo -> arancio -> rosso intenso)
 const RISK_COLOR_SCALE = [
-  "#fef0d9",
-  "#fdd49e",
-  "#fdbb84",
-  "#fc8d59",
-  "#e34a33",
-  "#b30000",
-  "#7f0000",
+  "#fbeae7",
+  "#f0c3bd",
+  "#e39b91",
+  "#d16e60",
+  "#b34535",
+  "#8c2d1f",
 ];
 
 export function RegioniIncidenzaSection() {

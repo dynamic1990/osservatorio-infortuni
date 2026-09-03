@@ -57,7 +57,7 @@ export function ItalyMap({ regions, onSelect, selected, title }: ItalyMapProps) 
               onMouseEnter={() => setHover(loc.id)}
               onMouseLeave={() => setHover(null)}
               fill={colorFor(code)}
-              stroke={isHover || isActive ? "#201e1d" : "#ffffff"}
+              stroke={isHover || isActive ? "var(--color-text)" : "#ffffff"}
               strokeWidth={isHover || isActive ? 2 : 0.8}
               style={{
                 cursor: code ? "pointer" : "default",

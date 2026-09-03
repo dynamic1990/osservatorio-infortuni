@@ -61,7 +61,7 @@ export function BenchmarkEurostatWidget() {
 
   const colori: Record<string, string> = {
     IT: "#c8102e",
-    EU27_2020: "#1d1b1a",
+    EU27_2020: "var(--color-text)",
     DE: "#1d4ed8",
     FR: "#1e7a4e",
     ES: "#c77d0a",

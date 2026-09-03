@@ -52,7 +52,7 @@ export function RegioniSection({ data }: { data: RegionePoint[] }) {
                 {bars.map((b, i) => (
                   <Cell
                     key={i}
-                    fill={b.highlight ? "#201e1d" : PALETTE[i % PALETTE.length]}
+                    fill={b.highlight ? "var(--color-text)" : PALETTE[i % PALETTE.length]}
                     fillOpacity={b.highlight ? 1 : 0.55}
                     cursor="pointer"
                   />

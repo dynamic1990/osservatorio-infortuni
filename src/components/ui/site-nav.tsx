@@ -104,7 +104,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
           display: "flex",
           gap: "var(--space-1)",
           paddingBottom: "var(--space-2)",
-          overflowX: "auto",
+          flexWrap: "wrap",
         }}
       >
         {links}

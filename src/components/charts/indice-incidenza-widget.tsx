@@ -97,7 +97,7 @@ export function IndiceIncidenzaWidget() {
                 <Tooltip formatter={(val, name) => [Number(val ?? 0).toLocaleString("it-IT", { maximumFractionDigits: 2 }), String(name)]} />
                 <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
                 <Bar dataKey="indice" name="Casi per 1.000 occ." fill={MODAL_COLORS.lavoro} isAnimationActive={false} />
-                <Line type="monotone" dataKey="mortali" name="Mortali per 1.000 occ." stroke="#201e1d" strokeWidth={2} dot={false} isAnimationActive={false} />
+                <Line type="monotone" dataKey="mortali" name="Mortali per 1.000 occ." stroke="var(--color-text)" strokeWidth={2} dot={false} isAnimationActive={false} />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
