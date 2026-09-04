@@ -41,7 +41,7 @@ export default function FontiPage() {
         </h1>
         <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
           Ogni numero pubblicato ha una fonte, una data di estrazione e dei limiti dichiarati.
-          Questo è il registro delle fonti integrate e del loro stato.
+          Questo è il registro delle fonti integrate.
         </p>
       </header>
 
@@ -52,9 +52,6 @@ export default function FontiPage() {
               <h2 style={{ margin: 0, fontSize: "1.05rem" }}>{fonte.area}</h2>
               <div style={{ color: "var(--color-text-soft)", fontSize: "0.85rem" }}>{fonte.owner}</div>
             </div>
-            <span className={`freshness ${fonte.status === "active" ? "fresh" : "stale"}`}>
-              {fonte.status === "active" ? "integrata" : "in programma"}
-            </span>
           </div>
           <dl style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-3)", margin: "var(--space-4) 0 0" }}>
             <div>

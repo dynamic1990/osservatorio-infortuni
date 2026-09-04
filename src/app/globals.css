@@ -30,25 +30,6 @@ a:hover {
   color: var(--color-text);
 }
 
-.freshness {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-full);
-}
-
-.freshness.fresh {
-  color: var(--color-success);
-  border-color: var(--color-success);
-}
-
-.freshness.stale {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
 /* Stili Modale Metodologia e Fonti (WIRED: angoli squadrati, hairline, nessuna ombra decorativa) */
 .btn-info-header {
   display: inline-flex;
