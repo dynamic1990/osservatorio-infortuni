@@ -33,7 +33,9 @@ export function VigilanzaKpi() {
     {
       label: "Tasso di irregolarità",
       value: `${ultimo.tassoIrregolarita.toLocaleString("it-IT")}%`,
-      sub: `aziende irregolari: ${exactNumber(ultimo.ispezioniIrregolari)} su ${exactNumber(ultimo.ispezioniDefinite)} definite`,
+      sub: precedente
+        ? `aziende irregolari: ${exactNumber(ultimo.ispezioniIrregolari)} su ${exactNumber(ultimo.ispezioniDefinite)} definite · ${ultimo.tassoIrregolarita >= precedente.tassoIrregolarita ? "+" : ""}${(ultimo.tassoIrregolarita - precedente.tassoIrregolarita).toLocaleString("it-IT", { maximumFractionDigits: 1 })} pt vs ${precedente.anno}`
+        : `aziende irregolari: ${exactNumber(ultimo.ispezioniIrregolari)} su ${exactNumber(ultimo.ispezioniDefinite)} definite`,
       accent: false,
     },
     {
@@ -44,7 +46,7 @@ export function VigilanzaKpi() {
     {
       label: "Violazioni sicurezza 2025",
       value: exactNumber(ultimo.violazioniSicurezza),
-      sub: `penali D.Lgs. 81/2008 · ${precedente ? `+${((ultimo.violazioniSicurezza - precedente.violazioniSicurezza) / precedente.violazioniSicurezza * 100).toLocaleString("it-IT", { maximumFractionDigits: 1 })}% vs ${precedente.anno}` : ""}`,
+      sub: precedente ? `penali D.Lgs. 81/2008 · ${ultimo.violazioniSicurezza >= precedente.violazioniSicurezza ? "+" : ""}${((ultimo.violazioniSicurezza - precedente.violazioniSicurezza) / precedente.violazioniSicurezza * 100).toLocaleString("it-IT", { maximumFractionDigits: 1 })}% vs ${precedente.anno}` : undefined,
       accent: true,
     },
   ];
