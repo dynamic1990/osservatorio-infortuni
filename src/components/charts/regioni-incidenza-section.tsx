@@ -18,18 +18,8 @@ import { regioneName } from "@/lib/labels";
 import { getTemporale } from "@/lib/temporale";
 import { MAP_ID_REGIONE } from "@/lib/regioni-map";
 import { compactNumber, exactNumber } from "@/lib/format";
-import { PALETTE } from "@/lib/palette";
+import { PALETTE, RISK_SCALE } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
-
-// Scala allerta rischio (giallo -> arancio -> rosso intenso)
-const RISK_COLOR_SCALE = [
-  "#fbeae7",
-  "#f0c3bd",
-  "#e39b91",
-  "#d16e60",
-  "#b34535",
-  "#8c2d1f",
-];
 
 export function RegioniIncidenzaSection() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
@@ -95,7 +85,7 @@ export function RegioniIncidenzaSection() {
 
   // Colore per regione sulla mappa
   const colorForRegion = (code?: string): string => {
-    if (!code || !regMap[code]) return "#e2e0de";
+    if (!code || !regMap[code]) return "var(--color-divider)";
     const val =
       metrica === "incidenza"
         ? incidenzaAmbito(regMap[code])
@@ -107,8 +97,8 @@ export function RegioniIncidenzaSection() {
 
     const range = maxVal - minVal || 1;
     const ratio = Math.max(0, Math.min(1, (val - minVal) / range));
-    const idx = Math.min(RISK_COLOR_SCALE.length - 1, Math.floor(ratio * RISK_COLOR_SCALE.length));
-    return RISK_COLOR_SCALE[idx];
+    const idx = Math.min(RISK_SCALE.length - 1, Math.floor(ratio * RISK_SCALE.length));
+    return RISK_SCALE[idx];
   };
 
   // Dati ordinati per il barchart con eventuale dettaglio Province Autonome Bolzano/Trento
@@ -333,7 +323,7 @@ export function RegioniIncidenzaSection() {
                   onMouseEnter={() => setHoverMapId(loc.id)}
                   onMouseLeave={() => setHoverMapId(null)}
                   fill={colorForRegion(code)}
-                  stroke={isSelected || isHovered ? "var(--color-text)" : "#ffffff"}
+                  stroke={isSelected || isHovered ? "var(--color-text)" : "var(--color-raised)"}
                   strokeWidth={isSelected ? 2.5 : isHovered ? 1.8 : 0.7}
                   style={{
                     cursor: code ? "pointer" : "default",
@@ -353,7 +343,7 @@ export function RegioniIncidenzaSection() {
               <span>Max: {maxVal}{metrica === "incidenza" || metrica === "mortaliInc" ? "‰" : metrica === "gravita" ? " gg" : ""}</span>
             </div>
             <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden" }}>
-              {RISK_COLOR_SCALE.map((c, i) => (
+              {RISK_SCALE.map((c, i) => (
                 <div key={i} style={{ flex: 1, background: c }} />
               ))}
             </div>
@@ -485,7 +475,7 @@ export function RegioniIncidenzaSection() {
                         key={r.anno}
                         style={{
                           background: r.anno === Number(anno) ? "var(--color-accent)" : "var(--color-surface)",
-                          color: r.anno === Number(anno) ? "#fff" : "inherit",
+                          color: r.anno === Number(anno) ? "var(--color-raised)" : "inherit",
                           padding: "4px 8px",
                           borderRadius: 4,
                           fontSize: "0.78rem",
@@ -622,7 +612,7 @@ export function RegioniIncidenzaSection() {
                     />
                     <ReferenceLine
                       x={mediaNazionale}
-                      stroke="#c8102e"
+                      stroke="var(--color-accent)"
                       strokeDasharray="4 4"
                       strokeWidth={1.8}
                     />
@@ -631,7 +621,7 @@ export function RegioniIncidenzaSection() {
                         <Cell
                           key={`cell-${index}`}
                           fill={selectedReg === entry.code ? "var(--color-accent)" : colorForRegion(entry.code === "021" || entry.code === "022" ? "04" : entry.code)}
-                          stroke={selectedReg === entry.code ? "#000000" : "none"}
+                          stroke={selectedReg === entry.code ? "var(--color-text)" : "none"}
                           strokeWidth={selectedReg === entry.code ? 2 : 0}
                         />
                       ))}

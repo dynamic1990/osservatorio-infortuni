@@ -121,7 +121,7 @@ export function SerieDecennaleWidget() {
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             {modalita === "totale" ? (
               <>
-                <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="#c8102e" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="var(--color-accent)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
                 <Line yAxisId="right" type="monotone" dataKey="incidenza" name="Incidenza ‰ (asse des.)" stroke="var(--color-text)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-text)" }} isAnimationActive={false} />
               </>
             ) : (

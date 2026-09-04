@@ -22,19 +22,19 @@ export function VigilanzaPanoramicaWidget() {
       titolo: "Recupero contributi e premi evasi",
       valore: formatEuro(ultimo.recuperoEuro),
       dettaglio: `Nel ${ultimo.anno} il personale ispettivo ha recuperato ${exactNumber(ultimo.recuperoEuro)} euro tra contributi previdenziali INPS e premi assicurativi INAIL non versati. Nel 2023 il recupero era ${formatEuro(serie.find((s) => s.anno === 2023)?.recuperoEuro ?? 0)}; la crescita riflette anche la maggiore capacità di accertamento dell&apos;azione di vigilanza.`,
-      colore: "#1e7a4e",
+      colore: "var(--color-success)",
     },
     {
       titolo: "Lavoratori irregolari e sommerso",
       valore: exactNumber(ultimo.lavoratoriIrregolari ?? 0),
       dettaglio: `Sono i lavoratori cui si riferiscono gli atti ispettivi definiti nell&apos;anno: ${exactNumber(ultimo.lavoratoriIrregolari ?? 0)} nel ${ultimo.anno}, con ${exactNumber(ultimo.lavoratoriInNero)} lavoratori totalmente in nero. Nel ${primo.anno} i lavoratori in nero erano ${exactNumber(primo.lavoratoriInNero)}. Il dato fotografa l&apos;attività accertata, non la stima del sommerso.`,
-      colore: "#c77d0a",
+      colore: "var(--color-warning)",
     },
     {
       titolo: "Sospensioni: massimo storico nel 2024",
       valore: `${exactNumber(serie.reduce((m, s) => (s.sospensioni > m ? s.sospensioni : m), 0))} provvedimenti`,
       dettaglio: `Nel 2024 i provvedimenti di sospensione dell&apos;attività imprenditoriale hanno toccato il record di ${exactNumber(15002)}, di cui ${exactNumber(5601)} per gravi violazioni in materia di sicurezza. Nel 2025 sono stati ${exactNumber(ultimo.sospensioni)}, secondo valore storico, con ${exactNumber(ultimo.sospensioniSicurezza)} legati alla sicurezza dei luoghi di lavoro.`,
-      colore: "#c8102e",
+      colore: "var(--color-accent)",
     },
   ];
 

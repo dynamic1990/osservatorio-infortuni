@@ -80,13 +80,13 @@ export function DimensioniWidget() {
               key={k}
               onClick={() => setDim(k)}
               style={{
-                border: "1px solid var(--color-divider)",
-                borderRadius: 999,
+                border: "1px solid var(--color-text)",
+                borderRadius: 2,
                 padding: "6px 12px",
                 fontSize: "0.85rem",
                 cursor: "pointer",
-                background: dim === k ? "var(--color-accent)" : "transparent",
-                color: dim === k ? "#fff" : "inherit",
+                background: dim === k ? "var(--color-text)" : "var(--color-raised)",
+                color: dim === k ? "var(--color-raised)" : "var(--color-text)",
               }}
             >
               {DIM_LABEL[k]}

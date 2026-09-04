@@ -51,15 +51,15 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 whiteSpace: "nowrap",
                 ...(attiva(v.href)
                   ? {
-                      background: "var(--color-blue)",
-                      color: "#ffffff",
-                      borderColor: "var(--color-blue)",
+                      background: "var(--color-text)",
+                      color: "var(--color-raised)",
+                      borderColor: "var(--color-text)",
                       fontWeight: 650,
                     }
                   : {
                       background: "var(--color-raised)",
-                      color: "var(--color-blue)",
-                      borderColor: "var(--color-blue)",
+                      color: "var(--color-text)",
+                      borderColor: "var(--color-text)",
                     }),
               }}
             >
@@ -194,8 +194,8 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                   onClick={() => setAperto(false)}
                   style={{
                     textDecoration: "none",
-                    color: attiva(v.href) ? "#ffffff" : "var(--color-text)",
-                    background: attiva(v.href) ? "var(--color-blue)" : "transparent",
+                    color: attiva(v.href) ? "var(--color-raised)" : "var(--color-text)",
+                    background: attiva(v.href) ? "var(--color-text)" : "transparent",
                     fontWeight: attiva(v.href) ? 700 : 550,
                     padding: "12px 14px",
                     borderRadius: 8,

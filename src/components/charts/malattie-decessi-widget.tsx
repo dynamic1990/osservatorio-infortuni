@@ -92,8 +92,8 @@ export function MalattieDecessiWidget() {
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
-              <Bar dataKey="maschi" name="Maschi" stackId="g" fill="#1d4ed8" isAnimationActive={false} />
-              <Bar dataKey="femmine" name="Femmine" stackId="g" fill="#c8102e" isAnimationActive={false} />
+              <Bar dataKey="maschi" name="Maschi" stackId="g" fill="var(--color-link)" isAnimationActive={false} />
+              <Bar dataKey="femmine" name="Femmine" stackId="g" fill="var(--color-accent)" isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -106,13 +106,13 @@ export function MalattieDecessiWidget() {
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
               {vista === "totale" ? (
                 <>
-                  <Bar dataKey="casi" name="Decessi totali" fill="#c8102e" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false} />
-                  <Line type="monotone" dataKey="silicosi" name="Silicosi/asbestosi" stroke="#1d4ed8" strokeWidth={2.5} dot={{ r: 3, fill: "#1d4ed8" }} isAnimationActive={false} />
+                  <Bar dataKey="casi" name="Decessi totali" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="silicosi" name="Silicosi/asbestosi" stroke="var(--color-link)" strokeWidth={2.5} dot={{ r: 3, fill: "var(--color-link)" }} isAnimationActive={false} />
                 </>
               ) : (
                 <>
-                  <Bar dataKey="altri" name="Altri decessi" stackId="a" fill="#d9d5d0" isAnimationActive={false} />
-                  <Bar dataKey="silicosi" name="Silicosi/asbestosi" stackId="a" fill="#1d4ed8" isAnimationActive={false} />
+                  <Bar dataKey="altri" name="Altri decessi" stackId="a" fill="var(--color-text-muted)" isAnimationActive={false} />
+                  <Bar dataKey="silicosi" name="Silicosi/asbestosi" stackId="a" fill="var(--color-link)" isAnimationActive={false} />
                 </>
               )}
             </ComposedChart>

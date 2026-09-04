@@ -26,9 +26,9 @@ const formatEtichetta = (v: unknown): string => {
 type Vista = "violazioni" | "nero" | "irregolari";
 
 const VISTE: Record<Vista, { label: string; dataKey: string; nome: string; colore: string }> = {
-  violazioni: { label: "Violazioni sicurezza", dataKey: "violazioniSicurezza", nome: "Violazioni penali salute e sicurezza", colore: "#c8102e" },
-  nero: { label: "Lavoro nero", dataKey: "lavoratoriInNero", nome: "Lavoratori totalmente in nero", colore: "#c77d0a" },
-  irregolari: { label: "Lavoratori irregolari", dataKey: "lavoratoriIrregolari", nome: "Lavoratori irregolari (INL+INPS+INAIL)", colore: "#1d4ed8" },
+  violazioni: { label: "Violazioni sicurezza", dataKey: "violazioniSicurezza", nome: "Violazioni penali salute e sicurezza", colore: "var(--color-accent)" },
+  nero: { label: "Lavoro nero", dataKey: "lavoratoriInNero", nome: "Lavoratori totalmente in nero", colore: "var(--color-warning)" },
+  irregolari: { label: "Lavoratori irregolari", dataKey: "lavoratoriIrregolari", nome: "Lavoratori irregolari (INL+INPS+INAIL)", colore: "var(--color-link)" },
 };
 
 export function VigilanzaViolazioniWidget() {
@@ -71,7 +71,7 @@ export function VigilanzaViolazioniWidget() {
             <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             <Bar dataKey="valore" name={v.nome} fill={v.colore} radius={[3, 3, 0, 0]} maxBarSize={64} isAnimationActive={false}>
-              <LabelList dataKey="valore" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#78716c" }} />
+              <LabelList dataKey="valore" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

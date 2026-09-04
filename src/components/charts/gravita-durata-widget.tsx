@@ -65,7 +65,7 @@ export function GravitaDurataWidget() {
   const palette =
     dim === "gravita"
       ? PALETTE.slice(0, 4)
-      : ["#1e7a4e", "#c77d0a", "#d45b2c", "#c8102e", "#8c2d1f"];
+      : ["var(--color-success)", "var(--color-warning)", "var(--color-terracotta)", "var(--color-accent)", "var(--color-accent-strong)"];
 
   return (
     <div>
@@ -76,13 +76,13 @@ export function GravitaDurataWidget() {
               key={k}
               onClick={() => setDim(k)}
               style={{
-                border: "1px solid var(--color-divider)",
-                borderRadius: 999,
+                border: "1px solid var(--color-text)",
+                borderRadius: 2,
                 padding: "6px 12px",
                 fontSize: "0.85rem",
                 cursor: "pointer",
-                background: dim === k ? "var(--color-accent)" : "transparent",
-                color: dim === k ? "#fff" : "inherit",
+                background: dim === k ? "var(--color-text)" : "var(--color-raised)",
+                color: dim === k ? "var(--color-raised)" : "var(--color-text)",
               }}
             >
               {DIM_LABEL[k]}

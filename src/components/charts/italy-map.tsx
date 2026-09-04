@@ -25,9 +25,9 @@ export function ItalyMap({ regions, onSelect, selected, title }: ItalyMapProps) 
   }, [regions]);
 
   const colorFor = (code?: string): string => {
-    if (!code) return "#e2e0de";
+    if (!code) return "var(--color-divider)";
     const v = code ? regions[code] : undefined;
-    if (v === undefined) return "#e2e0de";
+    if (v === undefined) return "var(--color-divider)";
     const idx = Math.round((v / max) * (MAP_SCALE.length - 1));
     return MAP_SCALE[idx];
   };
@@ -57,7 +57,7 @@ export function ItalyMap({ regions, onSelect, selected, title }: ItalyMapProps) 
               onMouseEnter={() => setHover(loc.id)}
               onMouseLeave={() => setHover(null)}
               fill={colorFor(code)}
-              stroke={isHover || isActive ? "var(--color-text)" : "#ffffff"}
+              stroke={isHover || isActive ? "var(--color-text)" : "var(--color-raised)"}
               strokeWidth={isHover || isActive ? 2 : 0.8}
               style={{
                 cursor: code ? "pointer" : "default",

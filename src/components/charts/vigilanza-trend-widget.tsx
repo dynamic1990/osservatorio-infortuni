@@ -80,17 +80,17 @@ export function VigilanzaTrendWidget() {
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
             {isSospensioni ? (
               <>
-                <Bar yAxisId="bar" dataKey="sospensioni" name="Sospensioni totali" fill="#1d4ed8" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
-                  <LabelList dataKey="sospensioni" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#78716c" }} />
+                <Bar yAxisId="bar" dataKey="sospensioni" name="Sospensioni totali" fill="var(--color-link)" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
+                  <LabelList dataKey="sospensioni" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
                 </Bar>
-                <Bar yAxisId="bar" dataKey="sospensioniSicurezza" name="di cui per gravi violazioni sicurezza" fill="#c8102e" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false} />
+                <Bar yAxisId="bar" dataKey="sospensioniSicurezza" name="di cui per gravi violazioni sicurezza" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false} />
               </>
             ) : (
               <>
-                <Bar yAxisId="bar" dataKey="controlli" name="Controlli avviati (INL+INPS+INAIL)" fill="#1d4ed8" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
-                  <LabelList dataKey="controlli" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#78716c" }} />
+                <Bar yAxisId="bar" dataKey="controlli" name="Controlli avviati (INL+INPS+INAIL)" fill="var(--color-link)" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
+                  <LabelList dataKey="controlli" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
                 </Bar>
-                <Line yAxisId="line" type="monotone" dataKey="tassoIrregolarita" name="Tasso di irregolarità" stroke="#c8102e" strokeWidth={2.5} dot={{ r: 4, fill: "#c8102e" }} isAnimationActive={false} />
+                <Line yAxisId="line" type="monotone" dataKey="tassoIrregolarita" name="Tasso di irregolarità" stroke="var(--color-accent)" strokeWidth={2.5} dot={{ r: 4, fill: "var(--color-accent)" }} isAnimationActive={false} />
               </>
             )}
           </ComposedChart>

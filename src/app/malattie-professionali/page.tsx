@@ -31,7 +31,7 @@ export default function MalattieProfessionaliPage() {
               <span
                 style={{
                   background: "var(--color-accent)",
-                  color: "#ffffff",
+                  color: "var(--color-raised)",
                   fontSize: "0.72rem",
                   fontWeight: 750,
                   padding: "2px 8px",

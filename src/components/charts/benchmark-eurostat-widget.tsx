@@ -60,11 +60,11 @@ export function BenchmarkEurostatWidget() {
   }, [dati]);
 
   const colori: Record<string, string> = {
-    IT: "#c8102e",
+    IT: "var(--color-accent)",
     EU27_2020: "var(--color-text)",
-    DE: "#1d4ed8",
-    FR: "#1e7a4e",
-    ES: "#c77d0a",
+    DE: "var(--color-link)",
+    FR: "var(--color-success)",
+    ES: "var(--color-warning)",
   };
 
   const nomi: Record<string, string> = {
@@ -88,15 +88,15 @@ export function BenchmarkEurostatWidget() {
             style={{
               padding: "var(--space-3)",
               borderRadius: "8px",
-              background: p.isItaly ? "#fbe9e7" : p.isEU ? "#f1efec" : "var(--color-surface-2)",
-              border: p.isItaly ? "1.5px solid #c8102e" : "1px solid var(--color-divider)",
+              background: p.isItaly ? "var(--color-accent-soft)" : p.isEU ? "var(--color-surface-2)" : "var(--color-surface-2)",
+              border: p.isItaly ? "1.5px solid var(--color-accent)" : "1px solid var(--color-divider)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "var(--space-2)" }}>
               <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
                 {p.isItaly ? "🇮🇹 Italia" : p.isEU ? "🇪🇺 UE-27" : p.nome}
               </span>
-              <span style={{ fontWeight: 800, fontSize: "1.05rem", color: p.isItaly ? "#c8102e" : "inherit" }}>
+              <span style={{ fontWeight: 800, fontSize: "1.05rem", color: p.isItaly ? "var(--color-accent)" : "inherit" }}>
                 {p.tassoIncidenzaStandardizzato.toLocaleString("it-IT")}
               </span>
             </div>

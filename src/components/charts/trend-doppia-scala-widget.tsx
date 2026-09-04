@@ -122,7 +122,7 @@ export function TrendDoppiaScalaWidget() {
               yAxisId="left"
               dataKey="casi"
               name="Volume infortuni (asse sin.)"
-              fill="#c8102e"
+              fill="var(--color-accent)"
               radius={[3, 3, 0, 0]}
               isAnimationActive={false}
             />

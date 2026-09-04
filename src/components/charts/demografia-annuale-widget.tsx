@@ -45,7 +45,7 @@ export function DemografiaAnnualeWidget() {
         casi: casiM,
         mortali: mortaliM,
         quota: totalGen > 0 ? (casiM / totalGen) * 100 : 0,
-        fill: "#1d4ed8",
+        fill: "var(--color-link)",
       },
       {
         key: "F",
@@ -53,7 +53,7 @@ export function DemografiaAnnualeWidget() {
         casi: casiF,
         mortali: mortaliF,
         quota: totalGen > 0 ? (casiF / totalGen) * 100 : 0,
-        fill: "#b0336b",
+        fill: "var(--color-violet)",
       },
     ];
   }, [annoData, modalita]);
@@ -149,7 +149,7 @@ export function DemografiaAnnualeWidget() {
                         </div>
                         <div className="tooltip-row">
                           <span>Esiti mortali:</span>
-                          <strong style={{ color: "#ff8b80" }}>{exactNumber(p.mortali)}</strong>
+                          <strong style={{ color: "var(--color-accent)" }}>{exactNumber(p.mortali)}</strong>
                         </div>
                       </div>
                     );
@@ -215,13 +215,13 @@ export function DemografiaAnnualeWidget() {
                         </div>
                         <div className="tooltip-row">
                           <span>Esiti mortali:</span>
-                          <strong style={{ color: "#ff8b80" }}>{exactNumber(p.mortali)}</strong>
+                          <strong style={{ color: "var(--color-accent)" }}>{exactNumber(p.mortali)}</strong>
                         </div>
                       </div>
                     );
                   }}
                 />
-                <Bar dataKey="casi" name="Infortuni" fill="#0e7c8a" isAnimationActive={false} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="casi" name="Infortuni" fill="var(--color-teal)" isAnimationActive={false} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

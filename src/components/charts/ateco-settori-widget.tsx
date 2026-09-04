@@ -199,7 +199,7 @@ export function AtecoSettoriWidget() {
                     justifyContent: "center",
                     borderRadius: 6,
                     background: riskColor(t),
-                    color: "#ffffff",
+                    color: "var(--color-raised)",
                     fontWeight: 750,
                     fontSize: "0.85rem",
                   }}

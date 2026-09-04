@@ -65,7 +65,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "Italia: avanzamento",
+  themeColor: "#ffffff",
 };
 
 export const revalidate = 86_400;

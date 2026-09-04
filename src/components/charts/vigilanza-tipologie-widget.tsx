@@ -94,7 +94,7 @@ export function VigilanzaTipologieWidget() {
                   const p = totale > 0 ? (v / totale) * 100 : 0;
                   if (p < 7) return "";
                   return (
-                    <text x={entry?.x} y={entry?.y} fill="#ffffff" fontSize={11} fontWeight={700} textAnchor="middle" dominantBaseline="central">
+                    <text x={entry?.x} y={entry?.y} fill="var(--color-raised)" fontSize={11} fontWeight={700} textAnchor="middle" dominantBaseline="central">
                       {`${p.toLocaleString("it-IT", { maximumFractionDigits: 1 })}%`}
                     </text>
                   );

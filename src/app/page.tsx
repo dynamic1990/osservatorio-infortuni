@@ -36,7 +36,7 @@ export default function HomePage() {
               <span
                 style={{
                   background: "var(--color-accent)",
-                  color: "#ffffff",
+                  color: "var(--color-raised)",
                   fontSize: "0.72rem",
                   fontWeight: 750,
                   padding: "2px 8px",
@@ -75,19 +75,6 @@ export default function HomePage() {
         <HeroCongiunturaleKpi />
       </section>
 
-      {/* 2bis. Notizie e Cronaca: infortuni mortali e gravi (aggiornamento 06:00) */}
-      <section className="card" aria-label="Notizie sugli Infortuni sul Lavoro">
-        <div className="card-header">
-          <h2 className="card-title">Cronaca: infortuni mortali e gravi in Italia</h2>
-          <p className="card-desc">
-            Aggiornamento automatico giornaliero alle <strong>06:00</strong> attraverso aggregazione RSS:
-            le notizie più rilevanti sugli infortuni sul lavoro nel nostro paese, con classificazione
-            automatica della gravità. Ogni voce rimanda alla fonte originale.
-          </p>
-        </div>
-        <NewsInfortuniWidget />
-      </section>
-
       {/* 3. Serie Storica Decennale 2014-2024 */}
       <section className="card" aria-label="Serie Storica Decennale">
         <div className="card-header">
@@ -112,6 +99,19 @@ export default function HomePage() {
           </p>
         </div>
         <TrendDoppiaScalaWidget />
+      </section>
+
+      {/* 2bis. Notizie e Cronaca: infortuni mortali e gravi (aggiornamento 06:00) */}
+      <section className="card" aria-label="Notizie sugli Infortuni sul Lavoro">
+        <div className="card-header">
+          <h2 className="card-title">Cronaca: infortuni mortali e gravi in Italia</h2>
+          <p className="card-desc">
+            Aggiornamento automatico giornaliero alle <strong>06:00</strong> attraverso aggregazione RSS:
+            le notizie più rilevanti sugli infortuni sul lavoro nel nostro paese, con classificazione
+            automatica della gravità. Ogni voce rimanda alla fonte originale.
+          </p>
+        </div>
+        <NewsInfortuniWidget />
       </section>
 
       {/* 4. Mappa Territoriale Interattiva: Colore = Tasso di Incidenza */}

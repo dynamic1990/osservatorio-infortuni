@@ -76,11 +76,11 @@ export function MalattieAndamentoWidget() {
             <YAxis tick={{ fontSize: 11 }} width={52} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : String(v))} />
             <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
-            <Bar dataKey="anno2025" name="I sem 2025" fill="#c4bfba" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
-              <LabelList dataKey="anno2025" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#78716c" }} />
+            <Bar dataKey="anno2025" name="I sem 2025" fill="var(--color-text-muted)" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
+              <LabelList dataKey="anno2025" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
             </Bar>
-            <Bar dataKey="anno2026" name="I sem 2026" fill="#c8102e" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
-              <LabelList dataKey="anno2026" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#c8102e", fontWeight: 650 }} />
+            <Bar dataKey="anno2026" name="I sem 2026" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
+              <LabelList dataKey="anno2026" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-accent)", fontWeight: 650 }} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
