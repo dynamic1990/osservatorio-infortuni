@@ -89,7 +89,22 @@ Prescrizioni operative:
 
 ---
 
-## Regola 5 — Leggibilità prima della spettacolarità
+## Regola 5 — Design system: una sola fonte, applicata ovunque
+
+Quando per l'app viene adottato un design system di riferimento (per esempio uno dei sistemi raccolti in awesome-design-md, il repository indicato da Damiano), quella scelta **sostituisce tutte le precedenti e vale per l'intera applicazione**, senza eccezioni per pagina o componente.
+
+Prescrizioni operative:
+
+- Il design system adottato va **scelto una volta e documentato** in `docs/DESIGN.md`, con riferimento esplicito (link del repository, nome del sistema) e le eventuali varianti deliberate.
+- **Applicazione integrale e professionale**: colori, tipografia, spaziature, forme dei controlli, angoli, elevazione, stati hover/active/focus, empty state e comportamento responsive seguono il sistema scelto. Non si applica un design system "a metà", ibridandolo con stili precedenti o lasciando pagine in versione vecchia.
+- **Niente stili paralleli**: i design system non si mescolano. Se si cambia riferimento, si migra tutta l'app con un unico giro di modifiche; non si introduce il nuovo stile pagina per pagina lasciando il resto indietro.
+- **Componenti condivisi**: pulsanti, filtri, card, tooltip e altri elementi riutilizzabili sono definiti una volta sola, conformi al sistema scelto, e riusati da tutte le pagine. Un controllo uguale non ha mai due resa diverse a seconda della sezione.
+- I token del design system (in `src/app/design-system.css`) restano l'unica fonte dei colori, in coerenza con la Regola 4: la mappa colore → canale si declina con la palette del sistema adottato.
+- Prima di dichiarare conclusa una modifica visuale va verificata la **coerenza su tutte le pagine**, non solo su quella toccata.
+
+---
+
+## Regola 6 — Leggibilità prima della spettacolarità
 
 Corollario delle regole precedenti, valido per ogni scelta di visualizzazione.
 
@@ -114,4 +129,5 @@ Prima di considerare conclusa una pagina o un widget, verificare:
 - [ ] Separazione in occasione di lavoro / in itinere presente o limitazione dichiarata.
 - [ ] Filtri e grafici della pagina condividono la stessa mappa colore → canale.
 - [ ] Colori presi dai token del design system, non hardcoded.
+- [ ] Design system di riferimento documentato in DESIGN.md e applicato in modo integrale e coerente su tutte le pagine (nessuna pagina ibrida o in versione vecchia).
 - [ ] Fonte e freschezza del dato visibili.
