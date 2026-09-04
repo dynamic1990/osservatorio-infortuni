@@ -64,7 +64,7 @@ export function VigilanzaTrendWidget() {
 
       <div style={{ width: "100%", height: 340 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 18, right: 8, bottom: 0, left: 4 }}>
+          <ComposedChart data={chartData} margin={{ top: 18, right: 8, bottom: 16, left: 4 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis yAxisId="bar" tick={{ fontSize: 11 }} width={54} tickFormatter={formatEtichetta} />
@@ -77,7 +77,7 @@ export function VigilanzaTrendWidget() {
               }}
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {isSospensioni ? (
               <>
                 <Bar yAxisId="bar" dataKey="sospensioni" name="Sospensioni totali" fill="var(--color-link)" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>

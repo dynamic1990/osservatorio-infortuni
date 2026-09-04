@@ -109,7 +109,7 @@ export function BenchmarkEurostatWidget() {
 
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 12, right: 16, bottom: 4, left: 4 }}>
+          <ComposedChart data={chartData} margin={{ top: 12, right: 16, bottom: 16, left: 4 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={48} />
@@ -131,7 +131,7 @@ export function BenchmarkEurostatWidget() {
                 );
               }}
             />
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {PAESI_FOCUS.map((codice) => (
               <Line
                 key={codice}

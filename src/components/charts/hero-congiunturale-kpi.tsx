@@ -267,9 +267,9 @@ export function HeroCongiunturaleKpi() {
         <div style={{ fontSize: "0.9rem", fontWeight: 650, marginBottom: "var(--space-2)" }}>
           Andamento mensile dei dati YTD fino a giugno ({modLabel.toLowerCase()})
         </div>
-        <div style={{ width: "100%", height: 230 }}>
+        <div style={{ width: "100%", height: 244 }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 8, right: 12, bottom: 0, left: -10 }}>
+            <BarChart data={chartData} margin={{ top: 8, right: 12, bottom: 16, left: -10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
               <XAxis dataKey="mese" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => compactNumber(v)} width={50} />
@@ -279,7 +279,7 @@ export function HeroCongiunturaleKpi() {
                   `Anno ${name}`,
                 ]}
               />
-              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
               <Bar dataKey="2025" name="Dati YTD 2025" fill="var(--color-text-muted)" isAnimationActive={false} radius={[2, 2, 0, 0]} />
               <Bar dataKey="2026" name="Dati YTD 2026" fill={MODAL_COLORS.lavoro} isAnimationActive={false} radius={[2, 2, 0, 0]} />
             </BarChart>

@@ -75,14 +75,14 @@ export function StagionalitaWidget() {
       </div>
 
       {/* Grafico a linee mensile */}
-      <div style={{ width: "100%", height: 300 }}>
+      <div style={{ width: "100%", height: 314 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+          <LineChart data={data} margin={{ top: 8, right: 8, bottom: 16, left: 8 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
             <XAxis dataKey="mese" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={54} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : v)} />
             <Tooltip formatter={(val) => [Number(val ?? 0).toLocaleString("it-IT"), "Casi"]} />
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             <ReferenceLine y={media} stroke="var(--color-text-soft)" strokeDasharray="4 4" label={{ value: "Media anno", position: "insideTopRight", fontSize: 11 }} />
             <Line type="monotone" dataKey="casi" name="Casi denunciati" stroke="var(--color-accent)" strokeWidth={2.5} dot={{ r: 3, fill: "var(--color-accent)" }} isAnimationActive={false} />
           </LineChart>

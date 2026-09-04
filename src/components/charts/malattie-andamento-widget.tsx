@@ -70,12 +70,12 @@ export function MalattieAndamentoWidget() {
 
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 18, right: 8, bottom: 0, left: 4 }} barGap={3}>
+          <BarChart data={chartData} margin={{ top: 18, right: 8, bottom: 16, left: 4 }} barGap={3}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
             <XAxis dataKey="mese" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={52} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : String(v))} />
             <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             <Bar dataKey="anno2025" name="I sem 2025" fill="var(--color-text-muted)" radius={[3, 3, 0, 0]} maxBarSize={38} isAnimationActive={false}>
               <LabelList dataKey="anno2025" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
             </Bar>

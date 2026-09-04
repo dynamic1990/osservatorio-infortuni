@@ -94,12 +94,12 @@ export function GravitaDurataWidget() {
 
       <div style={{ width: "100%", height: 360 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={conTotale} margin={{ top: 8, right: 16, bottom: 0, left: 8 }}>
+          <ComposedChart data={conTotale} margin={{ top: 8, right: 16, bottom: 16, left: 8 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 12 }} />
             <YAxis tick={{ fontSize: 11 }} width={64} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : v)} />
             <Tooltip formatter={(val, name) => [Number(val ?? 0).toLocaleString("it-IT"), String(name)]} />
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {ordine.map((k, i) => (
               <Bar
                 key={k}

@@ -83,27 +83,27 @@ export function MalattieDecessiWidget() {
         </div>
       </div>
 
-      <div style={{ width: "100%", height: 300 }}>
+      <div style={{ width: "100%", height: 314 }}>
         {vista === "genere" ? (
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 8, right: 8, bottom: 0, left: 4 }}>
+            <BarChart data={chartData} margin={{ top: 8, right: 8, bottom: 16, left: 4 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
               <Bar dataKey="maschi" name="Maschi" stackId="g" fill="var(--color-link)" isAnimationActive={false} />
               <Bar dataKey="femmine" name="Femmine" stackId="g" fill="var(--color-accent)" isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={chartData} margin={{ top: 8, right: 8, bottom: 0, left: 4 }}>
+            <ComposedChart data={chartData} margin={{ top: 8, right: 8, bottom: 16, left: 4 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+              <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
               {vista === "totale" ? (
                 <>
                   <Bar dataKey="casi" name="Decessi totali" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false} />

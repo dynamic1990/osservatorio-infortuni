@@ -72,9 +72,9 @@ export function SerieDecennaleWidget() {
         </div>
       </div>
 
-      <div style={{ width: "100%", height: 340 }}>
+      <div style={{ width: "100%", height: 354 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={serieCorrente} margin={{ top: 12, right: 16, bottom: 4, left: 4 }}>
+          <ComposedChart data={serieCorrente} margin={{ top: 12, right: 16, bottom: 16, left: 4 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis
@@ -118,7 +118,7 @@ export function SerieDecennaleWidget() {
                 );
               }}
             />
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {modalita === "totale" ? (
               <>
                 <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="var(--color-accent)" radius={[3, 3, 0, 0]} isAnimationActive={false} />

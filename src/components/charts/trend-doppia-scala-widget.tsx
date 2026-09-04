@@ -60,7 +60,7 @@ export function TrendDoppiaScalaWidget() {
       {/* Grafico cartesiano a doppia scala */}
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 12, right: 16, bottom: 4, left: 4 }}>
+          <ComposedChart data={chartData} margin={{ top: 12, right: 16, bottom: 16, left: 4 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 12 }} />
 
@@ -115,7 +115,7 @@ export function TrendDoppiaScalaWidget() {
               }}
             />
 
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 10, fontSize: "0.8rem" }} />
+            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
 
             {/* Barra volume (scala sinistra) */}
             <Bar
