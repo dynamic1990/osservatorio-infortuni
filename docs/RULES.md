@@ -42,6 +42,22 @@ Un numero riferito a un singolo anno, da solo, non dice quasi nulla: non si capi
 
 Gerarchia minima: se una fonte permette una sola elaborazione, quella minima è il confronto anno vs anno precedente. Trend e tasso di incidenza sono il livello desiderabile, non accessori; dove i dati per calcolarli esistono, vanno mostrati.
 
+### Ordine di lettura nella pagina
+
+I **primi indicatori visibili in una pagina devono rappresentare il dato più recente disponibile messo a confronto con l'anno precedente**. Il lettore deve capire subito dove siamo posizionati rispetto all'anno scorso, prima di ogni altra elaborazione. Solo dopo arriva il trend storico, se la fonte lo consente.
+
+Struttura di riferimento per ogni pagina:
+
+1. **Apertura**: ultimo anno o periodo disponibile vs anno precedente, con delta in valore assoluto e in percentuale. Qui si risponde alla domanda «come stiamo andando?».
+2. **Contesto**: il trend storico, una barra o un punto per anno. Qui si risponde a «da dove veniamo?».
+3. **Approfondimento**: composizioni, territori, settori, confronti di benchmark.
+
+Corollari operativi:
+
+- Nelle sezioni con filtro anno, l'anno di default è il **più recente disponibile**; il delta vs anno precedente accompagna sempre il dato principale.
+- Non si apre una sezione con un anno arbitrario, né con un dato privo di confronto.
+- I blocchi che non sono indicatori statistici (cronaca, notizie, approfondimenti qualitativi) non spezzano la sequenza «confronto più recente → trend storico»: se presenti, stanno dopo, o in una posizione che non interrompe la lettura.
+
 ---
 
 ## Regola 3 — Separazione "occasione di lavoro" e "in itinere"
@@ -89,6 +105,8 @@ Corollario delle regole precedenti, valido per ogni scelta di visualizzazione.
 Prima di considerare conclusa una pagina o un widget, verificare:
 
 - [ ] Nessun valore aggregato su più anni; ogni dato è riferito a un anno selezionabile.
+- [ ] Il primo blocco della pagina mostra il dato più recente vs anno precedente, con delta (valore + %).
+- [ ] Il trend storico segue il confronto iniziale e non lo precede; l'anno di default è il più recente.
 - [ ] Serie storica visibile dove la fonte lo consente (un punto/barra per anno).
 - [ ] Delta vs anno precedente presente e formattato (valore + percentuale + segno).
 - [ ] Percentuali presenti dove il valore assoluto da solo non basta.
