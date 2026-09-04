@@ -16,6 +16,8 @@ Limite noto: l'API REST mensile espone ~18 mesi di finestra; per lo storico si u
 
 ## Principi
 
+Le regole valide in tutta l'app (nessun aggregato multi-anno, separazione lavoro/itinere, coerenza cromatica filtri-grafici) sono in **[docs/RULES.md](docs/RULES.md)**. Da leggere prima di aggiungere o modificare una pagina.
+
 - Nessun numero senza fonte e data.
 - Nessun dato inventato o dimostrativo nelle pagine pubbliche.
 - Un segnale non è una colpa: un aumento delle denunce può dipendere da più vigilanza, più consapevolezza o cambi normativi.

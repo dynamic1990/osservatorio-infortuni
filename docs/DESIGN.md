@@ -17,6 +17,8 @@ La domanda sceglie la forma: mappa per geografia, linea per trend, barre per con
 
 Ordine di lettura: **dato principale → confronto → contesto → dettaglio → fonte**.
 
+Prima del design system valgono le regole trasversali di prodotto, raccolte in **[RULES.md](RULES.md)**: nessun aggregato multi-anno, separazione in occasione di lavoro / in itinere, coerenza cromatica tra filtri e grafici della stessa pagina.
+
 ## 02 Colors
 
 Palette ispirata al modello DVNS: grigio-carta caldo con un accento. Il tema infortuni suggerisce un segnale forte ma contenuto.
