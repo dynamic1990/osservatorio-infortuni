@@ -16,8 +16,11 @@ Prescrizioni operative:
 - L'anno è sempre **selezionabile tramite filtro** visibile nella pagina.
 - Accanto al valore dell'anno selezionato va riportato il **delta rispetto all'anno precedente**, in valore assoluto e in percentuale, con segno esplicito e colore coerente (miglioramento / peggioramento).
 - Se l'anno precedente non è disponibile nella serie, il delta va omesso e va indicato perché (es. "serie disponibile dal 2014").
-- Le serie storiche restano ammesse e anzi preferite quando la domanda è proprio l'andamento nel tempo: in quel caso l'asse x è l'anno e **ogni punto è un anno distinto**. Quello che è vietato è sommare o mediare gli anni in un unico valore.
-- Eventuali totali di periodo sono ammessi solo se l'utente li seleziona esplicitamente e solo con etichetta chiara del perimetro.
+- Quello che è vietato è sommare o mediare gli anni in un unico valore.
+
+**Le serie storiche non sono un aggregato multi-anno.** Una serie con un punto (o una barra) per ogni anno è il modo corretto di raccontare il trend, ed è anzi la forma preferita. La serie decennale 2014-2024 è quindi ammessa così com'è: ogni barra è un anno distinto e l'andamento si legge lungo l'asse. La regola colpisce solo il valore unico che comprime più anni in un numero ("2020-2024: 2,4 milioni di denunce").
+
+Eventuali totali di periodo sono ammessi solo se l'utente li seleziona esplicitamente e solo con etichetta chiara del perimetro.
 
 Forma della lettura corretta:
 
@@ -28,7 +31,20 @@ Forma della lettura corretta:
 
 ---
 
-## Regola 2 — Separazione "occasione di lavoro" e "in itinere"
+## Regola 2 — L'app è uno strumento di lettura dei trend
+
+Un numero riferito a un singolo anno, da solo, non dice quasi nulla: non si capisce se il fenomeno migliora, peggiora o è stabile. L'Osservatorio esiste per rendere leggibile la direzione delle cose, quindi ogni pagina, **ove la fonte lo consenta**, deve dare quattro livelli di lettura, in ordine di importanza:
+
+1. **Trend storico**: la serie temporale del fenomeno (un punto o una barra per anno, per mese dove ha senso), per vedere l'andamento nel tempo.
+2. **Confronto anno in oggetto vs anno precedente**: il delta in valore assoluto e in percentuale, con segno esplicito e codifica cromatica coerente.
+3. **Percentuali dove possibile**: le quote di composizione (per settore, genere, gravità, territorio) quando il valore assoluto da solo non basta a capire il peso relativo.
+4. **Tasso di incidenza dove possibile**: il dato rapportato a una dimensione del fenomeno (es. denunce ogni 100.000 occupati), per confrontare anni, territori e settori con popolazioni diverse. Il denominatore va sempre dichiarato: fonte, perimetro e anno di riferimento.
+
+Gerarchia minima: se una fonte permette una sola elaborazione, quella minima è il confronto anno vs anno precedente. Trend e tasso di incidenza sono il livello desiderabile, non accessori; dove i dati per calcolarli esistono, vanno mostrati.
+
+---
+
+## Regola 3 — Separazione "occasione di lavoro" e "in itinere"
 
 I due fenomeni hanno cause, dinamiche e leve di prevenzione diverse. Metterli insieme produce un numero che non parla né agli uni né agli altri.
 
@@ -42,7 +58,7 @@ Prescrizioni operative:
 
 ---
 
-## Regola 3 — Coerenza cromatica tra filtri e grafici
+## Regola 4 — Coerenza cromatica tra filtri e grafici
 
 Il colore è un sistema di riferimento, non una decorazione. Se nella stessa pagina un filtro usa un colore e il grafico associato ne usa un altro, l'utente perde il collegamento tra ciò che seleziona e ciò che legge.
 
@@ -51,15 +67,15 @@ Prescrizioni operative:
 - In una medesima pagina, il **colore di un pulsante di filtro attivo è lo stesso colore della serie, barra o area che quel filtro controlla**.
 - Nessun colore scritto a mano nei componenti: si usano i token CSS in `src/app/design-system.css` (`--color-accent`, `--color-blue`, `--color-success`, `--color-warning`, ecc.).
 - Ogni canale dati mantiene lo **stesso colore in tutta la pagina**: se "in occasione di lavoro" è blu in un grafico, è blu in tutti i grafici, nelle legende e nei filtri di quella pagina.
-- L'assegnazione colore → canale va dichiarata una volta sola per pagina, in un punto di definizione condiviso dai widget, non ripetuta dentro ogni componente.
+- L'assegnazione colore → canale va dichiarata una sola volta per pagina, in un punto di definizione condiviso dai widget, non ripetuta dentro ogni componente.
 - I delta usano una codifica distinta e coerente: una sola coppia di colori per "peggioramento / miglioramento", mai colori presi dalla palette delle serie.
 - Le palette devono restare leggibili anche in condizioni di daltonismo e in scala di grigi: il colore non è mai l'unico canale che distingue due serie (si affiancano etichette dirette, tratteggi o ordine).
 
 ---
 
-## Regola 4 — Leggibilità prima della spettacolarità
+## Regola 5 — Leggibilità prima della spettacolarità
 
-Corollario delle tre regole precedenti, valido per ogni scelta di visualizzazione.
+Corollario delle regole precedenti, valido per ogni scelta di visualizzazione.
 
 - La forma segue la domanda: linea per i trend, barre per i confronti, mappa per la geografia, tabella per i valori esatti.
 - Ogni grafico ha un equivalente testuale o tabellare accessibile.
@@ -73,7 +89,10 @@ Corollario delle tre regole precedenti, valido per ogni scelta di visualizzazion
 Prima di considerare conclusa una pagina o un widget, verificare:
 
 - [ ] Nessun valore aggregato su più anni; ogni dato è riferito a un anno selezionabile.
+- [ ] Serie storica visibile dove la fonte lo consente (un punto/barra per anno).
 - [ ] Delta vs anno precedente presente e formattato (valore + percentuale + segno).
+- [ ] Percentuali presenti dove il valore assoluto da solo non basta.
+- [ ] Tasso di incidenza calcolato dove i denominatori esistono, con fonte del denominatore dichiarata.
 - [ ] Separazione in occasione di lavoro / in itinere presente o limitazione dichiarata.
 - [ ] Filtri e grafici della pagina condividono la stessa mappa colore → canale.
 - [ ] Colori presi dai token del design system, non hardcoded.
