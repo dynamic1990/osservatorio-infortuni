@@ -31,8 +31,13 @@ export function MalattieKpi() {
   const casiM = dati.categorie.filter((c) => chiaviM.has(c.key)).reduce((a, c) => a + c.casi, 0);
   const quotaM = dati.nazionale.totale > 0 ? Math.round((casiM / dati.nazionale.totale) * 100) : 0;
 
-  const decM = decessi.perGenere.M ?? 0;
-  const decF = decessi.perGenere.F ?? 0;
+  // KPI decessi: anno più recente vs anno precedente (RULES.md Regola 1/2, niente aggregato 2020-2024)
+  const perAnno = [...decessi.perAnno].sort((a, b) => a.anno.localeCompare(b.anno));
+  const annoDec = perAnno[perAnno.length - 1];
+  const prevDec = perAnno[perAnno.length - 2];
+  const deltaDec = annoDec ? annoDec.casi - (prevDec?.casi ?? 0) : 0;
+  const decM = annoDec?.maschi ?? 0;
+  const decF = annoDec?.femmine ?? 0;
   const quotaDecM = decM + decF > 0 ? Math.round((decM / (decM + decF)) * 100) : 0;
 
   const kpi: KpiItem[] = [
@@ -55,8 +60,12 @@ export function MalattieKpi() {
     },
     {
       label: "Decessi registrati",
-      value: exactNumber(decessi.totale),
-      sub: `2020-2024 · età media ${(decessi.etaMedia ?? 0).toString().replace(".", ",")} anni · ${quotaDecM}% M`,
+      value: exactNumber(annoDec?.casi ?? 0),
+      sub:
+        prevDec !== null && prevDec !== undefined
+          ? `${deltaDec >= 0 ? "+" : ""}${exactNumber(deltaDec)} vs ${prevDec.anno} · età media ${(decessi.etaMedia ?? 0).toString().replace(".", ",")} anni · ${quotaDecM}% M`
+          : `anno ${annoDec?.anno} · età media ${(decessi.etaMedia ?? 0).toString().replace(".", ",")} anni · ${quotaDecM}% M`,
+      accent: deltaDec > 0,
     },
   ];
 
