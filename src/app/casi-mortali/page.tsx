@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { InformoKpi } from "@/components/charts/informo-kpi";
 import { InformoTrendWidget } from "@/components/charts/informo-trend-widget";
 import { InformoVociLista } from "@/components/charts/informo-voci-lista";
-import { InformoFattoriWidget } from "@/components/charts/informo-fattori-widget";
 import { InformoEsploratore } from "@/components/charts/informo-esploratore";
 import { InfoModalButton } from "@/components/ui/info-modal";
 import { getInformoAnalisi, INFORM_COLORS } from "@/lib/informo-casi";
@@ -13,7 +12,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Casi mortali | Analisi Infor.MO INAIL",
   description:
-    "Analisi di dettaglio dei casi mortali sul lavoro dell'archivio Infor.MO INAIL 2020-2024: dinamica degli eventi, fattori causali classificati, settori e territori a maggior rischio, profilo dei lavoratori e delle aziende coinvolti.",
+    "Analisi di dettaglio dei casi mortali sul lavoro dell'archivio Infor.MO INAIL 2020-2024: dinamica degli eventi, settori e territori a maggior rischio, profilo dei lavoratori e delle aziende coinvolti, con la copertura dell'archivio sul totale dei decessi denunciati.",
 };
 
 // Sezione con intestazione e contenuto, per uniformità con le altre pagine.
@@ -96,10 +95,9 @@ export default function CasiMortaliPage() {
             <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
               Ogni caso mortale documentato nell&apos;archivio Infor.MO di INAIL
               diventa qui un dato analizzabile: la dinamica dell&apos;evento, il
-              settore e il territorio, il profilo di chi è morto e dell&apos;azienda,
-              e soprattutto i fattori causali classificati dagli analisti secondo
-              il modello Infor.MO. Non un elenco di numeri: una lettura dei
-              pattern che si ripetono, per capire dove intervenire.
+              settore e il territorio, il profilo di chi è morto e dell&apos;azienda.
+              Non un elenco di numeri: una lettura dei pattern che si ripetono,
+              per capire dove intervenire.
             </p>
           </div>
         </div>
@@ -127,18 +125,17 @@ export default function CasiMortaliPage() {
           <section className="modal-section">
             <h3 className="modal-section-title">2. Cosa mostra ogni blocco</h3>
             <ul className="modal-list">
-              <li><strong>KPI d&apos;apertura:</strong> casi analizzati nell&apos;anno più recente (2024), copertura del dettaglio (dinamica e fattori) e quota sul totale nazionale dei morti denunciati.</li>
-              <li><strong>Serie quinquennale:</strong> un punto per anno, con copertura del dettaglio; ogni barra è un anno distinto, nessun aggregato multi-anno.</li>
+              <li><strong>KPI d&apos;apertura:</strong> casi analizzati nell&apos;anno più recente (2024), copertura del dettaglio e quota sul totale nazionale dei morti denunciati.</li>
+              <li><strong>Serie quinquennale:</strong> un punto per anno: il totale dei morti denunciati e dentro la quota con scheda di dettaglio in archivio.</li>
               <li><strong>Cause, settori, territorio:</strong> prime voci per anno con la classificazione INAIL.</li>
               <li><strong>Profilo:</strong> popolazioni a rischio, mansioni, sesso, rapporto di lavoro, sede della lesione.</li>
-              <li><strong>Fattori causali:</strong> il cuore dell&apos;archivio: ruolo (determinante/modulatore), tipologia, problemi di sicurezza, standard di confronto e valutazione del rischio.</li>
               <li><strong>Esploratore:</strong> ricerca libera full-text nella narrativa dei 1.212 casi con filtri per anno, settore e causa.</li>
             </ul>
           </section>
           <section className="modal-section">
             <h3 className="modal-section-title">3. Limiti dichiarati</h3>
             <ul className="modal-list">
-              <li><strong>Campione, non censimento:</strong> i 1.212 casi analizzati 2020-2024 sono l&apos;8,6% dei 14.051 morti denunciati nello stesso periodo. La lettura dei fattori vale per i casi analizzati, non per tutti i decessi.</li>
+              <li><strong>Campione, non censimento:</strong> i 1.212 casi analizzati 2020-2024 sono l&apos;8,6% dei 14.051 morti denunciati nello stesso periodo. La lettura di cause, settori e profili vale per i casi analizzati, non per tutti i decessi.</li>
               <li><strong>Occasione di lavoro / in itinere:</strong> la fonte dell&apos;archivio non distingue i due canali senza filtri dedicati, quindi il canale non è separabile in questa pagina e il dato è presentato in forma complessiva.</li>
               <li><strong>Classificazione degli analisti:</strong> è la ricostruzione a posteriori degli analisti INAIL, non un esito giudiziale né una attribuzione di colpa.</li>
               <li><strong>Campi parziali:</strong> età, mansione e azienda sono assenti o parziali per una quota di casi; la copertura per vista è indicata dove serve.</li>
@@ -160,8 +157,8 @@ export default function CasiMortaliPage() {
         <InformoKpi />
       </Sezione>
 
-      {/* 2. Trend storico */}
-      <Sezione occhiello="Da dove veniamo" titolo="La serie quinquennale">
+      {/* 2. Copertura dell'archivio sul totale */}
+      <Sezione occhiello="La copertura dell'archivio" titolo="Infortuni mortali: totale denunciato e casi analizzati">
         <InformoTrendWidget />
       </Sezione>
 
@@ -238,12 +235,7 @@ export default function CasiMortaliPage() {
         </div>
       </Sezione>
 
-      {/* 4. Fattori causali */}
-      <Sezione occhiello="I fattori causali" titolo="Cosa è intervenuto nell'evento">
-        <InformoFattoriWidget />
-      </Sezione>
-
-      {/* 5. Esploratore */}
+      {/* 4. Esploratore */}
       <Sezione occhiello="La lettura caso per caso" titolo="Cerca nella dinamica">
         <InformoEsploratore />
       </Sezione>
