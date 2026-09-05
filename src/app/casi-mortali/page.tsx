@@ -5,6 +5,7 @@ import { InformoTrendWidget } from "@/components/charts/informo-trend-widget";
 import { InformoVociLista } from "@/components/charts/informo-voci-lista";
 import { InformoFattoriWidget } from "@/components/charts/informo-fattori-widget";
 import { InformoEsploratore } from "@/components/charts/informo-esploratore";
+import { InfoModalButton } from "@/components/ui/info-modal";
 import { getInformoAnalisi, INFORM_COLORS } from "@/lib/informo-casi";
 
 export const revalidate = 86_400;
@@ -26,8 +27,11 @@ function Sezione({
   children: ReactNode;
 }) {
   return (
-    <section className="card" style={{ padding: "var(--space-5)", display: "grid", gap: "var(--space-4)" }}>
-      <div>
+    <section
+      className="card"
+      style={{ padding: "var(--space-5)", display: "grid", gap: "var(--space-4)", minWidth: 0, maxWidth: "100%" }}
+    >
+      <div style={{ minWidth: 0 }}>
         {occhiello && (
           <div
             style={{
@@ -99,25 +103,60 @@ export default function CasiMortaliPage() {
             </p>
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "var(--space-2)",
-            fontSize: "0.78rem",
-            color: "var(--color-text-muted)",
-          }}
-        >
-          <span>Da dove vengono i dati → INAIL, archivio Infor.MO (InformoWeb)</span>
-          <span>·</span>
-          <span>1.212 casi analizzati 2020-2024</span>
-          <span>·</span>
-          <span>2.334 fattori causali classificati</span>
-        </div>
+        <InfoModalButton>
+          <section className="modal-section">
+            <h3 className="modal-section-title">1. Fonte dei dati e perimetro</h3>
+            <p className="modal-text">
+              I dati provengono dall&apos;archivio <strong>Infor.MO</strong> di INAIL
+              (InformoWeb), il database pubblico degli infortuni analizzati con
+              il modello Infor.MO: classe di appartenenza del rischio, dinamica
+              dell&apos;evento e fattori causali. I casi sono recuperati via API
+              pubbliche (filtra.do, dettaglio.do, dettagliInfortunio.do,
+              dettaglioFattore.do) per gli eventi con tipoEvento mortale nel
+              periodo 2020-2024.
+            </p>
+            <p className="modal-text">
+              <strong>Perimetro:</strong> l&apos;archivio analizza una parte dei casi
+              denunciati con esito mortale, non è il censimento dei morti sul
+              lavoro. I totali ufficiali da denunce sono nella pagina Infortuni.
+              Il confronto anno su anno non ha senso su questo sottoinsieme: la
+              variazione misurerebbe la copertura dell&apos;archivio più che il
+              fenomeno reale. Per questo la pagina non presenta delta tra anni.
+            </p>
+          </section>
+          <section className="modal-section">
+            <h3 className="modal-section-title">2. Cosa mostra ogni blocco</h3>
+            <ul className="modal-list">
+              <li><strong>KPI d&apos;apertura:</strong> casi analizzati nell&apos;anno più recente (2024), copertura del dettaglio (dinamica e fattori) e quota sul totale nazionale dei morti denunciati.</li>
+              <li><strong>Serie quinquennale:</strong> un punto per anno, con copertura del dettaglio; ogni barra è un anno distinto, nessun aggregato multi-anno.</li>
+              <li><strong>Cause, settori, territorio:</strong> prime voci per anno con la classificazione INAIL.</li>
+              <li><strong>Profilo:</strong> popolazioni a rischio, mansioni, sesso, rapporto di lavoro, sede della lesione.</li>
+              <li><strong>Fattori causali:</strong> il cuore dell&apos;archivio: ruolo (determinante/modulatore), tipologia, problemi di sicurezza, standard di confronto e valutazione del rischio.</li>
+              <li><strong>Esploratore:</strong> ricerca libera full-text nella narrativa dei 1.212 casi con filtri per anno, settore e causa.</li>
+            </ul>
+          </section>
+          <section className="modal-section">
+            <h3 className="modal-section-title">3. Limiti dichiarati</h3>
+            <ul className="modal-list">
+              <li><strong>Campione, non censimento:</strong> i 1.212 casi analizzati 2020-2024 sono l&apos;8,6% dei 14.051 morti denunciati nello stesso periodo. La lettura dei fattori vale per i casi analizzati, non per tutti i decessi.</li>
+              <li><strong>Occasione di lavoro / in itinere:</strong> la fonte dell&apos;archivio non distingue i due canali senza filtri dedicati, quindi il canale non è separabile in questa pagina e il dato è presentato in forma complessiva.</li>
+              <li><strong>Classificazione degli analisti:</strong> è la ricostruzione a posteriori degli analisti INAIL, non un esito giudiziale né una attribuzione di colpa.</li>
+              <li><strong>Campi parziali:</strong> età, mansione e azienda sono assenti o parziali per una quota di casi; la copertura per vista è indicata dove serve.</li>
+            </ul>
+          </section>
+          <section className="modal-section">
+            <h3 className="modal-section-title">4. Aggiornamento</h3>
+            <p className="modal-text">
+              I dati sono estratti e aggiornati con uno script ETL
+              (scripts/etl/estrai_informo_dettaglio.py); la data di generazione
+              del dataset è riportata nel registro fonti.
+            </p>
+          </section>
+        </InfoModalButton>
       </header>
 
-      {/* 1. Confronto più recente (apertura, RULES.md regola 2) */}
-      <Sezione occhiello="Il punto di partenza" titolo="2024 vs 2023: come stiamo andando?">
+      {/* 1. Il punto di partenza (senza confronti anno su anno: vedi metodologia) */}
+      <Sezione occhiello="Il punto di partenza" titolo="I casi analizzati nell'anno più recente">
         <InformoKpi />
       </Sezione>
 
@@ -146,8 +185,8 @@ export default function CasiMortaliPage() {
           colore={INFORM_COLORS.secondario}
         />
         <p className="source-note">
-          Il conteggio è riferito al singolo anno: il confronto viene con il
-          delta vs anno precedente, non con aggregati pluriennali (RULES.md
+          Il conteggio è riferito al singolo anno selezionato: ogni lista
+          mostra le voci dell&apos;anno, senza aggregati pluriennali (RULES.md
           regola 1).
         </p>
       </Sezione>
@@ -207,44 +246,6 @@ export default function CasiMortaliPage() {
       {/* 5. Esploratore */}
       <Sezione occhiello="La lettura caso per caso" titolo="Cerca nella dinamica">
         <InformoEsploratore />
-      </Sezione>
-
-      {/* 6. Metodologia e limiti */}
-      <Sezione occhiello="Metodologia e limiti" titolo="Da dove vengono questi dati">
-        <div style={{ display: "grid", gap: "var(--space-2)", fontSize: "0.88rem", lineHeight: 1.6 }}>
-          <p style={{ margin: 0 }}>
-            La pagina usa l&apos;archivio Infor.MO di INAIL, il database pubblico
-            che documenta i casi di infortunio mortale sottoposti a un&apos;analisi
-            secondo il modello Infor.MO (classe di appartenenza del rischio,
-            dinamica, fattori causali). I dati sono recuperati via API
-            (<code>filtra.do</code>, <code>dettaglio.do</code>,
-            <code>dettagliInfortunio.do</code>, <code>dettaglioFattore.do</code>)
-            senza autenticazione, dal 2020 al 2024. Gli endpoint sono parte del
-            vecchio portale &ldquo;InformoWeb&rdquo; di INAIL, non degli Open Data
-            ufficiali del percorso dati.inail.it.
-          </p>
-          <p style={{ margin: 0 }}>
-            <strong>Perimetro:</strong> l&apos;archivio analizza una parte dei casi
-            denunciati con esito mortale. Non è il censimento dei morti sul
-            lavoro: i totali ufficiali da denunce sono quelli della pagina
-            Infortuni. Qui la cosa utile è la classificazione dei perché, che
-            esiste solo per i casi analizzati.
-          </p>
-          <p style={{ margin: 0 }}>
-            <strong>Limiti dichiarati:</strong> la fonte non distingue (senza
-            filtri dedicati) occasion di lavoro e in itinere, quindi il canale
-            non è separabile in questa pagina. La classificazione è quella degli
-            analisti INAIL e riflette la ricostruzione a posteriori, non un
-            esito giudiziale né una attribuzione di colpa. I campi anagrafici
-            (età, mansione, azienda) sono assenti o parziali per una quota di
-            casi: la copertura per ciascuna vista è indicata dove serve.
-          </p>
-          <p style={{ margin: 0 }}>
-            <strong>Aggiornamento:</strong> i dati sono estratti e aggiornati
-            periodicamente con uno script ETL (<code>scripts/etl/estrai_informo_dettaglio.py</code>);
-            la data di generazione del dataset è riportata nel registro fonti.
-          </p>
-        </div>
       </Sezione>
     </div>
   );

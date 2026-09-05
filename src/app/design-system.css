@@ -264,11 +264,21 @@ h3 {
   max-width: 100%;
 }
 
+/* Contenuto delle card: mai più largo del contenitore, mai scroll orizzontale. */
+.card > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
 @media (max-width: 700px) {
   .card,
   .chart-scroll-wrapper,
   .ateco-chart-inner {
     max-width: 100%;
+  }
+
+  .card > * {
+    overflow-wrap: break-word;
   }
 
   .ateco-chart-scroll {

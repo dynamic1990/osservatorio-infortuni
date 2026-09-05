@@ -9,13 +9,15 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
 } from "recharts";
 import { getInformoAnalisi } from "@/lib/informo-casi";
 
 // Trend dei casi mortali analizzati per anno (2020-2024). Un punto per anno,
-// non un aggregato multi-anno (RULES.md regola 1). Apre il confronto con il
-// trend storico dopo il KPI d'apertura (ordine di lettura regola 2).
+// non un aggregato multi-anno (RULES.md regola 1). È la lettura storica
+// dell'archivio: ogni barra è un anno distinto. Niente delta anno su anno
+// perché il dato è un sottoinsieme (campione) analizzato dell'archivio, non
+// la panoramica totale degli eventi: la variazione misurerebbe la copertura
+// dell'archivio più che il fenomeno reale.
 export function InformoTrendWidget() {
   const data = useMemo(() => getInformoAnalisi(), []);
 
@@ -24,8 +26,6 @@ export function InformoTrendWidget() {
       anno: s.anno,
       casi: s.casiAnalizzati,
       copertura: s.copertura ?? 100,
-      delta: s.deltaCasi,
-      deltaPerc: s.deltaPerc,
     }));
   }, [data]);
 
@@ -55,9 +55,6 @@ export function InformoTrendWidget() {
               content={({ active, payload, label }) => {
                 if (!active || !payload || !payload.length) return null;
                 const p = payload[0].payload;
-                const delta = p.delta !== undefined && p.delta !== null
-                  ? `${p.delta > 0 ? "+" : ""}${p.delta} (${p.deltaPerc > 0 ? "+" : ""}${p.deltaPerc}%)`
-                  : "primo anno della serie";
                 return (
                   <div className="custom-chart-tooltip">
                     <div className="tooltip-title">Anno {label}</div>
@@ -66,11 +63,7 @@ export function InformoTrendWidget() {
                       <strong>{p.casi}</strong>
                     </div>
                     <div className="tooltip-row">
-                      <span>Δ vs anno precedente:</span>
-                      <strong>{delta}</strong>
-                    </div>
-                    <div className="tooltip-row">
-                      <span>Copertura dettaglio:</span>
+                      <span>Copertura del dettaglio:</span>
                       <strong>{p.copertura}%</strong>
                     </div>
                   </div>
@@ -84,17 +77,41 @@ export function InformoTrendWidget() {
               radius={[3, 3, 0, 0]}
               isAnimationActive={false}
             />
-            <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
+      {/* Legenda testuale sotto il grafico (non sovrapposta al plot) */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "var(--space-2)",
+          fontSize: "0.8rem",
+          color: "var(--color-text-soft)",
+          paddingTop: "var(--space-1)",
+        }}
+      >
+        <span
+          style={{
+            width: 12,
+            height: 12,
+            display: "inline-block",
+            background: "var(--color-accent)",
+            borderRadius: 2,
+            flexShrink: 0,
+          }}
+        />
+        Casi analizzati per anno (Infor.MO)
+      </div>
+
       <p className="source-note">
-        Ogni barra è un anno distinto: il confronto corretto è l&apos;anno in
-        oggetto contro quello precedente (delta in valore e percentuale nel
-        tooltip). Fonte: INAIL Infor.MO, casi con tipoEvento mortale con scheda
-        di dettaglio. La copertura è il rapporto tra casi analizzati e denunce
-        con esito mortale dell&apos;archivio nello stesso anno; dove è 100%
+        Ogni barra è un anno distinto dell&apos;archivio Infor.MO: la pagina non
+        presenta confronti anno su anno perché l&apos;archivio documenta una parte
+        dei casi denunciati, quindi una variazione tra anni rifletterebbe la
+        copertura dell&apos;archivio più che l&apos;andamento reale degli eventi. La
+        copertura del dettaglio è il rapporto tra casi analizzati e denunce con
+        esito mortale dell&apos;archivio nello stesso anno; dove è 100%
         l&apos;archivio documenta l&apos;intero periodo.
       </p>
     </div>

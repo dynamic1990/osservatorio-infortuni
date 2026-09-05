@@ -96,7 +96,7 @@ export function InformoVociLista({
         {dati.map((v, i) => {
           const larghezza = Math.max(2, (v.count / max) * 100);
           return (
-            <div key={v.nome} style={{ display: "grid", gap: 4 }}>
+            <div key={v.nome} style={{ display: "grid", gap: 4, minWidth: 0, maxWidth: "100%" }}>
               <div
                 style={{
                   display: "flex",
@@ -104,14 +104,17 @@ export function InformoVociLista({
                   alignItems: "baseline",
                   gap: "var(--space-2)",
                   fontSize: "0.82rem",
+                  flexWrap: "wrap",
                 }}
               >
                 <span
                   style={{
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
                     fontWeight: 500,
+                    minWidth: 0,
+                    flex: "1 1 60%",
+                    wordBreak: "break-word",
                   }}
                   title={v.nome}
                 >
@@ -122,8 +125,10 @@ export function InformoVociLista({
                   style={{
                     display: "flex",
                     gap: "var(--space-3)",
-                    whiteSpace: "nowrap",
                     alignItems: "baseline",
+                    flexShrink: 1,
+                    flexWrap: "wrap",
+                    maxWidth: "100%",
                   }}
                 >
                   <span style={{ fontWeight: 700 }}>{v.count}</span>

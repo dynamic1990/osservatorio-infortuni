@@ -228,9 +228,10 @@ export function InformoEsploratore() {
                   font: "inherit",
                   textAlign: "left",
                   color: "var(--color-text)",
+                  flexWrap: "wrap",
                 }}
               >
-                <span style={{ display: "grid", gap: 2 }}>
+                <span style={{ display: "grid", gap: 2, minWidth: 0, flex: "1 1 70%" }}>
                   <span style={{ fontWeight: 650, fontSize: "0.88rem" }}>
                     Caso {c.codice}
                     <span style={{ color: "var(--color-text-muted)", fontWeight: 500 }}>
