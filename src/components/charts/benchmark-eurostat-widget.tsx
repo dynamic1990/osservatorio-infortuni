@@ -13,6 +13,7 @@ import {
   Legend,
 } from "recharts";
 import benchmarkRaw from "@/data/generated/eurostat-benchmark.json";
+import { longDate } from "@/lib/format";
 
 interface BenchmarkPayload {
   schemaVersion: number;
@@ -154,6 +155,7 @@ export function BenchmarkEurostatWidget() {
         Tasso di incidenza standardizzato per 100.000 occupati, infortuni mortali, tutti i settori
         (NACE Rev. 2, Sezioni A, C-N), sesso totale. La standardizzazione elimina l&apos;effetto della
         diversa struttura demografica tra paesi. Ultimo anno consolidato disponibile: {dati.ultimoAnno}.
+        Dati estratti il {longDate(dati.generatedAt)}.
       </p>
     </div>
   );

@@ -14,6 +14,7 @@ import {
   Brush,
 } from "recharts";
 import serieDecennale from "@/data/generated/inail-serie-decennale.json";
+import { longDate } from "@/lib/format";
 
 interface SerieDecennalePayload {
   schemaVersion: number;
@@ -148,7 +149,7 @@ export function SerieDecennaleWidget() {
       </div>
 
       <p className="source-note">
-        Il periodo 2014-2019 deriva dalla serie storica ufficiale INAIL, che pubblica il dato
+        Dati estratti il {longDate(dati.generatedAt)}. Il periodo 2014-2019 deriva dalla serie storica ufficiale INAIL, che pubblica il dato
         complessivo delle denunce senza distinguere tra infortuni in occasione di lavoro e in
         itinere. Per questi anni la ripartizione tra le due modalità non è disponibile. Dal 2020
         la serie si basa sui microdati Open Data INAIL, che consentono la distinzione tra lavoro

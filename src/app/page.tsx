@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HeroCongiunturaleKpi } from "@/components/charts/hero-congiunturale-kpi";
 import { TrendDoppiaScalaWidget } from "@/components/charts/trend-doppia-scala-widget";
 import { RegioniIncidenzaSection } from "@/components/charts/regioni-incidenza-section";
+import { MacroAreaWidget } from "@/components/charts/macro-area-widget";
 import { AtecoSettoriWidget } from "@/components/charts/ateco-settori-widget";
 import { DemografiaAnnualeWidget } from "@/components/charts/demografia-annuale-widget";
 import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
@@ -126,7 +127,20 @@ export default function HomePage() {
         <RegioniIncidenzaSection />
       </section>
 
-      {/* 5. Comparti Produttivi ATECO: Incidenza e Gravità */}
+      {/* 5. Macro-aree: Tasso di Incidenza per ripartizione geografica */}
+      <section className="card" aria-label="Macro-aree geografiche">
+        <div className="card-header">
+          <h2 className="card-title">Macro-aree: il rischio per ripartizione geografica</h2>
+          <p className="card-desc">
+            Sintesi per le quattro ripartizioni ISTAT (Nord-Ovest, Nord-Est, Centro, Sud e Isole):
+            tasso di incidenza su 1.000 occupati con confronto anno su anno. Il delta è in rosso
+            quando l&apos;incidenza aumenta, in verde quando cala.
+          </p>
+        </div>
+        <MacroAreaWidget />
+      </section>
+
+      {/* 6. Comparti Produttivi ATECO: Incidenza e Gravità */}
       <section className="card" aria-label="Comparti Produttivi ATECO">
         <div className="card-header">
           <h2 className="card-title">Comparti Produttivi e Attività Economiche (Classificazione ATECO)</h2>
