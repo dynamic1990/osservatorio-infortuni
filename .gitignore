@@ -27,3 +27,9 @@ tsbuildinfo
 tsconfig.tsbuildinfo
 .vercel
 .env*
+
+# ETL cache / checkpoint (sempre rigenerabili)
+data/etl_cache/
+
+# Dettaglio casi Infor.MO (grande, rigenerabile con estrai_informo_dettaglio.py)
+src/data/generated/informo-mortali-dettaglio.json

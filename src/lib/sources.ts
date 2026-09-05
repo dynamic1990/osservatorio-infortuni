@@ -10,7 +10,8 @@ export type SourceId =
   | "eurostat-esaw"
   | "google-news-rss"
   | "istat-eurostat-occupati"
-  | "inl-rapporti-vigilanza";
+  | "inl-rapporti-vigilanza"
+  | "inail-infor-mo-mortali";
 
 export interface SourceInfo {
   id: SourceId;
@@ -26,6 +27,18 @@ export interface SourceInfo {
 }
 
 export const SOURCES: Record<SourceId, SourceInfo> = {
+  "inail-infor-mo-mortali": {
+    id: "inail-infor-mo-mortali",
+    owner: "INAIL – Istituto Nazionale Assicurazione contro gli Infortuni sul Lavoro",
+    area: "Infortuni sul lavoro",
+    landingUrl: "https://www.inail.it/nsol-informo/",
+    apiUrl: "https://www.inail.it/nsol-informo/filtra.do",
+    format: "JSON (REST) + pagine HTML di dettaglio",
+    coverage: "Casi mortali analizzati con il modello Informo; scheda per caso con dinamica, profilo, settore, fattori causali",
+    frequency: "Aggiornamento continuo",
+    status: "active",
+    notes: "Per evento (tipoEvento=1). L'archivio documenta una parte dei casi denunciati: non è l'anagrafe ufficiale delle denunce ed esclude i casi senza scheda di analisi. La fonte non distingue tra infortuni in occasione di lavoro e in itinere.",
+  },
   "inail-infortuni-mensile": {
     id: "inail-infortuni-mensile",
     owner: "INAIL – Istituto Nazionale Assicurazione contro gli Infortuni sul Lavoro",
