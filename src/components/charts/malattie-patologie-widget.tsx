@@ -65,7 +65,7 @@ export function MalattiePatologieWidget() {
           const deltaPos = delta >= 0;
           const larghezza = Math.max(6, Math.round((v / maxCasi) * 100));
           return (
-            <div key={c.key} style={{ background: "var(--color-surface)", borderRadius: "6px", border: "1px solid var(--color-divider)", overflow: "hidden" }}>
+            <div key={c.key} style={{ background: "var(--color-surface)", borderRadius: "var(--radius-md)", border: "1px solid var(--color-divider)", overflow: "hidden" }}>
               <button
                 type="button"
                 onClick={() => toggle(c.key)}
@@ -74,7 +74,7 @@ export function MalattiePatologieWidget() {
                 style={{ padding: "10px 12px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left", font: "inherit", color: "var(--color-text)" }}
               >
                 <span className="pat-num" style={{ minWidth: 22, fontSize: "0.72rem", fontWeight: 650, color: "var(--color-text-soft)", fontVariantNumeric: "tabular-nums" }}>{idx + 1}</span>
-                <span className="pat-codice" style={{ minWidth: 30, height: 30, display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: 6, background: colorFor(idx), color: "var(--color-raised)", fontWeight: 750, fontSize: "0.6rem", padding: "0 5px", flexShrink: 0 }}>{c.key.slice(0, 6)}</span>
+                <span className="pat-codice" style={{ minWidth: 30, height: 30, display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: "var(--radius-md)", background: colorFor(idx), color: "var(--color-raised)", fontWeight: 750, fontSize: "0.6rem", padding: "0 5px", flexShrink: 0 }}>{c.key.slice(0, 6)}</span>
                 <span className="pat-main">
                   <span className="pat-nome">{c.nome}</span>
                   <span className="pat-bar" style={{ display: "block", height: 4, borderRadius: 2, marginTop: 5, background: `linear-gradient(to right, ${colorFor(idx)} ${larghezza}%, rgba(0,0,0,0.07) ${larghezza}%)` }} />

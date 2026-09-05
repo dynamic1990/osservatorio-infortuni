@@ -65,7 +65,7 @@ export function StagionalitaWidget() {
             <button
               key={a}
               onClick={() => setAnnoSel(a)}
-              className={`btn-pill ${annoSel === a ? "btn-pill-accent active" : ""}`}
+              className={`btn-pill ${annoSel === a ? "active" : ""}`}
             >
               {a}
             </button>

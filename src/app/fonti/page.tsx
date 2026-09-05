@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function FontiPage() {
   const fonti = listSources();
   return (
-    <div style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-4)" }}>
+    <div className="container" style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-4)" }}>
       <header
         style={{
           background: "var(--color-raised)",

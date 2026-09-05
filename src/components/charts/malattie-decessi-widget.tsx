@@ -70,7 +70,7 @@ export function MalattieDecessiWidget() {
             ["silicosi", "Amianto"],
             ["genere", "Per genere"],
           ] as const).map(([v, label]) => (
-            <button key={v} onClick={() => setVista(v)} className={`btn-pill ${vista === v ? "btn-pill-accent active" : ""}`}>
+            <button key={v} onClick={() => setVista(v)} className={`btn-pill ${vista === v ? "active" : ""}`}>
               {label}
             </button>
           ))}

@@ -30,7 +30,7 @@ function Sezione({
       className="card"
       style={{ padding: "var(--space-5)", display: "grid", gap: "var(--space-4)", minWidth: 0, maxWidth: "100%" }}
     >
-      <div style={{ minWidth: 0 }}>
+      <div className="card-header" style={{ marginBottom: 0 }}>
         {occhiello && (
           <div
             style={{
@@ -45,7 +45,7 @@ function Sezione({
             {occhiello}
           </div>
         )}
-        <h2 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 750, letterSpacing: "-0.01em" }}>
+        <h2 className="card-title" style={{ margin: 0 }}>
           {titolo}
         </h2>
       </div>

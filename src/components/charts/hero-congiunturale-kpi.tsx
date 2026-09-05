@@ -130,7 +130,7 @@ export function HeroCongiunturaleKpi() {
           style={{
             background: "var(--color-surface)",
             padding: "var(--space-3)",
-            borderRadius: "6px",
+            borderRadius: "var(--radius-md)",
             border: "1px solid var(--color-divider)",
           }}
         >
@@ -159,7 +159,7 @@ export function HeroCongiunturaleKpi() {
           style={{
             background: "var(--color-surface)",
             padding: "var(--space-3)",
-            borderRadius: "6px",
+            borderRadius: "var(--radius-md)",
             border: "1px solid var(--color-divider)",
           }}
         >
@@ -191,7 +191,7 @@ export function HeroCongiunturaleKpi() {
           style={{
             background: "var(--color-surface)",
             padding: "var(--space-3)",
-            borderRadius: "6px",
+            borderRadius: "var(--radius-md)",
             border: "1px solid var(--color-divider)",
           }}
         >
@@ -224,7 +224,7 @@ export function HeroCongiunturaleKpi() {
           style={{
             background: "var(--color-surface)",
             padding: "var(--space-3)",
-            borderRadius: "6px",
+            borderRadius: "var(--radius-md)",
             border: "1px solid var(--color-divider)",
           }}
         >
@@ -247,7 +247,7 @@ export function HeroCongiunturaleKpi() {
           style={{
             background: "var(--color-surface)",
             padding: "var(--space-3)",
-            borderRadius: "6px",
+            borderRadius: "var(--radius-md)",
             border: "1px solid var(--color-divider)",
           }}
         >

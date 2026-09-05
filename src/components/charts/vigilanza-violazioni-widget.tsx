@@ -54,7 +54,8 @@ export function VigilanzaViolazioniWidget() {
             <button
               key={k}
               onClick={() => setVista(k)}
-              className={`btn-pill ${vista === k ? "btn-pill-accent active" : ""}`}
+              className={`btn-pill ${vista === k ? "active" : ""}`}
+              style={vista === k ? { background: VISTE[k].colore, borderColor: VISTE[k].colore, color: "var(--color-raised)" } : undefined}
             >
               {VISTE[k].label}
             </button>

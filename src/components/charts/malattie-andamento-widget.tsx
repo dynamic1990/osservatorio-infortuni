@@ -60,7 +60,7 @@ export function MalattieAndamentoWidget() {
             <button
               key={v}
               onClick={() => setVista(v)}
-              className={`btn-pill ${vista === v ? "btn-pill-accent active" : ""}`}
+              className={`btn-pill ${vista === v ? "active" : ""}`}
             >
               {v === "totale" ? "Totale" : v === "maschi" ? "Maschi" : "Femmine"}
             </button>

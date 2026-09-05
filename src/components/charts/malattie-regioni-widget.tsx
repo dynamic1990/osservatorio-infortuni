@@ -32,7 +32,7 @@ export function MalattieRegioniWidget() {
         <div style={{ fontSize: "0.88rem", fontWeight: 700 }}>Denunce per regione (sede INAIL di protocollazione)</div>
         <div style={{ display: "flex", gap: "var(--space-1)" }}>
           {([["periodo", "Totale periodo"], ["2025", "I sem 2025"], ["2026", "I sem 2026"]] as const).map(([v, label]) => (
-            <button key={v} onClick={() => setVista(v)} className={`btn-pill ${vista === v ? "btn-pill-accent active" : ""}`}>
+            <button key={v} onClick={() => setVista(v)} className={`btn-pill ${vista === v ? "active" : ""}`}>
               {label}
             </button>
           ))}

@@ -140,7 +140,7 @@ export function InfoModalVigilanza() {
               <span style={{ fontSize: "0.8rem", color: "var(--color-text-soft)" }}>
                 Piattaforma di pubblico interesse basata esclusivamente su fonti istituzionali verificabili.
               </span>
-              <button onClick={() => setIsOpen(false)} className="btn-pill btn-pill-accent active">
+              <button onClick={() => setIsOpen(false)} className="btn-pill active">
                 Chiudi
               </button>
             </div>

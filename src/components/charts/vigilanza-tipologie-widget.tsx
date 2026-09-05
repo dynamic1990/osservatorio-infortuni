@@ -63,7 +63,7 @@ export function VigilanzaTipologieWidget() {
             <button
               key={a}
               onClick={() => setAnno(a)}
-              className={`btn-pill ${anno === a ? "btn-pill-accent active" : ""}`}
+              className={`btn-pill ${anno === a ? "active" : ""}`}
             >
               {a}
             </button>

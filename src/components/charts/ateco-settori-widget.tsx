@@ -3,15 +3,25 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { compactNumber, exactNumber } from "@/lib/format";
+import { RISK_SCALE } from "@/lib/palette";
 import { FiltroModalita, ModalitaState } from "./filtro-modalita";
 
-// Scala di rischio per i box: dal rosso tenue al rosso scuro in base all'incidenza
-const RISK_START = [243, 204, 200];
-const RISK_END = [127, 29, 22];
+// Scala di rischio unica dell'app (RULES.md Regola 4): interpolazione continua
+// tra il primo e l'ultimo gradino di RISK_SCALE (palette.ts), niente colori locali.
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "");
+  return [
+    parseInt(h.slice(0, 2), 16),
+    parseInt(h.slice(2, 4), 16),
+    parseInt(h.slice(4, 6), 16),
+  ];
+}
 
 function riskColor(t: number) {
   const v = Math.max(0, Math.min(1, t));
-  const c = RISK_START.map((s, i) => Math.round(s + (RISK_END[i] - s) * v));
+  const start = hexToRgb(RISK_SCALE[0]);
+  const end = hexToRgb(RISK_SCALE[RISK_SCALE.length - 1]);
+  const c = start.map((s, i) => Math.round(s + (end[i] - s) * v));
   return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
 }
 
@@ -163,7 +173,7 @@ export function AtecoSettoriWidget() {
               key={item.key}
               style={{
                 background: "var(--color-surface)",
-                borderRadius: "6px",
+                borderRadius: "var(--radius-md)",
                 border: "1px solid var(--color-divider)",
                 borderLeft: `4px solid ${riskColor(t)}`,
                 overflow: "hidden",
@@ -197,7 +207,7 @@ export function AtecoSettoriWidget() {
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    borderRadius: 6,
+                    borderRadius: "var(--radius-md)",
                     background: riskColor(t),
                     color: "var(--color-raised)",
                     fontWeight: 750,

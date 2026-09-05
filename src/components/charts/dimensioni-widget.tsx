@@ -79,15 +79,7 @@ export function DimensioniWidget() {
             <button
               key={k}
               onClick={() => setDim(k)}
-              style={{
-                border: "1px solid var(--color-text)",
-                borderRadius: 2,
-                padding: "6px 12px",
-                fontSize: "0.85rem",
-                cursor: "pointer",
-                background: dim === k ? "var(--color-text)" : "var(--color-raised)",
-                color: dim === k ? "var(--color-raised)" : "var(--color-text)",
-              }}
+              className={`btn-pill ${dim === k ? "active" : ""}`}
             >
               {DIM_LABEL[k]}
             </button>

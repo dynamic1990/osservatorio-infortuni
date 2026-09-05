@@ -247,25 +247,25 @@ export function RegioniIncidenzaSection() {
           <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Visualizza per:</span>
           <button
             onClick={() => setMetrica("incidenza")}
-            className={`btn-pill ${metrica === "incidenza" ? "btn-pill-accent active" : ""}`}
+            className={`btn-pill ${metrica === "incidenza" ? "active" : ""}`}
           >
             Incidenza (infortuni / 1.000 occ.)
           </button>
           <button
             onClick={() => setMetrica("gravita")}
-            className={`btn-pill ${metrica === "gravita" ? "btn-pill-accent active" : ""}`}
+            className={`btn-pill ${metrica === "gravita" ? "active" : ""}`}
           >
             Indice Gravità (gg / 1.000 occ.)
           </button>
           <button
             onClick={() => setMetrica("mortaliInc")}
-            className={`btn-pill ${metrica === "mortaliInc" ? "btn-pill-accent active" : ""}`}
+            className={`btn-pill ${metrica === "mortaliInc" ? "active" : ""}`}
           >
             Tasso Mortali
           </button>
           <button
             onClick={() => setMetrica("totale")}
-            className={`btn-pill ${metrica === "totale" ? "btn-pill-accent active" : ""}`}
+            className={`btn-pill ${metrica === "totale" ? "active" : ""}`}
           >
             Volume Casi
           </button>
