@@ -82,21 +82,21 @@ export function InformoTrendWidget() {
                 );
               }}
             />
-            {/* parte senza scheda: sotto (colore neutro) */}
-            <Bar
-              dataKey="nonCoperti"
-              name="Morti senza analisi Infor.MO"
-              stackId="mortali"
-              fill="var(--color-surface)"
-              radius={[0, 0, 0, 0]}
-              isAnimationActive={false}
-            />
-            {/* casi analizzati: sopra (accento) */}
+            {/* casi analizzati: in basso (accento) — in Recharts la prima Bar dichiarata sta alla base della pila */}
             <Bar
               dataKey="casi"
               name="Casi analizzati Infor.MO"
               stackId="mortali"
               fill="var(--color-accent)"
+              radius={[0, 0, 0, 0]}
+              isAnimationActive={false}
+            />
+            {/* parte senza scheda: sopra (neutro) */}
+            <Bar
+              dataKey="nonCoperti"
+              name="Morti senza analisi Infor.MO"
+              stackId="mortali"
+              fill="var(--color-surface)"
               radius={[3, 3, 0, 0]}
               isAnimationActive={false}
             />
@@ -104,13 +104,15 @@ export function InformoTrendWidget() {
         </ResponsiveContainer>
       </div>
 
-      {/* Legenda testuale sotto il grafico (non sovrapposta al plot) */}
+      {/* Legenda testuale sotto il grafico: ogni voce è un item autonomo
+          (swatch + label in linea), il contenitore va a capo per item interi
+          senza spezzare swatch e testo su righe diverse */}
       <div
         style={{
           display: "flex",
           flexWrap: "wrap",
           alignItems: "center",
-          gap: "var(--space-2)",
+          gap: "var(--space-2) var(--space-4)",
           fontSize: "0.8rem",
           color: "var(--color-text-soft)",
           paddingTop: "var(--space-1)",
@@ -118,33 +120,50 @@ export function InformoTrendWidget() {
       >
         <span
           style={{
-            width: 12,
-            height: 12,
-            display: "inline-block",
-            background: "var(--color-accent)",
-            borderRadius: 2,
-            flexShrink: 0,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "var(--space-2)",
+            minWidth: 0,
           }}
-        />
-        Casi analizzati nell&apos;archivio Infor.MO
+        >
+          <span
+            style={{
+              width: 12,
+              height: 12,
+              display: "inline-block",
+              background: "var(--color-accent)",
+              borderRadius: 2,
+              flexShrink: 0,
+            }}
+          />
+          Casi analizzati nell&apos;archivio Infor.MO
+        </span>
         <span
           style={{
-            width: 12,
-            height: 12,
-            display: "inline-block",
-            background: "var(--color-surface)",
-            border: "1px solid var(--color-divider)",
-            borderRadius: 2,
-            flexShrink: 0,
-            marginLeft: "var(--space-3)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "var(--space-2)",
+            minWidth: 0,
           }}
-        />
-        Morti denunciati senza scheda di analisi
+        >
+          <span
+            style={{
+              width: 12,
+              height: 12,
+              display: "inline-block",
+              background: "var(--color-surface)",
+              border: "1px solid var(--color-divider)",
+              borderRadius: 2,
+              flexShrink: 0,
+            }}
+          />
+          Morti denunciati senza scheda di analisi
+        </span>
       </div>
 
       <p className="source-note">
         Ogni barra è un anno distinto: l&apos;altezza totale è il numero di infortuni
-        mortali denunciati da INAIL (serie da denunce), la parte rossa sono i
+        mortali denunciati da INAIL (serie da denunce), la parte rossa in basso sono i
         casi con scheda di dettaglio nell&apos;archivio Infor.MO e la parte chiara la
         differenza, cioè i decessi denunciati senza analisi Infor.MO. La pagina
         non presenta confronti anno su anno perché l&apos;archivio documenta una
