@@ -4,6 +4,7 @@ import "./design-system.css";
 import { SiteNav } from "@/components/ui/site-nav";
 import { Footer } from "@/components/ui/footer";
 import { BackToTop } from "@/components/ui/back-to-top";
+import { Analytics } from "@vercel/analytics/next";
 
 const SITO_URL = "https://damianosalvati.cloud";
 
@@ -87,6 +88,7 @@ export default function RootLayout({
                 "Piattaforma indipendente di monitoraggio statistico sugli infortuni sul lavoro in Italia: dati INAIL, Eurostat e ISTAT.",
               publishes: "Ing. Damiano Salvati",
               inLanguage: "it-IT",
+              url: SITO_URL,
             }),
           }}
         />
@@ -94,6 +96,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <BackToTop />
+        <Analytics />
       </body>
     </html>
   );

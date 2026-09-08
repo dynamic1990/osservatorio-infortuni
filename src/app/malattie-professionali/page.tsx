@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Malattie Professionali | Osservatorio Infortuni sul Lavoro",
   description:
     "Dashboard sulle malattie professionali in Italia: denunce INAIL a confronto tra i semestri 2025 e 2026, patologie ICD-10 più denunciate, distribuzione per regione e decessi per malattia professionale riconosciuta (2020-2024).",
+  alternates: { canonical: "/malattie-professionali" },
 };
 
 export default function MalattieProfessionaliPage() {

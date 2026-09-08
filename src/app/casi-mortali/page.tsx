@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: "Casi mortali | Analisi Infor.MO INAIL",
   description:
     "Analisi di dettaglio dei casi mortali sul lavoro dell'archivio Infor.MO INAIL 2020-2024: dinamica degli eventi, settori e territori a maggior rischio, profilo dei lavoratori e delle aziende coinvolti, con la copertura dell'archivio sul totale dei decessi denunciati.",
+  alternates: { canonical: "/casi-mortali" },
 };
 
 // Sezione con intestazione e contenuto, per uniformità con le altre pagine.

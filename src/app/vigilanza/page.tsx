@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Vigilanza sul Lavoro | Osservatorio Infortuni sul Lavoro",
   description:
     "Dashboard sull'attività di vigilanza in materia di lavoro e previdenziale: serie storica 2021-2025 dei controlli ispettivi INL, INPS e INAIL, tasso di irregolarità, lavoratori in nero, provvedimenti di sospensione art. 14 D.Lgs. 81/2008, violazioni in materia di salute e sicurezza e patente a crediti.",
+  alternates: { canonical: "/vigilanza" },
 };
 
 export default function VigilanzaPage() {

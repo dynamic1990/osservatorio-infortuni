@@ -123,12 +123,12 @@ export function SerieDecennaleWidget() {
             {modalita === "totale" ? (
               <>
                 <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="var(--color-accent)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Line yAxisId="right" type="monotone" dataKey="incidenza" name="Incidenza ‰ (asse des.)" stroke="var(--color-text)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-text)" }} isAnimationActive={false} />
+                <Line yAxisId="right" type="monotone" dataKey="incidenza" name="Incidenza ‰ (asse des.)" stroke="var(--color-link)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-link)" }} isAnimationActive={false} />
               </>
             ) : (
               <>
                 <Bar yAxisId="left" dataKey="mortali" name="Casi mortali (asse sin.)" fill="var(--color-accent)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Line yAxisId="right" type="monotone" dataKey="indiceMortali" name="Incidenza mortalità ‰ (asse des.)" stroke="var(--color-text)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-text)" }} isAnimationActive={false} />
+                <Line yAxisId="right" type="monotone" dataKey="indiceMortali" name="Incidenza mortalità ‰ (asse des.)" stroke="var(--color-link)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-link)" }} isAnimationActive={false} />
               </>
             )}
             <Brush

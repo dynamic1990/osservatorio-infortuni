@@ -4,6 +4,7 @@ import { listSources } from "@/lib/sources";
 export const metadata: Metadata = {
   title: "Fonti",
   description: "Registro delle fonti ufficiali integrate in Osservatorio Infortuni.",
+  alternates: { canonical: "/fonti" },
 };
 
 export default function FontiPage() {

@@ -9,7 +9,6 @@ export const INK = "#1a1a1a";
 export const LINK = "#057dbc";
 
 export const PALETTE = [
-  INK, // inchiostro
   LINK, // link blue
   ACCENT, // rosso semantico tenue
   "#1e7a4e", // verde success
@@ -26,7 +25,7 @@ export const PALETTE = [
 // condividono la stessa mappa colore -> canale (RULES.md Regola 4).
 export const MODAL_COLORS = {
   lavoro: ACCENT,
-  itinere: INK,
+  itinere: "#3d5a80",
 };
 
 // Scala di rischio unica per mappe e box di incidenza: dal chiaro (basso) allo scuro (alto).

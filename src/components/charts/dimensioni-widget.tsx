@@ -106,7 +106,7 @@ export function DimensioniWidget() {
                 isAnimationActive={false}
               />
             ))}
-            <Line type="monotone" dataKey="totale" name="Totale" stroke="var(--color-text)" dot={false} isAnimationActive={false} />
+            <Line type="monotone" dataKey="totale" name="Totale" stroke="var(--color-link)" dot={false} isAnimationActive={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>

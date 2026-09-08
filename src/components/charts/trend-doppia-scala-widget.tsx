@@ -133,9 +133,9 @@ export function TrendDoppiaScalaWidget() {
               type="monotone"
               dataKey="incidenza"
               name="Incidenza ‰ occ. (asse des.)"
-              stroke="var(--color-text)"
+              stroke="var(--color-link)"
               strokeWidth={3}
-              dot={{ r: 4, fill: "var(--color-text)" }}
+              dot={{ r: 4, fill: "var(--color-link)" }}
               isAnimationActive={false}
             />
           </ComposedChart>
