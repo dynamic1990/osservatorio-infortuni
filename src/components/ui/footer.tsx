@@ -35,7 +35,16 @@ export function Footer() {
             paddingTop: "var(--space-2)",
           }}
         >
-          Progetto a cura di Ing. Damiano Salvati · 2026
+          Progetto a cura di Ing. Damiano Salvati · 2026 ·{" "}
+          <a
+            href="https://github.com/dynamic1990/osservatorio-infortuni"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "var(--color-link)" }}
+          >
+            Codice sorgente su GitHub
+          </a>{" "}
+          · Codice AGPL-3.0, dati dalle fonti pubbliche citate (vedi Fonti)
         </p>
       </div>
     </footer>

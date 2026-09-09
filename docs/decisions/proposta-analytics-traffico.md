@@ -34,7 +34,7 @@ di misura va scelta subito in modo da non doverla cambiare dopo.
 partire a misurare subito. È la scelta coerente con l'infrastruttura attuale.
 
 **Plausible self-hosted come upgrade quando serve** (es. >50k visite/mese, bisogno di
-serie storiche oltre 30 giorni, export dati): gira sulla VPS (31.97.57.243) in Docker
+serie storiche oltre 30 giorni, export dati): gira su una VPS privata in Docker
 accanto a Open WebUI, con Caddy già configurato come reverse proxy. Costo: solo la VPS
 che già paghiamo.
 

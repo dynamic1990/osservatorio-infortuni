@@ -56,4 +56,12 @@ python3 scripts/etl/inail_infortuni_snapshot.py --regione Lazio --anno 2025 --me
 
 ## Licenza
 
-Codice sotto GNU Affero GPL v3 (in valutazione). I dati di terzi restano sotto le loro licenze.
+Codice sotto [GNU Affero General Public License v3.0](LICENSE). I dati di terzi (INAIL, Eurostat, ISTAT, INL) restano sotto le rispettive licenze pubbliche.
+
+## Contribuire
+
+Issue e pull request benvenute. Prima di intervenire leggere `docs/RULES.md` (regole su dati e interfaccia) e `docs/LEGAL_AND_ETHICS.md` (limiti e responsabilità).
+
+## Sito live
+
+https://www.osservatorioinfortuni.it
