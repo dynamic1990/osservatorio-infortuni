@@ -9,7 +9,6 @@ const VOCI = [
   { href: "/casi-mortali", label: "Casi mortali" },
   { href: "/malattie-professionali", label: "Malattie professionali" },
   { href: "/vigilanza", label: "Vigilanza" },
-  { href: "/profili-rischio", label: "Profili di rischio" },
   { href: "/calcolatore-costo-infortunio", label: "Costo infortunio" },
   { href: "/fonti", label: "Fonti" },
 ];
