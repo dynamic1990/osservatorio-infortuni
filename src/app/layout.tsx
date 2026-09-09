@@ -6,7 +6,7 @@ import { Footer } from "@/components/ui/footer";
 import { BackToTop } from "@/components/ui/back-to-top";
 import { Analytics } from "@vercel/analytics/next";
 
-const SITO_URL = "https://damianosalvati.cloud";
+const SITO_URL = "https://www.osservatorioinfortuni.it";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITO_URL),

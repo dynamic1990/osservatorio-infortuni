@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = "https://damianosalvati.cloud";
+const baseUrl = "https://www.osservatorioinfortuni.it";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = ["/", "/casi-mortali", "/malattie-professionali", "/vigilanza", "/calcolatore-costo-infortunio", "/fonti"];
