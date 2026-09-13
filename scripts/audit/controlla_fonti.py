@@ -9,6 +9,9 @@ from __future__ import annotations
 
 import re
 import sys
+import hashlib
+import json
+from pathlib import Path
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -16,6 +19,7 @@ from datetime import datetime, timezone
 
 TIMEOUT = 25
 USER_AGENT = "OsservatorioInfortuni-FonteAudit/1.0"
+STATE_FILE = Path.home() / ".cache" / "osservatorio-infortuni" / "source-audit-state.json"
 
 SOURCES = [
     ("INAIL infortuni mensili", "https://dati.inail.it/portale/it/dataset/infortuni-sul-lavoro/dati-con-cadenza-mensile.html", "https://dati.inail.it/api/OpenData/DatiConCadenzaMensileInfortuni"),
@@ -37,18 +41,19 @@ class Check:
     signals: str
 
 
-def fetch(url: str) -> Check:
+def fetch(url: str, *, inspect_body: bool = False) -> Check:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
-            body = response.read(256_000)
+            body = response.read(128_000) if inspect_body else b""
             content_type = response.headers.get("Content-Type", "?")
             last_modified = response.headers.get("Last-Modified", "n/d")
             status = getattr(response, "status", 200)
             text = body.decode("utf-8", errors="ignore")
             years = sorted(set(re.findall(r"\b20(?:2[0-9]|1[4-9])\b", text)))
             signals = f"anni rilevati: {', '.join(years[-8:]) or 'n/d'}; Last-Modified: {last_modified}"
-            return Check("", url, "OK" if status < 400 else "WARN", f"HTTP {status}, {content_type}, {len(body)} byte", signals)
+            digest = hashlib.sha256(body).hexdigest()[:16] if body else ""
+            return Check("", url, "OK" if status < 400 else "WARN", f"HTTP {status}, {content_type}, {len(body)} byte", signals + (f"; fingerprint: {digest}" if digest else ""))
     except urllib.error.HTTPError as exc:
         return Check("", url, "WARN", f"HTTP {exc.code} {exc.reason}", "")
     except Exception as exc:  # rete, DNS, timeout, TLS
@@ -57,25 +62,48 @@ def fetch(url: str) -> Check:
 
 def main() -> int:
     now = datetime.now(timezone.utc).astimezone()
-    print(f"AUDIT MENSILE FONTI OSSERVATORIO | {now:%Y-%m-%d %H:%M %Z}")
-    print("Controllo non distruttivo. Radar Google News escluso. Nessun dataset modificato.")
-    print()
+    print(f"AUDIT FONTI OSSERVATORIO | {now:%Y-%m-%d}")
+    print("Radar escluso. Controllo non distruttivo, nessuna integrazione automatica.")
     failures = warnings = 0
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        old_state = json.loads(STATE_FILE.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        old_state = {}
+    new_state: dict[str, dict[str, str]] = {}
+    changes: list[str] = []
     for label, landing, api in SOURCES:
-        print(f"## {label}")
         for kind, url in (("landing", landing), ("endpoint", api)):
-            result = fetch(url)
+            # Il corpo della landing page cambia spesso per motivi editoriali.
+            # Per rilevare nuovi dati confrontiamo solo gli endpoint dati.
+            result = fetch(url, inspect_body=(kind == "endpoint" and "informo" not in label.lower()))
             result.label = label
-            print(f"- {kind}: **{result.status}** | {result.detail}")
-            if result.signals:
-                print(f"  {result.signals}")
+            if kind == "endpoint" and "fingerprint:" in result.signals:
+                fingerprint = result.signals.rsplit("fingerprint: ", 1)[1]
+                new_state[url] = {"fingerprint": fingerprint, "signals": result.signals}
+                previous = old_state.get(url, {}).get("fingerprint")
+                if previous and previous != fingerprint:
+                    changes.append(f"{label}: contenuto dell'endpoint cambiato")
+                elif not previous:
+                    changes.append(f"{label}: baseline iniziale registrata")
+            if result.status != "OK":
+                changes.append(f"{label} ({kind}): {result.status}, {result.detail}")
             failures += result.status == "FAIL"
             warnings += result.status == "WARN"
-        print()
+    STATE_FILE.write_text(json.dumps(new_state, ensure_ascii=False, indent=2), encoding="utf-8")
     print("ESITO")
-    print(f"- fonti controllate: {len(SOURCES)}")
+    print(f"- fonti controllate: {len(SOURCES)}, endpoint dati: {len(new_state)}")
     print(f"- errori: {failures}")
     print(f"- avvisi: {warnings}")
+    print(f"- endpoint con contenuto cambiato: {len([x for x in changes if 'baseline' not in x])}")
+    if changes:
+        print("- segnalazioni:")
+        for change in changes:
+            # Una riga per fonte, senza riversare nel messaggio il contenuto
+            # degli endpoint o metadati tecnici non utili alla decisione.
+            print(f"  - {change}")
+    else:
+        print("- nessun cambiamento rilevato rispetto all'audit precedente")
     print("- decisione: nessuna integrazione automatica; valutazione con Damiano prima di modificare i dataset.")
     return 1 if failures else 0
 
