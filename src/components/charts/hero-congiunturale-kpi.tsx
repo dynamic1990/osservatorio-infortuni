@@ -12,11 +12,26 @@ import {
   Legend,
 } from "recharts";
 import { getCongiunturaleData } from "@/lib/multidimensionale";
+import metaRaw from "@/data/generated/inail-infortuni-serie.meta.json";
 import { compactNumber, exactNumber, percent } from "@/lib/format";
 import { MODAL_COLORS } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
 
 const MESI_NOMI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu"];
+
+// Data di estrazione della fonte (metadato ETL), formattata per la UI.
+function dataEstrazioneFonte(): string {
+  try {
+    const raw = (metaRaw as { extractedAt?: string }).extractedAt;
+    if (!raw) return "";
+    return new Date(raw).toLocaleDateString("it-IT", {
+      month: "long",
+      year: "numeric",
+    });
+  } catch {
+    return "";
+  }
+}
 
 // Giorni effettivi dei dati YTD disponibili, gestendo i bisestili.
 function giorniSemestre(anno: number): number {
@@ -111,6 +126,11 @@ export function HeroCongiunturaleKpi() {
           <div style={{ fontSize: "1.15rem", fontWeight: 700 }}>
             Dati da inizio anno (YTD), aggiornati a giugno 2026
           </div>
+          {dataEstrazioneFonte() && (
+            <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+              Fonte INAIL, estrazione di {dataEstrazioneFonte()}
+            </div>
+          )}
         </div>
 
         {/* Filtro multiselezione modalità */}

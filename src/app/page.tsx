@@ -107,9 +107,9 @@ export default function HomePage() {
         <div className="card-header">
           <h2 className="card-title">Radar degli infortuni sul lavoro</h2>
           <p className="card-desc">
-            Aggiornamento automatico quotidiano attraverso aggregazione RSS: le notizie più rilevanti
-            sugli infortuni sul lavoro nel nostro paese, con classificazione automatica della gravità.
-            Ogni voce rimanda alla fonte originale.
+            Rassegna quotidiana curata da un filtro automatico che seleziona le notizie più
+            rilevanti sugli infortuni sul lavoro. Ogni voce rimanda alla fonte originale: per i
+            dati statistici vedi le sezioni precedenti.
           </p>
         </div>
         <NewsInfortuniWidget />
