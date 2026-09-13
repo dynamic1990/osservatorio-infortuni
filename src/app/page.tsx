@@ -63,8 +63,7 @@ export default function HomePage() {
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
               Progetto a cura di{" "}
-              <strong style={{ color: "var(--color-text)" }}>Ing. Damiano Salvati</strong> &middot;
-              aggiornamento automatico giornaliero
+              <strong style={{ color: "var(--color-text)" }}>Ing. Damiano Salvati</strong>
             </div>
           </div>
           <InfoModalButton />
