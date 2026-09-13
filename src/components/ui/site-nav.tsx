@@ -11,6 +11,7 @@ const VOCI = [
   { href: "/vigilanza", label: "Vigilanza" },
   { href: "/calcolatore-costo-infortunio", label: "Costo infortunio" },
   { href: "/fonti", label: "Fonti" },
+  { href: "/progetto", label: "Il progetto" },
 ];
 
 export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {

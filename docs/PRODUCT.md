@@ -43,12 +43,15 @@ Per ogni aggregato rilevante conserviamo almeno:
 
 La UI deve rendere visibile la freschezza effettiva del dato.
 
-## Fase 1 (attuale)
+## Stato attuale
 
-Solo open data INAIL sugli infortuni (cadenza mensile). Analisi per: tempo, territorio, settore, persona, modalità, esito. Nessuna correlazione con la vigilanza finché non ci sarà una fonte strutturata.
+Il sito integra open data INAIL sugli infortuni, dati sulle malattie professionali, benchmark Eurostat, denominatori occupazionali ISTAT/Eurostat, rapporti INL e l'archivio Infor.MO per i casi mortali analizzati. Le pagine mantengono separati numeratori, denominatori e perimetri non comparabili.
 
-## Fase 2 (futura)
+Il Radar degli infortuni sul lavoro è una rassegna quotidiana distinta dalle statistiche ufficiali. Il controllo mensile delle fonti è un audit non distruttivo: rileva possibili aggiornamenti, ma non pubblica dati senza verifica.
 
-- Malattie professionali.
-- Dati di vigilanza INL (da PDF annuali, con caveat espliciti).
-- Tassi di incidenza con denominatori Istat (occupati per settore/territorio).
+## Sviluppi futuri
+
+- Migliorare il confronto delle versioni e dei periodi coperti dagli endpoint.
+- Integrare nuove annualità solo dopo controllo di definizioni e compatibilità.
+- Rendere più granulari i denominatori occupazionali dove la fonte lo consente.
+- Documentare eventuali nuovi indicatori di vigilanza con caveat espliciti.

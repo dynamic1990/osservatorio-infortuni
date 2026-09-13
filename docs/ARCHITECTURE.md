@@ -50,6 +50,12 @@ Mai record singoli negli artefatti pubblicati.
 
 Il sito (Next.js App Router) legge **solo gli snapshot**, mai le API live. Ogni pagina passa dal contract di validazione (`src/lib/data/*-contract.ts`, zod) e mostra la freschezza del dato.
 
+## 6. Source audit layer
+
+Il registro delle fonti in `src/lib/sources.ts` è affiancato da `scripts/audit/controlla_fonti.py`. Il controllo mensile del 15 esclude intenzionalmente il Radar Google News, verifica le fonti ufficiali e confronta una fingerprint degli endpoint dati con la baseline precedente.
+
+L'audit è un allarme operativo, non un importatore automatico. Se rileva una variazione, la decisione di aggiornare i dataset resta manuale. Questo evita di pubblicare senza revisione una nuova annualità con definizioni, copertura o struttura incompatibili.
+
 ## Perché snapshot e non query live
 
 - Riproducibilità: chi apre una pagina vede esattamente i dati verificati in quel momento.
