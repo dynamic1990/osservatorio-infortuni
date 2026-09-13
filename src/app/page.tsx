@@ -102,14 +102,14 @@ export default function HomePage() {
         <TrendDoppiaScalaWidget />
       </section>
 
-      {/* 2bis. Radar automatico delle segnalazioni sul lavoro (aggiornamento 06:00) */}
+      {/* 2bis. Radar automatico quotidiano delle segnalazioni sul lavoro */}
       <section className="card" aria-label="Notizie sugli Infortuni sul Lavoro">
         <div className="card-header">
           <h2 className="card-title">Radar degli infortuni sul lavoro</h2>
           <p className="card-desc">
-            Aggiornamento automatico giornaliero alle <strong>06:00</strong> attraverso aggregazione RSS:
-            le notizie più rilevanti sugli infortuni sul lavoro nel nostro paese, con classificazione
-            automatica della gravità. Ogni voce rimanda alla fonte originale.
+            Aggiornamento automatico quotidiano attraverso aggregazione RSS: le notizie più rilevanti
+            sugli infortuni sul lavoro nel nostro paese, con classificazione automatica della gravità.
+            Ogni voce rimanda alla fonte originale.
           </p>
         </div>
         <NewsInfortuniWidget />

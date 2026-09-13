@@ -17,7 +17,8 @@
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "test:etl": "python3 -m unittest discover -s tests/etl -p 'test_*.py'",
     "etl:infortuni": "python3 scripts/etl/inail_infortuni_snapshot.py",
-    "test:snapshots": "python3 scripts/ci/validate-generated-artifacts.py"
+    "test:snapshots": "python3 scripts/ci/validate-generated-artifacts.py",
+    "audit:sources": "python3 scripts/audit/controlla_fonti.py"
   },
   "dependencies": {
     "@svg-maps/italy": "^2.0.0",

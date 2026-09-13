@@ -119,7 +119,7 @@ export const SOURCES: Record<SourceId, SourceInfo> = {
     apiUrl: "https://news.google.com/rss/search",
     format: "XML (RSS)",
     coverage: "Ultimi 7 giorni, query su infortuni sul lavoro in Italia",
-    frequency: "Giornaliero (06:00)",
+    frequency: "Quotidiano",
     status: "active",
     notes: "Classificazione automatica per parole chiave; ogni voce rimanda alla fonte originale. Non sostituisce i dati ufficiali INAIL.",
   },
