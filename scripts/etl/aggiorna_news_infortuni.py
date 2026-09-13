@@ -5,7 +5,8 @@ Aggrega le ultime notizie da Google News RSS (query: infortunio mortale/grave
 sul lavoro) e produce src/data/generated/news-infortuni.json per la dashboard.
 
 Caratteristiche:
-- mantiene solo notizie classificate gravi o mortali (escluse le generiche);
+- assegna a ogni articolo un WORK_ACCIDENT_SCORE da 0 a 100;
+- mantiene solo notizie classificate gravi o mortali e sufficientemente pertinenti;
 - esclude gli infortuni in itinere (tragitto casa-lavoro e simili);
 - estrae dal titolo la provincia e la regione dell'evento (best-effort);
 - ogni voce mantiene link, fonte e data per rimandare all'originale.
@@ -38,6 +39,7 @@ QUERIES = [
 
 MAX_ITEMS = 60
 MAX_KEEP = 25  # notizie conservate nel file
+MIN_WORK_ACCIDENT_SCORE = 45
 
 # ---------------------------------------------------------------------------
 # Riferimenti geografici (provincia -> regione)
@@ -161,6 +163,83 @@ def classify(titolo: str) -> str:
     if any(k in t for k in ("grav", "prognosi riservata", "rianimazion", "eliambulanza", "intubat", "amputazion")):
         return "grave"
     return "altro"
+
+
+# Il punteggio è un filtro prudenziale, non una classificazione ufficiale.
+# Il titolo RSS è spesso l'unico testo disponibile, quindi i segnali negativi
+# devono prevalere sui termini generici come "grave" o "infortunio".
+WORK_TERMS = {
+    "operaio", "operaia", "operai", "lavoratore", "lavoratrice", "lavoratori",
+    "cantiere", "azienda", "impresa", "ditta", "datore", "dipendente",
+    "muratore", "carpentiere", "edile", "capannone", "fabbrica", "officina",
+    "stabilimento", "ponteggio", "impalcatura", "macchinario", "muletto",
+    "gru", "escavatore", "trattore", "tetto", "lavorando", "lavorava",
+    "lavoro", "sul lavoro", "in azienda", "durante il turno",
+}
+EVENT_TERMS = {
+    "caduto", "caduta", "cadde", "precipitato", "precipita", "crollo", "crollato",
+    "travolto", "travolta", "travolge", "schiacciato", "schiacciata", "folgorato",
+    "ribaltato", "amputazione", "incidente", "investito", "esplosione", "morto",
+    "morta", "morti", "muore", "deceduto", "deceduta", "ferito", "ferita",
+}
+SPORT_TERMS = {
+    "basket", "calcio", "tennis", "pallavolo", "rugby", "sport", "atleta",
+    "giocatore", "giocatrice", "partita", "stagione", "olimpico", "olimpiadi",
+    "sciatore", "ciclista", "pilota", "motogp", "formula 1", "pugile",
+    "kartodromo", "pista", "gara", "campionato", "allenamento",
+}
+ROAD_NONWORK_TERMS = {
+    "incidente stradale", "scontro stradale", "schianto stradale", "auto", "automobile",
+    "motocicletta", "moto", "scooter", "pedone", "statale", "autostrada",
+}
+NON_PROFESSIONAL_TERMS = {
+    "casa", "domestico", "domestica", "tempo libero", "vacanza", "escursione",
+    "spiaggia", "piscina", "scivolo", "parco giochi",
+}
+
+
+def _contains(text: str, terms: set[str]) -> set[str]:
+    return {term for term in terms if term in text}
+
+
+def work_accident_score(titolo: str, fonte: str = "") -> tuple[int, list[str]]:
+    """Calcola un punteggio spiegabile di pertinenza al lavoro, 0-100."""
+    text = f"{titolo} {fonte}".lower()
+    score = 0
+    reasons: list[str] = []
+    work = _contains(text, WORK_TERMS)
+    events = _contains(text, EVENT_TERMS)
+    sports = _contains(text, SPORT_TERMS)
+    road = _contains(text, ROAD_NONWORK_TERMS)
+    non_professional = _contains(text, NON_PROFESSIONAL_TERMS)
+
+    if work:
+        score += min(42, 14 * len(work))
+        reasons.append("contesto lavorativo")
+    if events:
+        score += min(25, 10 * len(events))
+        reasons.append("evento/infortunio")
+    if any(term in text for term in ("mort", "decedut", "muore", "perde la vita", "uccis")):
+        score += 18
+        reasons.append("esito mortale")
+    elif any(term in text for term in ("grav", "ospedale", "prognosi", "rianimazione", "ambulanza")):
+        score += 10
+        reasons.append("conseguenza grave")
+    if any(prov.lower() in text for prov, _ in PROVINCE) or any(reg.lower() in text for reg in REGIONI_NOMI):
+        score += 5
+        reasons.append("localizzazione geografica")
+
+    if sports:
+        score -= 75
+        reasons.append("esclusione sport")
+    if road and not work:
+        score -= 35
+        reasons.append("incidente stradale non lavorativo")
+    if non_professional and not work:
+        score -= 35
+        reasons.append("evento non professionale")
+
+    return max(0, min(100, score)), reasons
 
 
 def is_itinere(titolo: str) -> bool:
@@ -439,23 +518,28 @@ def main() -> int:
         prov, reg = estrai_luogo(n["titolo"])
         n["provincia"] = prov
         n["regione"] = reg
+        score, reasons = work_accident_score(n["titolo"], n["fonte"])
+        n["workAccidentScore"] = score
+        n["scoreReasons"] = reasons
+        if score < MIN_WORK_ACCIDENT_SCORE:
+            continue
         filtrate.append(n)
 
     filtrate = dedupe_eventi(filtrate)
     filtrate.sort(key=news_datetime, reverse=True)
 
     payload = {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "datasetId": "news_infortuni",
         "generatedAt": utc_now(),
-        "fonte": "Google News RSS (query: infortuni sul lavoro Italia)",
+        "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
         "periodo": "ultimi 7 giorni",
         "notizie": filtrate[:MAX_KEEP],
     }
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[ok] {len(payload['notizie'])} notizie gravi/mortali -> {OUT}")
     for n in payload["notizie"][:8]:
-        print(f"  [{n['categoria']}] {n['titolo']} | {n.get('provincia')} ({n.get('regione')}) | {n['fonte']}")
+        print(f"  [{n['categoria']}] score={n['workAccidentScore']} {n['titolo']} | {n.get('provincia')} ({n.get('regione')}) | {n['fonte']}")
     return 0
 
 

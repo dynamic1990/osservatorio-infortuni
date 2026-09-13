@@ -1,54 +1,25 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "datasetId": "news_infortuni",
-  "generatedAt": "2026-09-13T06:30:12+00:00",
-  "fonte": "Google News RSS (query: infortuni sul lavoro Italia)",
+  "generatedAt": "2026-09-13T08:43:50+00:00",
+  "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
   "periodo": "ultimi 7 giorni",
   "notizie": [
     {
-      "titolo": "Cancar, grave infortunio al ginocchio: stagione a rischio",
-      "fonte": "Modena Noi",
-      "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1RYTBZYXp2QXRnZEtSNUFGUkNqQk1JVXNhRWd3ZGViWmFHc1NKRktoeU5UN2tRdzdWbDk5Tjd4UWlsT3NNX2tjVHZYdkIyRFgwei01QWxad3NjSFBlTHh1YkduUHBZa1dVeXBzcU1DWmgza3luTnZubGxkU1dzZw?oc=5",
-      "data": "Sat, 12 Sep 2026 19:15:54 GMT",
-      "categoria": "grave",
-      "provincia": null,
-      "regione": null
-    },
-    {
-      "titolo": "Infortunio a Botteghino di Zocca, grave un operaio di 44 anni",
-      "fonte": "èTV Rete 7",
-      "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPa19MUDlXSVEzb1hVYmVZNjFpUDNuLVVCSUlhS2hhRmNZdjRXWkdUNXJqOXAwUlBBNEoyODdJeUQ2cU5VeEZadXV6WkM4V083TnJEVm94dE05T1NYSzd1aU1zUWtMMGt0OE9nYTZUZlNYMXB3elE1YkU2dUdKU3llYWl3WExWdUROMUVTYnlyRVllRUMxWEZhaF9nVlJqbkN2?oc=5",
-      "data": "Sat, 12 Sep 2026 14:09:19 GMT",
-      "categoria": "grave",
-      "provincia": null,
-      "regione": null
-    },
-    {
-      "titolo": "Incidente mortale sulla Futa",
-      "fonte": "FirenzeToday",
-      "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOb2tYcEJ1U1YwakZKSHZ5Y2hFV3R3S3VNRWdIeFlNak9kSmdQVjlJcDNGWGF4aVZsLTFpRlBlY3o5b0R3WXlLbnVZWjJXR1F3bHlUOWxNUnU4TVUxeUtnTTE4M3Mtb3MzZmIzQ3phcENyVVJCalhkX2RzQlFmalRaaHdDOHRxbEhzN3QtUWx2dWU4MHNmSlk0VjNIRDhFamFOU0E?oc=5",
-      "data": "Sat, 12 Sep 2026 13:56:21 GMT",
-      "categoria": "mortale",
-      "provincia": null,
-      "regione": null
-    },
-    {
-      "titolo": "L'incidente mortale al kartodromo di Punta Bianca, al Duomo di Messina l'ultimo saluto ad Egidio",
-      "fonte": "AgrigentoNotizie",
-      "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQQ1R4dVlUUGR0QXhvWGNhV0cwY2ZwVkhRcGQyN3gyTllJU04tNHlmMkVGSGE1dHFIdGs4akh5SlpvSXh6cUVaV2dVNUNqZ0NzMFcyY1RveFJBTlJmRmpOVXFqQkZGRkxuWUloZ3dzZEdoaTR5SlA0VFpqRDRnX2VxSUlVU3g5QllpVzU2TW5LcmVsYlBIOS1PQV9EbzZKVFFRc2dOVVFjaTFZS1pwcEc3aEQ2ZXJBSjJ0cHZlZ0NHYw?oc=5",
-      "data": "Sat, 12 Sep 2026 11:12:23 GMT",
-      "categoria": "mortale",
-      "provincia": "Messina",
-      "regione": "Sicilia"
-    },
-    {
       "titolo": "Morti sul lavoro, Sicilia in \"zona rossa\" nei primi sette mesi del 2026: over 65 e lavoratori stranieri i più vulnerabili",
-      "fonte": "ilsicilia.it",
+      "fonte": "ilSicilia.it",
       "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQbUY5Q3c0YjBKV25sbUZaaVg3N21RNjZJTlFQS1lfUENzQ0tINENfSVB5MDcwZGt2ekxMWkpOTzJYaThPZkljSWs3UlZZZjRGbjd2VDdfRVJ6Y09mcXAyTld5akJtQkpGekJtb05pMkltTW9kdEUzNkNuRG8yM05haXpUV2hkbHJ6ZHE4RjhGc3JiS2JLLTg5MHUzVk1zdWR0UVh2TjUzRktvNWFNSFNkVUFYSFkyOEZwUjA1RVdvd3JsQzVuam5iYkFpdmFFdVFwRlpzZ2d3?oc=5",
       "data": "Sat, 12 Sep 2026 06:47:05 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": "Sicilia"
+      "regione": "Sicilia",
+      "workAccidentScore": 75,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "A Barletta cinque indagati per la morte di Vincenzo Dibenedetto, operaio 34enne precipitato nel vuoto mentre lavorava",
@@ -57,7 +28,14 @@
       "data": "Sat, 12 Sep 2026 05:34:00 GMT",
       "categoria": "mortale",
       "provincia": "Barletta",
-      "regione": "Puglia"
+      "regione": "Puglia",
+      "workAccidentScore": 85,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Operai morti nel cantiere a Moltrasio mentre cercavano di scaldarsi | il datore di lavoro condannato a pagare una multa",
@@ -66,34 +44,29 @@
       "data": "Sat, 12 Sep 2026 00:17:18 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 70,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ]
     },
     {
-      "titolo": "Non c'è tregua per Vlatko Cancar: grave infortunio per l'ex Olimpia",
-      "fonte": "Pianeta Basket",
-      "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPYWs2QXpSTTZYdU16MzZLQlJ2NFVvdVk3UkdwbzQwbXpXbFgzZkJmOUQ2SHlxU1M1V21TMlpOLVNfMmpacG9CQXpiLTlJZFZ2ZHE4dlBZdlFpSjVmWVM4YXg1Z29wVmpTVDNVVndCazhrRWtxcF91Z0kxbkQ3cVo4ZkRHMTY0b2VnN01wUTk4Mm12NlZzYjBLdFNGR2c2VjdLUFNZ?oc=5",
-      "data": "Fri, 11 Sep 2026 19:19:36 GMT",
+      "titolo": "Precipita dal tetto da un’altezza di cinque metri mentre lavora, grave un operaio a Isola della Scala",
+      "fonte": "Verona Oggi",
+      "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPWDZteHBHRUdfY3Jva29oYUpwMFE3ODBReEtGLUpqMVg5VW5vLW90OElMenhLZl84dEVRbFdsZHd5ay14bjVuMDBHUUhJenhzUlVWbXN0a3ZQcVNLYzVtdldlWlZYOHNFVzVWbVNFb1ROWTVpRElGTGJ2Z1hkcTA3S0RqMTBpSWVPUkhYMzR1TUl5Y3d0YmhtQkhkblVLUFFIUk9jbVktdWtoM3h3ZFFuZ1A0YjF5OFVZaC1ueDZRLW4?oc=5",
+      "data": "Fri, 11 Sep 2026 13:58:03 GMT",
       "categoria": "grave",
       "provincia": null,
-      "regione": null
-    },
-    {
-      "titolo": "Cade dal tetto mentre lavora, grave 56enne a Isola della Scala",
-      "fonte": "L'Arena",
-      "link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQZG14SnFScV9Xa3ZzUnRPMEpLVGpWb0FndkQ4QUZPa2d3MTl0RXZWMGc2bDZkQWl3TjVVY3ZBSEM5aHI0ZFk3Y3NsUk1LWGdKLVdmeWRoVFBuQ0N4YzlXcTZtNmhaZDVBS0hyQk5ScW9rdXFOM1dEU1ZacTA0Nzg3bjRjYURWZktnRkQ3TnR2Y3FQV3RWRzAxV1Y2bXVaRk9VMUxEbzRqeW5hU0pLaTJlY3lWVUFqNjgxanFXQ3M1Rzh2cHJVQk5JTkhB0gHPAUFVX3lxTE92aGhVOEhMOHRmOFc0VERvYmFHNkZkYmp0U01QTEpTcm01UFBUX08tb0NzTzgzcGtxVnVaOTBCMXE0RHZhOWFRb1JZZnl4dlZZc0ktLUpUVFJSQTFBWGZydGRIQjR3alN1TUZJdG9BcVhSM0JCSzNxdGxPMkJWcFBBYXV5NXhrdDVyYXhPc1lqSEZVWnZiYWlrWjJLRW85Mk5mcnAzWms4S2JFQVJvSVF2dVd5MWc0M0VBSzhLYVZFRHZqaXRNdHJSZTNFMGp4aw?oc=5",
-      "data": "Fri, 11 Sep 2026 14:26:57 GMT",
-      "categoria": "grave",
-      "provincia": null,
-      "regione": null
-    },
-    {
-      "titolo": "Villafontana, 63enne muore sul lavoro: trasportato a casa prima dell’arrivo dei soccorsi",
-      "fonte": "RaiNews",
-      "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPeXhQVjZ2WWRhTEZ6Z1IyWHU3T3NqbFhKaXpWQjh0NGRLNWxhQWxCU2FVOXNudV9SN0NHM1pDRkRTLThDbzV2elI1SHRRTThRZTdLeUdMaVJlMms1Z1dHTXpOazZUR0hBbmgtd0dEZ3djXzRMWE1aRkpseTAzTm92MXJnZFhONU4wMzhDMDFiZGVIT0J4Mi1UQThINlBtSXhTN0tPMHdfREtEblFCT2Y5SEEwRldGaDJ5cUkyWUdFZDNQRGpaN2pQTHp6RlBkVW0zX3ZnWElaaEpLQkNZUEFWWWZVVUxCd9IB6wFBVV95cUxPbUpINWdOMDlKbkJYX1QxT1lUOEw1ZFZfYUF3VGlNdlh2MW4wQTFaZDg3cEY0NmNDNmN1OWFnYTdSOXJzamYyMF9TSHJQUkFrNlRlNGw5aV9ISkFrX2dEMk1aUHdTSkJWSUptYlZPemxDY09jWWoxVzRuM2l6YzhMN1NKLWQ2LUNJV2taMFpQLVNMWkZWR3FCN2d5T1hoSkZBR3FqRlV6RjJXbGtQaTlrR0NwTFhqSmRsMm9qSVA5aHVjdUVjNzdEZDdLOG4zdnNFcVAwcERaME5YdUplYXhWMzQwa1dEcWU2YWdV?oc=5",
-      "data": "Fri, 11 Sep 2026 14:26:44 GMT",
-      "categoria": "mortale",
-      "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 67,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "conseguenza grave",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Travolto dal muletto nel cantiere accanto alla De Longhi, sotto la lente il mezzo che ha ucciso il 65enne Livio Baldin",
@@ -102,7 +75,13 @@
       "data": "Fri, 11 Sep 2026 13:49:29 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 56,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ]
     },
     {
       "titolo": "Prato unica provincia toscana senza morti sul lavoro nei primi sette mesi del 2026",
@@ -111,7 +90,14 @@
       "data": "Fri, 11 Sep 2026 13:12:57 GMT",
       "categoria": "mortale",
       "provincia": "Prato",
-      "regione": "Toscana"
+      "regione": "Toscana",
+      "workAccidentScore": 61,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Morti sul lavoro, in Veneto 66 vittime nei primi sette mesi del 2026",
@@ -120,7 +106,14 @@
       "data": "Fri, 11 Sep 2026 10:32:00 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": "Veneto"
+      "regione": "Veneto",
+      "workAccidentScore": 61,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Morte dell'operaio Attilio Franzini sui binari: tre pattegiamenti e una condanna a 8 mesi. La Cgil: «Importante aver accertato la responsabilità di Rfi»",
@@ -129,7 +122,13 @@
       "data": "Fri, 11 Sep 2026 09:41:14 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 51,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "34enne morto sul lavoro, Flai e Cgil BAT: «Abbiamo sperato, invece ennesima tragedia»",
@@ -138,7 +137,14 @@
       "data": "Fri, 11 Sep 2026 08:06:09 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 61,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Treviso, operaio di 60 anni muore schiacciato sotto un muletto",
@@ -147,16 +153,29 @@
       "data": "Fri, 11 Sep 2026 08:04:00 GMT",
       "categoria": "mortale",
       "provincia": "Treviso",
-      "regione": "Veneto"
+      "regione": "Veneto",
+      "workAccidentScore": 85,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Operaio morto sul lavoro: Cgil e Flai chiedono più controlli preventivi",
-      "fonte": "buonasera24.it",
+      "fonte": "Buonasera24",
       "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOMXpERkdXWThEQkx0cWdjZGd5b0YzbXN1V1ZucUVaeFQtbmcxWnpVRTgtZXlFcmJZUzIxV1ZJbTZqYm8wbUZzMWl1MHlPbU9naXdTamxudHo0eDZZZmp3M0FUdEJYdzMtMURobm9PRzdWb3gwVGlPeWRoZzREV3A0UmdobENMbEJFY0xKUmJDOUd5MlpTTy11NndKZUE0SUhSZVpacDV0S2ljN2ROSWs5dGN3Znhlc0RGRlV4ZEU5TQ?oc=5",
       "data": "Fri, 11 Sep 2026 06:37:55 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 70,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ]
     },
     {
       "titolo": "Veneto. Infortunio mortale sul lavoro a Treviso, Paglini: «Non possiamo rassegnarci a un’altra vittima» - CISL",
@@ -165,43 +184,29 @@
       "data": "Fri, 11 Sep 2026 06:31:16 GMT",
       "categoria": "mortale",
       "provincia": "Treviso",
-      "regione": "Veneto"
-    },
-    {
-      "titolo": "Cade da nove metri mentre lavora, muore dopo quattro mesi di agonia. Addio a Daniel Muntean",
-      "fonte": "FrosinoneToday",
-      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxORDU5ZG5DVXNINF95dWdiVk5WS0lIcXZfQ0U0amtDMzJ1Q1JQaGVGUWtqUk5KWko4R01SWmx3X0s2OWtuOFNWemJKOVZEQWdFZDNBdFdxYVhKWi1CdXJ4LWZVMkt3TFNBTnVPZ2Q5Y0ctSkM3eEFyQWpLOVJIdnVrQ0VHbF9JUHVNakR0em5yNElVNWptUEt6Wg?oc=5",
-      "data": "Fri, 11 Sep 2026 05:50:57 GMT",
-      "categoria": "mortale",
-      "provincia": null,
-      "regione": null
-    },
-    {
-      "titolo": "Muore nel campo, ma il corpo viene spostato: un indagato per omicidio colposo",
-      "fonte": "L'Arena",
-      "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOWTJyMzdBX083X1ozM1FhZFNBbjMwcndwMF9vQU43U0xxTlhMSFpSU2d2QXBSdDJ3dVFJNndCSGJVSndwNy1UQkxHdEVxOXBlU3UtMl9lX0N4OWROQ3NudnZiVkVUNDdpd2QtWGVYRGg0dlR4TWJnR3FBdHRLQm1STE1BTThDZC1yTkJKZ1ZiNUpyQTVDTzkxaXBacWhObFFCV25rbC1veWJadGhiNm5oQ2xOSGpyUkpPdmQzVEtlVUh0alh6UG1Z0gHMAUFVX3lxTE5EYmxMM0dDNEIzOFc4cU8yZUNZckdVWk9rOFhMOWVDRVRpWEFvLWdVRFVjNTRLMW9qaDRCS1ZENmJyV2o0LWpFZm9wbmI4ZEdZUE9NMVlYemxLOGp5bUZtUm1NSG51dy1ON2M0X1JNdzhXb3A0WHBZeUhKZC1fY2tKMDVDSUd0alJaeFV0UVNxcFNNcl9YeHpDc1dsckFwcWw2ak5Qb3VxMmkwUlliNExDR2ppTjA1eG1aeW55Z3ZfT0RxOGtxdUpvaDNEdw?oc=5",
-      "data": "Fri, 11 Sep 2026 03:05:44 GMT",
-      "categoria": "mortale",
-      "provincia": null,
-      "regione": null
+      "regione": "Veneto",
+      "workAccidentScore": 75,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Incidente col trattore al lavoro, perde la vita",
       "fonte": "Qdpnews",
-      "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQbjBrenhrYW5OOUc2NXg2Wm54ZDVrYkMybWJ1clhTS1BXMUJJbll2eERMUWtyNWhEQXdwc1AzMm5ZcnozQnhpWmJZTEFkT2Z0V3phUW1IQjZtU3hSVk1KMHVCOXREWnJQUkVHcFgtcWstWU9hM3NqeFZOdEtvM0paY1VVdWx1X2tpT0E?oc=5",
-      "data": "Thu, 10 Sep 2026 21:36:06 GMT",
+      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNYTZuTE1tSlg5NXZXbmNqLWlfbDFtR2k0WC1EYjdVXzh2YWk4c3RvVzVEOElDa1VHNzFJTnVJU0w0ak9rV1FqUWdPZWNfSmllUFhqR3BqV2FvdGdwM2xOME1Vay1Sbm0yaXQ5c1U1aXVJaG8wYk1FeHlNSk1zZ19sUU9sSGxGTU9QQ0R5UWR0TTJxdVFValltYUdRbzBJbm9jcG9BVQ?oc=5",
+      "data": "Thu, 10 Sep 2026 13:45:37 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": null
-    },
-    {
-      "titolo": "Salute e sicurezza Agricoltura, sempre meno infortuni e morti in campo, ma aumentano lungo il tragitto",
-      "fonte": "lavoroitalianoagroalimentare.it",
-      "link": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPZnBaNEtKcHBiaFF6VzBGRUNoeTAzaHhZalZzVUpCUTdERS1LZ3pzdDdnUTZHOTV4eTh5ZU1zTlY1Vnk0eUdRMnJXY1pVbWZnTXB4UkU0Zl94MC1YMnlPSXdVVHRKT2phSVRaSERsYW9GY25VazFWajNqdVBIRHJpNG5KdGtZVzBwb0FaTUxqVnNQb1hFRmJyMDJxdGZSZV85UHBkQTJYZnY1UVpzUnJXY1UxRGdnd1VqUE5FYXdXaWJNRThRSHJXLW80cUwtUjNLMUhTMFlGeGVvZw?oc=5",
-      "data": "Thu, 10 Sep 2026 17:56:43 GMT",
-      "categoria": "mortale",
-      "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 56,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ]
     },
     {
       "titolo": "Due incidenti mortali sul lavoro in provincia di Ragusa",
@@ -210,7 +215,14 @@
       "data": "Thu, 10 Sep 2026 12:28:04 GMT",
       "categoria": "mortale",
       "provincia": "Ragusa",
-      "regione": "Sicilia"
+      "regione": "Sicilia",
+      "workAccidentScore": 61,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Incidente mortale sul lavoro: 3 patteggiamenti e una condanna a 8 mesi",
@@ -219,7 +231,14 @@
       "data": "Thu, 10 Sep 2026 12:08:35 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": null
+      "regione": null,
+      "workAccidentScore": 71,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     },
     {
       "titolo": "Morti sul lavoro, Puglia in zona rossa: quinta in Italia per incidenza",
@@ -228,7 +247,153 @@
       "data": "Thu, 10 Sep 2026 08:55:26 GMT",
       "categoria": "mortale",
       "provincia": null,
-      "regione": "Puglia"
+      "regione": "Puglia",
+      "workAccidentScore": 61,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
+    },
+    {
+      "titolo": "Morti bianche, in 7 mesi 31 vittime del lavoro",
+      "fonte": "toscanamedianews.it",
+      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOQXE0eEtDMWdvRVUyS2xtaTA5Y3FBcXBWUEJ5dzJ4VHVvNFF1V1ktTGs2d0tuRmJzRF9rcHN4MFVSSDBpazVSdVVWX0lhaGVpUWJsUXJkeGJseHROTmRfMVJ3aW1OUjRFVzVVWURpN2FTRUl2Ujd3OUdCa2lDV1kzYU5EV3VkalhG0gGOAUFVX3lxTE1CYU5hTjMzaVFpdnhFVlBvcGtWMnlXcDhVVWZESXBzQXhrYldIM05wMHpOQkhZcU96Z2tNOVgwYmZWMlNrZG9GdkdaR1AtSVV0ZXV4eDVCSFB3RFdTVnpEWUtDa1lkTWluT3VvcUJ6d0VBOE94RHh6R0ZHZEJldk9qTEZOMlVUZkJ3N3lucnc?oc=5",
+      "data": "Thu, 10 Sep 2026 08:50:00 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": null,
+      "workAccidentScore": 47,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
+    },
+    {
+      "titolo": "Morte dell'operaio Franzini sui binari: tre patteggiamenti e una condanna a 8 mesi",
+      "fonte": "BolognaToday",
+      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPSFN2b2NnNGVDakdDZ3kwSHVNUHRVUGZET3RNb2FibEkxaUdQQzlKVTg3SEZkaHlDNmJzNXdzZXVGWXI4Y1JUVDhQelpIT1MzMWxhYjNqakpNMThXbWMteXJtWTE2WnRKODVxdmY0ZTFaTVZCOElMRkNydmVqb3A5R3hXS29ZMW1ldjNubFNrdFlNSGJwT1pYbA?oc=5",
+      "data": "Thu, 10 Sep 2026 08:39:24 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": null,
+      "workAccidentScore": 51,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
+    },
+    {
+      "titolo": "VENETO: aumentano i morti sul lavoro",
+      "fonte": "L'Azione",
+      "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOYmFqQTU4bGRhTmNTN1dSZ042dHp5NU5iWGVkVjd4YkJaMFBGQWhjNWZZcm1TYk1JaURtN2JhWTc4NEVXR3d2UWd1eXJjdXA1b0EyTWhOU2R0ZlBjMTlqcWtPQmtTMEFLWmRKTXVKdVc2cWd4X2NsNGNvdjhBSldsRTBNWFZQbU9vd3pXdG1iVEVvNzA?oc=5",
+      "data": "Thu, 10 Sep 2026 07:30:00 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": "Veneto",
+      "workAccidentScore": 61,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
+    },
+    {
+      "titolo": "Operaio morto sul lavoro. Amministratori sotto accusa: \"Norme di sicurezza violate\"",
+      "fonte": "Il Giorno",
+      "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNa3NRZlNEV0dlcnBkdFdNQVp5cGlVSG1iY29qWS03QWZJNmZmSUlhWUJzZUNDRGRSMU04M0FzekVyVnZJNmMtTUNkMEcxXzZHeG1RT3ZhTUVwWEdaZ2lUMG9UQTdLNTlVSmhqRFE4aURsNUlDU1p5eU5CaEVNXzB0c2NhY0VCZm1ZcmpiNkZ3?oc=5",
+      "data": "Thu, 10 Sep 2026 03:27:45 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": null,
+      "workAccidentScore": 70,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ]
+    },
+    {
+      "titolo": "Infortuni sul lavoro in aumento nei primi sette mesi del 2026, calano le denunce mortali",
+      "fonte": "Assinews.it",
+      "link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOdTdCcEg3TkxZX3ktTUdzYlBEY09RX0tQcG5WdHlvZVVtOVNpUGVOT2pQZzJkUjBSckdJT3RMbEF2b1c3LWhlMXVQZVo5bUFpbkJQdkhtODBPTW1GdDhxTXFCaHN1blBGdVIzSTBTUFdBVjRYbkFGQWl3MExqaXBTbjJvU2FWZFFkVkJPU25kUXJrZDZhRDRPRV8wbm12eGdjOEZpRUU4dUlsUDlXSldEQ3pnX3BWNC1keWFZbkZFN29TYzdJdThRREpR?oc=5",
+      "data": "Thu, 10 Sep 2026 02:32:35 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": null,
+      "workAccidentScore": 56,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ]
+    },
+    {
+      "titolo": "Esplosione alla centrale idroelettrica: due operai morti in Ticino",
+      "fonte": "QuiComo",
+      "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNN3hoZVNpa19rTmREQnVwazMtWnVrMjN4b0NSS0xVNlBmNzNiOUJlTnUxZW5BNEdqRnU4NFFYcl9sVWhIYzktbzQ2dWU1TG1UZnQ3NlZ6ei1lYWVGZkFVQzFSREkyWm1pYXFUbFhEYllLQmZXMVE2aFM2MW9yV1FKZEpmc2M?oc=5",
+      "data": "Wed, 09 Sep 2026 14:16:51 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": null,
+      "workAccidentScore": 57,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
+    },
+    {
+      "titolo": "Morti entrambi gli operai di Aet coinvolti nell’esplosione in centrale",
+      "fonte": "laRegione",
+      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQMmlHS3NqNUJLMVJvSXJjaHNGcGRxRUowZkpkOG9KY3Yzajl3UzhjRkVSdFBVY29fbXJFS1dORVlGYlQyWnJVbzZjdmVYdTdwRmRpLVM3Wm5fZFpaTkJSaXA3SEd6dngyNFBxNzgtSVA5ZlUwemJpU0JVZlhHUkZnUWUxMl80RmZZRlRCeWxUaG9KQ1AzSUNnMUdBTkk?oc=5",
+      "data": "Wed, 09 Sep 2026 14:11:00 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": null,
+      "workAccidentScore": 52,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ]
+    },
+    {
+      "titolo": "Fuscaldo, operaio precipita da un tetto durante lavori sulla rete telefonica: è grave",
+      "fonte": "Telemia",
+      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQQ2NtRXM0WnZnOXc3Y3lHd05aODZodVJ3LTlOR3JSSXg3WTZabjFGcVhjZS1iTTI0dkNuMVFZSnZMQ2dfX0ZkbC1faGN5OFRZcjBRcTFfNEt5MXZtY2oyVWFZVVpwVllEYVczQzRWZ3l3dk84R2FucWxjSVZnaGg4a1gwX1RKakhPc1pIR0Q0VmswWGtuT3hYMjk5YkFmUkNMa21VZjNnVHExZVk?oc=5",
+      "data": "Wed, 09 Sep 2026 07:00:00 GMT",
+      "categoria": "grave",
+      "provincia": null,
+      "regione": null,
+      "workAccidentScore": 62,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "conseguenza grave"
+      ]
+    },
+    {
+      "titolo": "Tragedia a Lamezia Terme, la Uil Calabria: “Zero morti sul lavoro non è un’utopia, è un dovere”",
+      "fonte": "Telemia",
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPcUVBS1hlR2NVY2hRcnI5ejhuTHZMRWxUeFplOGpoV1liQVJaS1hiOTVFV3dia2R2cWJFZXJtZTRDQmdpZks1QXhScURfak9fS2syX0k5U1F6ZnhpTm5BcG4yMHdCanc2MVVHY1c1YVNCb2JCbzdrUXIxUFpwWGgxOGlNQmdHOE1Nek9DN2ZtbE92WmdRLXFRVm5RZnQ0M3BZT2N4V0J2VERENTVjUF9RZXNZWQ?oc=5",
+      "data": "Wed, 09 Sep 2026 07:00:00 GMT",
+      "categoria": "mortale",
+      "provincia": null,
+      "regione": "Calabria",
+      "workAccidentScore": 61,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ]
     }
   ]
 }

@@ -11,6 +11,8 @@ interface Notizia {
   categoria: string;
   provincia?: string | null;
   regione?: string | null;
+  workAccidentScore: number;
+  scoreReasons?: string[];
 }
 
 interface NewsPayload {
@@ -40,12 +42,14 @@ export function NewsInfortuniWidget() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
   const notizie = useMemo(() => {
     return (dati.notizie || [])
-      .filter((n) => n.categoria === "mortale" || n.categoria === "grave")
+      .filter((n) => (n.workAccidentScore ?? 0) >= 40)
       .sort((a, b) => {
+        const scoreDelta = (b.workAccidentScore ?? 0) - (a.workAccidentScore ?? 0);
+        if (scoreDelta !== 0) return scoreDelta;
         const ta = new Date(a.data).getTime() || 0;
         const tb = new Date(b.data).getTime() || 0;
-        return tb - ta; // più recenti per prime
-      });
+        return tb - ta;
+      })
   }, [dati]);
 
   const [slide, setSlide] = useState(0);
@@ -72,7 +76,7 @@ export function NewsInfortuniWidget() {
         }}
       >
         <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)" }}>
-          <strong>{notizie.length}</strong> episodi gravi o mortali negli ultimi 7 giorni
+          <strong>{notizie.length}</strong> segnalazioni pertinenti sul lavoro negli ultimi 7 giorni
           <span style={{ color: "var(--color-text-muted)" }}>
             {" · Aggiornato: "}
             {formatData(dati.generatedAt)}
@@ -159,7 +163,7 @@ export function NewsInfortuniWidget() {
                       {" · "}
                     </>
                   ) : null}
-                  {n.fonte} · {formatData(n.data)}
+                  {n.fonte} · {formatData(n.data)} · score {n.workAccidentScore}/100
                 </span>
               </span>
               <span style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>↗</span>
@@ -168,15 +172,16 @@ export function NewsInfortuniWidget() {
         })}
         {visibili.length === 0 && (
           <div style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-            Nessun episodio grave o mortale rilevato negli ultimi 7 giorni.
+            Nessuna segnalazione pertinente rilevata negli ultimi 7 giorni.
           </div>
         )}
       </div>
 
       <p className="source-note">
-        Aggregazione automatica da Google News RSS (query su infortuni sul lavoro in Italia,
-        ultimi 7 giorni). Ogni voce rimanda all&apos;articolo originale; la provincia e la regione
-        indicate sono estratte dal titolo, quando disponibili. I dati ufficiali restano quelli INAIL.
+        Radar automatico da Google News RSS, con <strong>WORK_ACCIDENT_SCORE</strong> da 0 a 100.
+        Il punteggio combina contesto lavorativo, evento, esito, luogo e penalità per sport,
+        incidenti stradali non lavorativi ed eventi non professionali. Ogni voce rimanda
+        all&apos;articolo originale; i dati ufficiali restano quelli INAIL.
       </p>
     </div>
   );

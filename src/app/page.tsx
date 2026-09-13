@@ -17,7 +17,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Osservatorio Infortuni sul Lavoro | Dati e Indicatori Statistici INAIL",
   description:
-    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: cronaca quotidiana degli infortuni mortali e gravi, serie storica decennale 2014-2024, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
+    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: radar quotidiano delle segnalazioni pertinenti, serie storica decennale 2014-2024, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
 };
 
 export default function HomePage() {
@@ -102,10 +102,10 @@ export default function HomePage() {
         <TrendDoppiaScalaWidget />
       </section>
 
-      {/* 2bis. Notizie e Cronaca: infortuni mortali e gravi (aggiornamento 06:00) */}
+      {/* 2bis. Radar automatico delle segnalazioni sul lavoro (aggiornamento 06:00) */}
       <section className="card" aria-label="Notizie sugli Infortuni sul Lavoro">
         <div className="card-header">
-          <h2 className="card-title">Cronaca: infortuni mortali e gravi in Italia</h2>
+          <h2 className="card-title">Radar degli infortuni sul lavoro</h2>
           <p className="card-desc">
             Aggiornamento automatico giornaliero alle <strong>06:00</strong> attraverso aggregazione RSS:
             le notizie più rilevanti sugli infortuni sul lavoro nel nostro paese, con classificazione
