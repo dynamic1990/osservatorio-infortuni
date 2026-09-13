@@ -44,11 +44,11 @@ export function NewsInfortuniWidget() {
     return (dati.notizie || [])
       .filter((n) => (n.workAccidentScore ?? 0) >= 40)
       .sort((a, b) => {
-        const scoreDelta = (b.workAccidentScore ?? 0) - (a.workAccidentScore ?? 0);
-        if (scoreDelta !== 0) return scoreDelta;
         const ta = new Date(a.data).getTime() || 0;
         const tb = new Date(b.data).getTime() || 0;
-        return tb - ta;
+        const dateDelta = tb - ta;
+        if (dateDelta !== 0) return dateDelta;
+        return (b.workAccidentScore ?? 0) - (a.workAccidentScore ?? 0);
       })
   }, [dati]);
 
@@ -163,7 +163,7 @@ export function NewsInfortuniWidget() {
                       {" · "}
                     </>
                   ) : null}
-                  {n.fonte} · {formatData(n.data)} · score {n.workAccidentScore}/100
+                  {n.fonte} · {formatData(n.data)}
                 </span>
               </span>
               <span style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>↗</span>
@@ -178,10 +178,10 @@ export function NewsInfortuniWidget() {
       </div>
 
       <p className="source-note">
-        Radar automatico da Google News RSS, con <strong>WORK_ACCIDENT_SCORE</strong> da 0 a 100.
-        Il punteggio combina contesto lavorativo, evento, esito, luogo e penalità per sport,
-        incidenti stradali non lavorativi ed eventi non professionali. Ogni voce rimanda
-        all&apos;articolo originale; i dati ufficiali restano quelli INAIL.
+        Radar automatico da Google News RSS. Un punteggio interno di rilevanza combina
+        contesto lavorativo, evento, esito, luogo e penalità per sport, incidenti stradali
+        non lavorativi ed eventi non professionali. Ogni voce rimanda all&apos;articolo originale;
+        i dati ufficiali restano quelli INAIL.
       </p>
     </div>
   );

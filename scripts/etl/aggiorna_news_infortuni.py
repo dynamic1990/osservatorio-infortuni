@@ -177,10 +177,19 @@ WORK_TERMS = {
     "lavoro", "sul lavoro", "in azienda", "durante il turno",
 }
 EVENT_TERMS = {
-    "caduto", "caduta", "cadde", "precipitato", "precipita", "crollo", "crollato",
-    "travolto", "travolta", "travolge", "schiacciato", "schiacciata", "folgorato",
-    "ribaltato", "amputazione", "incidente", "investito", "esplosione", "morto",
-    "morta", "morti", "muore", "deceduto", "deceduta", "ferito", "ferita",
+    # Non è una tassonomia chiusa: questi segnali aumentano la fiducia, ma
+    # l'assenza di uno di essi non esclude l'articolo. Le dinamiche reali
+    # possono essere molto più numerose e il titolo RSS può usare sinonimi.
+    "caduto", "caduta", "cadde", "scivolato", "scivolata", "precipitato", "precipita",
+    "crollo", "crollato", "crollata", "cedimento", "sprofondato", "travolto", "travolta",
+    "travolge", "investito", "investita", "schiacciato", "schiacciata", "schiacciamento",
+    "folgorato", "folgorata", "elettrocuzione", "ustionato", "ustionata", "bruciato",
+    "esplosione", "incendio", "fumo", "intossicato", "intossicata", "avvelenato",
+    "annegato", "annegata", "soffocato", "asfissiato", "sepolto", "sepolta", "sommerso",
+    "ribaltato", "ribaltata", "amputazione", "ferito", "ferita", "ferito grave",
+    "malore", "colto da malore", "perde i sensi", "ustione", "lesione", "trauma",
+    "incidente", "sinistro", "scontro", "urto", "morto", "morta", "morti", "muore",
+    "deceduto", "deceduta", "decesso", "perde la vita", "ucciso", "uccisa",
 }
 SPORT_TERMS = {
     "basket", "calcio", "tennis", "pallavolo", "rugby", "sport", "atleta",
