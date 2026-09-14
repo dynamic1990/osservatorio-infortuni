@@ -17,20 +17,6 @@ export function Footer() {
         </div>
         <p
           style={{
-            maxWidth: 640,
-            fontSize: "0.9rem",
-            lineHeight: 1.6,
-            color: "var(--color-text-muted)",
-            margin: 0,
-          }}
-        >
-          Piattaforma indipendente di analisi statistica sugli infortuni sul lavoro in Italia. I dati
-          provengono da fonti pubbliche (INAIL, Eurostat ESAW, ISTAT) e sono elaborati a scopo
-          informativo e divulgativo: il presente osservatorio non è affiliato agli enti citati e non
-          sostituisce le pubblicazioni ufficiali.
-        </p>
-        <p
-          style={{
             fontSize: "0.9rem",
             lineHeight: 1.6,
             color: "var(--color-text-muted)",
