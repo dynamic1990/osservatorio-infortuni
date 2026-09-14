@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 const baseUrl = "https://www.osservatorioinfortuni.it";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["/", "/casi-mortali", "/malattie-professionali", "/vigilanza", "/calcolatore-costo-infortunio", "/fonti", "/progetto"];
+  const routes = ["/", "/casi-mortali", "/malattie-professionali", "/vigilanza", "/calcolatore-costo-infortunio", "/fonti", "/stato-fonti", "/progetto"];
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
     changeFrequency: route === "/" ? "daily" : "weekly",

@@ -115,6 +115,8 @@ export default function FontiPage() {
             <a href={fonte.landingUrl} target="_blank" rel="noreferrer">Pagina del dataset ↗</a>
             {" · "}
             <a href={fonte.apiUrl} target="_blank" rel="noreferrer">Endpoint API ↗</a>
+            {" · "}
+            <a href="/stato-fonti">Stato e freschezza</a>
           </div>
         </section>
       ))}
