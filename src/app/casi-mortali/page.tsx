@@ -10,7 +10,7 @@ import { getInformoAnalisi, INFORM_COLORS } from "@/lib/informo-casi";
 export const revalidate = 86_400;
 
 export const metadata: Metadata = {
-  title: "Casi mortali | Analisi Infor.MO INAIL",
+  title: "Analisi delle cause | Infor.MO INAIL",
   description:
     "Analisi di dettaglio dei casi mortali sul lavoro dell'archivio Infor.MO INAIL 2020-2024: dinamica degli eventi, settori e territori a maggior rischio, profilo dei lavoratori e delle aziende coinvolti, con la copertura dell'archivio sul totale dei decessi denunciati.",
   alternates: { canonical: "/casi-mortali" },
@@ -84,14 +84,14 @@ export default function CasiMortaliPage() {
                   letterSpacing: "0.05em",
                 }}
               >
-                Analisi casi mortali
+                Analisi delle cause
               </span>
               <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
                 Archivio Infor.MO &middot; INAIL &middot; 2020-2024
               </span>
             </div>
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
-              Casi mortali: la lettura dei perché
+              Analisi delle cause degli infortuni mortali
             </h1>
             <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
               Ogni caso mortale documentato nell&apos;archivio Infor.MO di INAIL
