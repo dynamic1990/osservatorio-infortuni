@@ -13,6 +13,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
+    "lint:ui": "eslint src/app/fonti/page.tsx src/components/ui/site-nav.tsx --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "test:etl": "python3 -m unittest discover -s tests/etl -p 'test_*.py'",

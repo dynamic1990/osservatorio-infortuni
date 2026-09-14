@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { listSources } from "@/lib/sources";
+import artifactRegistry from "../../../scripts/ci/generated-artifacts.json";
 
 export const metadata: Metadata = {
   title: "Fonti",
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
 
 export default function FontiPage() {
   const fonti = listSources();
+  const attive = fonti.filter((fonte) => fonte.status === "active").length;
+  const pianificate = fonti.filter((fonte) => fonte.status === "planned").length;
   return (
     <div className="container" style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-4)" }}>
       <header
@@ -46,6 +49,31 @@ export default function FontiPage() {
         </p>
       </header>
 
+      <section className="grid-kpi" aria-label="Stato del registro">
+        <div className="card" style={{ borderTop: "3px solid var(--color-success)" }}>
+          <div className="metric-label">Fonti attive</div>
+          <div className="metric-value">{attive}</div>
+          <div className="metric-sub">con integrazione nel sito</div>
+        </div>
+        <div className="card" style={{ borderTop: "3px solid var(--color-warning)" }}>
+          <div className="metric-label">In pianificazione</div>
+          <div className="metric-value">{pianificate}</div>
+          <div className="metric-sub">non ancora pubblicate</div>
+        </div>
+        <div className="card" style={{ borderTop: "3px solid var(--color-link)" }}>
+          <div className="metric-label">Artifact verificati</div>
+          <div className="metric-value">{artifactRegistry.artifacts.length}</div>
+          <div className="metric-sub">snapshot controllati con SHA-256</div>
+        </div>
+      </section>
+
+      <aside className="card" style={{ background: "var(--color-surface)", borderLeft: "3px solid var(--color-accent)" }}>
+        <strong>Come leggere questo registro</strong>
+        <p style={{ margin: "var(--space-1) 0 0", color: "var(--color-text-soft)", fontSize: "0.88rem", lineHeight: 1.55 }}>
+          Una fonte attiva non significa che il dato sia aggiornato in tempo reale. Le pagine pubblicano snapshot verificati; data di riferimento, data di estrazione e limiti restano distinti. I controlli automatici bloccano la pubblicazione se gli artifact cambiano in modo inatteso.
+        </p>
+      </aside>
+
       {fonti.map((fonte) => (
         <section className="card" key={fonte.id}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "var(--space-4)", flexWrap: "wrap" }}>
@@ -53,6 +81,20 @@ export default function FontiPage() {
               <h2 style={{ margin: 0, fontSize: "1.05rem" }}>{fonte.area}</h2>
               <div style={{ color: "var(--color-text-soft)", fontSize: "0.85rem" }}>{fonte.owner}</div>
             </div>
+            <span style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              border: "1px solid var(--color-divider)",
+              padding: "4px 8px",
+              fontSize: "0.72rem",
+              fontWeight: 700,
+              color: fonte.status === "active" ? "var(--color-success)" : "var(--color-warning)",
+              background: "var(--color-raised)",
+            }}>
+              <span aria-hidden="true">●</span>
+              {fonte.status === "active" ? "INTEGRATA" : "IN PIANIFICAZIONE"}
+            </span>
           </div>
           <dl style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-3)", margin: "var(--space-4) 0 0" }}>
             <div>

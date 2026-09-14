@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "src" / "data" / "generated"
+REGISTRY_PATH = ROOT / "scripts" / "ci" / "generated-artifacts.json"
 
 REQUIRED_META = {"schemaVersion", "datasetId", "source", "extractedAt", "period", "coverage", "limits", "methodology"}
 REQUIRED_VISTE = {"schemaVersion", "datasetId", "period", "coverage", "serieAnnuale", "serieAnnualeRegioni", "serieMensile", "settori", "regioni", "generi", "fasceEta", "modalita", "gestioni", "gruppiTariffari"}
@@ -21,6 +22,23 @@ def check(condition: bool, message: str) -> None:
 
 
 def main() -> int:
+    check(REGISTRY_PATH.exists(), f"manca {REGISTRY_PATH.relative_to(ROOT)}")
+    registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    check(registry.get("schemaVersion") == 1, "schemaVersion registry artifact != 1")
+    artifacts = registry.get("artifacts")
+    check(isinstance(artifacts, list) and artifacts, "registry artifact vuoto o invalido")
+    seen_paths: set[str] = set()
+    for artifact in artifacts:
+        path_text = artifact.get("path")
+        check(isinstance(path_text, str), "artifact senza path")
+        check(path_text not in seen_paths, f"path duplicato nel registry: {path_text}")
+        seen_paths.add(path_text)
+        path = ROOT / path_text
+        check(path.is_file(), f"artifact mancante: {path_text}")
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        check(digest == artifact.get("sha256"), f"hash divergente: {path_text}")
+        check(path.stat().st_size == artifact.get("bytes"), f"dimensione divergente: {path_text}")
+
     meta_path = DATA_DIR / "inail-infortuni-serie.meta.json"
     viste_path = DATA_DIR / "inail-infortuni-viste.json"
 
@@ -46,6 +64,7 @@ def main() -> int:
 
     print(f"OK: {viste_path.name} ({len(viste['serieAnnuale'])} anni, {viste['coverage']['regioni']} regioni)")
     print(f"OK: {meta_path.name} (estrazione {meta['extractedAt']})")
+    print(f"OK: generated-artifacts.json ({len(artifacts)} artifact verificati con SHA-256)")
     return 0
 
 

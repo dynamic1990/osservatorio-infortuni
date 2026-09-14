@@ -3,15 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { GitHubIcon } from "./social-icons";
 
 const VOCI = [
-  { href: "/", label: "Infortuni" },
-  { href: "/casi-mortali", label: "Casi mortali" },
-  { href: "/malattie-professionali", label: "Malattie professionali" },
-  { href: "/vigilanza", label: "Vigilanza" },
-  { href: "/calcolatore-costo-infortunio", label: "Costo infortunio" },
-  { href: "/fonti", label: "Fonti" },
-  { href: "/progetto", label: "Il progetto" },
+  { href: "/", label: "Quadro generale", icon: "⌂", group: "Esplora" },
+  { href: "/casi-mortali", label: "Casi mortali", icon: "†", group: "Esplora" },
+  { href: "/malattie-professionali", label: "Malattie professionali", icon: "＋", group: "Esplora" },
+  { href: "/vigilanza", label: "Vigilanza", icon: "◎", group: "Esplora" },
+  { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio", icon: "◌", group: "Strumenti" },
+  { href: "/fonti", label: "Fonti e metodo", icon: "↗", group: "Trasparenza" },
+  { href: "/progetto", label: "Il progetto", icon: "◇", group: "Trasparenza" },
 ];
 
 export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
@@ -66,6 +67,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                     }),
               }}
             >
+              <span aria-hidden="true" style={{ fontSize: "1rem", width: 20, textAlign: "center" }}>{v.icon}</span>
               {v.label}
             </Link>
           ))}
@@ -173,7 +175,10 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 borderBottom: "1px solid var(--color-divider)",
               }}
             >
-              <span style={{ fontWeight: 800, fontSize: "0.95rem" }}>Menù</span>
+              <div>
+                <span style={{ fontWeight: 800, fontSize: "0.95rem", display: "block" }}>Esplora l&apos;osservatorio</span>
+                <span style={{ color: "var(--color-text-muted)", fontSize: "0.75rem" }}>Dati, strumenti e metodo</span>
+              </div>
               <button
                 type="button"
                 aria-label="Chiudi il menu"
@@ -183,19 +188,19 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 ✕
               </button>
             </div>
-            <div
-              style={{
-                display: "grid",
-                gap: "var(--space-1)",
-                padding: "var(--space-3)",
-              }}
-            >
-              {VOCI.map((v) => (
+            <div style={{ display: "grid", gap: "var(--space-4)", padding: "var(--space-4) var(--space-3)" }}>
+              {["Esplora", "Strumenti", "Trasparenza"].map((group) => (
+                <div key={group}>
+                  <div style={{ color: "var(--color-text-muted)", fontSize: "0.68rem", fontWeight: 750, letterSpacing: "0.1em", textTransform: "uppercase", padding: "0 14px 6px" }}>{group}</div>
+                  {VOCI.filter((v) => v.group === group).map((v) => (
                 <Link
                   key={v.href}
                   href={v.href}
                   onClick={() => setAperto(false)}
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
                     textDecoration: "none",
                     color: attiva(v.href) ? "var(--color-raised)" : "var(--color-text)",
                     background: attiva(v.href) ? "var(--color-text)" : "transparent",
@@ -205,9 +210,21 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                     fontSize: "0.95rem",
                   }}
                 >
+                  <span aria-hidden="true" style={{ width: 22, fontSize: "1.05rem", textAlign: "center", opacity: attiva(v.href) ? 1 : 0.65 }}>{v.icon}</span>
                   {v.label}
                 </Link>
+                  ))}
+                </div>
               ))}
+              <a
+                href="https://github.com/dynamic1990/osservatorio-infortuni"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setAperto(false)}
+                style={{ display: "flex", alignItems: "center", gap: 10, margin: "var(--space-2) 14px 0", padding: "11px 12px", border: "1px solid var(--color-text)", color: "var(--color-text)", textDecoration: "none", fontWeight: 700, fontSize: "0.88rem" }}
+              >
+                <GitHubIcon size={19} /> Codice sorgente su GitHub <span aria-hidden="true" style={{ marginLeft: "auto" }}>↗</span>
+              </a>
             </div>
           </nav>
         </>
