@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GitHubIcon, LinkedInIcon } from "@/components/ui/social-icons";
+import { LinkedInIcon } from "@/components/ui/social-icons";
 
 export const metadata: Metadata = {
   title: "Il progetto",
@@ -60,6 +60,24 @@ export default function ProgettoPage() {
       ))}
 
       <section className="card" style={{ background: "var(--color-surface-2)" }}>
+        <h2 className="card-title" style={{ marginTop: 0 }}>Chi cura il progetto</h2>
+        <p style={{ margin: 0, color: "var(--color-text-soft)", lineHeight: 1.65 }}>
+          Sono Damiano Salvati, ingegnere della sicurezza, RSPP e lead auditor dei sistemi di gestione.
+          Mi occupo di salute e sicurezza sul lavoro, analisi dei dati e progettazione di strumenti che
+          rendano le informazioni pubbliche più leggibili e verificabili.
+        </p>
+        <a
+          href="https://www.linkedin.com/in/damiano-salvati"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: "inline-flex", alignItems: "center", gap: "0.5em", marginTop: "var(--space-3)", color: "var(--color-link)", textDecoration: "none", fontWeight: 600 }}
+        >
+          <LinkedInIcon size={22} />
+          Per domande o collaborazioni, scrivimi su LinkedIn ↗
+        </a>
+      </section>
+
+      <section className="card" style={{ background: "var(--color-surface-2)" }}>
         <h2 className="card-title" style={{ marginTop: 0 }}>Documentazione per chi vuole verificare</h2>
         <p style={{ color: "var(--color-text-soft)", lineHeight: 1.6 }}>
           Il repository contiene il codice, gli script ETL, i contratti dei dati e la documentazione
@@ -71,56 +89,6 @@ export default function ProgettoPage() {
         </a>
       </section>
 
-      <section className="card" style={{ background: "var(--color-surface-2)" }}>
-        <h2 className="card-title" style={{ marginTop: 0 }}>Contatti</h2>
-        <p style={{ color: "var(--color-text-soft)", lineHeight: 1.65, fontSize: "1rem" }}>
-          Il progetto è curato da Ing. Damiano Salvati. Se vuoi segnalare un dato, proporre una
-          collaborazione o semplicemente fare una domanda, puoi scrivermi su LinkedIn:
-        </p>
-        <div
-          style={{
-            display: "grid",
-            gap: "var(--space-3)",
-            fontSize: "1rem",
-            marginTop: "var(--space-2)",
-          }}
-        >
-          <a
-            href="https://www.linkedin.com/in/damiano-salvati"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5em",
-              width: "fit-content",
-              color: "var(--color-link)",
-              textDecoration: "none",
-              fontWeight: 600,
-            }}
-          >
-            <LinkedInIcon size={22} />
-            Profilo LinkedIn di Damiano Salvati
-          </a>
-          <a
-            href="https://github.com/dynamic1990/osservatorio-infortuni"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5em",
-              width: "fit-content",
-              color: "var(--color-link)",
-              textDecoration: "none",
-              fontWeight: 600,
-            }}
-          >
-            <GitHubIcon size={22} />
-            Codice sorgente su GitHub
-          </a>
-        </div>
-      </section>
     </main>
   );
 }

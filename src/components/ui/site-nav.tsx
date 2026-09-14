@@ -12,7 +12,6 @@ const VOCI = [
   { href: "/vigilanza", label: "Vigilanza", icon: "◎", group: "Esplora" },
   { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio", icon: "◌", group: "Strumenti" },
   { href: "/fonti", label: "Fonti e metodo", icon: "↗", group: "Trasparenza" },
-  { href: "/stato-fonti", label: "Stato delle fonti", icon: "◉", group: "Trasparenza" },
   { href: "/progetto", label: "Il progetto", icon: "◇", group: "Trasparenza" },
 ];
 

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { listSources } from "@/lib/sources";
+import { getSourceStatus } from "@/lib/source-status";
 import artifactRegistry from "../../../scripts/ci/generated-artifacts.json";
 
 export const metadata: Metadata = {
   title: "Fonti",
-  description: "Registro delle fonti ufficiali integrate in Osservatorio Infortuni.",
+  description: "Fonti, stato, freschezza e metodologia di Osservatorio Infortuni.",
   alternates: { canonical: "/fonti" },
 };
 
@@ -44,8 +45,8 @@ export default function FontiPage() {
           Fonti
         </h1>
         <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
-          Ogni numero pubblicato ha una fonte, una data di estrazione e dei limiti dichiarati.
-          Questo è il registro delle fonti integrate.
+          Ogni numero pubblicato ha una fonte, una data di estrazione, uno stato e dei limiti dichiarati.
+          Qui trovi il registro completo e lo stato di ciascuna fonte.
         </p>
       </header>
 
@@ -74,7 +75,9 @@ export default function FontiPage() {
         </p>
       </aside>
 
-      {fonti.map((fonte) => (
+      {fonti.map((fonte) => {
+        const status = getSourceStatus(fonte.id);
+        return (
         <section className="card" key={fonte.id}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "var(--space-4)", flexWrap: "wrap" }}>
             <div>
@@ -93,7 +96,7 @@ export default function FontiPage() {
               background: "var(--color-raised)",
             }}>
               <span aria-hidden="true">●</span>
-              {fonte.status === "active" ? "INTEGRATA" : "IN PIANIFICAZIONE"}
+              {status?.label ?? (fonte.status === "active" ? "INTEGRATA" : "IN PIANIFICAZIONE")}
             </span>
           </div>
           <dl style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-3)", margin: "var(--space-4) 0 0" }}>
@@ -109,17 +112,25 @@ export default function FontiPage() {
               <dt style={{ fontWeight: 600, fontSize: "0.8rem" }}>Copertura</dt>
               <dd style={{ margin: 0 }}>{fonte.coverage}</dd>
             </div>
+            {status && <div>
+              <dt style={{ fontWeight: 600, fontSize: "0.8rem" }}>Periodo pubblicato</dt>
+              <dd style={{ margin: 0 }}>{status.period}</dd>
+            </div>}
+            {status && <div>
+              <dt style={{ fontWeight: 600, fontSize: "0.8rem" }}>Freschezza</dt>
+              <dd style={{ margin: 0 }}>{status.freshness}</dd>
+            </div>}
           </dl>
           {fonte.notes && <p style={{ fontSize: "0.85rem", color: "var(--color-text-soft)", marginBottom: 0 }}>{fonte.notes}</p>}
+          {status?.note && <p style={{ fontSize: "0.85rem", color: "var(--color-text-soft)", marginBottom: 0 }}>{status.note}</p>}
           <div style={{ marginTop: "var(--space-3)", fontSize: "0.85rem" }}>
             <a href={fonte.landingUrl} target="_blank" rel="noreferrer">Pagina del dataset ↗</a>
             {" · "}
             <a href={fonte.apiUrl} target="_blank" rel="noreferrer">Endpoint API ↗</a>
-            {" · "}
-            <a href="/stato-fonti">Stato e freschezza</a>
           </div>
         </section>
-      ))}
+        );
+      })}
     </div>
   );
 }

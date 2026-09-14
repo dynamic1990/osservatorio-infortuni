@@ -1,4 +1,4 @@
-import { GitHubIcon, LinkedInIcon } from "./social-icons";
+import { LinkedInIcon } from "./social-icons";
 
 export function Footer() {
   return (
@@ -58,22 +58,6 @@ export function Footer() {
             color: "var(--color-text-muted)",
           }}
         >
-          <a
-            href="https://github.com/dynamic1990/osservatorio-infortuni"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5em",
-              width: "fit-content",
-              color: "var(--color-link)",
-              textDecoration: "none",
-            }}
-          >
-            <GitHubIcon size={20} />
-            Codice sorgente su GitHub
-          </a>
           <a
             href="https://www.linkedin.com/in/damiano-salvati"
             target="_blank"
