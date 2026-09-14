@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ExternalLink } from "lucide-react";
 import { listSources } from "@/lib/sources";
 import { getSourceStatus } from "@/lib/source-status";
 import artifactRegistry from "../../../scripts/ci/generated-artifacts.json";
@@ -124,9 +125,9 @@ export default function FontiPage() {
           {fonte.notes && <p style={{ fontSize: "0.85rem", color: "var(--color-text-soft)", marginBottom: 0 }}>{fonte.notes}</p>}
           {status?.note && <p style={{ fontSize: "0.85rem", color: "var(--color-text-soft)", marginBottom: 0 }}>{status.note}</p>}
           <div style={{ marginTop: "var(--space-3)", fontSize: "0.85rem" }}>
-            <a href={fonte.landingUrl} target="_blank" rel="noreferrer">Pagina del dataset ↗</a>
+            <a href={fonte.landingUrl} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>Pagina del dataset <ExternalLink aria-hidden="true" size={14} strokeWidth={1.8} /></a>
             {" · "}
-            <a href={fonte.apiUrl} target="_blank" rel="noreferrer">Endpoint API ↗</a>
+            <a href={fonte.apiUrl} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>Endpoint API <ExternalLink aria-hidden="true" size={14} strokeWidth={1.8} /></a>
           </div>
         </section>
         );

@@ -3,16 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { BookOpen, ChartNoAxesCombined, CircleDollarSign, ExternalLink, FileText, Home, Menu, ShieldCheck, X } from "lucide-react";
 import { GitHubIcon } from "./social-icons";
 
 const VOCI = [
-  { href: "/", label: "Quadro generale", icon: "⌂", group: "Esplora" },
-  { href: "/casi-mortali", label: "Casi mortali", icon: "†", group: "Esplora" },
-  { href: "/malattie-professionali", label: "Malattie professionali", icon: "＋", group: "Esplora" },
-  { href: "/vigilanza", label: "Vigilanza", icon: "◎", group: "Esplora" },
-  { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio", icon: "◌", group: "Strumenti" },
-  { href: "/fonti", label: "Fonti e metodo", icon: "↗", group: "Trasparenza" },
-  { href: "/progetto", label: "Il progetto", icon: "◇", group: "Trasparenza" },
+  { href: "/", label: "Quadro generale", icon: Home, group: "Esplora" },
+  { href: "/casi-mortali", label: "Casi mortali", icon: ShieldCheck, group: "Esplora" },
+  { href: "/malattie-professionali", label: "Malattie professionali", icon: FileText, group: "Esplora" },
+  { href: "/vigilanza", label: "Vigilanza", icon: ChartNoAxesCombined, group: "Esplora" },
+  { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio", icon: CircleDollarSign, group: "Strumenti" },
+  { href: "/fonti", label: "Fonti e metodo", icon: BookOpen, group: "Trasparenza" },
+  { href: "/progetto", label: "Il progetto", icon: FileText, group: "Trasparenza" },
 ];
 
 export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
@@ -67,7 +68,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                     }),
               }}
             >
-              <span aria-hidden="true" style={{ fontSize: "1rem", width: 20, textAlign: "center" }}>{v.icon}</span>
+              <v.icon aria-hidden="true" size={17} strokeWidth={1.8} style={{ width: 20 }} />
               {v.label}
             </Link>
           ))}
@@ -132,9 +133,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
             padding: 0,
           }}
         >
-          <span style={{ width: 17, height: 2, background: "var(--color-text)", borderRadius: 2 }} />
-          <span style={{ width: 17, height: 2, background: "var(--color-text)", borderRadius: 2 }} />
-          <span style={{ width: 17, height: 2, background: "var(--color-text)", borderRadius: 2 }} />
+          <Menu aria-hidden="true" size={20} strokeWidth={1.8} />
         </button>
       </div>
 
@@ -185,7 +184,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 onClick={() => setAperto(false)}
                 style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: "1.2rem", color: "var(--color-text)", padding: 4 }}
               >
-                ✕
+                <X aria-hidden="true" size={20} strokeWidth={1.8} />
               </button>
             </div>
             <div style={{ display: "grid", gap: "var(--space-4)", padding: "var(--space-4) var(--space-3)" }}>
@@ -210,7 +209,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                     fontSize: "0.95rem",
                   }}
                 >
-                  <span aria-hidden="true" style={{ width: 22, fontSize: "1.05rem", textAlign: "center", opacity: attiva(v.href) ? 1 : 0.65 }}>{v.icon}</span>
+                  <v.icon aria-hidden="true" size={18} strokeWidth={1.8} style={{ width: 22, opacity: attiva(v.href) ? 1 : 0.65 }} />
                   {v.label}
                 </Link>
                   ))}
@@ -223,7 +222,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 onClick={() => setAperto(false)}
                 style={{ display: "flex", alignItems: "center", gap: 10, margin: "var(--space-2) 14px 0", padding: "11px 12px", border: "1px solid var(--color-text)", color: "var(--color-text)", textDecoration: "none", fontWeight: 700, fontSize: "0.88rem" }}
               >
-                <GitHubIcon size={19} /> Codice sorgente su GitHub <span aria-hidden="true" style={{ marginLeft: "auto" }}>↗</span>
+                <GitHubIcon size={19} /> Codice sorgente su GitHub <ExternalLink aria-hidden="true" size={16} strokeWidth={1.8} style={{ marginLeft: "auto" }} />
               </a>
             </div>
           </nav>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ExternalLink } from "lucide-react";
 import { LinkedInIcon } from "@/components/ui/social-icons";
 
 export const metadata: Metadata = {
@@ -73,7 +74,7 @@ export default function ProgettoPage() {
           style={{ display: "inline-flex", alignItems: "center", gap: "0.5em", marginTop: "var(--space-3)", color: "var(--color-link)", textDecoration: "none", fontWeight: 600 }}
         >
           <LinkedInIcon size={22} />
-          Per domande o collaborazioni, scrivimi su LinkedIn ↗
+          Per domande o collaborazioni, scrivimi su LinkedIn <ExternalLink aria-hidden="true" size={16} strokeWidth={1.8} />
         </a>
       </section>
 
@@ -85,7 +86,7 @@ export default function ProgettoPage() {
           delle fonti sono nel README.
         </p>
         <a href="https://github.com/dynamic1990/osservatorio-infortuni" target="_blank" rel="noreferrer">
-          Apri il repository open source ↗
+          Apri il repository open source <ExternalLink aria-hidden="true" size={16} strokeWidth={1.8} />
         </a>
       </section>
 

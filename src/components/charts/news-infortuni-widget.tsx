@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ExternalLink } from "lucide-react";
 import newsRaw from "@/data/generated/news-infortuni.json";
 
 interface Notizia {
@@ -166,7 +167,7 @@ export function NewsInfortuniWidget() {
                   {n.fonte} · {formatData(n.data)}
                 </span>
               </span>
-              <span style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>↗</span>
+              <ExternalLink aria-hidden="true" size={15} strokeWidth={1.8} style={{ color: "var(--color-text-muted)" }} />
             </a>
           );
         })}
