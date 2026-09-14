@@ -80,6 +80,12 @@ Controllo leggero delle fonti:
 npm run audit:sources
 ```
 
+Lo stesso controllo viene eseguito automaticamente il 15 di ogni mese da
+GitHub Actions e può essere avviato manualmente dalla scheda Actions. Ogni
+esecuzione pubblica un report JSON come artifact scaricabile per 90 giorni.
+Un errore di rete o una fonte non raggiungibile rende fallita l'esecuzione;
+avvisi e cambiamenti di contenuto restano invece nel report per la revisione.
+
 L'audit non modifica i dataset pubblicati. Per rigenerare uno snapshot o cambiare il perimetro dei dati, leggere prima `docs/RULES.md` e la documentazione dello script interessato.
 
 ## Licenza

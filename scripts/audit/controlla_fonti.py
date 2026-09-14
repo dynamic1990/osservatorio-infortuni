@@ -11,6 +11,7 @@ import re
 import sys
 import hashlib
 import json
+import argparse
 from pathlib import Path
 import urllib.error
 import urllib.request
@@ -40,6 +41,15 @@ class Check:
     detail: str
     signals: str
 
+    def as_dict(self) -> dict[str, str]:
+        return {
+            "label": self.label,
+            "url": self.url,
+            "status": self.status,
+            "detail": self.detail,
+            "signals": self.signals,
+        }
+
 
 def fetch(url: str, *, inspect_body: bool = False) -> Check:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
@@ -61,23 +71,38 @@ def fetch(url: str, *, inspect_body: bool = False) -> Check:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--report",
+        type=Path,
+        help="scrive anche un report JSON nel percorso indicato",
+    )
+    parser.add_argument(
+        "--state",
+        type=Path,
+        default=STATE_FILE,
+        help="percorso della baseline persistente (default: cache utente)",
+    )
+    args = parser.parse_args()
     now = datetime.now(timezone.utc).astimezone()
     print(f"AUDIT FONTI OSSERVATORIO | {now:%Y-%m-%d}")
     print("Radar escluso. Controllo non distruttivo, nessuna integrazione automatica.")
     failures = warnings = 0
-    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    args.state.parent.mkdir(parents=True, exist_ok=True)
     try:
-        old_state = json.loads(STATE_FILE.read_text(encoding="utf-8"))
+        old_state = json.loads(args.state.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         old_state = {}
     new_state: dict[str, dict[str, str]] = {}
     changes: list[str] = []
+    checks: list[Check] = []
     for label, landing, api in SOURCES:
         for kind, url in (("landing", landing), ("endpoint", api)):
             # Il corpo della landing page cambia spesso per motivi editoriali.
             # Per rilevare nuovi dati confrontiamo solo gli endpoint dati.
             result = fetch(url, inspect_body=(kind == "endpoint" and "informo" not in label.lower()))
             result.label = label
+            checks.append(result)
             if kind == "endpoint" and "fingerprint:" in result.signals:
                 fingerprint = result.signals.rsplit("fingerprint: ", 1)[1]
                 new_state[url] = {"fingerprint": fingerprint, "signals": result.signals}
@@ -90,7 +115,7 @@ def main() -> int:
                 changes.append(f"{label} ({kind}): {result.status}, {result.detail}")
             failures += result.status == "FAIL"
             warnings += result.status == "WARN"
-    STATE_FILE.write_text(json.dumps(new_state, ensure_ascii=False, indent=2), encoding="utf-8")
+    args.state.write_text(json.dumps(new_state, ensure_ascii=False, indent=2), encoding="utf-8")
     print("ESITO")
     print(f"- fonti controllate: {len(SOURCES)}, endpoint dati: {len(new_state)}")
     print(f"- errori: {failures}")
@@ -105,6 +130,26 @@ def main() -> int:
     else:
         print("- nessun cambiamento rilevato rispetto all'audit precedente")
     print("- decisione: nessuna integrazione automatica; valutazione con Damiano prima di modificare i dataset.")
+    if args.report:
+        report = {
+            "schemaVersion": 1,
+            "generatedAt": now.isoformat(),
+            "audit": "official-sources",
+            "radarExcluded": True,
+            "automaticIntegration": False,
+            "summary": {
+                "sources": len(SOURCES),
+                "checks": len(checks),
+                "failures": failures,
+                "warnings": warnings,
+                "changedEndpoints": len([x for x in changes if "baseline" not in x]),
+            },
+            "checks": [check.as_dict() for check in checks],
+            "signals": changes,
+        }
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(f"- report JSON: {args.report}")
     return 1 if failures else 0
 
 
