@@ -1,12 +1,21 @@
-# Prossima sessione — Osservatorio Infortuni (decisa il 2026-09-05)
+# Prossima sessione — Osservatorio Infortuni (decisa il 2026-09-05, aggiornata 2026-09-15)
 
-Stato al termine della sessione: pagina **Casi mortali** live (commit `d09fe4d`),
-build verde (7 rotte statiche), ETL Infor.MO di dettaglio completo
-(1.212 casi, 2.334 fattori). Working tree del repo progetto pulito.
+## PRIORITÀ DOMANI (decisa da Damiano il 2026-09-15)
 
-Ordine di lavoro suggerito (dal più importante al più decorativo):
+### A. Eurostat + EU-OSHA: dati open utili?
+- Verificare se Eurostat (già parzialmente usato: ESAW, namq_10_a10_e) e EU-OSHA (European Agency for Safety and Health at Work) forniscono dati open realmente utili per l'Osservatorio, non solo per l'Italia.
+- EU-OSHA: sistemi e banche dati (es. OSH overview, barometri, survey ESENER, country profiles). Verificare API/download e licenze.
+- Eurostat: confermare dataset ESAW (hsw_mi01..mi07), serie per paese; valutare indicatori per probabilità.
+
+### B. Banche dati anglosassoni per probabilità di evento (valutazione rischi)
+- Cercare serie storiche open: UK HSE (Health and Safety Executive), USA BLS (Bureau of Labor Statistics, es. CFOI per i fatali), Canada CCOHS, ecc.
+- Obiettivo: capire se possiamo costruire uno strumento che, a partire dalle serie storiche, **stima la probabilità di un evento** per la valutazione dei rischi (non solo dashboard).
+- Da chiarire con Damiano: perimetro (Italia vs Europa vs anglosassoni), scala (settore/mansione/territorio), modello (tassi storici, Poisson/trend, bande di probabilità tipo ISO 12100), output (pagina pubblica, tool interno, documento).
+- Implicazioni legali/etiche: probabilità su dati aggregati, non su singolo caso; nessuna attribuzione individuale.
 
 ---
+
+## Priorità pregresse (per riprendere in coda)
 
 ## 1. Tool SEO + analisi traffico utenti (richiesto DAMIANO)
 
