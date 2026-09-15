@@ -7,7 +7,7 @@ La banca dati INAIL è ricchissima ma di difficile lettura: dataset enormi, codi
 ## Cosa trovi nel sito
 
 - **Home**: andamento congiunturale, serie storica, territorio, comparti ATECO, demografia e benchmark europeo.
-- **Casi mortali**: archivio analizzato Infor.MO di INAIL, con dinamiche e fattori causali aggregati.
+- **Analisi delle cause**: archivio analizzato Infor.MO di INAIL, con dinamiche e fattori causali aggregati, incrocio causa &times; settore economico.
 - **Malattie professionali**: denunce e decessi riconosciuti, con il perimetro dichiarato nella pagina.
 - **Vigilanza**: rapporti annuali INL e indicatori sull'attività ispettiva.
 - **Calcolatore del costo**: stima orientativa per scenari, non una valutazione contabile o legale.

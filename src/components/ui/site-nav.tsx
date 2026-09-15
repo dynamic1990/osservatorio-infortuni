@@ -8,7 +8,7 @@ import { GitHubIcon } from "./social-icons";
 
 const VOCI = [
   { href: "/", label: "Quadro generale", icon: Home, group: "Esplora" },
-  { href: "/casi-mortali", label: "Analisi delle cause", icon: Workflow, group: "Esplora" },
+  { href: "/analisi-delle-cause", label: "Analisi delle cause", icon: Workflow, group: "Esplora" },
   { href: "/malattie-professionali", label: "Malattie professionali", icon: Cross, group: "Esplora" },
   { href: "/vigilanza", label: "Vigilanza", icon: UserSearch, group: "Esplora" },
   { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio", icon: CircleDollarSign, group: "Strumenti" },
