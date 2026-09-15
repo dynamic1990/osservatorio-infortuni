@@ -49,7 +49,7 @@ export function HeroCongiunturaleKpi() {
       ? "lavoro"
       : "itinere";
 
-  // Calcolo KPI in base alla modalita selezionata
+  // Calcolo KPI in base alla modalità selezionata
   const kpiMod = useMemo(() => {
     if (filtroMod === "lavoro") return data.nazionale.lavoro;
     if (filtroMod === "itinere") return data.nazionale.itinere;
@@ -71,7 +71,7 @@ export function HeroCongiunturaleKpi() {
   const deltaMedia = mediaMortali26 - mediaMortali25;
   const occMln = (data.nazionale.occupati2024 / 1_000_000).toFixed(1);
 
-  // Calcolo incidenza semestrale per la modalita
+  // Calcolo incidenza semestrale per la modalità
   const occMigliaia = data.nazionale.occupati2024 / 1000;
   const inc25 = (kpiMod.anno2025 / occMigliaia).toFixed(2);
   const inc26 = (kpiMod.anno2026 / occMigliaia).toFixed(2);

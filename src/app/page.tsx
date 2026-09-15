@@ -57,8 +57,8 @@ export default function HomePage() {
             </h1>
             <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
               Piattaforma indipendente di trasparenza e monitoraggio statistico: dati congiunturali
-              a parita di periodo (2026 vs 2025), media giornaliera dei morti sul lavoro, tassi di
-              incidenza e gravita normalizzati sugli occupati, serie storica 2014-2024, benchmark
+              a parità di periodo (2026 vs 2025), media giornaliera dei morti sul lavoro, tassi di
+              incidenza e gravità normalizzati sugli occupati, serie storica 2014-2024, benchmark
               europeo, mappa del rischio territoriale e comparti produttivi ATECO.
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
