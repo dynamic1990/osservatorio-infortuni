@@ -25,10 +25,12 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
+import hashlib
 
 ROOT = Path(__file__).resolve().parents[2]
 GEN = ROOT / "src" / "data" / "generated"
 OUT = GEN / "news-infortuni.json"
+REGISTRY = ROOT / "scripts" / "ci" / "generated-artifacts.json"
 
 QUERIES = [
     "infortunio mortale lavoro",
@@ -546,6 +548,26 @@ def main() -> int:
         "notizie": filtrate[:MAX_KEEP],
     }
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Tiene il registro artifact allineato: il file cambia a ogni esecuzione
+    # (radar quotidiano), quindi si aggiorna subito hash e byte count così
+    # la validazione in CI (validate-generated-artifacts.py) non fallisce.
+    if REGISTRY.exists():
+        try:
+            registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+            entries = registry if isinstance(registry, list) else registry.get("artifacts", registry)
+            if isinstance(entries, dict):
+                entries = list(entries.values())
+            content = OUT.read_bytes()
+            sha = hashlib.sha256(content).hexdigest()
+            for entry in entries:
+                if isinstance(entry, dict) and entry.get("path") == "src/data/generated/news-infortuni.json":
+                    entry["sha256"] = sha
+                    entry["bytes"] = len(content)
+                    break
+            REGISTRY.write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            print(f"[registry] aggiornato generated-artifacts.json ({sha[:12]}…)")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[warn] registro artifact non aggiornato: {exc}")
     print(f"[ok] {len(payload['notizie'])} notizie gravi/mortali -> {OUT}")
     for n in payload["notizie"][:8]:
         print(f"  [{n['categoria']}] score={n['workAccidentScore']} {n['titolo']} | {n.get('provincia')} ({n.get('regione')}) | {n['fonte']}")
