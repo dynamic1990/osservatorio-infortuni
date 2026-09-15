@@ -81,7 +81,7 @@ def audit_serie_decennale() -> None:
         if s["anno"] in ind and ind[s["anno"]] and s.get("mortali"):
             if abs(ind[s["anno"]] - s["mortali"]) > 1:
                 rep("Home / serie decennale", f"cross-check mortali {s['anno']}", "FAIL", f"serie={s['mortali']} vs indice-incidenza={ind[s['anno']]}")
-    # 2024 mortali per il distinguo Infor.MO (NEXT_SESSION: 1.228)
+    # 2024 mortali per il distinguo Infor.MO (riferimento: 1.228)
     m2024 = next((s["mortali"] for s in serie if s["anno"] == 2024), None)
     rep("Home / serie decennale", "mortali 2024 (riferimento Infor.MO)", "INFO", f"valore={m2024} — deve restare distinto dai casi analizzati Infor.MO 2024")
 

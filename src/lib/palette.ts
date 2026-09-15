@@ -1,5 +1,5 @@
 // Palette categoriale per la dashboard - design system WIRED (registro pubblico)
-// Bianco carta, inchiostro, link blue e accento rosso semantico #f36458 (delibera Damiano 04/09/2026).
+// Bianco carta, inchiostro, link blue e accento rosso semantico #f36458 (delibera di progetto 04/09/2026).
 // I colori delle serie derivano da inchiostro e link: niente colori a mano nei componenti (RULES.md Regola 4/5).
 
 export const ACCENT = "#f36458";

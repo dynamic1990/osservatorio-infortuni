@@ -129,7 +129,7 @@ def main() -> int:
             print(f"  - {change}")
     else:
         print("- nessun cambiamento rilevato rispetto all'audit precedente")
-    print("- decisione: nessuna integrazione automatica; valutazione con Damiano prima di modificare i dataset.")
+    print("- decisione: nessuna integrazione automatica; valutazione di progetto prima di modificare i dataset.")
     if args.report:
         report = {
             "schemaVersion": 1,

@@ -2,11 +2,11 @@
 
 ## Riferimento ufficiale
 
-**Design system adottato: WIRED** (scelta Damiano, 04/09/2026).
+**Design system adottato: WIRED** (scelta di progetto, 04/09/2026).
 
 - Fonte: `awesome-design-md` (https://github.com/VoltAgent/awesome-design-md) → file ufficiale copiato in `docs/design-system/wired-DESIGN.md`.
 - Direzione: **"il registro pubblico"**: documento di giornale autorevole, carta chiara, inchiostro scuro, densità editoriale. La domanda sceglie la forma (linea per trend, barre per confronti, mappa per geografia, tabella per valori esatti).
-- **Accento rosso semantico**: `#f36458` (mutuato da Sanity, delibera Damiano) usato con parsimonia per: esiti mortali, peggioramenti (delta negativi,, evidenza principale. Non un rosso "allarme" pieno: tenue, corallino, misurato.
+- **Accento rosso semantico**: `#f36458` (mutuato dal design system di riferimento, delibera di progetto) usato con parsimonia per: esiti mortali, peggioramenti (delta negativi,, evidenza principale. Non un rosso "allarme" pieno: tenue, corallino, misurato.
 
 ## Palette (token in `src/app/design-system.css`)
 

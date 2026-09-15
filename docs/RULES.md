@@ -91,7 +91,7 @@ Prescrizioni operative:
 
 ## Regola 5 — Design system: una sola fonte, applicata ovunque
 
-Quando per l'app viene adottato un design system di riferimento (per esempio uno dei sistemi raccolti in awesome-design-md, il repository indicato da Damiano), quella scelta **sostituisce tutte le precedenti e vale per l'intera applicazione**, senza eccezioni per pagina o componente.
+Quando per l'app viene adottato un design system di riferimento (per esempio uno dei sistemi raccolti in awesome-design-md, il repository di riferimento del progetto), quella scelta **sostituisce tutte le precedenti e vale per l'intera applicazione**, senza eccezioni per pagina o componente.
 
 Prescrizioni operative:
 
