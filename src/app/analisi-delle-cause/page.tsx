@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { InformoKpi } from "@/components/charts/informo-kpi";
 import { InformoTrendWidget } from "@/components/charts/informo-trend-widget";
 import { InformoVociLista } from "@/components/charts/informo-voci-lista";
 import { InformoEsploratore } from "@/components/charts/informo-esploratore";
 import { CausePerSettore } from "@/components/charts/cause-per-settore";
+import { FiltroDimensioneAziendale } from "@/components/charts/filtro-dimensione-aziendale";
 import { InfoModalButton } from "@/components/ui/info-modal";
 import { getInformoAnalisi, INFORM_COLORS } from "@/lib/informo-casi";
 
@@ -156,8 +156,21 @@ export default function CasiMortaliPage() {
       </header>
 
       {/* 1. Il punto di partenza (senza confronti anno su anno: vedi metodologia) */}
-      <Sezione occhiello="Il punto di partenza" titolo="I casi analizzati nell'anno più recente">
-        <InformoKpi />
+      <Sezione occhiello="Il filtro per dimensione" titolo="Analizza per dimensione aziendale">
+        <div style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", maxWidth: "72ch" }}>
+          Microimprese, piccole, medie e grandi aziende hanno profili di rischio
+          diversi: qui puoi selezionare una o più classi dimensionali e leggere
+          dinamiche, settori e fattori causali di quel sottoinsieme, anno per anno.
+          Le classi seguono la raccomandazione UE 2003/361; i casi senza dato di
+          dimensione sono nella classe &quot;Non dichiarata&quot;.
+        </div>
+        <FiltroDimensioneAziendale />
+        <p className="source-note">
+          Classi dimensionali sul numero di addetti del singolo caso (raccomandazione
+          UE 2003/361): micro 0-9, piccole 10-49, medie 50-249, grandi 250+.
+          Le quote sono sul totale del cluster e dell&apos;anno, senza aggregati
+          multi-anno (RULES.md regola 1).
+        </p>
       </Sezione>
 
       {/* 2. Copertura dell'archivio sul totale */}
