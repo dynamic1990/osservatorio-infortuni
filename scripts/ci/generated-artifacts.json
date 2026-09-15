@@ -31,20 +31,6 @@
       "sha256": "7a60468c83f26bcd05c22a3c98bafa5721d250e61adfd8349742a2d2b10323ce"
     },
     {
-      "artifactId": "inail-infortuni-semestrale-storico",
-      "path": "src/data/generated/inail-infortuni-semestrale-storico.json",
-      "kind": "generated-json",
-      "bytes": 293803253,
-      "sha256": "98eac0ecf2d0ff0dda522452dbb81287856f75bc48e1adecc6f916d758062f4b"
-    },
-    {
-      "artifactId": "inail-infortuni-serie",
-      "path": "src/data/generated/inail-infortuni-serie.json",
-      "kind": "generated-json",
-      "bytes": 93189181,
-      "sha256": "045fec8dd1aee4152f7896a859208e0b680f47a55ac8cc541499f0184c5f0fce"
-    },
-    {
       "artifactId": "inail-infortuni-serie.meta",
       "path": "src/data/generated/inail-infortuni-serie.meta.json",
       "kind": "generated-json",
@@ -85,13 +71,6 @@
       "kind": "generated-json",
       "bytes": 126876,
       "sha256": "7beed8fa5c8411aaab0c6f289a67aaea6a64b139790a17cd539da6d6bf8bb401"
-    },
-    {
-      "artifactId": "informo-mortali-dettaglio",
-      "path": "src/data/generated/informo-mortali-dettaglio.json",
-      "kind": "generated-json",
-      "bytes": 2995836,
-      "sha256": "4681d2f39f72a213732010a1fd6a58849f6d94adeee7c968848f26ec80370cbb"
     },
     {
       "artifactId": "informo-mortali",
@@ -135,5 +114,6 @@
       "bytes": 5956,
       "sha256": "5eba57198eacdcd3b0747aa5f527f7ad10c6aa7f690e176748f7d659573b5a4e"
     }
-  ]
+  ],
+  "note": "I 3 file grandi rigenerabili (inail-infortuni-serie.json, inail-infortuni-semestrale-storico.json, informo-mortali-dettaglio.json) NON sono versionati (gitignore) e non hanno hash: il validatore li salta; in ambiente di sviluppo vanno generati prima della build."
 }
