@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { InformoTrendWidget } from "@/components/charts/informo-trend-widget";
 import { InformoVociLista } from "@/components/charts/informo-voci-lista";
 import { InformoEsploratore } from "@/components/charts/informo-esploratore";
-import { CausePerSettore } from "@/components/charts/cause-per-settore";
 import { FiltroDimensioneAziendale } from "@/components/charts/filtro-dimensione-aziendale";
 import { InfoModalButton } from "@/components/ui/info-modal";
 import { getInformoAnalisi, INFORM_COLORS } from "@/lib/informo-casi";
@@ -155,24 +154,7 @@ export default function CasiMortaliPage() {
         </InfoModalButton>
       </header>
 
-      {/* 1. Il punto di partenza (senza confronti anno su anno: vedi metodologia) */}
-      <Sezione occhiello="La dimensione aziendale" titolo="Analisi per dimensione aziendale">
-        <div style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", maxWidth: "72ch" }}>
-          Microimprese, piccole, medie e grandi aziende hanno profili di rischio
-          diversi: seleziona una o più classi dimensionali e l&apos;anno, e leggi
-          dinamiche, settori e fattori causali di quel sottoinsieme nel carosello,
-          con la variazione rispetto all&apos;anno precedente.
-        </div>
-        <FiltroDimensioneAziendale />
-        <p className="source-note">
-          Classi dimensionali sul numero di addetti del singolo caso (raccomandazione
-          UE 2003/361): micro 0-9, piccole 10-49, medie 50-249, grandi 250+.
-          Le quote sono sul totale del cluster e dell&apos;anno, senza aggregati
-          multi-anno (RULES.md regola 1).
-        </p>
-      </Sezione>
-
-      {/* 2. Copertura dell'archivio sul totale */}
+      {/* 1. Copertura dell'archivio sul totale */}
       <Sezione occhiello="La copertura dell'archivio" titolo="Infortuni mortali: totale denunciato e casi analizzati">
         <InformoTrendWidget />
       </Sezione>
@@ -196,21 +178,28 @@ export default function CasiMortaliPage() {
           limite={8}
           colore={INFORM_COLORS.secondario}
         />
+        <div style={{ display: "grid", gap: "var(--space-3)", borderTop: "1px solid var(--color-divider)", paddingTop: "var(--space-4)" }}>
+          <div>
+            <div style={{ color: "var(--color-accent)", fontSize: "0.78rem", fontWeight: 650, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 4 }}>
+              La dimensione aziendale
+            </div>
+            <h3 style={{ margin: 0, fontSize: "1.2rem" }}>Analisi per dimensione aziendale</h3>
+            <p style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", maxWidth: "72ch", margin: "var(--space-2) 0 0" }}>
+              Microimprese, piccole, medie e grandi aziende hanno profili di rischio diversi.
+              Consulta dinamiche e settori per anno, con la variazione rispetto all&apos;anno precedente.
+            </p>
+          </div>
+          <FiltroDimensioneAziendale />
+          <p className="source-note">
+            Classi dimensionali sul numero di addetti del singolo caso (raccomandazione UE 2003/361):
+            micro 0-9, piccole 10-49, medie 50-249, grandi 250+. Le quote sono sul totale del cluster
+            e dell&apos;anno, senza aggregati multi-anno (RULES.md regola 1).
+          </p>
+        </div>
         <p className="source-note">
           Il conteggio è riferito al singolo anno selezionato: ogni lista
           mostra le voci dell&apos;anno, senza aggregati pluriennali (RULES.md
           regola 1).
-        </p>
-      </Sezione>
-
-      <Sezione occhiello="Le cause per settore" titolo="Perché si muore, settore per settore">
-        <CausePerSettore />
-        <p className="source-note">
-          La causa è il problema di sicurezza prevalente classificato dagli analisti
-          INAIL nella scheda del caso. L&apos;incrocio copre i casi con settore
-          economico noto e causa classificata; le quote sono sul totale dei casi del
-          settore, non sul totale nazionale (RULES.md regola 1: niente aggregati
-          multi-anno).
         </p>
       </Sezione>
 

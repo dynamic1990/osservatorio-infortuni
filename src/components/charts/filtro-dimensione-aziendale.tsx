@@ -108,20 +108,24 @@ export function FiltroDimensioneAziendale() {
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      {/* Filtri: anno + vista */}
+      {/* Filtri: anno a pulsanti + vista */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-3)", alignItems: "center" }}>
-        <label style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
-          Anno
-          <select
-            value={anno}
-            onChange={(e) => setAnno(Number(e.target.value))}
-            style={{ ...stileSelect, minWidth: 120 }}
-          >
+        <div style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
+          <span>Anno</span>
+          <div style={{ display: "flex", gap: "var(--space-1)", flexWrap: "wrap" }}>
             {ANNI.map((a) => (
-              <option key={a} value={a}>{a}</option>
+              <button
+                key={a}
+                type="button"
+                onClick={() => setAnno(a)}
+                className={`btn-pill ${anno === a ? "active" : ""}`}
+                aria-pressed={anno === a}
+              >
+                {a}
+              </button>
             ))}
-          </select>
-        </label>
+          </div>
+        </div>
 
         <label style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
           Analisi
@@ -145,6 +149,24 @@ export function FiltroDimensioneAziendale() {
         {clusterTutte?.casi.toLocaleString("it-IT") ?? "n.d."} (di cui {clusterNondich?.casi ?? 0} con
         dimensione non dichiarata).
       </p>
+
+      {/* Dimensioni: pulsanti che portano alla card corrispondente */}
+      <div style={{ display: "flex", gap: "var(--space-1)", flexWrap: "wrap", alignItems: "center" }}>
+        <span style={{ fontSize: "0.78rem", color: "var(--color-text-soft)", marginRight: 4 }}>Dimensione</span>
+        {clusterOrdinati.map((cluster) => (
+          <button
+            key={cluster.id}
+            type="button"
+            onClick={() => {
+              const el = document.getElementById(`cluster-${cluster.id}`);
+              el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+            }}
+            className="btn-pill"
+          >
+            {cluster.nome.split(" (")[0]}
+          </button>
+        ))}
+      </div>
 
       {/* Carosello: tutte le card sempre attive, con frecce di scorrimento */}
       <div style={{ position: "relative" }}>
@@ -204,13 +226,12 @@ export function FiltroDimensioneAziendale() {
           ref={refCarosello}
           className="carosello-cluster"
           style={{
-            display: "grid",
-            gridAutoFlow: "column",
-            gridAutoColumns: "minmax(280px, 1fr)",
+            display: "flex",
             gap: "var(--space-3)",
             overflowX: "auto",
             scrollSnapType: "x mandatory",
-            padding: "var(--space-1)",
+            padding: "var(--space-1) var(--space-2) var(--space-2)",
+            scrollbarWidth: "thin",
           }}
         >
           {clusterOrdinati.map((cluster) => {
@@ -223,12 +244,15 @@ export function FiltroDimensioneAziendale() {
             return (
               <div
                 key={cluster.id}
+                id={`cluster-${cluster.id}`}
                 style={{
                   border: "1px solid var(--color-divider)",
                   borderRadius: "6px",
                   padding: "var(--space-3)",
                   background: "var(--color-raised)",
                   scrollSnapAlign: "start",
+                  flex: "0 0 clamp(280px, 78vw, 360px)",
+                  minWidth: 0,
                   display: "grid",
                   gap: "var(--space-2)",
                   alignContent: "start",
@@ -236,8 +260,9 @@ export function FiltroDimensioneAziendale() {
               >
                 <div>
                   <strong style={{ fontSize: "0.88rem", display: "block" }}>{cluster.nome}</strong>
-                  <div style={{ fontSize: "0.75rem", color: "var(--color-text-soft)", display: "flex", gap: 8, alignItems: "baseline" }}>
-                    <span>{casi.toLocaleString("it-IT")} casi nel {anno}</span>
+                  <div style={{ marginTop: 6, display: "flex", gap: 8, alignItems: "baseline" }}>
+                    <span style={{ fontSize: "1.35rem", lineHeight: 1, fontWeight: 800, color: "var(--color-accent)" }}>{casi.toLocaleString("it-IT")}</span>
+                    <span style={{ fontSize: "0.75rem", color: "var(--color-text-soft)" }}>casi nel {anno}</span>
                     <Delta prev={casiPrev} curr={casi} />
                   </div>
                 </div>
