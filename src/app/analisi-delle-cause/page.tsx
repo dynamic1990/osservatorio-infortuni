@@ -190,17 +190,7 @@ export default function CasiMortaliPage() {
             </p>
           </div>
           <FiltroDimensioneAziendale />
-          <p className="source-note">
-            Classi dimensionali sul numero di addetti del singolo caso (raccomandazione UE 2003/361):
-            micro 0-9, piccole 10-49, medie 50-249, grandi 250+. Le quote sono sul totale del cluster
-            e dell&apos;anno, senza aggregati multi-anno (RULES.md regola 1).
-          </p>
         </div>
-        <p className="source-note">
-          Il conteggio è riferito al singolo anno selezionato: ogni lista
-          mostra le voci dell&apos;anno, senza aggregati pluriennali (RULES.md
-          regola 1).
-        </p>
       </Sezione>
 
       <Sezione occhiello="Il territorio" titolo="Dove avvengono i casi mortali">
