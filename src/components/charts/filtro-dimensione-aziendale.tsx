@@ -36,7 +36,7 @@ interface ClusterDataset {
 
 const ANNI = [2020, 2021, 2022, 2023, 2024];
 
-// Viste mostrate: solo dinamiche e settori (tipi di fattore e problemi di sicurezza rimossi)
+// Viste mostrate: solo dinamiche e settori
 type Vista = "incidenti" | "settori";
 const VISTE: { id: Vista; label: string }[] = [
   { id: "incidenti", label: "Dinamiche" },
@@ -46,15 +46,23 @@ const VISTE: { id: Vista; label: string }[] = [
 // Ordine delle card: micro, piccole, medie, grandi, non dichiarata
 const ORDINE = ["micro", "piccola", "media", "grande", "nd"];
 
-const stileSelect = {
+const GAP_CARD = 12;
+
+const stilePulsanteNav = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: 6,
   font: "inherit",
   fontSize: "0.82rem",
-  padding: "8px 12px",
+  fontWeight: 600,
+  padding: "6px 14px",
   borderRadius: "6px",
   border: "1px solid var(--color-divider)",
   background: "var(--color-raised)",
   color: "var(--color-text)",
-};
+  cursor: "pointer",
+} as const;
 
 // Delta % tra due conteggi, con segno e colore (migliora = verde, peggiora = accent)
 function Delta({ prev, curr }: { prev?: number; curr?: number }) {
@@ -75,6 +83,7 @@ export function FiltroDimensioneAziendale() {
   const [dati, setDati] = useState<ClusterDataset | null>(null);
   const [anno, setAnno] = useState(2024);
   const [vista, setVista] = useState<Vista>("incidenti");
+  const [indice, setIndice] = useState(0);
   const refCarosello = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -89,10 +98,27 @@ export function FiltroDimensioneAziendale() {
     return ORDINE.map((id) => mappa.get(id)).filter((c): c is ClusterDim => Boolean(c));
   }, [dati]);
 
-  const scorri = (dir: 1 | -1) => {
+  const passo = () => {
+    const el = refCarosello.current;
+    const prima = el?.firstElementChild as HTMLElement | null;
+    return prima ? prima.offsetWidth + GAP_CARD : 1;
+  };
+
+  // Tiene traccia della card visibile durante lo scroll
+  useEffect(() => {
+    const el = refCarosello.current;
+    if (!el || clusterOrdinati.length === 0) return;
+    const onScroll = () => setIndice(Math.round(el.scrollLeft / passo()));
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dati, clusterOrdinati.length]);
+
+  const vaiA = (i: number) => {
     const el = refCarosello.current;
     if (!el) return;
-    el.scrollBy({ left: dir * 320, behavior: "smooth" });
+    el.scrollTo({ left: i * passo(), behavior: "smooth" });
+    setIndice(i);
   };
 
   if (!dati) {
@@ -105,6 +131,7 @@ export function FiltroDimensioneAziendale() {
 
   const clusterNondich = dati.cluster.find((c) => c.id === "nd");
   const clusterTutte = dati.cluster.find((c) => c.id === "tutte");
+  const totaleCard = clusterOrdinati.length;
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)", minWidth: 0, width: "100%", maxWidth: "100%" }}>
@@ -132,7 +159,15 @@ export function FiltroDimensioneAziendale() {
           <select
             value={vista}
             onChange={(e) => setVista(e.target.value as Vista)}
-            style={{ ...stileSelect, minWidth: 180 }}
+            style={{
+              font: "inherit",
+              fontSize: "0.82rem",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              border: "1px solid var(--color-divider)",
+              background: "var(--color-raised)",
+              color: "var(--color-text)",
+            }}
           >
             {VISTE.map((v) => (
               <option key={v.id} value={v.id}>{v.label}</option>
@@ -153,14 +188,11 @@ export function FiltroDimensioneAziendale() {
       {/* Dimensioni: pulsanti che portano alla card corrispondente */}
       <div style={{ display: "flex", gap: "var(--space-1)", flexWrap: "wrap", alignItems: "center" }}>
         <span style={{ fontSize: "0.78rem", color: "var(--color-text-soft)", marginRight: 4 }}>Dimensione</span>
-        {clusterOrdinati.map((cluster) => (
+        {clusterOrdinati.map((cluster, i) => (
           <button
             key={cluster.id}
             type="button"
-            onClick={() => {
-              const el = document.getElementById(`cluster-${cluster.id}`);
-              el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-            }}
+            onClick={() => vaiA(i)}
             className="btn-pill"
           >
             {cluster.nome.split(" (")[0]}
@@ -168,72 +200,17 @@ export function FiltroDimensioneAziendale() {
         ))}
       </div>
 
-      {/* Carosello: tutte le card sempre attive, con frecce di scorrimento */}
-      <div style={{ position: "relative", minWidth: 0, width: "100%", maxWidth: "100%", overflow: "hidden", padding: "0 28px" }}>
-        {/* Frecce ai lati */}
-        <button
-          type="button"
-          onClick={() => scorri(-1)}
-          aria-label="Scorri a sinistra"
-          style={{
-            position: "absolute",
-            left: 0,
-            top: "50%",
-            transform: "translateY(-50%)",
-            zIndex: 2,
-            width: 32,
-            height: 32,
-            borderRadius: "50%",
-            border: "1px solid var(--color-divider)",
-            background: "var(--color-raised)",
-            color: "var(--color-text)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.12)",
-          }}
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => scorri(1)}
-          aria-label="Scorri a destra"
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "50%",
-            transform: "translateY(-50%)",
-            zIndex: 2,
-            width: 32,
-            height: 32,
-            borderRadius: "50%",
-            border: "1px solid var(--color-divider)",
-            background: "var(--color-raised)",
-            color: "var(--color-text)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.12)",
-          }}
-        >
-          <ChevronRight size={18} />
-        </button>
-
+      {/* Carosello: card a larghezza piena su mobile, scroll a scatto */}
+      <div style={{ minWidth: 0, width: "100%", maxWidth: "100%" }}>
         <div
           ref={refCarosello}
           className="carosello-cluster"
           style={{
             display: "flex",
-            width: "100%",
-            maxWidth: "100%",
-            boxSizing: "border-box",
-            gap: "var(--space-3)",
+            gap: GAP_CARD,
             overflowX: "auto",
             scrollSnapType: "x mandatory",
-            padding: "var(--space-1) var(--space-2) var(--space-2)",
+            padding: "var(--space-1) 2px var(--space-2)",
             scrollbarWidth: "thin",
             overscrollBehaviorX: "contain",
           }}
@@ -248,15 +225,16 @@ export function FiltroDimensioneAziendale() {
             return (
               <div
                 key={cluster.id}
-                id={`cluster-${cluster.id}`}
                 style={{
                   border: "1px solid var(--color-divider)",
                   borderRadius: "6px",
                   padding: "var(--space-3)",
                   background: "var(--color-raised)",
                   scrollSnapAlign: "start",
-                  flex: "0 0 min(360px, calc(100vw - 96px))",
+                  flex: "0 0 calc(100% - 12px)",
+                  maxWidth: 420,
                   minWidth: 0,
+                  boxSizing: "border-box",
                   display: "grid",
                   gap: "var(--space-2)",
                   alignContent: "start",
@@ -265,7 +243,9 @@ export function FiltroDimensioneAziendale() {
                 <div>
                   <strong style={{ fontSize: "0.88rem", display: "block" }}>{cluster.nome}</strong>
                   <div style={{ marginTop: 6, display: "flex", gap: 8, alignItems: "baseline" }}>
-                    <span style={{ fontSize: "1.35rem", lineHeight: 1, fontWeight: 800, color: "var(--color-accent)" }}>{casi.toLocaleString("it-IT")}</span>
+                    <span style={{ fontSize: "1.35rem", lineHeight: 1, fontWeight: 800, color: "var(--color-accent)" }}>
+                      {casi.toLocaleString("it-IT")}
+                    </span>
                     <span style={{ fontSize: "0.75rem", color: "var(--color-text-soft)" }}>casi nel {anno}</span>
                     <Delta prev={casiPrev} curr={casi} />
                   </div>
@@ -296,6 +276,31 @@ export function FiltroDimensioneAziendale() {
               </div>
             );
           })}
+        </div>
+
+        {/* Comandi alla base: precedente / indicatore / prossima */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--space-3)", marginTop: "var(--space-2)" }}>
+          <button
+            type="button"
+            onClick={() => vaiA(Math.max(0, indice - 1))}
+            disabled={indice <= 0}
+            aria-label="Card precedente"
+            style={{ ...stilePulsanteNav, opacity: indice <= 0 ? 0.4 : 1, cursor: indice <= 0 ? "default" : "pointer" }}
+          >
+            <ChevronLeft size={16} /> Precedente
+          </button>
+          <span style={{ fontSize: "0.8rem", color: "var(--color-text-soft)" }}>
+            {indice + 1} / {totaleCard}
+          </span>
+          <button
+            type="button"
+            onClick={() => vaiA(Math.min(totaleCard - 1, indice + 1))}
+            disabled={indice >= totaleCard - 1}
+            aria-label="Card successiva"
+            style={{ ...stilePulsanteNav, opacity: indice >= totaleCard - 1 ? 0.4 : 1, cursor: indice >= totaleCard - 1 ? "default" : "pointer" }}
+          >
+            Successiva <ChevronRight size={16} />
+          </button>
         </div>
       </div>
     </div>
