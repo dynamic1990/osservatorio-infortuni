@@ -156,13 +156,12 @@ export default function CasiMortaliPage() {
       </header>
 
       {/* 1. Il punto di partenza (senza confronti anno su anno: vedi metodologia) */}
-      <Sezione occhiello="Il filtro per dimensione" titolo="Analizza per dimensione aziendale">
+      <Sezione occhiello="La dimensione aziendale" titolo="Analisi per dimensione aziendale">
         <div style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", maxWidth: "72ch" }}>
           Microimprese, piccole, medie e grandi aziende hanno profili di rischio
-          diversi: qui puoi selezionare una o più classi dimensionali e leggere
-          dinamiche, settori e fattori causali di quel sottoinsieme, anno per anno.
-          Le classi seguono la raccomandazione UE 2003/361; i casi senza dato di
-          dimensione sono nella classe &quot;Non dichiarata&quot;.
+          diversi: seleziona una o più classi dimensionali e l&apos;anno, e leggi
+          dinamiche, settori e fattori causali di quel sottoinsieme nel carosello,
+          con la variazione rispetto all&apos;anno precedente.
         </div>
         <FiltroDimensioneAziendale />
         <p className="source-note">
