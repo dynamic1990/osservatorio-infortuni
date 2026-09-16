@@ -107,7 +107,7 @@ export function FiltroDimensioneAziendale() {
   const clusterTutte = dati.cluster.find((c) => c.id === "tutte");
 
   return (
-    <div style={{ display: "grid", gap: "var(--space-4)" }}>
+    <div style={{ display: "grid", gap: "var(--space-4)", minWidth: 0, width: "100%", maxWidth: "100%" }}>
       {/* Filtri: anno a pulsanti + vista */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-3)", alignItems: "center" }}>
         <div style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
@@ -169,7 +169,7 @@ export function FiltroDimensioneAziendale() {
       </div>
 
       {/* Carosello: tutte le card sempre attive, con frecce di scorrimento */}
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", minWidth: 0, width: "100%", maxWidth: "100%", overflow: "hidden", padding: "0 28px" }}>
         {/* Frecce ai lati */}
         <button
           type="button"
@@ -177,7 +177,7 @@ export function FiltroDimensioneAziendale() {
           aria-label="Scorri a sinistra"
           style={{
             position: "absolute",
-            left: -14,
+            left: 0,
             top: "50%",
             transform: "translateY(-50%)",
             zIndex: 2,
@@ -202,7 +202,7 @@ export function FiltroDimensioneAziendale() {
           aria-label="Scorri a destra"
           style={{
             position: "absolute",
-            right: -14,
+            right: 0,
             top: "50%",
             transform: "translateY(-50%)",
             zIndex: 2,
@@ -227,11 +227,15 @@ export function FiltroDimensioneAziendale() {
           className="carosello-cluster"
           style={{
             display: "flex",
+            width: "100%",
+            maxWidth: "100%",
+            boxSizing: "border-box",
             gap: "var(--space-3)",
             overflowX: "auto",
             scrollSnapType: "x mandatory",
             padding: "var(--space-1) var(--space-2) var(--space-2)",
             scrollbarWidth: "thin",
+            overscrollBehaviorX: "contain",
           }}
         >
           {clusterOrdinati.map((cluster) => {
@@ -251,7 +255,7 @@ export function FiltroDimensioneAziendale() {
                   padding: "var(--space-3)",
                   background: "var(--color-raised)",
                   scrollSnapAlign: "start",
-                  flex: "0 0 clamp(280px, 78vw, 360px)",
+                  flex: "0 0 min(360px, calc(100vw - 96px))",
                   minWidth: 0,
                   display: "grid",
                   gap: "var(--space-2)",
