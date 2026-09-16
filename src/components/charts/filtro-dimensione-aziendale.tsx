@@ -154,26 +154,22 @@ export function FiltroDimensioneAziendale() {
           </div>
         </div>
 
-        <label style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
-          Analisi
-          <select
-            value={vista}
-            onChange={(e) => setVista(e.target.value as Vista)}
-            style={{
-              font: "inherit",
-              fontSize: "0.82rem",
-              padding: "8px 12px",
-              borderRadius: "6px",
-              border: "1px solid var(--color-divider)",
-              background: "var(--color-raised)",
-              color: "var(--color-text)",
-            }}
-          >
+        <div style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
+          <span>Analisi</span>
+          <div style={{ display: "flex", gap: "var(--space-1)", flexWrap: "wrap" }}>
             {VISTE.map((v) => (
-              <option key={v.id} value={v.id}>{v.label}</option>
+              <button
+                key={v.id}
+                type="button"
+                onClick={() => setVista(v.id)}
+                className={`btn-pill ${vista === v.id ? "active" : ""}`}
+                aria-pressed={vista === v.id}
+              >
+                {v.label}
+              </button>
             ))}
-          </select>
-        </label>
+          </div>
+        </div>
       </div>
 
       {/* Nota di copertura */}
@@ -289,9 +285,6 @@ export function FiltroDimensioneAziendale() {
           >
             <ChevronLeft size={16} /> Precedente
           </button>
-          <span style={{ fontSize: "0.8rem", color: "var(--color-text-soft)" }}>
-            {indice + 1} / {totaleCard}
-          </span>
           <button
             type="button"
             onClick={() => vaiA(Math.min(totaleCard - 1, indice + 1))}
