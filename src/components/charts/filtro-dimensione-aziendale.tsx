@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Tipi del dataset precalcolato (informo-cluster-dimensionali.json)
@@ -36,16 +36,16 @@ interface ClusterDataset {
 
 const ANNI = [2020, 2021, 2022, 2023, 2024];
 
-// Viste mostrate come select nel pannello
-type Vista = "incidenti" | "settori" | "fattoriTipo" | "problemiSicurezza";
+// Viste mostrate: solo dinamiche e settori (tipi di fattore e problemi di sicurezza rimossi)
+type Vista = "incidenti" | "settori";
 const VISTE: { id: Vista; label: string }[] = [
   { id: "incidenti", label: "Dinamiche" },
   { id: "settori", label: "Settori" },
-  { id: "fattoriTipo", label: "Tipi di fattore" },
-  { id: "problemiSicurezza", label: "Problemi di sicurezza" },
 ];
 
-// Stile comune per select
+// Ordine delle card: micro, piccole, medie, grandi, non dichiarata
+const ORDINE = ["micro", "piccola", "media", "grande", "nd"];
+
 const stileSelect = {
   font: "inherit",
   fontSize: "0.82rem",
@@ -73,9 +73,9 @@ function Delta({ prev, curr }: { prev?: number; curr?: number }) {
 
 export function FiltroDimensioneAziendale() {
   const [dati, setDati] = useState<ClusterDataset | null>(null);
-  const [selezionati, setSelezionati] = useState<Set<string>>(new Set(["micro"]));
   const [anno, setAnno] = useState(2024);
   const [vista, setVista] = useState<Vista>("incidenti");
+  const refCarosello = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     fetch("/data/informo-cluster-dimensionali.json")
@@ -84,19 +84,16 @@ export function FiltroDimensioneAziendale() {
       .catch(() => setDati(null));
   }, []);
 
-  const toggle = (id: string) => {
-    setSelezionati((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
+  const clusterOrdinati = useMemo(() => {
+    const mappa = new Map((dati?.cluster ?? []).map((c) => [c.id, c]));
+    return ORDINE.map((id) => mappa.get(id)).filter((c): c is ClusterDim => Boolean(c));
+  }, [dati]);
 
-  const clusterVisibili = useMemo(
-    () => (dati?.cluster ?? []).filter((c) => selezionati.has(c.id) && c.id !== "tutte"),
-    [dati, selezionati]
-  );
+  const scorri = (dir: 1 | -1) => {
+    const el = refCarosello.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 320, behavior: "smooth" });
+  };
 
   if (!dati) {
     return (
@@ -111,31 +108,8 @@ export function FiltroDimensioneAziendale() {
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      {/* Filtri: dimensione (multi-select) + anno + vista */}
+      {/* Filtri: anno + vista */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-3)", alignItems: "center" }}>
-        <label style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
-          Dimensione aziendale
-          <select
-            multiple
-            size={5}
-            aria-label="Seleziona una o più dimensioni aziendali"
-            value={[...selezionati]}
-            onChange={(e) => {
-              const voci = Array.from(e.target.selectedOptions).map((o) => o.value);
-              setSelezionati(new Set(voci));
-            }}
-            style={{ ...stileSelect, minWidth: 260, lineHeight: 1.8 }}
-          >
-            {dati.cluster
-              .filter((c) => c.id !== "tutte")
-              .map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nome} ({c.casi})
-                </option>
-              ))}
-          </select>
-        </label>
-
         <label style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
           Anno
           <select
@@ -172,11 +146,62 @@ export function FiltroDimensioneAziendale() {
         dimensione non dichiarata).
       </p>
 
-      {/* Carosello di card per cluster */}
-      {clusterVisibili.length === 0 ? (
-        <p className="source-note">Nessun cluster selezionato: scegli una o più dimensioni.</p>
-      ) : (
+      {/* Carosello: tutte le card sempre attive, con frecce di scorrimento */}
+      <div style={{ position: "relative" }}>
+        {/* Frecce ai lati */}
+        <button
+          type="button"
+          onClick={() => scorri(-1)}
+          aria-label="Scorri a sinistra"
+          style={{
+            position: "absolute",
+            left: -14,
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 2,
+            width: 32,
+            height: 32,
+            borderRadius: "50%",
+            border: "1px solid var(--color-divider)",
+            background: "var(--color-raised)",
+            color: "var(--color-text)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.12)",
+          }}
+        >
+          <ChevronLeft size={18} />
+        </button>
+        <button
+          type="button"
+          onClick={() => scorri(1)}
+          aria-label="Scorri a destra"
+          style={{
+            position: "absolute",
+            right: -14,
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 2,
+            width: 32,
+            height: 32,
+            borderRadius: "50%",
+            border: "1px solid var(--color-divider)",
+            background: "var(--color-raised)",
+            color: "var(--color-text)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.12)",
+          }}
+        >
+          <ChevronRight size={18} />
+        </button>
+
         <div
+          ref={refCarosello}
           className="carosello-cluster"
           style={{
             display: "grid",
@@ -185,18 +210,16 @@ export function FiltroDimensioneAziendale() {
             gap: "var(--space-3)",
             overflowX: "auto",
             scrollSnapType: "x mandatory",
-            paddingBottom: "var(--space-2)",
+            padding: "var(--space-1)",
           }}
         >
-          {clusterVisibili.map((cluster) => {
+          {clusterOrdinati.map((cluster) => {
             const annoCorrente = cluster.perAnno.find((p) => p.anno === anno);
             const annoPrecedente = cluster.perAnno.find((p) => p.anno === anno - 1);
             const casi = annoCorrente?.casi ?? 0;
             const casiPrev = annoPrecedente?.casi ?? undefined;
             const voci = annoCorrente?.viste[vista] ?? [];
             const vociPrev = annoPrecedente?.viste[vista] ?? [];
-            const casiTotVista = voci.reduce((s, v) => s + v.count, 0);
-            const casiTotVistaPrev = vociPrev.reduce((s, v) => s + v.count, 0);
             return (
               <div
                 key={cluster.id}
@@ -230,7 +253,7 @@ export function FiltroDimensioneAziendale() {
                             <span style={{ color: "var(--color-text-soft)" }}>{v.nome}</span>
                             <span style={{ display: "flex", gap: 6, alignItems: "baseline", flexShrink: 0 }}>
                               <strong>{v.quota.toLocaleString("it-IT", { maximumFractionDigits: 1 })}%</strong>
-                              <Delta prev={casiTotVistaPrev ? prev : undefined} curr={v.count} />
+                              <Delta prev={prev} curr={v.count} />
                             </span>
                           </div>
                           <div style={{ height: 4, borderRadius: 999, background: "var(--color-divider)", overflow: "hidden" }}>
@@ -245,7 +268,7 @@ export function FiltroDimensioneAziendale() {
             );
           })}
         </div>
-      )}
+      </div>
     </div>
   );
 }
