@@ -16,19 +16,6 @@ export interface BandoPrevenzione {
 
 export const AGGIORNATO_AL = "17 settembre 2026";
 
-export const RIEPILOGO_RISORSE = {
-  // Somma delle dotazioni dei bandi "Aperto" o con dotazione annunciata presenti in questa pagina.
-  disponibiliOra: "oltre 635 milioni di euro",
-  disponibiliOraDettaglio: "600 M€ Bando ISI 2025/2026 + 30 M€ Fondimpresa Avviso 4/2026 + 5 M€ Regione Lazio",
-  // Fonte ufficiale INAIL: comunicazione dicembre 2024 sulle 15 edizioni dell'iniziativa (dal 2010).
-  stanziatoDal2010: "oltre 4 miliardi di euro",
-  stanziatoDal2010Nota: "solo bandi ISI INAIL, 15 edizioni dal 2010 al 2024",
-  cumulatoConEdizioneCorrente: "oltre 4,7 miliardi di euro",
-  cumulatoConEdizioneCorrenteNota: "inclusa l'edizione 2025/2026 da 600 milioni",
-};
-
-// Elenco curato a mano: solo bandi verificati sulle fonti ufficiali.
-// INL e ASL non erogano finanziamenti alle imprese: non compaiono come fonti.
 export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
   {
     id: "inail-isi-2025-2026",
@@ -103,5 +90,50 @@ export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
     regione: "Calabria (Cosenza)",
     stato: "Da verificare",
     link: "https://confcommerciocosenza.it/bando-impresa-sicura-2026-contributi-per-la-sicurezza-nei-luoghi-di-lavoro/",
+  },
+
+  {
+    id: "calabria-impresa-sicura",
+    ente: "Regione Calabria",
+    titolo: "Avviso Impresa Sicura (PR Calabria FESR-FSE+ 2021-2027)",
+    descrizione:
+      "Intervento a sostegno delle imprese che rafforzano la prevenzione e la sicurezza nei luoghi di lavoro, finanziato dal Programma Regionale Calabria FESR-FSE+ 2021-2027.",
+    regione: "Calabria",
+    stato: "Da verificare",
+    link: "https://confcommerciocosenza.it/bando-impresa-sicura-2026-contributi-per-la-sicurezza-nei-luoghi-di-lavoro/",
+    note: "L'avviso risulta in fase di pre-informazione (gennaio 2026): verificare l'apertura della procedura sul portale della Regione Calabria e sul BURC.",
+  },
+  {
+    id: "emilia-romagna-formazione",
+    ente: "Regione Emilia-Romagna",
+    titolo: "Terzo avviso formazione aggiuntiva salute e sicurezza",
+    descrizione:
+      "Procedura a evidenza pubblica per selezionare e finanziare interventi formativi aggiuntivi in materia di salute e sicurezza nei luoghi di lavoro, in attuazione dell'Accordo quadro INAIL-Conferenza delle Regioni.",
+    regione: "Emilia-Romagna",
+    stato: "Da verificare",
+    link: "https://formazionelavoro.regione.emilia-romagna.it/leggi-atti-bandi/bandi-regionali/bandi-per-annualita/2026/terzo-avviso-a-presentare-interventi-di-formazione-aggiuntiva-in-materia-di-salute-e-sicurezza-nei-luoghi-di-lavoro",
+    note: "Avviso pubblicato a febbraio 2026: verificare scadenze e modalità di presentazione delle domande sul portale della Regione.",
+  },
+  {
+    id: "lombardia-voucher-sicurezza",
+    ente: "Regione Lombardia",
+    titolo: "Voucher aziendali formazione aggiuntiva sicurezza",
+    descrizione:
+      "Voucher per interventi di formazione aggiuntiva in materia di sicurezza nei luoghi di lavoro, rivolti a dipendenti e datori di lavoro delle aziende con codici ATECO C23-C33, E, F41-F43.",
+    regione: "Lombardia",
+    stato: "Da verificare",
+    link: "https://www.bandi.regione.lombardia.it/servizi/servizio/bandi/dettaglio/istruzione-formazione-lavoro/lavoro-occupazione/avviso-pubblico-l-assegnazione-voucher-aziendali-interventi-formazione-aggiuntiva-materia-sicurezza-salute-luoghi-lavoro-RLW12024041803",
+    note: "Il contributo è erogato a rimborso dopo il completamento del corso e il rilascio delle attestazioni. Verificare la disponibilità dell'edizione corrente sul portale bandi della Regione.",
+  },
+  {
+    id: "abruzzo-formazione-fse",
+    ente: "Regione Abruzzo",
+    titolo: "Contributi formazione su sicurezza e salute sul lavoro (FSE+ 2021-2027)",
+    descrizione:
+      "Contributi a fondo perduto per la formazione su salute e sicurezza sul lavoro, cofinanziati dal Fondo Sociale Europeo Plus 2021-2027, per rafforzare la consapevolezza dei rischi negli ambienti professionali.",
+    regione: "Abruzzo",
+    stato: "Da verificare",
+    link: "https://edunews24.it/bandi/abruzzo-formazione-sicurezza-salute-lavoro",
+    note: "Bando FSE+ con finestra recente (settembre 2026): verificare apertura e scadenze sul portale della Regione Abruzzo.",
   },
 ];

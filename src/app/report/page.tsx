@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 const REPORT = [
   {
     href: "/report/infortuni-1-semestre-2026",
+    name: "Report overview infortuni",
     title: "Infortuni sul lavoro, primo semestre 2026: più denunce, meno casi mortali",
     date: "16 settembre 2026",
     description:
@@ -40,8 +41,8 @@ export default function ReportIndexPage() {
           {REPORT.map((report) => (
             <article key={report.href} className="card" style={{ display: "grid", gap: "var(--space-3)" }}>
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "var(--space-2)", alignItems: "center" }}>
-                <span className="eyebrow" style={{ margin: 0 }}>Report · {report.date}</span>
-                <time dateTime="2026-09-16" style={{ color: "var(--color-text-muted)", fontSize: "0.82rem" }}>{report.date}</time>
+                <span className="eyebrow" style={{ margin: 0 }}>{report.name}</span>
+                <time dateTime="2026-09-16" style={{ color: "var(--color-text-muted)", fontSize: "0.82rem" }}>Pubblicato il {report.date}</time>
               </div>
               <h2 style={{ margin: 0, fontSize: "clamp(1.45rem, 4vw, 2rem)", maxWidth: "28ch" }}>
                 <Link href={report.href} style={{ color: "var(--color-text)", textDecoration: "none" }}>{report.title}</Link>

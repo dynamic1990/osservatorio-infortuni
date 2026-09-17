@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AGGIORNATO_AL, BANDI_PREVENZIONE, RIEPILOGO_RISORSE, type BandoPrevenzione, type StatoBando } from "@/data/bandi-prevenzione";
+import { AGGIORNATO_AL, BANDI_PREVENZIONE, type BandoPrevenzione, type StatoBando } from "@/data/bandi-prevenzione";
 
 export const revalidate = 86_400;
 
@@ -137,57 +137,6 @@ export default function BandiPrevenzionePage() {
           </div>
         </div>
       </header>
-
-      <section className="card" aria-label="Risorse per la prevenzione">
-        <div className="card-header">
-          <h2 className="card-title">Le risorse per la prevenzione in cifre</h2>
-          <p className="card-desc">
-            Quanto è disponibile oggi per le imprese e quanto lo Stato ha stanziato nel tempo, secondo
-            le fonti ufficiali. Il dato &ldquo;erogato&rdquo; non è pubblicato per singolo bando in tempo reale:
-            INAIL rende disponibili le dotazioni stanziate e i bandi finanziati, non il consuntivo
-            dell&apos;erogato per ogni edizione.
-          </p>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "var(--space-3)" }}>
-          <div style={{ border: "1px solid var(--color-divider)", borderRadius: 8, padding: "var(--space-4)", background: "var(--color-surface-2)" }}>
-            <div style={{ fontSize: "0.75rem", fontWeight: 750, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-text-muted)" }}>
-              Disponibili ora
-            </div>
-            <div style={{ fontSize: "1.7rem", fontWeight: 850, letterSpacing: "-0.02em", marginTop: "var(--space-1)" }}>
-              {RIEPILOGO_RISORSE.disponibiliOra}
-            </div>
-            <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginTop: "var(--space-1)" }}>
-              {RIEPILOGO_RISORSE.disponibiliOraDettaglio}
-            </div>
-          </div>
-          <div style={{ border: "1px solid var(--color-divider)", borderRadius: 8, padding: "var(--space-4)", background: "var(--color-surface-2)" }}>
-            <div style={{ fontSize: "0.75rem", fontWeight: 750, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-text-muted)" }}>
-              Stanziato dal 2010 (solo ISI)
-            </div>
-            <div style={{ fontSize: "1.7rem", fontWeight: 850, letterSpacing: "-0.02em", marginTop: "var(--space-1)" }}>
-              {RIEPILOGO_RISORSE.stanziatoDal2010}
-            </div>
-            <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginTop: "var(--space-1)" }}>
-              {RIEPILOGO_RISORSE.stanziatoDal2010Nota}
-            </div>
-          </div>
-          <div style={{ border: "1px solid var(--color-divider)", borderRadius: 8, padding: "var(--space-4)", background: "var(--color-surface-2)" }}>
-            <div style={{ fontSize: "0.75rem", fontWeight: 750, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-text-muted)" }}>
-              Con l&apos;edizione corrente
-            </div>
-            <div style={{ fontSize: "1.7rem", fontWeight: 850, letterSpacing: "-0.02em", marginTop: "var(--space-1)" }}>
-              {RIEPILOGO_RISORSE.cumulatoConEdizioneCorrente}
-            </div>
-            <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginTop: "var(--space-1)" }}>
-              {RIEPILOGO_RISORSE.cumulatoConEdizioneCorrenteNota}
-            </div>
-          </div>
-        </div>
-        <p style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", margin: "var(--space-3) 0 0" }}>
-          Fonte: INAIL, comunicazione ufficiale dicembre 2024 (15 edizioni del bando ISI dal 2010);
-          dotazioni delle edizioni 2025/2026 e avvisi dei fondi interprofessionali pubblicati nel 2026.
-        </p>
-      </section>
 
       <section className="card" aria-label="Elenco bandi attivi" style={{ padding: "var(--space-3)" }}>
         <div className="card-header">
