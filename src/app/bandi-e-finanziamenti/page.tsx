@@ -132,8 +132,7 @@ export default function BandiPrevenzionePage() {
               aperti, delle scadenze e degli importi, a partire dalle fonti che erogano davvero i contributi.
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-              Aggiornato al {AGGIORNATO_AL} &middot; Progetto a cura di{" "}
-              <strong style={{ color: "var(--color-text)" }}>Ing. Damiano Salvati</strong>
+              Aggiornato al {AGGIORNATO_AL}
             </div>
           </div>
         </div>
@@ -160,9 +159,7 @@ export default function BandiPrevenzionePage() {
         <p style={{ color: "var(--color-text-soft)", fontSize: "0.92rem", margin: 0 }}>
           Le informazioni sono curate a mano e verificate sulle fonti ufficiali, ma le condizioni di ogni bando
           cambiano spesso. <strong>Prima di presentare una domanda, verifica sempre i dettagli sul portale
-          dell&apos;ente che emette il bando.</strong> L&apos;Ispettorato Nazionale del Lavoro e le ASL non
-          pubblicano bandi di finanziamento per le imprese: il loro ruolo è di vigilanza, informazione e
-          assistenza, e per questo non compaiono tra le fonti.
+          dell&apos;ente che emette il bando.</strong>
         </p>
       </section>
     </div>

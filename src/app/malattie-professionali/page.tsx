@@ -57,10 +57,6 @@ export default function MalattieProfessionaliPage() {
               2025 e 2026, raggruppamento clinico ICD-10, distribuzione territoriale e decessi
               riconosciuti nel quinquennio 2020-2024.
             </p>
-            <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-              Progetto a cura di{" "}
-              <strong style={{ color: "var(--color-text)" }}>Ing. Damiano Salvati</strong>
-            </div>
           </div>
           <InfoModalButton />
         </div>
