@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CircleDollarSign, Cross, ExternalLink, FileText, Home, Menu, Newspaper, UserSearch, Workflow, X } from "lucide-react";
+import { BookOpen, CircleDollarSign, Cross, ExternalLink, FileText, Home, Landmark, Menu, Newspaper, UserSearch, Workflow, X } from "lucide-react";
 import { GitHubIcon } from "./social-icons";
 
 const VOCI = [
@@ -11,6 +11,7 @@ const VOCI = [
   { href: "/analisi-delle-cause", label: "Analisi delle cause", icon: Workflow, group: "Esplora" },
   { href: "/malattie-professionali", label: "Malattie professionali", icon: Cross, group: "Esplora" },
   { href: "/vigilanza", label: "Vigilanza", icon: UserSearch, group: "Esplora" },
+  { href: "/bandi-e-finanziamenti", label: "Bandi e finanziamenti", icon: Landmark, group: "Esplora" },
   { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio", icon: CircleDollarSign, group: "Strumenti" },
   { href: "/report", label: "Report", icon: Newspaper, group: "Strumenti" },
   { href: "/fonti", label: "Fonti e metodo", icon: BookOpen, group: "Trasparenza" },

@@ -30,6 +30,10 @@ const sections = [
     title: "Un controllo mensile, senza import automatici",
     body: "Il 15 di ogni mese un audit separato dal Radar controlla gli endpoint delle fonti ufficiali e confronta la loro impronta con la baseline precedente. Se rileva una variazione, invia una segnalazione. Non modifica dataset e non integra nuove annualità senza una decisione e una verifica manuale.",
   },
+  {
+    title: "Licenza: codice aperto, dati pubblici",
+    body: "Il codice sorgente del progetto è rilasciato sotto licenza GNU AGPL-3.0: chiunque può usarlo, studiarlo, modificarlo e ridistribuirlo, anche in ambito commerciale. Chi mette online una versione modificata, o la integra in un altro sistema, deve pubblicarne il sorgente con la stessa licenza: il copyleft garantisce che il progetto resti aperto nel tempo. I dati mostrati non appartengono al progetto: restano di proprietà degli enti che li pubblicano (INAIL, ISTAT, Eurostat, INL) e sono soggetti alle loro licenze d'uso.",
+  },
 ];
 
 export default function ProgettoPage() {

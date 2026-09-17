@@ -57,9 +57,7 @@ export default function VigilanzaPage() {
               dai provvedimenti di sospensione alle nuove regole della patente a crediti.
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-              Progetto a cura di{" "}
-              <strong style={{ color: "var(--color-text)" }}>Ing. Damiano Salvati</strong> &middot;
-              aggiornato con il Rapporto annuale INL 2025
+              Aggiornato con il Rapporto annuale INL 2025
             </div>
           </div>
           <InfoModalVigilanza />
