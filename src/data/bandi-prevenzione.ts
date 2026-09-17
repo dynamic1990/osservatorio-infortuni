@@ -16,6 +16,17 @@ export interface BandoPrevenzione {
 
 export const AGGIORNATO_AL = "17 settembre 2026";
 
+export const RIEPILOGO_RISORSE = {
+  // Somma delle dotazioni dei bandi "Aperto" o con dotazione annunciata presenti in questa pagina.
+  disponibiliOra: "oltre 635 milioni di euro",
+  disponibiliOraDettaglio: "600 M€ Bando ISI 2025/2026 + 30 M€ Fondimpresa Avviso 4/2026 + 5 M€ Regione Lazio",
+  // Fonte ufficiale INAIL: comunicazione dicembre 2024 sulle 15 edizioni dell'iniziativa (dal 2010).
+  stanziatoDal2010: "oltre 4 miliardi di euro",
+  stanziatoDal2010Nota: "solo bandi ISI INAIL, 15 edizioni dal 2010 al 2024",
+  cumulatoConEdizioneCorrente: "oltre 4,7 miliardi di euro",
+  cumulatoConEdizioneCorrenteNota: "inclusa l'edizione 2025/2026 da 600 milioni",
+};
+
 // Elenco curato a mano: solo bandi verificati sulle fonti ufficiali.
 // INL e ASL non erogano finanziamenti alle imprese: non compaiono come fonti.
 export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
@@ -81,7 +92,7 @@ export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
     regione: "Campania",
     stato: "Da verificare",
     link: "https://www.regione.campania.it/cittadini/it/tematiche/regione-informa-lavoro/sicurezza-sul-lavoro-prevenzione-rischi-e-formazione",
-    note: "Avviso pubblicato sul Bollettino ufficiale regionale: verificare stato e scadenze della misura.",
+    note: "La misura è stata annunciata dalla Regione (2 milioni di euro), ma lo stato attuale della finestra di domanda non è confermabile dalle pagine ufficiali consultate: verificare sul BURC e sul portale della Regione se il bando è aperto.",
   },
   {
     id: "cosenza-impresa-sicura",
