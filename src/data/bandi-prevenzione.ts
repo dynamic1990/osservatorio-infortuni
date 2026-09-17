@@ -136,4 +136,27 @@ export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
     link: "https://edunews24.it/bandi/abruzzo-formazione-sicurezza-salute-lavoro",
     note: "Bando FSE+ con finestra recente (settembre 2026): verificare apertura e scadenze sul portale della Regione Abruzzo.",
   },
+  {
+    id: "camcom-tno-voucher-sicurezza",
+    ente: "Camera di Commercio Toscana Nord-Ovest",
+    titolo: "Bando voucher per interventi di sicurezza 2026",
+    descrizione:
+      "Voucher a fondo perduto per progetti di acquisto di beni e servizi che migliorano la sicurezza dei luoghi di lavoro, inclusi attrezzature e impianti di nuova fabbricazione, oltre alla vulnerabilità fisica e informatica delle imprese.",
+    contributo: "Voucher a fondo perduto su spese ammissibili (spese dal 1° gennaio 2026, fino a 120 giorni dalla concessione)",
+    regione: "Toscana (TNO: Pisa, Lucca, Massa-Carrara, Prato, Pistoia, Livorno)",
+    stato: "Da verificare",
+    link: "https://tno.camcom.it/bandi/2026/bando-la-concessione-di-voucher-finalizzati-alla-realizzazione-di-interventi-la",
+    note: "Bando camerale pubblicato a febbraio 2026: verificare lo stato della procedura e il rimanente disponibile sul sito della Camera di Commercio.",
+  },
+  {
+    id: "fondo-nuove-competenze",
+    ente: "Ministero del Lavoro / ANPAL",
+    titolo: "Fondo Nuove Competenze (FNC)",
+    descrizione:
+      "Il fondo statale per la formazione continua finanzia piani formativi aziendali, settoriali e territoriali, incluse la formazione in materia di salute e sicurezza e i bonus per la formazione dei neoassunti, collegati ad accordi collettivi di rimodulazione dell'orario.",
+    regione: "Nazionale",
+    stato: "Da verificare",
+    link: "https://www.lavoro.gov.it/temi-e-priorita/orientamento-e-formazione/focus/fondi-alle-imprese-la-formazione-continua/pagine-0",
+    note: "Gli avvisi FNC vengono pubblicati dall'ANPAL per edizioni successive: verificare sul portale del Ministero l'avviso aperto e le sue scadenze.",
+  },
 ];
