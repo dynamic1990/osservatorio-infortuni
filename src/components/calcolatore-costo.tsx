@@ -51,6 +51,14 @@ type Esposizione = keyof typeof REPUTAZIONE_BANDE.esposizione;
 type Mercato = keyof typeof REPUTAZIONE_BANDE.mercato;
 type Gravita = keyof typeof REPUTAZIONE_BANDE.gravita;
 
+// Riferimento nazionale INAIL: "Il costo dei danni da lavoro per l'azienda Italia"
+// (Consulenza statistico attuariale, 2026, dati 2023). Costo medio per infortunio
+// con prestazione INAIL: circa 33.000 euro; malattia professionale: circa 61.000.
+// Costo complessivo nazionale 2023: 49,2 miliardi, 2,31% del PIL. Sono medie
+// macroeconomiche (rapporto costo totale / eventi indennizzati), usate qui solo
+// come benchmark di confronto, non come tariffa del singolo evento aziendale.
+const MEDIA_INAIL_INFORTUNIO = 33_000; // costo medio per infortunio, benchmark INAIL 2023
+
 // Ordini di grandezza per eventi gravi/mortali. Sono stime indicativi costruite su
 // fonti pubbliche (tabelle di risarcimento per macrolesioni, pratiche correnti sui
 // costi di difesa) e NON rappresentano importi dovuti. Ogni caso concreto va valutato
@@ -217,12 +225,24 @@ export function CalcolatoreCosto() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "var(--space-3)" }}>
         {([["minimo", "Scenario minimo", result.minimo], ["probabile", "Scenario probabile", result.probabile], ["grave", "Scenario grave", result.grave]] as const).map(([key, label, value]) => <div key={key} style={{ padding: "var(--space-3)", background: key === "probabile" ? "var(--color-text)" : "var(--color-surface)", color: key === "probabile" ? "var(--color-raised)" : "var(--color-text)", border: "1px solid var(--color-divider)" }}><div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.04em", opacity: 0.75 }}>{label}</div><strong style={{ display: "block", fontSize: "1.45rem", marginTop: 5 }}>{euro.format(value)}</strong></div>)}
       </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--space-3)", marginTop: "var(--space-3)" }}>
+        {([
+          ["Costo totale stimato", euro.format(result.probabile)],
+          ["Costo medio per infortunio", euro.format(infortunati > 0 ? result.probabile / infortunati : 0)],
+          ["Costo per giorno di assenza", euro.format(infortunati * effGiorni > 0 ? result.assenza / (infortunati * effGiorni) : 0)],
+          ["Incidenza sul fatturato", `${fatturato > 0 ? `${((result.probabile / fatturato) * 100).toFixed(2)}%` : "n.d."}`],
+          ["Vs media nazionale INAIL", `${infortunati > 0 ? `${result.probabile / infortunati >= MEDIA_INAIL_INFORTUNIO ? "+" : ""}${Math.round((result.probabile / infortunati) / MEDIA_INAIL_INFORTUNIO * 100 - 100)}%` : "n.d."}`],
+        ] as const).map(([label, value]) => <div key={label} style={{ padding: "var(--space-2) var(--space-3)", background: "var(--color-surface)", border: "1px solid var(--color-divider)" }}><div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--color-text-soft)" }}>{label}</div><strong style={{ display: "block", fontSize: "1.05rem", marginTop: 3 }}>{value}</strong></div>)}
+      </div>
+      <p className="source-note" style={{ marginTop: "var(--space-2)" }}>
+        Benchmark: il costo medio per infortunio del calcolo è confrontato con la media nazionale INAIL 2023 di circa {euro.format(MEDIA_INAIL_INFORTUNIO)} per evento con prestazione INAIL (INAIL, <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em>, Consulenza statistico attuariale, 2026). Nel 2023 il costo complessivo nazionale di infortuni e malattie professionali è stimato in 49,2 miliardi di euro, pari al 2,31% del PIL. Sono medie macroeconomiche del sistema Paese: un evento aziendale può costare molto di più o di meno a seconda di gravità, settore e assenze.
+      </p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "8px", marginTop: "var(--space-3)", fontSize: "0.82rem" }}>
         <span>Assenza: <strong>{euro.format(result.assenza)}</strong></span><span>Sostituzione: <strong>{euro.format(result.sostituzione)}</strong></span><span>Fermo: <strong>{euro.format(result.fermo)}</strong></span><span>Gestione e sanzioni: <strong>{euro.format(result.amministrativi)}</strong></span>
         {mostraReputazione && <span>Danno di immagine: <strong>{euro.format(result.repMedio)}</strong></span>}
         {mostraGravi && <span>Evento grave/mortale: <strong>{euro.format(result.evMedio)}</strong></span>}
       </div>
     </div>
-    <p className="source-note">Stima orientativa, non contabile né giuridica. I valori operativi sono inseriti dall&apos;utente e precompilati dalle medie INAIL {anno} (dataset multidimensionale integrato nell&apos;Osservatorio): durata media delle assenze, casi e incidenza per settore e regione. Il danno di immagine e gli eventi gravi/mortali usano bande prudenziali dichiarate, da verificare sempre con i professionisti competenti (legale, consulente del lavoro, medico legale). Il calcolatore non determina responsabilità, sanzioni o rimborsi INAIL. Le tabelle sanzionatorie del D.Lgs. 81/08 sono aggiornate periodicamente: gli importi indicati qui sono ordini di grandezza da verificare sulla fonte ufficiale.</p>
+    <p className="source-note">Stima orientativa, non contabile né giuridica. La struttura a componenti (assicurativo, prevenzionale, conseguente non assicurativo) e i benchmark nazionali (costo medio per infortunio, costo complessivo e peso sul PIL) seguono la metodologia della Consulenza statistico attuariale INAIL: <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em>, 2026, dati 2023. I valori operativi sono inseriti dall&apos;utente e precompilati dalle medie INAIL {anno} (dataset multidimensionale integrato nell&apos;Osservatorio): durata media delle assenze, casi e incidenza per settore e regione. Il danno di immagine e gli eventi gravi/mortali usano bande prudenziali dichiarate, da verificare sempre con i professionisti competenti (legale, consulente del lavoro, medico legale). Il calcolatore non determina responsabilità, sanzioni o rimborsi INAIL. Le tabelle sanzionatorie del D.Lgs. 81/08 sono aggiornate periodicamente: gli importi indicati qui sono ordini di grandezza da verificare sulla fonte ufficiale.</p>
   </div>;
 }

@@ -4,7 +4,7 @@ import { CalcolatoreCosto } from "@/components/calcolatore-costo";
 export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Calcolatore del costo di un infortunio per l'azienda",
-  description: "Stima orientativa dei costi diretti, operativi, reputazionali e degli eventi gravi di un infortunio sul lavoro, con precompilazione dai dati INAIL per settore e regione.",
+  description: "Stima orientativa dei costi diretti, operativi, reputazionali e degli eventi gravi di un infortunio sul lavoro, con benchmark della metodologia INAIL sul costo dei danni da lavoro e precompilazione dai dati INAIL per settore e regione.",
   alternates: { canonical: "/calcolatore-costo-infortunio" },
 };
 
@@ -19,9 +19,10 @@ export default function CalcolatorePage() {
     <section className="card" style={{ fontSize: "0.88rem", lineHeight: 1.55 }}>
       <h2 className="card-title">Come leggere il risultato</h2>
       <p>Il calcolatore non produce una tariffa ufficiale e non sostituisce paghe, contabilità, consulenza legale o valutazione del rischio. Serve a rendere visibili componenti che spesso restano disperse: assenza, riorganizzazione del lavoro, sostituzione, fermo, gestione dell&apos;evento, danno di immagine e costi legali.</p>
+      <p>La struttura a componenti segue la metodologia della Consulenza statistico attuariale INAIL, pubblicazione “Il costo dei danni da lavoro per l&#39;azienda Italia” (2026, dati 2023): costi diretti e indiretti, assenze, sostituzione, perdita di produttività, costi di gestione e danno di immagine. I benchmark nazionali mostrati nel risultato (costo medio per infortunio di circa 33.000 euro, costo complessivo di 49,2 miliardi di euro e 2,31% del PIL) sono medie macroeconomiche di riferimento, non la tariffa del singolo evento aziendale.</p>
       <p>I valori di assenza vengono precompilati con la durata media delle assenze del settore ATECO o della regione selezionata, dal dataset INAIL {new Date().getFullYear() === 2026 ? "2024" : "2024"} integrato nell&apos;Osservatorio. Restano sempre modificabili: il CCNL, il ruolo e la mansione incidono sul costo effettivo.</p>
       <p>Il danno di immagine è una stima a bande espressa come quota del fatturato: la correlazione tra eventi gravi e perdita di commesse è documentata, ma non esiste una tariffa univoca, quindi il calcolatore restituisce un intervallo prudenziale. Gli eventi gravi e mortali usano ordini di grandezza per risarcimento, sanzioni e difesa: ogni caso va valutato con legale e consulente tecnico.</p>
     </section>
-    <p className="source-note">Metodologia: modello parametrico sviluppato per l&apos;Osservatorio Infortuni, con medie INAIL (dataset multidimensionale, anno 2024) per la precompilazione e bande prudenziali dichiarate per danno di immagine ed eventi gravi. Nessun valore preimpostato rappresenta un dato dovuto; gli importi sanzionatori vanno verificati sulla fonte ufficiale (D.Lgs. 81/08 e aggiornamenti).</p>
+    <p className="source-note">Metodologia: modello parametrico sviluppato per l&apos;Osservatorio Infortuni, con struttura a componenti ispirata a INAIL, <em>Il costo dei danni da lavoro per l&#39;azienda Italia</em> (Consulenza statistico attuariale, 2026, dati 2023), medie INAIL (dataset multidimensionale, anno 2024) per la precompilazione e bande prudenziali dichiarate per danno di immagine ed eventi gravi. Nessun valore preimpostato rappresenta un dato dovuto; gli importi sanzionatori vanno verificati sulla fonte ufficiale (D.Lgs. 81/08 e aggiornamenti).</p>
   </main>;
 }
