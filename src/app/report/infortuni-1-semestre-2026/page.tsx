@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InfoModalButton } from "@/components/ui/info-modal";
 
 export const metadata: Metadata = {
   title: "Infortuni sul lavoro 2026: i dati INAIL aggiornati (I semestre)",
@@ -36,9 +37,32 @@ export default function ReportArticlePage() {
     <main className="container" style={{ paddingTop: "var(--space-5)", paddingBottom: "var(--space-10)" }}>
       <article style={{ maxWidth: "76ch", margin: "0 auto", display: "grid", gap: "var(--space-6)" }}>
         <header style={{ borderBottom: "1px solid var(--color-divider)", paddingBottom: "var(--space-5)" }}>
-          <p className="eyebrow" style={{ margin: 0 }}>REPORT · INFORTUNI</p>
-          <h1 style={{ fontSize: "clamp(2rem, 7vw, 3.5rem)", lineHeight: 1.06, margin: "var(--space-2) 0 var(--space-3)" }}>Infortuni sul lavoro, primo semestre 2026: più denunce, meno casi mortali</h1>
-          <p style={{ color: "var(--color-text-muted)", margin: 0, fontSize: "0.86rem" }}><strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-09-16">16 settembre 2026</time>. Fonte: INAIL, dati congiunturali provvisori.</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "var(--space-3)" }}>
+            <div style={{ maxWidth: "62ch" }}>
+              <p className="eyebrow" style={{ margin: 0 }}>REPORT · INFORTUNI</p>
+              <h1 style={{ fontSize: "clamp(2rem, 7vw, 3.5rem)", lineHeight: 1.06, margin: "var(--space-2) 0 var(--space-3)" }}>Infortuni sul lavoro, primo semestre 2026: più denunce, meno casi mortali</h1>
+              <p style={{ color: "var(--color-text-muted)", margin: 0, fontSize: "0.86rem" }}><strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-09-16">16 settembre 2026</time>. Fonte: INAIL, dati congiunturali provvisori.</p>
+            </div>
+            <InfoModalButton>
+              <section className="modal-section">
+                <h3 className="modal-section-title">1. Fonti dei dati</h3>
+                <p className="modal-text">Dati INAIL congiunturali provvisori (denunce di infortunio) per il confronto semestrale gennaio-giugno 2026 vs 2025. I dati di dettaglio su genere, età, settori, gravità e durata si riferiscono all&apos;ultimo anno consolidato disponibile, il 2024.</p>
+              </section>
+              <section className="modal-section">
+                <h3 className="modal-section-title">2. Metodo e perimetro</h3>
+                <ul className="modal-list">
+                  <li><strong>Confronto a pari perimetro:</strong> totale denunce, itinere, esiti mortali, regioni e incidenza sono confrontati a pari perimetro gennaio-giugno 2026 vs 2025, su dati provvisori.</li>
+                  <li><strong>Occasione di lavoro / itinere:</strong> l&apos;occasione di lavoro è l&apos;attività lavorativa in sé; l&apos;itinere è il percorso casa-lavoro e gli spostamenti connessi nei limiti previsti.</li>
+                  <li><strong>Denunce vs infortuni riconosciuti:</strong> le denunce non coincidono con gli infortuni riconosciuti: il dato statistico è quello delle denunce con esito mortale, riportato in forma divulgativa come &quot;morti sul lavoro&quot;.</li>
+                  <li><strong>Carattere provvisorio:</strong> i numeri sono provvisori e vengono integrati e riclassificati nel tempo: i definitivi arrivano con le successive pubblicazioni INAIL.</li>
+                </ul>
+              </section>
+              <section className="modal-section">
+                <h3 className="modal-section-title">3. Limitazioni</h3>
+                <p className="modal-text">La disaggregazione per genere, età, settore, gravità e durata si riferisce al 2024, perché è l&apos;ultimo anno consolidato; il confronto semestrale usa i dati provvisori 2026. I dettagli e il metodo completo sono consultabili nella sezione <Link href="/fonti">Fonti e metodo</Link>.</p>
+              </section>
+            </InfoModalButton>
+          </div>
         </header>
 
         <section aria-labelledby="risposta-diretta" style={{ borderLeft: "4px solid var(--color-accent)", padding: "var(--space-4)", background: "var(--color-accent-soft)" }}>
@@ -73,16 +97,12 @@ export default function ReportArticlePage() {
           <p style={{ margin: 0, lineHeight: 1.7 }}>Il tema si inserisce nel quadro più ampio delle <Link href="/malattie-professionali">malattie professionali</Link>, che hanno tempi e criteri di lettura differenti.</p>
         </Section>
 
-        <Section title="Note metodologiche e limiti">
-          <p style={{ margin: 0, lineHeight: 1.7 }}>Fonte INAIL. Il confronto semestrale (totale, itinere, mortali, regioni, incidenza) è a pari perimetro, gennaio-giugno 2026 vs 2025, su dati provvisori. Le dimensioni di dettaglio (genere, età, settori, gravità, durata) si riferiscono all&apos;ultimo anno consolidato disponibile, il 2024. Nel titolo &quot;morti sul lavoro&quot; è usato in forma divulgativa: il dato statistico è quello delle denunce con esito mortale. Le denunce non coincidono con gli infortuni riconosciuti.</p>
-        </Section>
-
         <section aria-labelledby="faq" style={{ display: "grid", gap: "var(--space-4)" }}>
           <h2 id="faq" style={{ margin: 0 }}>FAQ</h2>
           {faq.map(({ question, answer }) => <details key={question} style={{ borderTop: "1px solid var(--color-divider)", paddingTop: "var(--space-3)" }}><summary style={{ cursor: "pointer", fontWeight: 700, lineHeight: 1.4 }}>{question}</summary><p style={{ margin: "var(--space-2) 0 0", lineHeight: 1.6, color: "var(--color-text-soft)" }}>{answer}</p></details>)}
         </section>
 
-        <p className="source-note">Fonte: INAIL, dati congiunturali provvisori. Ultimo aggiornamento: 16 settembre 2026.</p>
+        <p className="source-note">Fonte: INAIL, dati congiunturali provvisori. Ultimo aggiornamento: 16 settembre 2026. Metodo e limiti nel pulsante &quot;Metodologia, Formule e Fonti&quot; in alto.</p>
       </article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </main>

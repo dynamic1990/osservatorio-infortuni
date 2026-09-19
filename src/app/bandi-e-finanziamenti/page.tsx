@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AGGIORNATO_AL, BANDI_PREVENZIONE, type BandoPrevenzione, type StatoBando } from "@/data/bandi-prevenzione";
+import { InfoModalButton } from "@/components/ui/info-modal";
 
 export const revalidate = 86_400;
 
@@ -135,6 +136,24 @@ export default function BandiPrevenzionePage() {
               Aggiornato al {AGGIORNATO_AL}
             </div>
           </div>
+          <InfoModalButton>
+            <section className="modal-section">
+              <h3 className="modal-section-title">1. Fonti e verifica</h3>
+              <p className="modal-text">I bandi sono raccolti e verificati a mano sulle fonti ufficiali degli enti (INAIL ISI, fondi interprofessionali, Regioni). Le condizioni di ciascun bando cambiano spesso: prima di presentare una domanda verificare sempre i dettagli sul portale dell&apos;ente che emette il bando.</p>
+            </section>
+            <section className="modal-section">
+              <h3 className="modal-section-title">2. Stati dei bandi</h3>
+              <ul className="modal-list">
+                <li><strong>Aperto / In scadenza:</strong> finestra di presentazione attiva, da controllare per eventuali proroghe.</li>
+                <li><strong>Prossima apertura:</strong> bando annunciato, non ancora presentabile.</li>
+                <li><strong>Da verificare:</strong> scadenza o condizioni da controllare sul portale ufficiale.</li>
+              </ul>
+            </section>
+            <section className="modal-section">
+              <h3 className="modal-section-title">3. Disclaimer</h3>
+              <p className="modal-text">Il raccoglitore ha scopo informativo e non sostituisce i testi ufficiali dei bandi. La partecipazione a un bando richiede la lettura integrale dell&apos;avviso e della documentazione allegata sul sito dell&apos;ente erogatore.</p>
+            </section>
+          </InfoModalButton>
         </div>
       </header>
 
@@ -143,8 +162,7 @@ export default function BandiPrevenzionePage() {
           <h2 className="card-title">Bandi in evidenza</h2>
           <p className="card-desc">
             INAIL e i fondi interprofessionali coprono la maggior parte delle risorse disponibili; le Regioni
-            aggiungono misure locali. Lo stato &ldquo;Da verificare&rdquo; segnala i bandi la cui scadenza va
-            controllata sul portale ufficiale.
+            aggiungono misure locali. Lo stato di ogni bando è indicato nella scheda; i dettagli sul metodo sono nel pulsante in alto.
           </p>
         </div>
         <div style={{ display: "grid", gap: "var(--space-4)" }}>
@@ -154,14 +172,6 @@ export default function BandiPrevenzionePage() {
         </div>
       </section>
 
-      <section className="card" aria-label="Note metodologiche" style={{ padding: "var(--space-3)" }}>
-        <h2 className="card-title">Come leggere questa pagina</h2>
-        <p style={{ color: "var(--color-text-soft)", fontSize: "0.92rem", margin: 0 }}>
-          Le informazioni sono curate a mano e verificate sulle fonti ufficiali, ma le condizioni di ogni bando
-          cambiano spesso. <strong>Prima di presentare una domanda, verifica sempre i dettagli sul portale
-          dell&apos;ente che emette il bando.</strong>
-        </p>
-      </section>
     </div>
   );
 }
