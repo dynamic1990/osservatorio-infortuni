@@ -58,6 +58,11 @@ type Gravita = keyof typeof REPUTAZIONE_BANDE.gravita;
 // macroeconomiche (rapporto costo totale / eventi indennizzati), usate qui solo
 // come benchmark di confronto, non come tariffa del singolo evento aziendale.
 const MEDIA_INAIL_INFORTUNIO = 33_000; // costo medio per infortunio, benchmark INAIL 2023
+// Parametri ufficiali INAIL 2023 (pubblicazione "Il costo dei danni da lavoro per l'azienda Italia",
+// Consulenza statistico attuariale, 2026): usati come riferimento, non come tariffa del singolo evento.
+const MEDIA_INAIL_MALATTIA = 61_000; // costo medio per malattia professionale
+const COSTO_COMPLESSIVO_2023 = 49_238_000_000; // costo complessivo nazionale infortuni + malattie professionali
+const INCIDENZA_PIL_2023 = 2.31; // % del PIL 2023
 
 // Ordini di grandezza per eventi gravi/mortali. Sono stime indicativi costruite su
 // fonti pubbliche (tabelle di risarcimento per macrolesioni, pratiche correnti sui
@@ -111,6 +116,14 @@ export function CalcolatoreCosto() {
   const [gravitaEvento, setGravitaEvento] = useState<Gravita | "nessuno">("nessuno");
   const [eventoGrave, setEventoGrave] = useState<"nessuno" | "grave" | "mortale">("nessuno");
 
+  // Componenti di costo attivabili: la stima si adatta al caso concreto (metodologia INAIL:
+  // ogni componente del costo conseguente non assicurativo può esserci o meno).
+  type Componente = "assenza" | "sostituzione" | "fermo" | "gestione" | "reputazione" | "gravi";
+  const [attive, setAttive] = useState<Record<Componente, boolean>>({
+    assenza: true, sostituzione: true, fermo: true, gestione: true, reputazione: true, gravi: true,
+  });
+  const toggleComponente = (c: Componente) => setAttive((prev) => ({ ...prev, [c]: !prev[c] }));
+
   const settore = annoData.atecoMacro?.find((s) => s.key === settoreKey) ?? null;
   const regione = annoData.regioni?.find((r) => r.regione === regioneKey) ?? null;
 
@@ -121,19 +134,19 @@ export function CalcolatoreCosto() {
   const effGiorni = settore || regione ? (giorni === 30 ? Math.round(durataSuggerita) : giorni) : giorni;
 
   const result = useMemo(() => {
-    const assenza = infortunati * effGiorni * costoGiorno * (quotaAzienda / 100);
-    const sostituzione = sostituto === "no" ? 0 : infortunati * effGiorni * costoSostituto * (sostituto === "esterno" ? 1.2 : 1);
-    const fermo = oreFermo * valoreOra;
-    const amministrativi = costiExtra + sanzioni;
+    const assenza = (attive.assenza ? 1 : 0) * infortunati * effGiorni * costoGiorno * (quotaAzienda / 100);
+    const sostituzione = (attive.sostituzione ? 1 : 0) * (sostituto === "no" ? 0 : infortunati * effGiorni * costoSostituto * (sostituto === "esterno" ? 1.2 : 1));
+    const fermo = (attive.fermo ? 1 : 0) * oreFermo * valoreOra;
+    const amministrativi = (attive.gestione ? 1 : 0) * (costiExtra + sanzioni);
 
     // Danno reputazionale: quota del fatturato secondo le bande. Centrali per lo scenario probabile.
-    const rep = gravitaEvento === "nessuno" ? null : REPUTAZIONE_BANDE;
+    const rep = gravitaEvento === "nessuno" || !attive.reputazione ? null : REPUTAZIONE_BANDE;
     const repMin = rep ? fatturato * rep.esposizione[esposizione].min * rep.mercato[mercato].min * (gravitaEvento !== "nessuno" ? rep.gravita[gravitaEvento].min : 0) : 0;
     const repMax = rep ? fatturato * rep.esposizione[esposizione].max * rep.mercato[mercato].max * (gravitaEvento !== "nessuno" ? rep.gravita[gravitaEvento].max : 0) : 0;
     const repMedio = (repMin + repMax) / 2;
 
     // Evento grave/mortale: risarcimento + sanzioni + legali come intervallo.
-    const ev = eventoGrave === "nessuno" ? null : EVENTI_GRAVI[eventoGrave];
+    const ev = eventoGrave === "nessuno" || !attive.gravi ? null : EVENTI_GRAVI[eventoGrave];
     const evMin = ev ? ev.risarcimento.min + ev.sanzioni.min + ev.legali.min : 0;
     const evMax = ev ? ev.risarcimento.max + ev.sanzioni.max + ev.legali.max : 0;
     const evMedio = (evMin + evMax) / 2;
@@ -148,10 +161,10 @@ export function CalcolatoreCosto() {
       evMin, evMax, evMedio,
       minimo, probabile, grave,
     };
-  }, [infortunati, effGiorni, costoGiorno, quotaAzienda, sostituto, costoSostituto, oreFermo, valoreOra, costiExtra, sanzioni, fatturato, esposizione, mercato, gravitaEvento, eventoGrave]);
+  }, [infortunati, effGiorni, costoGiorno, quotaAzienda, sostituto, costoSostituto, oreFermo, valoreOra, costiExtra, sanzioni, fatturato, esposizione, mercato, gravitaEvento, eventoGrave, attive]);
 
-  const mostraReputazione = gravitaEvento !== "nessuno";
-  const mostraGravi = eventoGrave !== "nessuno";
+  const mostraReputazione = gravitaEvento !== "nessuno" && attive.reputazione;
+  const mostraGravi = eventoGrave !== "nessuno" && attive.gravi;
 
   return <div style={{ display: "grid", gap: "var(--space-5)" }}>
     {/* Profilo aziendale: precompilazione dal dataset INAIL */}
@@ -163,6 +176,40 @@ export function CalcolatoreCosto() {
       </div>
       {settore && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>Settore <strong>{settore.nome}</strong>: {number.format(casiSettore)} infortuni denunciati nel {anno}, durata media assenza <strong>{number.format(Math.round(settore.durataMedia ?? 0))} giorni</strong>, incidenza {incidenzaSettore ? `${number.format(incidenzaSettore)} per 1.000 occupati` : "non disponibile"}. I giorni di assenza sotto sono stati precompilati con la media del settore: puoi modificarli.</p>}
       {!settore && regione && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>Regione {regioneName(regioneKey)}: durata media assenza {number.format(Math.round(regione.durataMedia ?? 0))} giorni nel {anno}. Usata come riferimento per i giorni precompilati.</p>}
+    </fieldset>
+
+    {/* Parametri ufficiali INAIL */}
+    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
+      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Parametri ufficiali INAIL (riferimento 2023)</legend>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "var(--space-2)", fontSize: "0.84rem" }}>
+        <span>Costo medio infortunio: <strong>{euro.format(MEDIA_INAIL_INFORTUNIO)}</strong></span>
+        <span>Costo medio malattia professionale: <strong>{euro.format(MEDIA_INAIL_MALATTIA)}</strong></span>
+        <span>Costo complessivo nazionale: <strong>{euro.format(COSTO_COMPLESSIVO_2023)}</strong></span>
+        <span>Incidenza sul PIL: <strong>{INCIDENZA_PIL_2023}%</strong></span>
+      </div>
+      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>
+        INAIL, Consulenza statistico attuariale, <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em>, 2026, dati 2023. Medie nazionali macroeconomiche: il tuo evento può costare molto di più o di meno.
+      </p>
+    </fieldset>
+
+    {/* Componenti attivabili */}
+    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
+      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Componenti di costo (attiva solo quelle del tuo caso)</legend>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+        {([
+          ["assenza", "Assenza"],
+          ["sostituzione", "Sostituzione"],
+          ["fermo", "Fermo operativo"],
+          ["gestione", "Gestione e sanzioni"],
+          ["reputazione", "Danno di immagine"],
+          ["gravi", "Eventi gravi/mortali"],
+        ] as const).map(([k, label]) => (
+          <button key={k} type="button" className={`btn-pill ${attive[k] ? "active" : ""}`} onClick={() => toggleComponente(k)} aria-pressed={attive[k]}>{label}</button>
+        ))}
+      </div>
+      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>
+        Disattiva le componenti che non si applicano al tuo evento per una stima più plausibile. Le stime dei tre scenari si aggiornano di conseguenza.
+      </p>
     </fieldset>
 
     {/* Componenti operative */}
