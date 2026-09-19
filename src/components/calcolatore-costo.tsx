@@ -60,9 +60,6 @@ type Gravita = keyof typeof REPUTAZIONE_BANDE.gravita;
 const MEDIA_INAIL_INFORTUNIO = 33_000; // costo medio per infortunio, benchmark INAIL 2023
 // Parametri ufficiali INAIL 2023 (pubblicazione "Il costo dei danni da lavoro per l'azienda Italia",
 // Consulenza statistico attuariale, 2026): usati come riferimento, non come tariffa del singolo evento.
-const MEDIA_INAIL_MALATTIA = 61_000; // costo medio per malattia professionale
-const COSTO_COMPLESSIVO_2023 = 49_238_000_000; // costo complessivo nazionale infortuni + malattie professionali
-const INCIDENZA_PIL_2023 = 2.31; // % del PIL 2023
 
 // Ordini di grandezza per eventi gravi/mortali. Sono stime indicativi costruite su
 // fonti pubbliche (tabelle di risarcimento per macrolesioni, pratiche correnti sui
@@ -176,20 +173,6 @@ export function CalcolatoreCosto() {
       </div>
       {settore && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>Settore <strong>{settore.nome}</strong>: {number.format(casiSettore)} infortuni denunciati nel {anno}, durata media assenza <strong>{number.format(Math.round(settore.durataMedia ?? 0))} giorni</strong>, incidenza {incidenzaSettore ? `${number.format(incidenzaSettore)} per 1.000 occupati` : "non disponibile"}. I giorni di assenza sotto sono stati precompilati con la media del settore: puoi modificarli.</p>}
       {!settore && regione && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>Regione {regioneName(regioneKey)}: durata media assenza {number.format(Math.round(regione.durataMedia ?? 0))} giorni nel {anno}. Usata come riferimento per i giorni precompilati.</p>}
-    </fieldset>
-
-    {/* Parametri ufficiali INAIL */}
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Parametri ufficiali INAIL (riferimento 2023)</legend>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "var(--space-2)", fontSize: "0.84rem" }}>
-        <span>Costo medio infortunio: <strong>{euro.format(MEDIA_INAIL_INFORTUNIO)}</strong></span>
-        <span>Costo medio malattia professionale: <strong>{euro.format(MEDIA_INAIL_MALATTIA)}</strong></span>
-        <span>Costo complessivo nazionale: <strong>{euro.format(COSTO_COMPLESSIVO_2023)}</strong></span>
-        <span>Incidenza sul PIL: <strong>{INCIDENZA_PIL_2023}%</strong></span>
-      </div>
-      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>
-        INAIL, Consulenza statistico attuariale, <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em>, 2026, dati 2023. Medie nazionali macroeconomiche: il tuo evento può costare molto di più o di meno.
-      </p>
     </fieldset>
 
     {/* Componenti attivabili */}

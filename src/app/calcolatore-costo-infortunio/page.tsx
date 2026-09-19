@@ -9,11 +9,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/calcolatore-costo-infortunio" },
 };
 
-const KPI_INAIL_2023 = [
-  { valore: "≈ 33.000 €", label: "Costo medio per infortunio sul lavoro (eventi con prestazione INAIL)" },
-  { valore: "≈ 61.000 €", label: "Costo medio per malattia professionale" },
-  { valore: "49,2 mld €", label: "Costo complessivo nazionale di infortuni e malattie professionali nel 2023" },
-  { valore: "2,31%", label: "del PIL italiano nel 2023" },
+const KPI_AZIENDA_INAIL_2023 = [
+  { valore: "≈ 33.000 €", label: "Costo medio complessivo per infortunio con prestazione INAIL. È il benchmark più utile per stimare l&apos;ordine di grandezza di un evento aziendale" },
+  { valore: "≈ 61.000 €", label: "Costo medio complessivo per malattia professionale con prestazione INAIL" },
+];
+
+const KPI_COLLETTIVITA_INAIL_2023 = [
+  { valore: "12,5 mld €", label: "Costo assicurativo: premi e prestazioni del sistema assicurativo" },
+  { valore: "23,3 mld €", label: "Costo prevenzionale: investimenti e risorse per la prevenzione" },
+  { valore: "13,5 mld €", label: "Costo conseguente non assicurativo: costi su aziende, lavoratori e famiglie" },
+  { valore: "49,2 mld €", label: "Costo sociale complessivo, pari al 2,31% del PIL 2023" },
 ];
 
 export default function CalcolatorePage() {
@@ -31,7 +36,7 @@ export default function CalcolatorePage() {
             La stima riprende la metodologia della Consulenza statistico attuariale INAIL (pubblicazione <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em>, 2026, dati 2023), che articola il costo di un evento lesivo in tre componenti: <strong>costo assicurativo</strong> (premi e prestazioni), <strong>costo prevenzionale</strong> (sicurezza, formazione, dispositivi) e <strong>costo conseguente non assicurativo</strong>, la parte che resta a carico di azienda e vittima: retribuzione durante l&apos;assenza, perdita di produttività, sostituzione del lavoratore, danni materiali, gestione amministrativa e legale, danno di immagine.
           </p>
           <p className="modal-text">
-            Il calcolatore adatta a livello aziendale la componente <em>conseguente non assicurativa</em>, quella più vicina ai costi realmente sostenuti da un&apos;impresa, e usa i parametri nazionali INAIL come benchmark di confronto.
+            Per l&apos;HSE manager, il riferimento più immediato è il costo complessivo medio per evento, circa 33.000 euro per infortunio e 61.000 euro per malattia professionale. Questo importo non è però un costo esclusivo dell&apos;azienda: comprende la prospettiva macroeconomica complessiva. Il calcolatore adatta a livello aziendale soprattutto la componente <em>conseguente non assicurativa</em>, quella più vicina ai costi sostenuti da impresa, lavoratore e famiglia.
           </p>
         </section>
         <section className="modal-section">
@@ -72,18 +77,29 @@ export default function CalcolatorePage() {
     </header>
 
     <section className="card" aria-label="KPI ufficiali INAIL">
-      <h2 className="card-title">I numeri ufficiali INAIL</h2>
-      <p>Dal più recente studio dell&apos;INAIL sul costo sociale ed economico di infortuni e malattie professionali in Italia (dati 2023):</p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "var(--space-3)" }}>
-        {KPI_INAIL_2023.map((kpi) => (
-          <div key={kpi.label} style={{ padding: "var(--space-3)", background: "var(--color-surface)", border: "1px solid var(--color-divider)" }}>
+      <h2 className="card-title">Il costo di un infortunio: azienda, Stato e collettività</h2>
+      <p>La ricerca INAIL distingue il costo complessivo dell&apos;evento e le sue componenti. Per sensibilizzare il datore di lavoro è utile partire dal costo medio per evento, poi mostrare quanto l&apos;infortunio pesa sul sistema pubblico e sulla collettività.</p>
+      <h3 style={{ fontSize: "1rem", marginBottom: "var(--space-2)" }}>Il riferimento per l&apos;azienda</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "var(--space-3)" }}>
+        {KPI_AZIENDA_INAIL_2023.map((kpi) => (
+          <div key={kpi.label} style={{ padding: "var(--space-3)", background: "var(--color-surface)", border: "1px solid var(--color-accent)" }}>
             <strong style={{ display: "block", fontSize: "1.35rem" }}>{kpi.valore}</strong>
             <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)" }}>{kpi.label}</span>
           </div>
         ))}
       </div>
+      <p className="source-note" style={{ marginTop: "var(--space-2)" }}>Attenzione: la media INAIL è un costo complessivo macroeconomico, non una fattura a carico dell&apos;azienda. La quota realmente sostenuta dall&apos;impresa varia in base ad assenze, sostituzione, fermo, gestione, danni materiali e conseguenze dell&apos;evento.</p>
+      <h3 style={{ fontSize: "1rem", marginBottom: "var(--space-2)" }}>Il costo per Stato e collettività</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "var(--space-3)" }}>
+        {KPI_COLLETTIVITA_INAIL_2023.map((kpi) => (
+          <div key={kpi.label} style={{ padding: "var(--space-3)", background: "var(--color-surface)", border: "1px solid var(--color-divider)" }}>
+            <strong style={{ display: "block", fontSize: "1.2rem" }}>{kpi.valore}</strong>
+            <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)" }}>{kpi.label}</span>
+          </div>
+        ))}
+      </div>
       <p className="source-note" style={{ marginTop: "var(--space-2)" }}>
-        Fonte: INAIL, Consulenza statistico attuariale, <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em>, 2026, dati 2023. <a href="https://www.inail.it/portale/it/inail-comunica/pubblicazioni/catalogo-generale/catalogo-generale-dettaglio.2026.09.pubbl-il-costo-dei-danni-da-lavoro-per-azienda-italia.html">Pubblicazione ufficiale</a>. Sono medie nazionali macroeconomiche: il costo di un singolo evento aziendale dipende da gravità, settore, assenze e organizzazione del lavoro.
+        Fonte: INAIL, Consulenza statistico attuariale, <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em>, 2026, dati 2023. La ricerca stima 12,504 miliardi di euro di costo assicurativo, 23,281 miliardi di costo prevenzionale e 13,453 miliardi di costo conseguente non assicurativo. <a href="https://www.inail.it/portale/it/inail-comunica/pubblicazioni/catalogo-generale/catalogo-generale-dettaglio.2026.09.pubbl-il-costo-dei-danni-da-lavoro-per-azienda-italia.html">Pubblicazione ufficiale</a>. Sono medie nazionali macroeconomiche: il costo di un singolo evento aziendale dipende da gravità, settore, assenze e organizzazione del lavoro.
       </p>
     </section>
 
