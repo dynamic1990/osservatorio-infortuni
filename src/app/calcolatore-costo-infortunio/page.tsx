@@ -117,9 +117,9 @@ export default function CalcolatorePage() {
 
     <section className="card" style={{ fontSize: "0.88rem", lineHeight: 1.55 }}>
       <h2 className="card-title">Come leggere il risultato</h2>
-      <p>Il calcolatore non produce una tariffa ufficiale: serve a rendere visibili le componenti di costo che spesso restano disperse. I valori precompilati dai dati INAIL restano modificabili, perché CCNL, ruolo e mansione incidono sul costo effettivo. Danno di immagine ed eventi gravi usano bande prudenziali dichiarate: ogni caso va valutato con legale e consulente del lavoro.</p>
+      <p>Il risultato è una stima orientativa, non una tariffa ufficiale: modifica i valori precompilati per adattarli alla tua azienda. Le componenti per immagine, eventi gravi e sanzioni sono prudenziali e non rappresentano importi dovuti.</p>
     </section>
 
-    <p className="source-note">Metodologia ispirata a INAIL, <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em> (Consulenza statistico attuariale, 2026, dati 2023); precompilazione dal dataset INAIL 2024; bande prudenziali per danno di immagine ed eventi gravi. Nessun valore preimpostato rappresenta un dato dovuto; gli importi sanzionatori vanno verificati sulla fonte ufficiale (D.Lgs. 81/08 e aggiornamenti).</p>
+    <p className="source-note">Fonte metodologica: INAIL, <em>Il costo dei danni da lavoro per l&apos;azienda Italia</em> (2026, dati 2023). Precompilazione: dataset INAIL 2024. Per valutazioni contabili o giuridiche, verificare il caso con i professionisti competenti.</p>
   </main>;
 }
