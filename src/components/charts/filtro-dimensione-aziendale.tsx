@@ -34,8 +34,6 @@ interface ClusterDataset {
   cluster: ClusterDim[];
 }
 
-const ANNI = [2020, 2021, 2022, 2023, 2024];
-
 // Viste mostrate: solo dinamiche e settori
 type Vista = "incidenti" | "settori";
 const VISTE: { id: Vista; label: string }[] = [
@@ -98,6 +96,15 @@ export function FiltroDimensioneAziendale() {
     return ORDINE.map((id) => mappa.get(id)).filter((c): c is ClusterDim => Boolean(c));
   }, [dati]);
 
+  // Anni disponibili dal dataset (non hardcoded: il periodo può cambiare).
+  const anniDisponibili = useMemo(
+    () =>
+      [...new Set((dati?.cluster ?? []).flatMap((c) => c.perAnno.map((p) => p.anno)))].sort(
+        (a, b) => a - b
+      ),
+    [dati]
+  );
+
   const passo = () => {
     const el = refCarosello.current;
     const prima = el?.firstElementChild as HTMLElement | null;
@@ -140,7 +147,7 @@ export function FiltroDimensioneAziendale() {
         <div style={{ display: "grid", gap: 4, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
           <span>Anno</span>
           <div style={{ display: "flex", gap: "var(--space-1)", flexWrap: "wrap" }}>
-            {ANNI.map((a) => (
+            {anniDisponibili.map((a) => (
               <button
                 key={a}
                 type="button"
@@ -176,7 +183,7 @@ export function FiltroDimensioneAziendale() {
       <p className="source-note" style={{ margin: 0 }}>
         Classi dimensionali (raccomandazione UE 2003/361): micro 0-9, piccole 10-49, medie 50-249,
         grandi 250+ addetti. Le quote sono sul totale del cluster e dell&apos;anno. Delta = variazione
-        % dei casi rispetto all&apos;anno precedente. Casi nel quinquennio:{" "}
+        % dei casi rispetto all&apos;anno precedente. Casi nel periodo:{" "}
         {clusterTutte?.casi.toLocaleString("it-IT") ?? "n.d."} (di cui {clusterNondich?.casi ?? 0} con
         dimensione non dichiarata).
       </p>

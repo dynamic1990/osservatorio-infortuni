@@ -88,10 +88,11 @@ def main() -> int:
         }
         settori_out.append(voce_settore)
 
+    anni = sorted({c["anno"] for c in casi})
     payload = {
         "meta": {
             "fonte": "INAIL - Infor.MO / InformoWeb (tipoEvento=1, casi mortali)",
-            "periodo": "2020-2024",
+            "periodo": f"{anni[0]}-{anni[-1]}",
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "nota": "Incrocio causa x settore precalcolato dal dettaglio casi. "
                     "Copre i casi con settore economico e problema di sicurezza "

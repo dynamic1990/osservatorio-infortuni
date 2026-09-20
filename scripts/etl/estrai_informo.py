@@ -23,7 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "src" / "data" / "generated"
 URL = "https://www.inail.it/nsol-informo/filtra.do"
-YEARS = list(range(2020, 2025))
+YEARS = list(range(2014, 2025))
 PAGE_SIZE = 10
 
 

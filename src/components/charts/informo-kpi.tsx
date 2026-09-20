@@ -83,24 +83,24 @@ export function InformoKpi() {
             Quota sul totale nazionale
           </div>
           <div className="metric-value" style={{ color: "var(--color-text)" }}>
-            {data.quotaQuinquennio !== undefined
-              ? `${data.quotaQuinquennio.toLocaleString("it-IT")}%`
+            {data.quotaPeriodo !== undefined
+              ? `${data.quotaPeriodo.toLocaleString("it-IT")}%`
               : "—"}
           </div>
           <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
             dei {data.totaleMortaliNazionali?.toLocaleString("it-IT") ?? "—"} morti
-            denunciati 2020-2024 (serie INAIL)
+            denunciati 2014-2024 (serie INAIL)
           </div>
         </div>
       </div>
 
       <p className="source-note">
         Fonte: INAIL, archivio Infor.MO (InformoWeb), casi con tipoEvento mortale
-        analizzati con il modello Informo nel periodo 2020-2024. Il campione è
+        analizzati con il modello Informo nel periodo 2014-2024. Il campione è
         una parte delle denunce di morte registrate da INAIL nello stesso
-        periodo (14.051): la quota è dichiarata perché l&apos;analisi dei fattori
+        periodo: la quota è dichiarata perché l&apos;analisi dei fattori
         vale per i casi analizzati, non per tutti i decessi denunciati. La
-        copertura "dettaglio completo" misura invece quanti casi dell&apos;archivio
+        copertura &ldquo;dettaglio completo&rdquo; misura invece quanti casi dell&apos;archivio
         hanno la scheda di analisi, ed è indipendente dal totale nazionale.
       </p>
     </div>

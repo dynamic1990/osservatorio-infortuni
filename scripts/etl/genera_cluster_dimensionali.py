@@ -4,7 +4,7 @@
 Ingresso: src/data/generated/informo-mortali-dettaglio.json
 Uscita:   public/data/informo-cluster-dimensionali.json
 
-Raggruppa i casi mortali Infor.MO 2020-2024 per classe dimensionale dell'azienda
+Raggruppa i casi mortali Infor.MO per classe dimensionale dell'azienda
 (raccomandazione UE 2003/361): microimprese (0-9 addetti), piccole (10-49),
 medie (50-249), grandi (250+), più la classe "Non dichiarata" per i casi senza
 dato. Per ogni cluster e per ogni anno produce le viste principali della
@@ -28,7 +28,6 @@ ROOT = Path(__file__).resolve().parents[2]
 DET = ROOT / "src" / "data" / "generated" / "informo-mortali-dettaglio.json"
 OUT = ROOT / "public" / "data" / "informo-cluster-dimensionali.json"
 
-ANNI = [2020, 2021, 2022, 2023, 2024]
 TOP = 8  # voci per vista per cluster-anno
 
 CLUSTER = [
@@ -74,6 +73,7 @@ def cluster_of(a: int | None) -> str:
 def main() -> int:
     d = json.loads(DET.read_text(encoding="utf-8"))
     casi = d["casi"]
+    ANNI = sorted({c["anno"] for c in casi})
 
     # casi per cluster
     by_cluster: dict[str, list] = defaultdict(list)
@@ -129,7 +129,7 @@ def main() -> int:
     payload = {
         "meta": {
             "fonte": "INAIL - Infor.MO / InformoWeb (tipoEvento=1, casi mortali)",
-            "periodo": "2020-2024",
+            "periodo": f"{ANNI[0]}-{ANNI[-1]}",
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "cluster": [
                 {"id": c[0], "nome": c[1]}

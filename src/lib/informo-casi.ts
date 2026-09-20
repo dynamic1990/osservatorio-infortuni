@@ -43,7 +43,7 @@ export interface InformoAnalisi {
   casiConFattori: number;
   totaleMortaliNazionali?: number;
   casiPeriodo?: number;
-  quotaQuinquennio?: number;
+  quotaPeriodo?: number;
 }
 
 // Colori di pagina: la serie dell'anno corrente usa l'accento rosso semantico,
@@ -56,7 +56,9 @@ export const INFORM_COLORS = {
   scalaRischio: RISK_SCALE,
 };
 
-export const ANNI_INFORMO = [2020, 2021, 2022, 2023, 2024] as const;
+export const ANNI_INFORMO = [
+  2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
+] as const;
 export const ANNO_DEFAULT = 2024;
 
 export function getInformoAnalisi(): InformoAnalisi {

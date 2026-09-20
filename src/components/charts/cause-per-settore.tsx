@@ -73,7 +73,7 @@ export function CausePerSettore() {
         <p className="source-note" style={{ marginBottom: 0 }}>
           Incrocio calcolato su {copertura.casiConIncrocio?.toLocaleString("it-IT")} casi su{" "}
           {copertura.casiTotali?.toLocaleString("it-IT")} con settore e causa classificati
-          (periodo 2020-2024). Quote riferite al totale casi del settore.
+          (periodo 2014-2024). Quote riferite al totale casi del settore.
         </p>
       )}
 

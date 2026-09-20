@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import { getInformoAnalisi } from "@/lib/informo-casi";
 
-// Trend quinquennale (2020-2024) degli infortuni mortali: ogni barra mostra il
+// Trend per anno (2014-2024) degli infortuni mortali: ogni barra mostra il
 // totale dei morti denunciati (serie INAIL) e, dentro, la quota dei casi con
 // scheda di dettaglio nell'archivio Infor.MO. È un grafico a pile: la parte
 // alta (colore testo) è la differenza tra le denunce e i casi analizzati.

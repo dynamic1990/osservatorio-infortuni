@@ -183,8 +183,14 @@ def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     state = {"casi": {}, "fattori_cache": {}} if args.force else load_ckpt()
+    # Chiave composta (anno, codice): la vecchia chiave per solo codice può
+    # riusare record con anno stantio quando un caso cambia anno tra estrazioni.
+    vecchi = state.get("casi", {})
+    state["casi"] = {
+        f"{v.get('anno')}-{k}": v for k, v in vecchi.items()
+    } if vecchi and all("-" not in k for k in vecchi) else vecchi
 
-    da_fare = [t for t in casi if str(t[1]) not in state["casi"]]
+    da_fare = [t for t in casi if f"{t[0]}-{t[1]}" not in state["casi"]]
     print(f"[informo-dettaglio] gia' fatti {len(casi) - len(da_fare)}, "
           f"rimanenti {len(da_fare)}", flush=True)
 
@@ -197,7 +203,7 @@ def main() -> None:
     try:
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as ex:
             for anno, codice, caso in ex.map(processa, da_fare, chunksize=8):
-                state["casi"][str(codice)] = caso
+                state["casi"][f"{anno}-{codice}"] = caso
                 done += 1
                 if done % 25 == 0:
                     save_ckpt(state)
@@ -209,8 +215,10 @@ def main() -> None:
 
     save_ckpt(state)
 
-    casi_out = [state["casi"][str(c)] for (_, c) in casi if str(c) in state["casi"]]
+    casi_out = [state["casi"][f"{a}-{c}"] for (a, c) in casi if f"{a}-{c}" in state["casi"]]
     casi_out.sort(key=lambda c: (c["anno"], c["codiceInfortunio"]))
+    anni = sorted({c["anno"] for c in casi_out})
+    periodo = f"{anni[0]}-{anni[-1]}" if anni else ""
     dataset = {
         "meta": {
             "fonte": "INAIL - Infor.MO / InformoWeb (dettaglio casi)",
@@ -218,7 +226,7 @@ def main() -> None:
             "endpointJson": DETTAGLI_JSON_URL,
             "endpointFattore": FATTORE_URL,
             "tipoEvento": "1 (mortali)",
-            "periodo": "2020-2024",
+            "periodo": periodo,
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "nota": "Dataset di dettaglio: narrativa dinamica, fattori causali "
                     "classificati, profilo lavoratore e azienda. I conteggi "

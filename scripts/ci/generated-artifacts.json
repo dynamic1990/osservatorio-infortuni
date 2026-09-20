@@ -69,29 +69,29 @@
       "artifactId": "informo-cause-settori",
       "path": "public/data/informo-cause-settori.json",
       "kind": "generated-json",
-      "bytes": 18899,
-      "sha256": "d5e0d5deef3dcedb6c545bb0ba796313dccc6198d761dd4bde40e22e0ff30286"
+      "bytes": 26751,
+      "sha256": "12591e9a583506e81f1a423b92c401cfbaf95f07e482054ddce2a1c3581c3bed"
     },
     {
       "artifactId": "informo-cluster-dimensionali",
       "path": "public/data/informo-cluster-dimensionali.json",
       "kind": "generated-json",
-      "bytes": 73499,
-      "sha256": "a683061629876d382aa49a988c53fc39dd778edbef7f4df22eda159eabd0294f"
+      "bytes": 158414,
+      "sha256": "2c3752040a10575aa4de4fc24a1f93fa5e2a2012462178c0c21dd4445c12ae82"
     },
     {
       "artifactId": "informo-mortali",
       "path": "src/data/generated/informo-mortali.json",
       "kind": "generated-json",
-      "bytes": 1250773,
-      "sha256": "9a3f75dc265a0b8ab0f019674185145c9e4c467140cc767b293d4690f67f45fb"
+      "bytes": 2680440,
+      "sha256": "eae0ce8dd8df9da9c0c17f0d2cd69487c1625d021a83af453136011634733fd8"
     },
     {
       "artifactId": "informo-mortali-analisi",
       "path": "src/data/generated/informo-mortali-analisi.json",
       "kind": "generated-json",
-      "bytes": 126876,
-      "sha256": "7beed8fa5c8411aaab0c6f289a67aaea6a64b139790a17cd539da6d6bf8bb401"
+      "bytes": 277956,
+      "sha256": "c8afbc845b09e5e71efe68e1202971f23d5e807e289c58f99f295538fdcdcaf2"
     },
     {
       "artifactId": "malattie-professionali",
@@ -128,6 +128,5 @@
       "bytes": 5956,
       "sha256": "5eba57198eacdcd3b0747aa5f527f7ad10c6aa7f690e176748f7d659573b5a4e"
     }
-  ],
-  "note": "I 3 file grandi rigenerabili (inail-infortuni-serie.json, inail-infortuni-semestrale-storico.json, informo-mortali-dettaglio.json) NON sono versionati (gitignore) e non hanno hash: il validatore li salta; in ambiente di sviluppo vanno generati prima della build."
+  ]
 }

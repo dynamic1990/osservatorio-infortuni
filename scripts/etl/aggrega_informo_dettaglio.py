@@ -169,12 +169,13 @@ def main() -> int:
             out.append({"anno": anno, "voci": voci_counter(mappa[anno])})
         return out
 
+    periodo = f"{anni[0]}-{anni[-1]}" if anni else ""
     dataset = {
         "meta": {
             "fonte": "INAIL - Infor.MO / InformoWeb (tipoEvento=1, casi mortali)",
             "endpointFiltri": "https://www.inail.it/nsol-informo/filtra.do",
             "endpointDettaglio": "https://www.inail.it/nsol-informo/dettaglio.do",
-            "periodo": "2020-2024",
+            "periodo": periodo,
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "nota": "Conteggi ufficiali (incidenti, settori, territori, "
                     "popolazioni, mansioni) dai filtri INAIL e sempre distinti "
@@ -201,7 +202,7 @@ def main() -> int:
         "casiConFattori": casi_con_fattori,
         "totaleMortaliNazionali": totale_mortali_naz,
         "casiPeriodo": len(casi),
-        "quotaQuinquennio": round(
+        "quotaPeriodo": round(
             len(casi) / totale_mortali_naz * 100, 1
         ) if totale_mortali_naz else None,
     }

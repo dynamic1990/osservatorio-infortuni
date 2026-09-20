@@ -64,10 +64,11 @@ def main() -> int:
         catalogo.append(voce)
 
     catalogo.sort(key=lambda v: (v["anno"], v["codice"]))
+    anni = sorted({v["anno"] for v in catalogo})
     payload = {
         "meta": {
             "fonte": "INAIL - Infor.MO / InformoWeb (tipoEvento=1, casi mortali)",
-            "periodo": "2020-2024",
+            "periodo": f"{anni[0]}-{anni[-1]}" if anni else "",
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "nota": "Catalogo casi per ricerca e analisi qualitativa: dinamica "
                     "testuale e fattori per singolo caso. Non è un dataset di "
