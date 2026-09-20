@@ -57,7 +57,11 @@ function Sezione({
 
 export default function CasiMortaliPage() {
   const analisi = getInformoAnalisi();
-  const serie = analisi.serie;
+
+  // Casi reali per anno (dalla serie dell'archivio): servono all'etichetta
+  // del totale di periodo, distinta dalle voci classificate (un caso può
+  // avere più voci, quindi la somma delle voci supera i casi).
+  const casiAnno = analisi.serie.map((s) => ({ anno: s.anno, casi: s.casiAnalizzati }));
 
   return (
     <div className="container" style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-2)" }}>
@@ -163,20 +167,24 @@ export default function CasiMortaliPage() {
       <Sezione occhiello="Le cause" titolo="Perché si muore: tipologie di incidente">
         <InformoVociLista
           titolo="Incidente (causa prevalente)"
-          sottotitolo="Classificazione INAIL della dinamica, casi per anno"
+          sottotitolo="Classificazione INAIL della dinamica: casi per anno o somma di periodo"
           serie={analisi.incidenti}
           limite={8}
           colore={INFORM_COLORS.corrente}
+          multiAnno
+          casiAnno={casiAnno}
         />
       </Sezione>
 
       <Sezione occhiello="I settori" titolo="Dove avvengono i casi mortali">
         <InformoVociLista
           titolo="Settore di attività"
-          sottotitolo="Classificazione INAIL per attività economica"
+          sottotitolo="Classificazione INAIL per attività economica: casi per anno o somma di periodo"
           serie={analisi.settori}
           limite={8}
           colore={INFORM_COLORS.secondario}
+          multiAnno
+          casiAnno={casiAnno}
         />
         <div style={{ display: "grid", gap: "var(--space-3)", borderTop: "1px solid var(--color-divider)", paddingTop: "var(--space-4)" }}>
           <div>
@@ -196,10 +204,12 @@ export default function CasiMortaliPage() {
       <Sezione occhiello="Il territorio" titolo="Dove avvengono i casi mortali">
         <InformoVociLista
           titolo="Macro-aree"
-          sottotitolo="Localizzazione INAIL: Nord-Ovest, Nord-Est, Centro, Sud e Isole"
+          sottotitolo="Localizzazione INAIL: Nord-Ovest, Nord-Est, Centro, Sud e Isole (per anno o somma di periodo)"
           serie={analisi.territori}
           limite={4}
           colore={INFORM_COLORS.corrente}
+          multiAnno
+          casiAnno={casiAnno}
         />
       </Sezione>
 
@@ -210,6 +220,8 @@ export default function CasiMortaliPage() {
           serie={analisi.popolazioni}
           limite={8}
           colore={INFORM_COLORS.secondario}
+          multiAnno
+          casiAnno={casiAnno}
         />
         <InformoVociLista
           titolo="Mansioni coinvolte"
@@ -217,6 +229,8 @@ export default function CasiMortaliPage() {
           serie={analisi.mansioni}
           limite={8}
           colore={INFORM_COLORS.corrente}
+          multiAnno
+          casiAnno={casiAnno}
         />
         <div
           style={{

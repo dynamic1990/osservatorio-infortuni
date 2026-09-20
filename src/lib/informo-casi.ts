@@ -81,6 +81,44 @@ export function vociAnno(data: AnnoVoci[] | undefined, anno: number): VoceCounte
   return found ? found.voci : [];
 }
 
+// Totale di periodo: somma per nome delle voci sugli anni selezionati.
+// Usata per la vista aggregata multi-anno (Regola 1: totale di periodo solo
+// con selezione esplicita dell'utente ed etichetta del perimetro).
+export function sommaVociPerNome(
+  data: AnnoVoci[] | undefined,
+  anni: readonly number[]
+): { nome: string; count: number; anniPresenti: number }[] {
+  if (!data) return [];
+  const perNome = new Map<string, { count: number; anniPresenti: Set<number> }>();
+  for (const anno of anni) {
+    const voci = data.find((s) => s.anno === anno);
+    if (!voci) continue;
+    for (const v of voci.voci) {
+      const cur = perNome.get(v.nome) ?? { count: 0, anniPresenti: new Set<number>() };
+      cur.count += v.count;
+      cur.anniPresenti.add(anno);
+      perNome.set(v.nome, cur);
+    }
+  }
+  return [...perNome.entries()].map(([nome, { count, anniPresenti }]) => ({
+    nome,
+    count,
+    anniPresenti: anniPresenti.size,
+  }));
+}
+
+// Denominatore del periodo: somma di tutte le voci sugli anni selezionati,
+// per le quote percentuali della vista aggregata.
+export function totalePeriodo(data: AnnoVoci[] | undefined, anni: readonly number[]): number {
+  if (!data) return 0;
+  let tot = 0;
+  for (const anno of anni) {
+    const voci = data.find((s) => s.anno === anno);
+    if (voci) for (const v of voci.voci) tot += v.count;
+  }
+  return tot;
+}
+
 // Delta tra due conteggi: {delta, pct} con segno.
 export function deltaVoce(prevCount?: number, currCount?: number) {
   if (prevCount === undefined || currCount === undefined || prevCount === 0) {
