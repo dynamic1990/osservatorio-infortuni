@@ -43,12 +43,36 @@ export const metadata: Metadata = {
     description:
       "Monitoraggio indipendente di infortuni e morti sul lavoro in Italia: congiunturale, media giornaliera YTD, serie decennale, benchmark UE e mappa del rischio per regione.",
     locale: "it_IT",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Osservatorio Infortuni sul Lavoro: dati e indicatori statistici INAIL",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Osservatorio Infortuni sul Lavoro",
     description:
       "Monitoraggio indipendente degli infortuni sul lavoro in Italia: dati INAIL, media giornaliera dei morti, mappa del rischio e benchmark europeo.",
+    images: ["/og-image.png"],
+  },
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: [{ url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    other: [
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/apple-icon.png",
+      },
+    ],
   },
   robots: {
     index: true,
