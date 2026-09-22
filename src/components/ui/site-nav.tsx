@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, CircleDollarSign, Cross, ExternalLink, FileText, Home, Landmark, Menu, Newspaper, UserSearch, Workflow, X } from "lucide-react";
@@ -105,6 +106,9 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
           href="/"
           onClick={() => setAperto(false)}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "var(--space-2)",
             fontWeight: 800,
             fontSize: "1.05rem",
             letterSpacing: "-0.01em",
@@ -113,7 +117,18 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
             color: "var(--color-text)",
           }}
         >
-          Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span>
+          <Image
+            src="/logo-icon.png"
+            alt=""
+            width={30}
+            height={30}
+            priority
+            aria-hidden
+            style={{ display: "block", height: 30, width: "auto" }}
+          />
+          <span>
+            Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span>
+          </span>
         </Link>
         <button
           type="button"
