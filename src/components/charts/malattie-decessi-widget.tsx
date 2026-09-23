@@ -135,7 +135,7 @@ export function MalattieDecessiWidget() {
 
       <p className="source-note">
         Fonte: INAIL Open Data, dataset <em>DatiSemestraliMalattieProfessionaliDataDec</em> (decessi per malattia
-        professionale riconosciuta, esiti di casi protocollati). Serie per anno di morte nel quinquennio 2020-2024.
+        professionale riconosciuta, esiti di casi protocollati). Serie per anno di morte nel quinquennio 2021-2025.
         La vista "Amianto" isola i decessi da silicosi e asbestosi, malattie che emergono a distanza di anni
         dall&apos;esposizione. Ranking regionale e dato di genere si riferiscono all&apos;anno selezionato ({annoSel}),
         per seguire l&apos;evoluzione senza appiattirla sull&apos;aggregato quinquennale.

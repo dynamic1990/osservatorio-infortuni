@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Unifica mensile (16 regioni via API) + mensile CSV (4 regioni) + semestrale
-storico (2020-2024, tutte le regioni) in un'unica vista per il sito.
+storico (2021-2025, tutte le regioni) in un'unica vista per il sito.
 
 Output: src/data/generated/inail-infortuni-viste.json (viste, piccolo) e
-meta aggiornato. Le serie coprono 2020-2026 con tutte le 20 regioni.
+meta aggiornato. Le serie coprono 2021-2026 con tutte le 20 regioni.
 
 Usa:
   python3 scripts/etl/inail_unify_views.py
@@ -106,7 +106,7 @@ def fascia(eta: int) -> str:
 
 
 def main() -> int:
-    # 1) Carica lo storico semestrale aggregato (2020-2024, 20 regioni)
+    # 1) Carica lo storico semestrale aggregato (2021-2025, 20 regioni)
     storico_path = OUT / "inail-infortuni-semestrale-storico.json"
     storico = json.loads(storico_path.read_text(encoding="utf-8"))
     semi = storico["aggregates"]
@@ -129,7 +129,7 @@ def main() -> int:
     gruppi = Counter()
     mortali = Counter()
 
-    # semestrale (2020-2024)
+    # semestrale (2021-2025)
     for r in semi:
         anno = r["anno"]
         serie_annuale[anno] += r["casi"]
@@ -156,14 +156,14 @@ def main() -> int:
     viste = {
         "schemaVersion": 2,
         "datasetId": "inail_infortuni_viste",
-        "period": {"annoDa": 2020, "annoA": 2024, "mesi": None},
+        "period": {"annoDa": 2021, "annoA": 2025, "mesi": None},
         "coverage": {
             "regioni": len(regioni),
             "record": storico["coverage"]["record"],
             "casi": sum(v for v in serie_annuale.values()),
             "mortali": viste_mortali,
             "casiPerAnno": {str(a): serie_annuale[a] for a in sorted(serie_annuale)},
-            "notaPeriodo": "Serie annuale consolidata 2020-2024 (cadenza semestrale, tutte le 20 regioni). I dati mensili 2025-2026 sono congiunturali su finestre di rilevazione (gen-giu).",
+            "notaPeriodo": "Serie annuale consolidata 2021-2025 (cadenza semestrale, tutte le 20 regioni). I dati mensili 2025-2026 sono congiunturali su finestre di rilevazione (gen-giu).",
         },
         "serieAnnuale": [{"anno": a, "casi": serie_annuale[a]} for a in sorted(serie_annuale)],
         "serieAnnualeRegioni": [

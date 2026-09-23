@@ -11,7 +11,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Malattie Professionali | Osservatorio Infortuni sul Lavoro",
   description:
-    "Dashboard sulle malattie professionali in Italia: denunce INAIL a confronto tra i semestri 2025 e 2026, patologie ICD-10 più denunciate, distribuzione per regione e decessi per malattia professionale riconosciuta (2020-2024).",
+    "Dashboard sulle malattie professionali in Italia: denunce INAIL a confronto tra i semestri 2025 e 2026, patologie ICD-10 più denunciate, distribuzione per regione e decessi per malattia professionale riconosciuta (2021-2025).",
   alternates: { canonical: "/malattie-professionali" },
 };
 
@@ -55,7 +55,7 @@ export default function MalattieProfessionaliPage() {
               patologie che emergono dopo anni di esposizione a rumore, sovraccarico biomeccanico,
               polveri e agenti cancerogeni. Denunce protocollate a confronto tra i primi semestri
               2025 e 2026, raggruppamento clinico ICD-10, distribuzione territoriale e decessi
-              riconosciuti nel quinquennio 2020-2024.
+              riconosciuti nel quinquennio 2021-2025.
             </p>
           </div>
           <InfoModalButton />
@@ -112,7 +112,7 @@ export default function MalattieProfessionaliPage() {
           <h2 className="card-title">Decessi per malattia professionale riconosciuta</h2>
           <p className="card-desc">
             L&apos;eredità più pesante delle esposizioni professionali: i decessi riconosciuti
-            dall&apos;INAIL nel quinquennio 2020-2024, con il peso delle malattie da amianto
+            dall&apos;INAIL nel quinquennio 2021-2025, con il peso delle malattie da amianto
             (silicosi e asbestosi) che continuano a manifestarsi a distanza di decenni.
           </p>
         </div>

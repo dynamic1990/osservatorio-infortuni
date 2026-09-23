@@ -17,7 +17,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Osservatorio Infortuni sul Lavoro | Dati e Indicatori Statistici INAIL",
   description:
-    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: radar quotidiano delle segnalazioni pertinenti, serie storica decennale 2014-2024, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
+    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: radar quotidiano delle segnalazioni pertinenti, serie storica decennale 2014-2025, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
 };
 
 export default function HomePage() {

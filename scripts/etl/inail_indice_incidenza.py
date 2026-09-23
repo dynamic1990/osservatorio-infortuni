@@ -82,7 +82,7 @@ def main() -> int:
         "schemaVersion": 1,
         "datasetId": "inail_indice_incidenza",
         "generatedAt": utc_now(),
-        "period": {"annoDa": 2020, "annoA": 2024},
+        "period": {"annoDa": 2021, "annoA": 2025},
         "formula": "indice = casi / occupati * 1000 (occupati 15-64, ISTAT/Eurostat lfst_r_lfe2emp)",
         "nota": "Gli infortuni INAIL includono denunce; il denominatore sono gli occupati (non solo assicurati INAIL).",
         "nazionale": naz_serie,

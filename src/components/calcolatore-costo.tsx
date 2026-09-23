@@ -82,7 +82,7 @@ const EVENTI_GRAVI = {
 
 export function CalcolatoreCosto() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
-  const anno = "2024";
+  const anno = "2025";
   const annoData = multidim.perAnno[anno] ?? multidim.consolidatoTotale;
 
   const settoriOptions = useMemo(() => {

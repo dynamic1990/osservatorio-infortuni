@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Analisi temporale infortuni da CSV semestrali INAIL (20 regioni, 2020-2024).
+"""Analisi temporale infortuni da CSV semestrali INAIL (20 regioni, 2021-2025).
 
 Produce src/data/generated/inail-infortuni-temporale.json con le serie per
 anno (consolidata) e per mese (congiunturale), aggregate per regione, pronte
@@ -202,7 +202,7 @@ def main() -> int:
         "schemaVersion": 1,
         "datasetId": "inail_infortuni_temporale",
         "generatedAt": utc_now(),
-        "period": {"annoDa": 2020, "annoA": 2024, "mesi": {"da": "2025-01", "a": "2026-06"}},
+        "period": {"annoDa": 2021, "annoA": 2025, "mesi": {"da": "2025-01", "a": "2026-06"}},
         "coverage": {"regioni": 20, "casiAnnuali": tot_generale},
         "serieAnnuale": serie_annuale,
         "serieMensile": serie_mensile,

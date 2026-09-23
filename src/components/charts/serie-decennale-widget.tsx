@@ -154,8 +154,8 @@ export function SerieDecennaleWidget() {
         itinere. Per questi anni la ripartizione tra le due modalità non è disponibile. Dal 2020
         la serie si basa sui microdati Open Data INAIL, che consentono la distinzione tra lavoro
         e itinere: i filtri della dashboard su questa modalità si applicano quindi al solo periodo
-        2020-2024. Il denominatore occupati 15-64 è ISTAT/Eurostat (lfst_r_lfe2emp). Il dato 2020
-        include i casi COVID riconosciuti come infortunio (picco dei casi mortali). La serie
+        2021-2025. Il denominatore occupati 15-64 è ISTAT/Eurostat (lfst_r_lfe2emp). Il dato 2020
+        (dai microdati della rilevazione precedente) include i casi COVID riconosciuti come infortunio (picco dei casi mortali). La serie
         consente di leggere il rischio reale separandolo dalle oscillazioni della platea occupazionale.
       </p>
     </div>

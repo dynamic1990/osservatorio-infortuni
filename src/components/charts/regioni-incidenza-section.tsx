@@ -23,7 +23,7 @@ import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-m
 
 export function RegioniIncidenzaSection() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
-  const [anno, setAnno] = useState<string>("2024");
+  const [anno, setAnno] = useState<string>("2025");
   const [metrica, setMetrica] = useState<"incidenza" | "mortaliInc" | "gravita" | "totale">("incidenza");
   const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
   const [selectedReg, setSelectedReg] = useState<string | null>(null);
@@ -197,7 +197,7 @@ export function RegioniIncidenzaSection() {
     };
   }, [annoData]);
 
-  // Serie storica annuale 2020-2024 della regione attiva (per l'andamento nella scheda dettaglio)
+  // Serie storica annuale 2021-2025 della regione attiva (per l'andamento nella scheda dettaglio)
   const serieRegione = useMemo(() => {
     if (!activeRegData) return [];
     const reg = activeRegData.regione;
@@ -463,7 +463,7 @@ export function RegioniIncidenzaSection() {
                 </div>
               </div>
 
-              {/* Andamento annuale 2020-2024 della regione */}
+              {/* Andamento annuale 2021-2025 della regione */}
               {serieRegione.length > 0 && (
                 <div style={{ marginTop: "var(--space-2)", paddingTop: "var(--space-2)", borderTop: "1px dashed var(--color-divider)" }}>
                   <div style={{ fontSize: "0.72rem", color: "var(--color-text-soft)", textTransform: "uppercase", marginBottom: 4 }}>

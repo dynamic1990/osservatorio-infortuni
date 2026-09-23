@@ -18,7 +18,7 @@ import { FiltroModalita, type ModalitaState } from "./filtro-modalita";
 
 export function DemografiaAnnualeWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
-  const [anno, setAnno] = useState<string>("2024");
+  const [anno, setAnno] = useState<string>("2025");
   const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
 
   const annoData = useMemo(() => {

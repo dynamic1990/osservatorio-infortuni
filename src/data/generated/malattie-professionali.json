@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "datasetId": "inail-malattie-professionali",
- "generatedAt": "2026-09-03T14:17:45+00:00",
+ "generatedAt": "2026-09-23T17:58:08+00:00",
  "periodo": "Gennaio - Giugno 2025 e Gennaio - Giugno 2026",
  "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. I CSV ufficiali coprono i primi due semestri: gen-giu 2025 e gen-giu 2026.",
  "fonte": "INAIL Open Data — DatiMensiliMalattieProfessionaliDataProt (denunce) + DatiSemestraliMalattieProfessionaliDataDec (decessi)",
@@ -880,254 +880,157 @@
   }
  ],
  "decessi": {
-  "totale": 5244,
+  "totale": 4853,
   "perAnno": [
    {
-    "anno": "2020",
-    "casi": 1269,
-    "silicosiAsbestosi": 273,
-    "maschi": 1222,
-    "femmine": 47
-   },
-   {
     "anno": "2021",
-    "casi": 1115,
-    "silicosiAsbestosi": 216,
-    "maschi": 1068,
+    "casi": 1134,
+    "silicosiAsbestosi": 219,
+    "maschi": 1087,
     "femmine": 47
    },
    {
     "anno": "2022",
-    "casi": 1090,
-    "silicosiAsbestosi": 226,
-    "maschi": 1051,
-    "femmine": 39
+    "casi": 1120,
+    "silicosiAsbestosi": 232,
+    "maschi": 1080,
+    "femmine": 40
    },
    {
     "anno": "2023",
-    "casi": 951,
-    "silicosiAsbestosi": 177,
-    "maschi": 914,
-    "femmine": 37
+    "casi": 1000,
+    "silicosiAsbestosi": 184,
+    "maschi": 961,
+    "femmine": 39
    },
    {
     "anno": "2024",
-    "casi": 819,
-    "silicosiAsbestosi": 120,
-    "maschi": 781,
-    "femmine": 38
+    "casi": 877,
+    "silicosiAsbestosi": 125,
+    "maschi": 835,
+    "femmine": 42
+   },
+   {
+    "anno": "2025",
+    "casi": 722,
+    "silicosiAsbestosi": 100,
+    "maschi": 696,
+    "femmine": 26
    }
   ],
   "perRegione": [
    {
     "codice": "03",
     "nome": "Lombardia",
-    "casi": 806
+    "casi": 740
    },
    {
     "codice": "01",
     "nome": "Piemonte",
-    "casi": 615
+    "casi": 561
    },
    {
     "codice": "09",
     "nome": "Toscana",
-    "casi": 480
+    "casi": 435
    },
    {
     "codice": "07",
     "nome": "Liguria",
-    "casi": 423
+    "casi": 385
    },
    {
     "codice": "16",
     "nome": "Puglia",
-    "casi": 367
-   },
-   {
-    "codice": "06",
-    "nome": "FriuliVeneziaGiulia",
-    "casi": 338
+    "casi": 359
    },
    {
     "codice": "05",
     "nome": "Veneto",
-    "casi": 333
+    "casi": 320
+   },
+   {
+    "codice": "06",
+    "nome": "FriuliVeneziaGiulia",
+    "casi": 318
    },
    {
     "codice": "15",
     "nome": "Campania",
-    "casi": 295
+    "casi": 290
    },
    {
     "codice": "19",
     "nome": "Sicilia",
-    "casi": 269
+    "casi": 263
    },
    {
     "codice": "08",
     "nome": "EmiliaRomagna",
-    "casi": 266
+    "casi": 252
    },
    {
     "codice": "20",
     "nome": "Sardegna",
-    "casi": 221
-   },
-   {
-    "codice": "13",
-    "nome": "Abruzzo",
-    "casi": 181
+    "casi": 190
    },
    {
     "codice": "12",
     "nome": "Lazio",
-    "casi": 174
+    "casi": 156
+   },
+   {
+    "codice": "13",
+    "nome": "Abruzzo",
+    "casi": 153
    },
    {
     "codice": "11",
     "nome": "Marche",
-    "casi": 142
+    "casi": 133
    },
    {
     "codice": "10",
     "nome": "Umbria",
-    "casi": 92
+    "casi": 82
    },
    {
     "codice": "18",
     "nome": "Calabria",
-    "casi": 82
+    "casi": 77
    },
    {
     "codice": "04",
     "nome": "TrentinoAltoAdige",
-    "casi": 69
+    "casi": 59
    },
    {
     "codice": "17",
     "nome": "Basilicata",
-    "casi": 50
+    "casi": 45
    },
    {
     "codice": "02",
     "nome": "ValledAosta",
-    "casi": 40
+    "casi": 31
    },
    {
     "codice": "14",
     "nome": "Molise",
-    "casi": 1
+    "casi": 4
    }
   ],
   "perGenere": {
-   "M": 5036,
-   "F": 208
+   "M": 4659,
+   "F": 194
   },
-  "etaMedia": 78.2,
+  "etaMedia": 78.4,
   "perRegioneAnno": {
-   "2020": [
-    {
-     "codice": "03",
-     "nome": "Lombardia",
-     "casi": 210
-    },
-    {
-     "codice": "01",
-     "nome": "Piemonte",
-     "casi": 142
-    },
-    {
-     "codice": "09",
-     "nome": "Toscana",
-     "casi": 116
-    },
-    {
-     "codice": "07",
-     "nome": "Liguria",
-     "casi": 104
-    },
-    {
-     "codice": "05",
-     "nome": "Veneto",
-     "casi": 81
-    },
-    {
-     "codice": "06",
-     "nome": "FriuliVeneziaGiulia",
-     "casi": 79
-    },
-    {
-     "codice": "16",
-     "nome": "Puglia",
-     "casi": 72
-    },
-    {
-     "codice": "08",
-     "nome": "EmiliaRomagna",
-     "casi": 69
-    },
-    {
-     "codice": "19",
-     "nome": "Sicilia",
-     "casi": 62
-    },
-    {
-     "codice": "15",
-     "nome": "Campania",
-     "casi": 58
-    },
-    {
-     "codice": "20",
-     "nome": "Sardegna",
-     "casi": 57
-    },
-    {
-     "codice": "13",
-     "nome": "Abruzzo",
-     "casi": 46
-    },
-    {
-     "codice": "12",
-     "nome": "Lazio",
-     "casi": 46
-    },
-    {
-     "codice": "11",
-     "nome": "Marche",
-     "casi": 39
-    },
-    {
-     "codice": "10",
-     "nome": "Umbria",
-     "casi": 28
-    },
-    {
-     "codice": "04",
-     "nome": "TrentinoAltoAdige",
-     "casi": 17
-    },
-    {
-     "codice": "18",
-     "nome": "Calabria",
-     "casi": 16
-    },
-    {
-     "codice": "02",
-     "nome": "ValledAosta",
-     "casi": 14
-    },
-    {
-     "codice": "17",
-     "nome": "Basilicata",
-     "casi": 13
-    }
-   ],
    "2021": [
     {
      "codice": "03",
      "nome": "Lombardia",
-     "casi": 187
+     "casi": 188
     },
     {
      "codice": "01",
@@ -1137,17 +1040,17 @@
     {
      "codice": "09",
      "nome": "Toscana",
-     "casi": 101
+     "casi": 102
     },
     {
      "codice": "07",
      "nome": "Liguria",
-     "casi": 96
+     "casi": 97
     },
     {
      "codice": "15",
      "nome": "Campania",
-     "casi": 79
+     "casi": 80
     },
     {
      "codice": "06",
@@ -1155,44 +1058,44 @@
      "casi": 76
     },
     {
-     "codice": "19",
-     "nome": "Sicilia",
-     "casi": 61
-    },
-    {
      "codice": "16",
      "nome": "Puglia",
-     "casi": 60
+     "casi": 64
+    },
+    {
+     "codice": "19",
+     "nome": "Sicilia",
+     "casi": 63
     },
     {
      "codice": "05",
      "nome": "Veneto",
-     "casi": 57
+     "casi": 60
     },
     {
      "codice": "08",
      "nome": "EmiliaRomagna",
-     "casi": 52
+     "casi": 54
     },
     {
      "codice": "20",
      "nome": "Sardegna",
-     "casi": 47
+     "casi": 48
     },
     {
      "codice": "12",
      "nome": "Lazio",
-     "casi": 33
+     "casi": 34
     },
     {
      "codice": "13",
      "nome": "Abruzzo",
-     "casi": 31
+     "casi": 32
     },
     {
      "codice": "11",
      "nome": "Marche",
-     "casi": 28
+     "casi": 29
     },
     {
      "codice": "18",
@@ -1224,7 +1127,7 @@
     {
      "codice": "03",
      "nome": "Lombardia",
-     "casi": 143
+     "casi": 149
     },
     {
      "codice": "01",
@@ -1234,17 +1137,17 @@
     {
      "codice": "09",
      "nome": "Toscana",
-     "casi": 102
+     "casi": 103
     },
     {
      "codice": "07",
      "nome": "Liguria",
-     "casi": 92
+     "casi": 96
     },
     {
      "codice": "16",
      "nome": "Puglia",
-     "casi": 82
+     "casi": 86
     },
     {
      "codice": "05",
@@ -1254,37 +1157,37 @@
     {
      "codice": "15",
      "nome": "Campania",
-     "casi": 67
+     "casi": 72
     },
     {
      "codice": "19",
      "nome": "Sicilia",
-     "casi": 58
+     "casi": 59
     },
     {
      "codice": "06",
      "nome": "FriuliVeneziaGiulia",
-     "casi": 55
+     "casi": 56
     },
     {
      "codice": "08",
      "nome": "EmiliaRomagna",
-     "casi": 53
+     "casi": 54
     },
     {
      "codice": "20",
      "nome": "Sardegna",
-     "casi": 52
+     "casi": 54
     },
     {
      "codice": "13",
      "nome": "Abruzzo",
-     "casi": 45
+     "casi": 46
     },
     {
      "codice": "12",
      "nome": "Lazio",
-     "casi": 41
+     "casi": 44
     },
     {
      "codice": "11",
@@ -1309,7 +1212,7 @@
     {
      "codice": "17",
      "nome": "Basilicata",
-     "casi": 9
+     "casi": 10
     },
     {
      "codice": "02",
@@ -1326,72 +1229,77 @@
     {
      "codice": "03",
      "nome": "Lombardia",
-     "casi": 132
+     "casi": 140
     },
     {
      "codice": "01",
      "nome": "Piemonte",
-     "casi": 105
+     "casi": 106
     },
     {
      "codice": "16",
      "nome": "Puglia",
-     "casi": 88
+     "casi": 90
     },
     {
      "codice": "09",
      "nome": "Toscana",
-     "casi": 87
+     "casi": 89
     },
     {
      "codice": "07",
      "nome": "Liguria",
-     "casi": 76
+     "casi": 78
     },
     {
      "codice": "06",
      "nome": "FriuliVeneziaGiulia",
-     "casi": 66
+     "casi": 68
     },
     {
      "codice": "05",
      "nome": "Veneto",
-     "casi": 63
+     "casi": 68
     },
     {
      "codice": "19",
      "nome": "Sicilia",
-     "casi": 53
+     "casi": 58
     },
     {
      "codice": "15",
      "nome": "Campania",
-     "casi": 48
+     "casi": 51
     },
     {
      "codice": "08",
      "nome": "EmiliaRomagna",
-     "casi": 46
+     "casi": 49
     },
     {
      "codice": "20",
      "nome": "Sardegna",
-     "casi": 39
+     "casi": 43
     },
     {
      "codice": "13",
      "nome": "Abruzzo",
-     "casi": 37
+     "casi": 40
     },
     {
      "codice": "12",
      "nome": "Lazio",
-     "casi": 34
+     "casi": 36
     },
     {
      "codice": "18",
      "nome": "Calabria",
-     "casi": 17
+     "casi": 18
+    },
+    {
+     "codice": "11",
+     "nome": "Marche",
+     "casi": 18
     },
     {
      "codice": "04",
@@ -1399,19 +1307,14 @@
      "casi": 17
     },
     {
-     "codice": "11",
-     "nome": "Marche",
-     "casi": 15
+     "codice": "17",
+     "nome": "Basilicata",
+     "casi": 14
     },
     {
      "codice": "10",
      "nome": "Umbria",
-     "casi": 13
-    },
-    {
-     "codice": "17",
-     "nome": "Basilicata",
-     "casi": 12
+     "casi": 14
     },
     {
      "codice": "02",
@@ -1423,52 +1326,52 @@
     {
      "codice": "03",
      "nome": "Lombardia",
-     "casi": 134
+     "casi": 149
     },
     {
      "codice": "01",
      "nome": "Piemonte",
-     "casi": 121
+     "casi": 122
     },
     {
      "codice": "09",
      "nome": "Toscana",
-     "casi": 74
+     "casi": 79
     },
     {
      "codice": "16",
      "nome": "Puglia",
-     "casi": 65
+     "casi": 68
     },
     {
      "codice": "06",
      "nome": "FriuliVeneziaGiulia",
-     "casi": 62
-    },
-    {
-     "codice": "07",
-     "nome": "Liguria",
-     "casi": 55
+     "casi": 65
     },
     {
      "codice": "05",
      "nome": "Veneto",
-     "casi": 55
+     "casi": 64
+    },
+    {
+     "codice": "07",
+     "nome": "Liguria",
+     "casi": 59
     },
     {
      "codice": "08",
      "nome": "EmiliaRomagna",
-     "casi": 46
+     "casi": 48
     },
     {
      "codice": "15",
      "nome": "Campania",
-     "casi": 43
+     "casi": 47
     },
     {
      "codice": "19",
      "nome": "Sicilia",
-     "casi": 35
+     "casi": 39
     },
     {
      "codice": "20",
@@ -1478,22 +1381,22 @@
     {
      "codice": "11",
      "nome": "Marche",
-     "casi": 24
+     "casi": 25
     },
     {
      "codice": "13",
      "nome": "Abruzzo",
-     "casi": 22
+     "casi": 24
     },
     {
      "codice": "12",
      "nome": "Lazio",
-     "casi": 20
+     "casi": 23
     },
     {
      "codice": "18",
      "nome": "Calabria",
-     "casi": 11
+     "casi": 12
     },
     {
      "codice": "10",
@@ -1513,6 +1416,108 @@
     {
      "codice": "17",
      "nome": "Basilicata",
+     "casi": 4
+    }
+   ],
+   "2025": [
+    {
+     "codice": "03",
+     "nome": "Lombardia",
+     "casi": 114
+    },
+    {
+     "codice": "01",
+     "nome": "Piemonte",
+     "casi": 86
+    },
+    {
+     "codice": "09",
+     "nome": "Toscana",
+     "casi": 62
+    },
+    {
+     "codice": "07",
+     "nome": "Liguria",
+     "casi": 55
+    },
+    {
+     "codice": "06",
+     "nome": "FriuliVeneziaGiulia",
+     "casi": 53
+    },
+    {
+     "codice": "16",
+     "nome": "Puglia",
+     "casi": 51
+    },
+    {
+     "codice": "05",
+     "nome": "Veneto",
+     "casi": 51
+    },
+    {
+     "codice": "08",
+     "nome": "EmiliaRomagna",
+     "casi": 47
+    },
+    {
+     "codice": "19",
+     "nome": "Sicilia",
+     "casi": 44
+    },
+    {
+     "codice": "15",
+     "nome": "Campania",
+     "casi": 40
+    },
+    {
+     "codice": "11",
+     "nome": "Marche",
+     "casi": 25
+    },
+    {
+     "codice": "12",
+     "nome": "Lazio",
+     "casi": 19
+    },
+    {
+     "codice": "20",
+     "nome": "Sardegna",
+     "casi": 19
+    },
+    {
+     "codice": "10",
+     "nome": "Umbria",
+     "casi": 17
+    },
+    {
+     "codice": "13",
+     "nome": "Abruzzo",
+     "casi": 11
+    },
+    {
+     "codice": "18",
+     "nome": "Calabria",
+     "casi": 9
+    },
+    {
+     "codice": "04",
+     "nome": "TrentinoAltoAdige",
+     "casi": 7
+    },
+    {
+     "codice": "02",
+     "nome": "ValledAosta",
+     "casi": 5
+    },
+    {
+     "codice": "17",
+     "nome": "Basilicata",
+     "casi": 4
+    },
+    {
+     "codice": "14",
+     "nome": "Molise",
      "casi": 3
     }
    ]

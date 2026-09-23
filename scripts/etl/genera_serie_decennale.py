@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Serie storica decennale infortuni sul lavoro (2014-2024).
+"""Serie storica decennale infortuni sul lavoro (2014-2025).
 
 Fonte numeratori:
 - 2014-2019: serie storica ufficiale INAIL (denunce e casi mortali),
   estratta da pubblicazioni INAIL / Fondazione Feltrinelli (Tabella dati 1951-2019).
-- 2020-2024: microdati INAIL Open Data gia' aggregati (inail-multidimensionale.json).
+- 2020: microdati INAIL Open Data (rilevazione precedente, cadenza semestrale 2021/1).
+- 2021-2025: microdati INAIL Open Data consolidati (inail-multidimensionale.json,
+  rilevazione 30/04/2026).
 
 Fonte denominatori:
 - Occupati 15-64 Italia: Eurostat lfst_r_lfe2emp (THS_PER), scaricati al momento.
@@ -32,6 +34,9 @@ STOCK_2014_2019 = {
     2018: {"totale": 645049, "mortali": 1218},
     2019: {"totale": 641638, "mortali": 1089},
 }
+
+# 2020: microdati rilevazione 30/04/2021 (vecchi CSV semestrali 2020-2024)
+STOCK_2020 = {"totale": 572403, "mortali": 1742}
 
 
 def utc_now() -> str:
@@ -70,7 +75,7 @@ def fetch_occupati_it() -> dict[int, float]:
     out = {}
     for t in dims["time"]["category"]["index"]:
         y = int(t)
-        if 2014 <= y <= 2024:
+        if 2014 <= y <= 2025:
             v = get_val(t)
             out[y] = round(float(v) * 1000) if v is not None else 0
     return out
@@ -81,19 +86,23 @@ def main() -> int:
     multi = json.loads((GEN / "inail-multidimensionale.json").read_text(encoding="utf-8"))
 
     serie = []
-    for anno in range(2014, 2025):
+    for anno in range(2014, 2026):
         occ = occupati.get(anno, 0)
         if anno <= 2019:
             s = STOCK_2014_2019[anno]
             totale, mortali = s["totale"], s["mortali"]
             lavoro = itinere = mortaliLavoro = mortaliItinere = None
             nota = "Serie storica ufficiale INAIL (denunce)"
+        elif anno == 2020:
+            totale, mortali = STOCK_2020["totale"], STOCK_2020["mortali"]
+            lavoro = itinere = mortaliLavoro = mortaliItinere = None
+            nota = "Microdati INAIL Open Data (rilevazione 2021/1)"
         else:
             row = multi["perAnno"][str(anno)]
             totale, mortali = row["totale"], row["mortali"]
             lavoro, itinere = row["lavoro"], row["itinere"]
             mortaliLavoro = mortaliItinere = None
-            nota = "Microdati INAIL Open Data consolidati"
+            nota = "Microdati INAIL Open Data consolidati (rilevazione 30/04/2026)"
         serie.append({
             "anno": anno,
             "totale": totale,
@@ -112,7 +121,7 @@ def main() -> int:
         "schemaVersion": 1,
         "datasetId": "inail_serie_decennale",
         "generatedAt": utc_now(),
-        "periodo": "2014-2024",
+        "periodo": "2014-2025",
         "fonte": "INAIL (denunce) + Eurostat (occupati 15-64, lfst_r_lfe2emp)",
         "serie": serie,
     }

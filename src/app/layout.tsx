@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Osservatorio Infortuni sul Lavoro",
   },
   description:
-    "Piattaforma indipendente di analisi statistica sugli infortuni sul lavoro in Italia: monitoraggio congiunturale, media giornaliera dei morti sul lavoro, serie storica 2014-2024, benchmark europeo Eurostat, mappa del rischio per regione e incidenza per comparto ATECO. Realizzata da Ing. Damiano Salvati.",
+    "Piattaforma indipendente di analisi statistica sugli infortuni sul lavoro in Italia: monitoraggio congiunturale, media giornaliera dei morti sul lavoro, serie storica 2014-2025, benchmark europeo Eurostat, mappa del rischio per regione e incidenza per comparto ATECO. Realizzata da Ing. Damiano Salvati.",
   keywords: [
     "infortuni sul lavoro Italia",
     "morti sul lavoro",

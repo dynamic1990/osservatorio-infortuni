@@ -32,7 +32,7 @@ interface DettaglioRiga {
 
 export function AtecoSettoriWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
-  const [anno, setAnno] = useState<string>("2024");
+  const [anno, setAnno] = useState<string>("2025");
   const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
   const [aperto, setAperto] = useState<string | null>(null);
   const dettaglioRef = useRef<HTMLDivElement | null>(null);

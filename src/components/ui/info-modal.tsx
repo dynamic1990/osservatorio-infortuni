@@ -109,7 +109,7 @@ export function InfoModalButton({ children }: { children?: ReactNode }) {
                     <h3 className="modal-section-title">2. Fonti Ufficiali e Origine dei Dati</h3>
                     <ul className="modal-list">
                       <li>
-                        <strong>INAIL Open Data (Dati Consolidati Semestrali 2020–2024):</strong> microdati elementari e tabelle B1–B7 estratti dagli archivi ufficiali INAIL (cadenza semestrale), comprendenti esito amministrativo, grado di menomazione (D.Lgs. 38/2000), giornate indennizzate, gestione assicurativa, classificazione ATECO e provincia/regione di accadimento (3.024.370 record consolidati).
+                        <strong>INAIL Open Data (Dati Consolidati Semestrali 2021–2025):</strong> microdati elementari e tabelle B1–B7 estratti dagli archivi ufficiali INAIL (cadenza semestrale, rilevazione 30/04/2026), comprendenti esito amministrativo, grado di menomazione (D.Lgs. 38/2000), giornate indennizzate, gestione assicurativa, classificazione ATECO e provincia/regione di accadimento (3.052.546 record consolidati).
                       </li>
                       <li>
                         <strong>INAIL Open Data (Flussi mensili 2025–2026):</strong> dati provvisori mensili da inizio anno (YTD), con ultimo mese disponibile giugno 2026 e confronto a pari periodo con il 2025.

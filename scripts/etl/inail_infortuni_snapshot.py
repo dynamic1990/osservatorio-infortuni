@@ -239,7 +239,7 @@ def build_views(aggregates: list[dict], period: dict, coverage: dict) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--anno-da", type=int, default=2020)
+    parser.add_argument("--anno-da", type=int, default=2021)
     parser.add_argument("--anno-a", type=int, default=datetime.now().year - 1)
     parser.add_argument("--mese-a", type=int, default=6, choices=range(1, 13),
                         help="Mese finale (default 6: la finestra API arriva a giugno)")

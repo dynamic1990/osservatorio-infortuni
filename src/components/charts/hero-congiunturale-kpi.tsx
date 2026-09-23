@@ -306,7 +306,7 @@ export function HeroCongiunturaleKpi() {
           </ResponsiveContainer>
         </div>
         <div className="source-note" style={{ marginTop: "var(--space-2)" }}>
-          Nota metodologica: confronto a pari periodo da inizio anno. L&apos;ultimo mese disponibile è giugno 2026; i dati 2025 e 2026 sono denunce mensili provvisorie soggette a consolidamento e non sono sommati alle serie storiche consolidate 2020-2024.
+          Nota metodologica: confronto a pari periodo da inizio anno. L&apos;ultimo mese disponibile è giugno 2026; i dati 2025 e 2026 sono denunce mensili provvisorie soggette a consolidamento e non sono sommati alle serie storiche consolidate 2021-2025.
         </div>
       </div>
     </div>

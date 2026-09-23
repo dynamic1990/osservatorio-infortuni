@@ -17,7 +17,7 @@ La banca dati INAIL è ricchissima ma di difficile lettura: dataset enormi, codi
 
 Copertura verificata al 2026-08-27 per la base INAIL e aggiornata nel registro delle fonti:
 
-- **Serie storica consolidata 2020-2024**: dataset semestrali regionali INAIL (file CSV), tutte le 20 regioni, ~3 milioni di record, con definizione amministrativa, indennizzo e giorni indennizzati.
+- **Serie storica consolidata 2021-2025**: dataset semestrali regionali INAIL (file CSV), tutte le 20 regioni, ~3,05 milioni di record (rilevazione 30/04/2026), con definizione amministrativa, indennizzo e giorni indennizzati.
 - **Congiuntura mensile 2025-2026**: API REST mensile (16 regioni) + CSV mensili delle 4 regioni con nome composto (Valle d'Aosta, Trentino-Alto Adige, Friuli-Venezia Giulia, Emilia-Romagna).
 - Analisi per: tempo (serie storiche), luogo (regione/provincia ISTAT), persona (età, genere), modalità (in occasione di lavoro / in itinere, con/senza mezzo di trasporto), settore (ATECO), esito.
 

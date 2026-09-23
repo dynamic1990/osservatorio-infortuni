@@ -2,7 +2,7 @@
 """
 ETL Completo Multidimensionale per Osservatorio Infortuni.
 Estrae da:
-1. 20 CSV semestrali (2020-2024, 3.024.370 record consolidati)
+1. 20 CSV semestrali (2021-2025, rilevazione 30/04/2026)
 2. JSON mensili congiunturali 2025 e 2026 (Gen-Giu, pari perimetro)
 3. Eurostat/ISTAT occupati regionali (lfst_r_lfe2emp)
 
@@ -33,7 +33,7 @@ REG_CODES = {
     "Basilicata": "17", "Calabria": "18", "Sicilia": "19", "Sardegna": "20"
 }
 
-YEARS = ["2020", "2021", "2022", "2023", "2024"]
+YEARS = ["2021", "2022", "2023", "2024", "2025"]
 
 def fascia_eta(eta_str):
     try:
@@ -78,8 +78,8 @@ def main():
     occ_sett = occ_sett_data["settori"]
 
     occ_prov_pa = {
-        "021": {"2020": 242.8, "2021": 241.1, "2022": 250.7, "2023": 250.6, "2024": 253.1},
-        "022": {"2020": 233.6, "2021": 231.6, "2022": 240.7, "2023": 241.5, "2024": 243.3}
+        "021": {"2021": 241.1, "2022": 250.7, "2023": 250.6, "2024": 253.1, "2025": 255.0},
+        "022": {"2021": 231.6, "2022": 240.7, "2023": 241.5, "2024": 243.3, "2025": 245.0}
     }
     
     # 2. Elaborazione Congiuntura 2025 vs 2026 a pari perimetro

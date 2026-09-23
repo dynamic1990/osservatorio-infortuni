@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Analisi approfondita infortuni INAIL (dimensioni 2020-2024).
+"""Analisi approfondita infortuni INAIL (dimensioni 2021-2025).
 
 Legge i 20 CSV semestrali in streaming e produce
 src/data/generated/inail-infortuni-approfondimenti.json con le dimensioni
@@ -13,7 +13,7 @@ che il dataset elementare espone ma che la dashboard alfa non valorizzava:
   - durata dell'assenza (classi di giorni indennizzati)
   - luogo di nascita (Italia / estero)
   - mezzo di trasporto (con/senza)
-  - stagionalità consolidata 2020-2024 (mese di accadimento)
+  - stagionalità consolidata 2021-2025 (mese di accadimento)
 
 Principi:
   - mai macinare i raw altrove: qui si fa streaming una tantum e si esce
@@ -159,7 +159,7 @@ def main() -> int:
         "schemaVersion": 1,
         "datasetId": "inail_infortuni_approfondimenti",
         "generatedAt": utc_now(),
-        "period": {"annoDa": 2020, "annoA": 2024},
+        "period": {"annoDa": 2021, "annoA": 2025},
         "coverage": {"regioni": 20, "recordTotali": tot},
         "dimensioni": {
             "gestione": serie_dim(agg, "gestione", ["I", "S", "A", "ND"]),
