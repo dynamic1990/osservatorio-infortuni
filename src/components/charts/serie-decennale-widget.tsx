@@ -58,7 +58,7 @@ export function SerieDecennaleWidget() {
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)" }}>
         <div style={{ fontSize: "0.95rem", fontWeight: 700 }}>
-          Serie storica decennale consolidata (2014 – 2024)
+          Serie storica consolidata (2014 – 2025)
         </div>
         <div style={{ display: "flex", gap: "var(--space-1)" }}>
           {(["totale", "mortali"] as const).map((m) => (
@@ -153,9 +153,9 @@ export function SerieDecennaleWidget() {
         complessivo delle denunce senza distinguere tra infortuni in occasione di lavoro e in
         itinere. Per questi anni la ripartizione tra le due modalità non è disponibile. Dal 2020
         la serie si basa sui microdati Open Data INAIL, che consentono la distinzione tra lavoro
-        e itinere: i filtri della dashboard su questa modalità si applicano quindi al solo periodo
-        2021-2025. Il denominatore occupati 15-64 è ISTAT/Eurostat (lfst_r_lfe2emp). Il dato 2020
-        (dai microdati della rilevazione precedente) include i casi COVID riconosciuti come infortunio (picco dei casi mortali). La serie
+        e itinere: i filtri della dashboard su questa modalità si applicano quindi al periodo
+        2020-2025. Il denominatore occupati 15-64 è ISTAT/Eurostat (lfst_r_lfe2emp). Il dato 2020
+        include i casi COVID riconosciuti come infortunio (picco dei casi mortali). La serie
         consente di leggere il rischio reale separandolo dalle oscillazioni della platea occupazionale.
       </p>
     </div>

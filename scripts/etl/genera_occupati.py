@@ -7,7 +7,8 @@
   I valori per settore non sono esposti a livello aggregato IT da Eurostat LFS;
   la colonna 2025 viene stimata con il tasso di crescita dell'occupazione totale.
 
-Aggiornamento 2026-09-23: finestra 2021-2025, incluso 2025.
+Aggiornamento 2026-09-23: finestra 2020-2025 (il 2020 serve per l'indice di
+incidenza dell'anno, incluso nel multidimensionale).
 """
 import json
 import ssl
@@ -39,7 +40,7 @@ NUTS2_CORRETTA = {
     "Basilicata": ["ITF5"], "Calabria": ["ITF6"], "Sicilia": ["ITG1"], "Sardegna": ["ITG2"],
 }
 
-ANNI = ["2021", "2022", "2023", "2024", "2025"]
+ANNI = ["2020", "2021", "2022", "2023", "2024", "2025"]
 
 
 def fetch_region_data():

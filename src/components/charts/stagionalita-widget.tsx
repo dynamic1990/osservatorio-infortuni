@@ -20,10 +20,10 @@ const MESI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ot
 export function StagionalitaWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
 
-  // Anni 2021-2025: disponibili con dettaglio mensile nel consolidato INAIL
+  // Anni 2020-2025: disponibili con dettaglio mensile nel consolidato INAIL
   const anni = useMemo(() => {
     return multidim.anniDisponibili
-      .filter((a) => Number(a) >= 2020 && Number(a) <= 2024 && multidim.perAnno[a]?.mensile)
+      .filter((a) => Number(a) >= 2020 && Number(a) <= 2025 && multidim.perAnno[a]?.mensile)
       .sort((a, b) => Number(a) - Number(b));
   }, [multidim]);
 
@@ -90,7 +90,7 @@ export function StagionalitaWidget() {
       </div>
 
       <p className="source-note">
-        Distribuzione per mese di accadimento nell&apos;anno selezionato, dato consolidato INAIL 2021-2025
+        Distribuzione per mese di accadimento nell&apos;anno selezionato, dato consolidato INAIL 2020-2025
         (tutte le regioni). Totale anno: <strong>{totAnno.toLocaleString("it-IT")}</strong> casi, picco mensile{" "}
         <strong>{max.toLocaleString("it-IT")}</strong> ({meseMax}), minimo <strong>{min.toLocaleString("it-IT")}</strong>.
         La stagionalità produttiva (edilizia, agricoltura) spiega gli andamenti: utile per pianificare le

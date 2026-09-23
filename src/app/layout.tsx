@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: "Osservatorio Infortuni sul Lavoro",
     title: "Osservatorio Infortuni sul Lavoro | Dati INAIL ed Eurostat",
     description:
-      "Monitoraggio indipendente di infortuni e morti sul lavoro in Italia: congiunturale, media giornaliera YTD, serie decennale, benchmark UE e mappa del rischio per regione.",
+      "Monitoraggio indipendente di infortuni e morti sul lavoro in Italia: congiunturale, media giornaliera YTD, serie storica, benchmark UE e mappa del rischio per regione.",
     locale: "it_IT",
     images: [
       {

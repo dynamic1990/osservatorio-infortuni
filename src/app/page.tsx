@@ -17,7 +17,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Osservatorio Infortuni sul Lavoro | Dati e Indicatori Statistici INAIL",
   description:
-    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: radar quotidiano delle segnalazioni pertinenti, serie storica decennale 2014-2025, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
+    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: radar quotidiano delle segnalazioni pertinenti, serie storica 2014-2025, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
 };
 
 export default function HomePage() {
@@ -75,12 +75,12 @@ export default function HomePage() {
         <HeroCongiunturaleKpi />
       </section>
 
-      {/* 3. Serie Storica Decennale 2014-2024 */}
-      <section className="card" aria-label="Serie Storica Decennale">
+      {/* 3. Serie Storica 2014-2025 */}
+      <section className="card" aria-label="Serie Storica">
         <div className="card-header">
-          <h2 className="card-title">Serie Storica Decennale (2014 – 2024)</h2>
+          <h2 className="card-title">Serie Storica (2014 – 2025)</h2>
           <p className="card-desc">
-            Dieci anni di denunce INAIL e casi mortali confrontati con gli <strong>occupati ISTAT/Eurostat</strong>:
+            Dodici anni di denunce INAIL e casi mortali confrontati con gli <strong>occupati ISTAT/Eurostat</strong>:
             una lettura del rischio separata dalle oscillazioni della platea occupazionale, dal picco
             COVID del 2020 al consolidamento post-pandemia.
           </p>
@@ -91,11 +91,11 @@ export default function HomePage() {
       {/* 3. Trend Storico a Doppia Scala: Volumi Assoluti vs Tasso di Incidenza */}
       <section className="card" aria-label="Evoluzione e Indice di Incidenza">
         <div className="card-header">
-          <h2 className="card-title">Evoluzione Temporale e Tasso di Incidenza (2020 – 2024)</h2>
+          <h2 className="card-title">Evoluzione Temporale e Tasso di Incidenza (2020 – 2025)</h2>
           <p className="card-desc">
             Rappresentazione cartesiana su <strong>doppia scala</strong>: i volumi assoluti di denunce
             (barre, asse sinistro) vengono confrontati con il <strong>tasso di incidenza</strong> (linea, asse destro)
-            espresso come <em>infortuni ogni 1.000 occupati</em>.
+            espresso come <em>infortuni ogni 1.000 occupati</em>, dal primo anno dei microdati (2020) all&apos;ultimo consolidato (2025).
           </p>
         </div>
         <TrendDoppiaScalaWidget />

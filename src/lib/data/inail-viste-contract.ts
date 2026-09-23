@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Contratto delle viste precalcolate (dashboard leggera).
-// Serie annuale consolidata 2020-2024 (semestrale, 20 regioni) +
+// Serie annuale consolidata 2020-2025 (semestrale, 20 regioni) +
 // serie mensile congiunturale 2025-2026.
 
 export const SerieCountSchema = z.object({ key: z.string(), casi: z.number() });

@@ -33,7 +33,7 @@ REG_CODES = {
     "Basilicata": "17", "Calabria": "18", "Sicilia": "19", "Sardegna": "20"
 }
 
-YEARS = ["2021", "2022", "2023", "2024", "2025"]
+YEARS = ["2020", "2021", "2022", "2023", "2024", "2025"]
 
 def fascia_eta(eta_str):
     try:
@@ -78,8 +78,8 @@ def main():
     occ_sett = occ_sett_data["settori"]
 
     occ_prov_pa = {
-        "021": {"2021": 241.1, "2022": 250.7, "2023": 250.6, "2024": 253.1, "2025": 255.0},
-        "022": {"2021": 231.6, "2022": 240.7, "2023": 241.5, "2024": 243.3, "2025": 245.0}
+        "021": {"2020": 242.9, "2021": 241.1, "2022": 250.7, "2023": 250.6, "2024": 253.1, "2025": 255.0},
+        "022": {"2020": 233.5, "2021": 231.6, "2022": 240.7, "2023": 241.5, "2024": 243.3, "2025": 245.0}
     }
     
     # 2. Elaborazione Congiuntura 2025 vs 2026 a pari perimetro
@@ -244,182 +244,186 @@ def main():
 
     dataset_by_year = {y: new_dimension_container() for y in YEARS}
     dataset_all = new_dimension_container()
-    
+
+    def aggrega_riga(T, row, idx, reg_cod, anno_label, mese_num, is_mortale, mod, gen, f_eta, gest, es, ind, gr, is_menomato, g_val, dur, nascita_key, mezzo_key, macro, div):
+        """Aggrega una riga nel contenitore T replicando la logica del loop principale."""
+        is_itinere = (mod == "S")
+        T["totale"] += 1
+        if is_mortale:
+            T["mortali"] += 1
+            T["generiMortali"][gen] += 1
+            T["fasceEtaMortali"][f_eta] += 1
+            if macro != "ND": T["atecoMacroMortali"][macro] += 1
+        if is_itinere:
+            T["itinere"] += 1
+            T["modalita"]["itinere"] += 1
+            T["generiItinere"][gen] += 1
+            T["fasceEtaItinere"][f_eta] += 1
+            T["gravitaItinere"][gr] += 1
+            T["durataItinere"][dur] += 1
+            T["atecoMacroItinere"][macro] += 1
+            T["atecoDivisioneItinere"][div] += 1
+            if 1 <= mese_num <= 12: T["mensileItinere"][mese_num] += 1
+        else:
+            T["lavoro"] += 1
+            T["modalita"]["lavoro"] += 1
+            T["generiLavoro"][gen] += 1
+            T["fasceEtaLavoro"][f_eta] += 1
+            T["gravitaLavoro"][gr] += 1
+            T["durataLavoro"][dur] += 1
+            T["atecoMacroLavoro"][macro] += 1
+            T["atecoDivisioneLavoro"][div] += 1
+            if 1 <= mese_num <= 12: T["mensileLavoro"][mese_num] += 1
+        T["generi"][gen] += 1
+        T["fasceEta"][f_eta] += 1
+        T["gestione"][gest] += 1
+        if is_itinere:
+            T["gestioneItinere"][gest] += 1
+            T["esitoItinere"][es] += 1
+            T["indennizzoItinere"][ind] += 1
+            T["nascitaItinere"][nascita_key] += 1
+            T["mezzoItinere"][mezzo_key] += 1
+        else:
+            T["gestioneLavoro"][gest] += 1
+            T["esitoLavoro"][es] += 1
+            T["indennizzoLavoro"][ind] += 1
+            T["nascitaLavoro"][nascita_key] += 1
+            T["mezzoLavoro"][mezzo_key] += 1
+        T["esito"][es] += 1
+        T["indennizzo"][ind] += 1
+        T["gravita"][gr] += 1
+        if is_menomato: T["menomati"] += 1
+        T["durata"][dur] += 1
+        if g_val > 0:
+            T["giorni"] += g_val
+            T["casi_con_giorni"] += 1
+        T["nascita"][nascita_key] += 1
+        T["mezzo"][mezzo_key] += 1
+        m_stat = T["atecoMacro"][macro]
+        m_stat["totale"] += 1
+        if is_mortale:
+            m_stat["mortali"] += 1
+            if is_itinere: m_stat["mortaliItinere"] += 1
+            else: m_stat["mortaliLavoro"] += 1
+        if is_itinere: m_stat["itinere"] += 1
+        else: m_stat["lavoro"] += 1
+        if is_menomato: m_stat["menomati"] += 1
+        if g_val > 0:
+            m_stat["giorni"] += g_val
+            m_stat["casi_con_giorni"] += 1
+            if is_itinere:
+                m_stat["giorniItinere"] += g_val
+                m_stat["casi_giorni_itinere"] += 1
+            else:
+                m_stat["giorniLavoro"] += g_val
+                m_stat["casi_giorni_lavoro"] += 1
+        T["atecoDivisione"][div] += 1
+        if 1 <= mese_num <= 12: T["mensile"][mese_num] += 1
+        r_stat = T["regioni"][reg_cod]
+        r_stat["totale"] += 1
+        if is_mortale: r_stat["mortali"] += 1
+        if is_itinere: r_stat["itinere"] += 1
+        else: r_stat["lavoro"] += 1
+        if is_menomato: r_stat["menomati"] += 1
+        if g_val > 0:
+            r_stat["giorni"] += g_val
+            r_stat["casi_con_giorni"] += 1
+        # Province Autonome per Trentino-Alto Adige (021 Bolzano, 022 Trento)
+        if reg_cod == "04" and "LuogoAccadimento" in idx:
+            luogo_cod = row[idx["LuogoAccadimento"]].strip()
+            if luogo_cod in ("021", "022"):
+                p_stat = T["provinceAutonome"][luogo_cod]
+                p_stat["totale"] += 1
+                if is_mortale: p_stat["mortali"] += 1
+                if is_itinere: p_stat["itinere"] += 1
+                else: p_stat["lavoro"] += 1
+                if is_menomato: p_stat["menomati"] += 1
+                if g_val > 0:
+                    p_stat["giorni"] += g_val
+                    p_stat["casi_con_giorni"] += 1
+
+    def process_csv(zf, fname, reg_cod, anno_target=None):
+        """Processa un CSV dentro zip; se anno_target specificato, filtra solo quell'anno."""
+        with zf.open(fname) as bf:
+            text_f = io.TextIOWrapper(bf, encoding='utf-8-sig', errors='replace')
+            reader = csv.reader(text_f, delimiter=';')
+            header = next(reader)
+            idx = {col: i for i, col in enumerate(header)}
+            idx_dt = idx["DataAccadimento"]
+            idx_morte = idx["DataMorte"]
+            idx_mod = idx["ModalitaAccadimento"]
+            idx_gen = idx["Genere"]
+            idx_eta = idx["Eta"]
+            idx_gest = idx["Gestione"]
+            idx_esito = idx["DefinizioneAmministrativa"]
+            idx_ind = idx["Indennizzo"]
+            idx_gm = idx["GradoMenomazione"]
+            idx_gi = idx["GiorniIndennizzati"]
+            idx_ln = idx["LuogoNascita"]
+            idx_mz = idx["ConSenzaMezzoTrasporto"]
+            idx_ateco = idx["SettoreAttivitaEconomica"]
+            idx_luogo = idx["LuogoAccadimento"]
+            for row in reader:
+                if not row or len(row) < len(header): continue
+                raw_dt = row[idx_dt].strip()
+                parts = raw_dt.split('/')
+                if len(parts) != 3: continue
+                anno = parts[2]
+                if anno_target is not None and anno != anno_target: continue
+                if anno not in dataset_by_year: continue
+                try:
+                    mese_num = int(parts[1])
+                except:
+                    mese_num = 0
+                targets = [dataset_by_year[anno], dataset_all]
+                is_mortale = bool(row[idx_morte].strip())
+                mod = row[idx_mod].strip()
+                gen = row[idx_gen].strip().upper()
+                if gen not in ("M", "F"): gen = "ND"
+                f_eta = fascia_eta(row[idx_eta].strip())
+                gest = row[idx_gest].strip().upper()
+                if gest not in ("I", "S", "A"): gest = "ND"
+                es = row[idx_esito].strip().upper()
+                if es not in ("P", "N", "F", "I"): es = "ND"
+                ind = row[idx_ind].strip().upper()
+                if ind not in ("TE", "NE", "CA", "RD", "RS"): ind = "ND"
+                gr = map_gravita(row[idx_gm].strip())
+                gm_val = -1
+                try: gm_val = int(row[idx_gm].strip())
+                except: pass
+                is_menomato = (gm_val >= 0)
+                g_val = 0
+                try: g_val = int(row[idx_gi].strip())
+                except: pass
+                dur = map_durata(row[idx_gi].strip())
+                ln = row[idx_ln].strip().upper()
+                nascita_key = "ITAL" if (ln == "ITAL" or ln == "IT") else ("ESTERO" if ln else "ND")
+                mz = row[idx_mz].strip().upper()
+                mezzo_key = "CON_MEZZO" if mz in ("S", "SI", "1") else "SENZA_MEZZO"
+                ateco = row[idx_ateco].strip()
+                if ateco and ateco != "ND":
+                    macro = ateco[0].upper()
+                    div = ateco[:4].strip()
+                else:
+                    macro = "ND"; div = "ND"
+                for T in targets:
+                    aggrega_riga(T, row, idx, reg_cod, anno, mese_num, is_mortale, mod, gen, f_eta, gest, es, ind, gr, is_menomato, g_val, dur, nascita_key, mezzo_key, macro, div)
+
     zips = sorted(glob.glob(str(RAW_DIR / "semestrale-*.zip")))
+    backup_dir = ROOT / "data" / "raw.bak_2020_2024"
     for zpath in zips:
         reg_name = Path(zpath).stem.replace("semestrale-", "")
         reg_cod = REG_CODES.get(reg_name, "ND")
+        # 2021-2025 dai raw aggiornati (rilevazione 30/04/2026)
         with zipfile.ZipFile(zpath) as zf:
             for fname in zf.namelist():
-                with zf.open(fname) as bf:
-                    text_f = io.TextIOWrapper(bf, encoding='utf-8-sig', errors='replace')
-                    reader = csv.reader(text_f, delimiter=';')
-                    header = next(reader)
-                    idx = {col: i for i, col in enumerate(header)}
-                    
-                    idx_dt = idx["DataAccadimento"]
-                    idx_morte = idx["DataMorte"]
-                    idx_mod = idx["ModalitaAccadimento"]
-                    idx_gen = idx["Genere"]
-                    idx_eta = idx["Eta"]
-                    idx_gest = idx["Gestione"]
-                    idx_esito = idx["DefinizioneAmministrativa"]
-                    idx_ind = idx["Indennizzo"]
-                    idx_gm = idx["GradoMenomazione"]
-                    idx_gi = idx["GiorniIndennizzati"]
-                    idx_ln = idx["LuogoNascita"]
-                    idx_mz = idx["ConSenzaMezzoTrasporto"]
-                    idx_ateco = idx["SettoreAttivitaEconomica"]
-                    idx_luogo = idx["LuogoAccadimento"]
-                    
-                    for row in reader:
-                        if not row or len(row) < len(header): continue
-                        raw_dt = row[idx_dt].strip()
-                        parts = raw_dt.split('/')
-                        if len(parts) != 3: continue
-                        anno = parts[2]
-                        if anno not in dataset_by_year: continue
-                        try:
-                            mese_num = int(parts[1])
-                        except:
-                            mese_num = 0
-                            
-                        targets = [dataset_by_year[anno], dataset_all]
-                        
-                        is_mortale = bool(row[idx_morte].strip())
-                        mod = row[idx_mod].strip()
-                        is_itinere = (mod == "S")
-                        gen = row[idx_gen].strip().upper()
-                        if gen not in ("M", "F"): gen = "ND"
-                        f_eta = fascia_eta(row[idx_eta].strip())
-                        gest = row[idx_gest].strip().upper()
-                        if gest not in ("I", "S", "A"): gest = "ND"
-                        es = row[idx_esito].strip().upper()
-                        if es not in ("P", "N", "F", "I"): es = "ND"
-                        ind = row[idx_ind].strip().upper()
-                        if ind not in ("TE", "NE", "CA", "RD", "RS"): ind = "ND"
-                        gr = map_gravita(row[idx_gm].strip())
-                        
-                        gm_val = -1
-                        try: gm_val = int(row[idx_gm].strip())
-                        except: pass
-                        is_menomato = (gm_val >= 0)
-                        
-                        g_val = 0
-                        try: g_val = int(row[idx_gi].strip())
-                        except: pass
-                        dur = map_durata(row[idx_gi].strip())
-                        
-                        ln = row[idx_ln].strip().upper()
-                        nascita_key = "ITAL" if (ln == "ITAL" or ln == "IT") else ("ESTERO" if ln else "ND")
-                        
-                        mz = row[idx_mz].strip().upper()
-                        mezzo_key = "CON_MEZZO" if mz in ("S", "SI", "1") else "SENZA_MEZZO"
-                        
-                        ateco = row[idx_ateco].strip()
-                        if ateco and ateco != "ND":
-                            macro = ateco[0].upper()
-                            div = ateco[:4].strip()
-                        else:
-                            macro = "ND"
-                            div = "ND"
-                            
-                        for T in targets:
-                            T["totale"] += 1
-                            if is_mortale: 
-                                T["mortali"] += 1
-                                T["generiMortali"][gen] += 1
-                                T["fasceEtaMortali"][f_eta] += 1
-                                if macro != "ND": T["atecoMacroMortali"][macro] += 1
-                            if is_itinere:
-                                T["itinere"] += 1
-                                T["modalita"]["itinere"] += 1
-                                T["generiItinere"][gen] += 1
-                                T["fasceEtaItinere"][f_eta] += 1
-                                T["gravitaItinere"][gr] += 1
-                                T["durataItinere"][dur] += 1
-                                T["atecoMacroItinere"][macro] += 1
-                                T["atecoDivisioneItinere"][div] += 1
-                                if 1 <= mese_num <= 12: T["mensileItinere"][mese_num] += 1
-                            else:
-                                T["lavoro"] += 1
-                                T["modalita"]["lavoro"] += 1
-                                T["generiLavoro"][gen] += 1
-                                T["fasceEtaLavoro"][f_eta] += 1
-                                T["gravitaLavoro"][gr] += 1
-                                T["durataLavoro"][dur] += 1
-                                T["atecoMacroLavoro"][macro] += 1
-                                T["atecoDivisioneLavoro"][div] += 1
-                                if 1 <= mese_num <= 12: T["mensileLavoro"][mese_num] += 1
-                            T["generi"][gen] += 1
-                            T["fasceEta"][f_eta] += 1
-                            T["gestione"][gest] += 1
-                            if is_itinere:
-                                T["gestioneItinere"][gest] += 1
-                                T["esitoItinere"][es] += 1
-                                T["indennizzoItinere"][ind] += 1
-                                T["nascitaItinere"][nascita_key] += 1
-                                T["mezzoItinere"][mezzo_key] += 1
-                            else:
-                                T["gestioneLavoro"][gest] += 1
-                                T["esitoLavoro"][es] += 1
-                                T["indennizzoLavoro"][ind] += 1
-                                T["nascitaLavoro"][nascita_key] += 1
-                                T["mezzoLavoro"][mezzo_key] += 1
-                            T["esito"][es] += 1
-                            T["indennizzo"][ind] += 1
-                            T["gravita"][gr] += 1
-                            if is_menomato: T["menomati"] += 1
-                            T["durata"][dur] += 1
-                            if g_val > 0:
-                                T["giorni"] += g_val
-                                T["casi_con_giorni"] += 1
-                            T["nascita"][nascita_key] += 1
-                            T["mezzo"][mezzo_key] += 1
-                            m_stat = T["atecoMacro"][macro]
-                            m_stat["totale"] += 1
-                            if is_mortale:
-                                m_stat["mortali"] += 1
-                                if is_itinere: m_stat["mortaliItinere"] += 1
-                                else: m_stat["mortaliLavoro"] += 1
-                            if is_itinere: m_stat["itinere"] += 1
-                            else: m_stat["lavoro"] += 1
-                            if is_menomato: m_stat["menomati"] += 1
-                            if g_val > 0:
-                                m_stat["giorni"] += g_val
-                                m_stat["casi_con_giorni"] += 1
-                                if is_itinere:
-                                    m_stat["giorniItinere"] += g_val
-                                    m_stat["casi_giorni_itinere"] += 1
-                                else:
-                                    m_stat["giorniLavoro"] += g_val
-                                    m_stat["casi_giorni_lavoro"] += 1
-                            T["atecoDivisione"][div] += 1
-                            if 1 <= mese_num <= 12: T["mensile"][mese_num] += 1
-                            
-                            r_stat = T["regioni"][reg_cod]
-                            r_stat["totale"] += 1
-                            if is_mortale: r_stat["mortali"] += 1
-                            if is_itinere: r_stat["itinere"] += 1
-                            else: r_stat["lavoro"] += 1
-                            if is_menomato: r_stat["menomati"] += 1
-                            if g_val > 0:
-                                r_stat["giorni"] += g_val
-                                r_stat["casi_con_giorni"] += 1
-
-                            # Province Autonome per Trentino-Alto Adige (021 Bolzano, 022 Trento)
-                            if reg_cod == "04":
-                                luogo_cod = row[idx_luogo].strip()
-                                if luogo_cod in ("021", "022"):
-                                    p_stat = T["provinceAutonome"][luogo_cod]
-                                    p_stat["totale"] += 1
-                                    if is_mortale: p_stat["mortali"] += 1
-                                    if is_itinere: p_stat["itinere"] += 1
-                                    else: p_stat["lavoro"] += 1
-                                    if is_menomato: p_stat["menomati"] += 1
-                                    if g_val > 0:
-                                        p_stat["giorni"] += g_val
-                                        p_stat["casi_con_giorni"] += 1
+                process_csv(zf, fname, reg_cod)
+        # 2020 dal backup (rilevazione 31/10/2025, unica fonte con il 2020)
+        bz_path = backup_dir / f"semestrale-{reg_name}.zip"
+        if bz_path.exists():
+            with zipfile.ZipFile(bz_path) as zfb:
+                for fname in zfb.namelist():
+                    process_csv(zfb, fname, reg_cod, anno_target="2020")
 
     # Costruzione JSON strutturato
     def format_container(c, anno_label):
@@ -429,8 +433,8 @@ def main():
             r_data = c["regioni"][r_cod]
             # occupati
             if anno_label == "ALL":
-                # media occupati 2020-2024
-                occ_vals = [occ_reg.get(r_cod, {}).get(y, 0) for y in YEARS]
+                # media occupati sugli anni con dato disponibile (2021-2025)
+                occ_vals = [occ_reg.get(r_cod, {}).get(y, 0) for y in YEARS if occ_reg.get(r_cod, {}).get(y)]
                 occ_k = sum(occ_vals) / len(occ_vals) if occ_vals else 1
             else:
                 occ_k = occ_reg.get(r_cod, {}).get(anno_label, 1)
@@ -460,7 +464,7 @@ def main():
         for p_cod, p_name in [("021", "P.A. Bolzano / Bozen"), ("022", "P.A. Trento")]:
             p_data = c["provinceAutonome"][p_cod]
             if anno_label == "ALL":
-                occ_vals = [occ_prov_pa[p_cod].get(y, 0) for y in YEARS]
+                occ_vals = [occ_prov_pa[p_cod].get(y, 0) for y in YEARS if occ_prov_pa[p_cod].get(y)]
                 occ_k = sum(occ_vals) / len(occ_vals) if occ_vals else 1
             else:
                 occ_k = occ_prov_pa[p_cod].get(anno_label, 1)
@@ -487,7 +491,7 @@ def main():
 
         # Nazionale
         if anno_label == "ALL":
-            occ_tot_k = sum(sum(occ_reg.get(r, {}).get(y, 0) for y in YEARS) / len(YEARS) for r in occ_reg)
+            occ_tot_k = sum(sum(occ_reg.get(r, {}).get(y, 0) for y in YEARS if occ_reg.get(r, {}).get(y)) / len([y for y in YEARS if occ_reg.get(r, {}).get(y)]) for r in occ_reg)
         else:
             occ_tot_k = sum(occ_reg.get(r, {}).get(anno_label, 0) for r in occ_reg)
             

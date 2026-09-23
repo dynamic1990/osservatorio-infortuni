@@ -32,7 +32,7 @@ export const SOURCE_STATUS: SourceStatus[] = [
     sourceId: "inail-serie-storica",
     dataState: "verified",
     label: "Snapshot verificato",
-    period: "2020–2024, serie consolidata",
+    period: "2020–2025, serie consolidata",
     extractedAt: "2026-08-27T00:30:00+00:00",
     checkedAt: "2026-09-14",
     freshness: "18 giorni dall'ultima estrazione",

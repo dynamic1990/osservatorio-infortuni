@@ -1,4 +1,4 @@
-// Loader per le dimensioni approfondite INAIL 2020-2024 (taglio H&S manager).
+// Loader per le dimensioni approfondite INAIL 2020-2025 (taglio H&S manager).
 // Fonte: src/data/generated/inail-infortuni-approfondimenti.json
 // Generato da scripts/etl/inail_analisi_approfondita.py (streaming sui CSV semestrali).
 
