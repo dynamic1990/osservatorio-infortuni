@@ -11,6 +11,15 @@ export const metadata: Metadata = {
 
 const REPORT = [
   {
+    href: "/report/relazione-annuale-inail-2025",
+    name: "Report Relazione annuale INAIL",
+    title: "Relazione annuale INAIL 2025: meno morti sul lavoro, boom di malattie professionali",
+    date: "23 settembre 2026",
+    description:
+      "1.198 morti sul lavoro (-3,3%), 600.000 denunce di infortunio e 98.312 malattie professionali, record degli ultimi 26 anni. I dati presentati alla Camera e il PDF ufficiale.",
+    tags: ["Relazione annuale", "Morti sul lavoro", "Malattie professionali", "Scarica PDF"],
+  },
+  {
     href: "/report/infortuni-1-semestre-2026",
     name: "Report overview infortuni",
     title: "Infortuni sul lavoro, primo semestre 2026: più denunce, meno casi mortali",
