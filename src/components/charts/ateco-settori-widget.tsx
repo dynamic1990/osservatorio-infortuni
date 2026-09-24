@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useRef } from "react";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { RISK_SCALE } from "@/lib/palette";
@@ -34,13 +34,15 @@ export function AtecoSettoriWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2025");
   const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
-  const [aperto, setAperto] = useState<string | null>(null);
   const dettaglioRef = useRef<HTMLDivElement | null>(null);
 
-  // Cambiando anno o modalità chiudi il box aperto
-  useEffect(() => {
-    setAperto(null);
-  }, [anno, modalita]);
+  // Stato: vista macro (A-U) o divisione (2 cifre), ricerca testo, divisione aperta nel trend
+  const [vista, setVista] = useState<"macro" | "divisione">("macro");
+  const [cerca, setCerca] = useState<string>("");
+  const [aperto, setAperto] = useState<string | null>(null);
+  const [trendDiv, setTrendDiv] = useState<string | null>(null);
+
+  // Cambiando anno o modalità chiudi i box aperti (reset fatto nelle callback di click)
 
   const annoData = useMemo(() => {
     return multidim.perAnno[anno] || multidim.consolidatoTotale;
@@ -87,6 +89,70 @@ export function AtecoSettoriWidget() {
   const percND = ((casiND / (totFiltrato || 1)) * 100).toFixed(1);
 
   const maxIncidenza = Math.max(...macroData.map((m) => m.indiceIncidenza || 0), 0.0001);
+
+  // ---- Vista divisioni (2 cifre): tutte le 86, con ricerca e trend ----
+  const serieTot = multidim.atecoDivisioneSerie || {};
+  const serieLavoro = multidim.atecoDivisioneSerieLavoro || {};
+  const serieItinere = multidim.atecoDivisioneSerieItinere || {};
+  const serieMortali = multidim.atecoDivisioneSerieMortali || {};
+
+  // Divisioni filtrate per testo (codice, nome, sezione) e per modalità selezionata
+  const divisioniData = useMemo(() => {
+    const lista = (annoData.atecoDivisioni || [])
+      .filter((d) => d.key !== "ND")
+      .map((d) => {
+        const f = filtraItem(d as any);
+        return { ...d, casi: f.casi, lavoro: f.lavoro, itinere: f.itinere } as any;
+      });
+    const query = cerca.trim().toLowerCase();
+    if (query) {
+      return lista.filter((d) => {
+        const key = (d.key || "").toLowerCase();
+        const nome = (d.nome || "").toLowerCase();
+        const sez = (d.sezioneNome || "").toLowerCase();
+        return key.includes(query) || nome.includes(query) || sez.includes(query);
+      });
+    }
+    return lista;
+  }, [annoData, filtraItem, cerca]);
+
+  // Ordinamento: se cerco per codice, rilevanza sul codice; altrimenti casi decrescenti
+  const divisioniOrdinate = useMemo(() => {
+    const query = cerca.trim().toLowerCase();
+    const arr = [...divisioniData];
+    if (query) {
+      arr.sort((a, b) => {
+        const ka = (a.key || "").toLowerCase().startsWith(query) ? 0 : 1;
+        const kb = (b.key || "").toLowerCase().startsWith(query) ? 0 : 1;
+        if (ka !== kb) return ka - kb;
+        return (b.casi || 0) - (a.casi || 0);
+      });
+    } else {
+      arr.sort((a, b) => (b.casi || 0) - (a.casi || 0));
+    }
+    return arr;
+  }, [divisioniData, cerca]);
+
+  // Mini-sparkline: serie 2020-2025 della divisione selezionata
+  const trendDivisione = useMemo(() => {
+    if (!trendDiv) return null;
+    const anni = multidim.anniDisponibili || [];
+    const serie = modalita.lavoro && modalita.itinere
+      ? serieTot[trendDiv]
+      : (modalita.lavoro ? serieLavoro[trendDiv] : serieItinere[trendDiv]);
+    if (!serie) return null;
+    const valori = anni.map((a) => serie[a] || 0);
+    if (valori.every((v) => v === 0)) return null;
+    const max = Math.max(...valori, 1);
+    const min = Math.min(...valori);
+    const punti = valori.map((v, i) => ({ anno: anni[i], v, y: v === 0 ? 0 : 30 - ((v - min) / (max - min || 1)) * 28 }));
+    return {
+      anni,
+      valori,
+      punti,
+      mortali: (serieMortali[trendDiv] || {}) as Record<string, number>,
+    };
+  }, [trendDiv, modalita, multidim]);
 
   const righeDettaglio = (p: any): DettaglioRiga[] => {
     const righe: DettaglioRiga[] = [];
@@ -144,7 +210,11 @@ export function AtecoSettoriWidget() {
           {multidim.anniDisponibili.map((a) => (
             <button
               key={a}
-              onClick={() => setAnno(a)}
+              onClick={() => {
+                setAnno(a);
+                setAperto(null);
+                setTrendDiv(null);
+              }}
               className={`btn-pill ${anno === a ? "active" : ""}`}
             >
               {a}
@@ -152,23 +222,90 @@ export function AtecoSettoriWidget() {
           ))}
         </div>
 
-        <FiltroModalita value={modalita} onChange={setModalita} size="sm" />
+        <FiltroModalita
+          value={modalita}
+          onChange={(m) => {
+            setModalita(m);
+            setAperto(null);
+            setTrendDiv(null);
+          }}
+          size="sm"
+        />
       </div>
 
-      {/* Intestazione lista */}
+      {/* Switch macro/divisioni + ricerca */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "var(--space-3)",
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ display: "flex", gap: "var(--space-2)", fontSize: "0.8rem" }}>
+          <button
+            type="button"
+            onClick={() => setVista("macro")}
+            className={`btn-pill ${vista === "macro" ? "active" : ""}`}
+            aria-pressed={vista === "macro"}
+          >
+            Macro-settori (A–U)
+          </button>
+          <button
+            type="button"
+            onClick={() => setVista("divisione")}
+            className={`btn-pill ${vista === "divisione" ? "active" : ""}`}
+            aria-pressed={vista === "divisione"}
+          >
+            Divisioni ({annoData.atecoDivisioni?.length || 0})
+          </button>
+        </div>
+        {vista === "divisione" && (
+          <div style={{ position: "relative", flex: 1, minWidth: 200 }}>
+            <input
+              type="search"
+              value={cerca}
+              onChange={(e) => setCerca(e.target.value)}
+              placeholder="Cerca codice o settore, es. H52, magazzinaggio, costruzioni…"
+              aria-label="Cerca codice ATECO o nome del settore"
+              style={{
+                width: "100%",
+                padding: "7px 10px 7px 30px",
+                border: "1px solid var(--color-divider)",
+                borderRadius: "var(--radius-md)",
+                background: "var(--color-surface)",
+                color: "var(--color-text)",
+                fontSize: "0.82rem",
+              }}
+            />
+            <span style={{ position: "absolute", left: 9, top: 5, fontSize: "0.8rem", color: "var(--color-text-soft)" }} aria-hidden="true">
+              🔍
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Intestazione lista - adatta al tipo di vista */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "var(--space-2)", fontSize: "0.88rem", fontWeight: 700 }}>
-        <span>Tasso di Incidenza per Settore ATECO (Infortuni ogni 1.000 occupati)</span>
+        <span>
+          {vista === "macro"
+            ? "Tasso di Incidenza per Settore ATECO (Infortuni ogni 1.000 occupati)"
+            : "Dettaglio per Divisione ATECO (2 cifre)"}
+        </span>
         <span style={{ fontSize: "0.78rem", color: "var(--color-text-soft)", fontWeight: 400 }}>
-          Ordinati per incidenza, tocca un settore per il dettaglio
+          {vista === "macro"
+            ? "Ordinati per incidenza, tocca un settore per il dettaglio"
+            : `${divisioniOrdinate.length} divisioni · tocca una divisione per il dettaglio e il trend`}
         </span>
       </div>
 
-      {/* Box settori ordinati per indice di incidenza */}
-      <div style={{ display: "grid", gap: "var(--space-2)" }}>
-        {macroData.map((item, idx) => {
-          const isOpen = aperto === item.key;
-          const t = (item.indiceIncidenza || 0) / maxIncidenza;
-          return (
+      {vista === "macro" ? (
+        /* Box settori ordinati per indice di incidenza */
+        <div style={{ display: "grid", gap: "var(--space-2)" }}>
+          {macroData.map((item, idx) => {
+            const isOpen = aperto === item.key;
+            const t = (item.indiceIncidenza || 0) / maxIncidenza;
+            return (
             <div
               key={item.key}
               style={{
@@ -268,10 +405,174 @@ export function AtecoSettoriWidget() {
             </div>
           );
         })}
-      </div>
+        </div>
+      ) : (
+        /* Lista divisioni ATECO (2 cifre) */
+        <div style={{ display: "grid", gap: "var(--space-2)" }}>
+          {divisioniOrdinate.length === 0 && (
+            <div style={{ padding: "var(--space-4)", color: "var(--color-text-soft)", fontSize: "0.85rem" }}>
+              Nessuna divisione corrisponde alla ricerca.
+            </div>
+          )}
+          {divisioniOrdinate.map((item, idx) => {
+            const chiave = (item.key || "") as string;
+            const isOpen = aperto === chiave;
+            const t = Math.min(1, (item.casi || 0) / (divisioniOrdinate[0]?.casi || 1));
+            const totSerie = serieTot[chiave] || {};
+            const trendPunti = (multidim.anniDisponibili || []).map((a) => totSerie[a] || 0);
+            const maxTrend = Math.max(...trendPunti, 1);
+            return (
+              <div
+                key={chiave}
+                style={{
+                  background: "var(--color-surface)",
+                  borderRadius: "var(--radius-md)",
+                  border: "1px solid var(--color-divider)",
+                  borderLeft: `4px solid ${riskColor(t)}`,
+                  overflow: "hidden",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggle(chiave)}
+                  aria-expanded={isOpen}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "var(--space-3)",
+                    width: "100%",
+                    padding: "10px 12px",
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    font: "inherit",
+                    color: "var(--color-text)",
+                  }}
+                >
+                  <span style={{ minWidth: 22, fontSize: "0.72rem", fontWeight: 650, color: "var(--color-text-soft)", fontVariantNumeric: "tabular-nums" }}>
+                    {idx + 1}
+                  </span>
+                  <span
+                    style={{
+                      minWidth: 46,
+                      padding: "3px 7px",
+                      borderRadius: "var(--radius-md)",
+                      background: riskColor(t),
+                      color: "var(--color-raised)",
+                      fontWeight: 750,
+                      fontSize: "0.8rem",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {chiave}
+                  </span>
+                  <span style={{ flex: 1, fontWeight: 600, fontSize: "0.78rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {item.nome}
+                    <span style={{ color: "var(--color-text-soft)", fontSize: "0.68rem" }}> · {item.sezioneNome}</span>
+                  </span>
+                  <span style={{ fontWeight: 750, fontVariantNumeric: "tabular-nums", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
+                    {exactNumber(item.casi)}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      color: "var(--color-text-soft)",
+                      transform: isOpen ? "rotate(180deg)" : "none",
+                      transition: "transform 0.15s ease",
+                    }}
+                    aria-hidden="true"
+                  >
+                    ▾
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div
+                    ref={dettaglioRef}
+                    style={{
+                      borderTop: "1px solid var(--color-divider)",
+                      padding: "var(--space-3) var(--space-4)",
+                      background: "var(--color-raised)",
+                    }}
+                  >
+                    <div style={{ fontSize: "0.82rem", fontWeight: 700, marginBottom: "var(--space-2)" }}>
+                      <span style={{ color: "var(--color-accent)" }}>{chiave}</span> · {item.nome}
+                    </div>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                        gap: "var(--space-2)",
+                      }}
+                    >
+                      {righeDettaglio(item).map((r) => (
+                        <div key={r.label} style={{ fontSize: "0.82rem" }}>
+                          <div style={{ fontSize: "0.7rem", color: "var(--color-text-soft)", textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                            {r.label}
+                          </div>
+                          <div style={{ fontWeight: 650, fontVariantNumeric: "tabular-nums" }}>{r.valore}</div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Trend della divisione */}
+                    {(() => {
+                      const conDati = trendPunti.some((v) => v > 0);
+                      if (!conDati) return null;
+                      return (
+                        <div style={{ marginTop: "var(--space-3)" }}>
+                          <div style={{ fontSize: "0.78rem", fontWeight: 700, marginBottom: "var(--space-1)" }}>
+                            Andamento {chiave} ({multidim.anniDisponibili?.[0]} – {multidim.anniDisponibili?.[multidim.anniDisponibili.length - 1]})
+                          </div>
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "var(--space-2)" }}>
+                            {multidim.anniDisponibili?.map((a) => (
+                              <div key={a} style={{ fontSize: "0.82rem" }}>
+                                <div style={{ fontSize: "0.66rem", color: "var(--color-text-soft)" }}>{a}</div>
+                                <div style={{ fontWeight: 650, fontVariantNumeric: "tabular-nums" }}>{exactNumber(totSerie[a] || 0)}</div>
+                              </div>
+                            ))}
+                          </div>
+                          <svg
+                            role="img"
+                            aria-label={`Andamento ${chiave} ${item.nome} dal ${multidim.anniDisponibili?.[0]} al ${multidim.anniDisponibili?.[multidim.anniDisponibili.length - 1]}`}
+                            viewBox="0 0 100 30"
+                            width="100%"
+                            height={40}
+                            style={{ marginTop: "var(--space-2)" }}
+                          >
+                            {trendPunti.map((v, i) => {
+                              const x = i * (100 / Math.max(1, trendPunti.length - 1));
+                              const y = v === 0 ? 28 : 28 - (v / maxTrend) * 26;
+                              return (
+                                <circle key={i} cx={x} cy={y} r="1.6" fill="var(--color-accent)" />
+                              );
+                            })}
+                            <polyline
+                              fill="none"
+                              stroke="var(--color-accent)"
+                              strokeWidth="1.4"
+                              strokeLinejoin="round"
+                              strokeLinecap="round"
+                              points={trendPunti.map((v, i) => {
+                                const x = i * (100 / Math.max(1, trendPunti.length - 1));
+                                const y = v === 0 ? 28 : 28 - (v / maxTrend) * 26;
+                                return `${x},${y}`;
+                              }).join(" ")}
+                            />
+                          </svg>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <p className="source-note">
-        Classificazione ATECO 2007: l&apos;incidenza settoriale è calcolata rapportando gli infortuni INAIL per macro-sezione (A–U) agli occupati effettivi rilevati da ISTAT (Rilevazione Forze di Lavoro). Il filtro modalità consente di separare gli infortuni in occasione di lavoro da quelli in itinere per ciascun comparto. Casi non attribuiti a specifico settore (ND): {exactNumber(casiND)} ({percND}% del totale {modalita.lavoro && modalita.itinere ? "complessivo" : "della modalità selezionata"}).
+        Classificazione ATECO 2007: l&apos;incidenza settoriale è calcolata rapportando gli infortuni INAIL per macro-sezione (A–U) agli occupati effettivi rilevati da ISTAT (Rilevazione Forze di Lavoro). Il dettaglio per divisione (2 cifre) usa la decodifica ufficiale INAIL e mostra il trend 2020 – {multidim.anniDisponibili?.[multidim.anniDisponibili.length - 1]} per ciascuna divisione. Il filtro modalità consente di separare gli infortuni in occasione di lavoro da quelli in itinere per ciascun comparto. Casi non attribuiti a specifico settore (ND): {exactNumber(casiND)} ({percND}% del totale {modalita.lavoro && modalita.itinere ? "complessivo" : "della modalità selezionata"}).
       </p>
     </div>
   );

@@ -108,7 +108,8 @@ export interface AnnualMultidimData {
   mensileLavoro: Record<string, number>;
   mensileItinere: Record<string, number>;
   atecoMacro: AtecoMacroData[];
-  atecoDivisioni: { key: string; casi: number; lavoro?: number; itinere?: number }[];
+  atecoDivisioni: { key: string; nome?: string; sezione?: string; sezioneNome?: string; casi: number; lavoro?: number; itinere?: number; mortali?: number }[];
+  atecoDivisioniTop?: { key: string; nome?: string; sezione?: string; sezioneNome?: string; casi: number; lavoro?: number; itinere?: number; mortali?: number }[];
   regioni: RegioneAnnualData[];
   provinceAutonome?: ProvinciaAutonomaData[];
 }
@@ -118,6 +119,10 @@ export interface MultidimensionaleDataset {
   anniDisponibili: string[];
   perAnno: Record<string, AnnualMultidimData>;
   consolidatoTotale: AnnualMultidimData;
+  atecoDivisioneSerie?: Record<string, Record<string, number>>;
+  atecoDivisioneSerieLavoro?: Record<string, Record<string, number>>;
+  atecoDivisioneSerieItinere?: Record<string, Record<string, number>>;
+  atecoDivisioneSerieMortali?: Record<string, Record<string, number>>;
 }
 
 export interface CongiunturaleDataset {

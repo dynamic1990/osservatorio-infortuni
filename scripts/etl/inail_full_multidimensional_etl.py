@@ -20,6 +20,13 @@ import os
 from collections import defaultdict
 from pathlib import Path
 
+# Import con fallback: quando lo script gira da scripts/etl/ (python etl.py)
+# il package "scripts" non e' sul path, importa il modulo vicino.
+try:
+    from scripts.etl.ateco_divisioni import ATECO_DIVISIONI, ATECO_MACRO_NAMES
+except ModuleNotFoundError:
+    from ateco_divisioni import ATECO_DIVISIONI, ATECO_MACRO_NAMES
+
 ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / "data" / "raw"
 GEN_DIR = ROOT / "src" / "data" / "generated"
@@ -235,6 +242,7 @@ def main():
             "atecoDivisione": defaultdict(int),
             "atecoDivisioneLavoro": defaultdict(int),
             "atecoDivisioneItinere": defaultdict(int),
+            "atecoDivisioneMortali": defaultdict(int),
             "mensile": defaultdict(int),
             "mensileLavoro": defaultdict(int),
             "mensileItinere": defaultdict(int),
@@ -318,6 +326,7 @@ def main():
                 m_stat["giorniLavoro"] += g_val
                 m_stat["casi_giorni_lavoro"] += 1
         T["atecoDivisione"][div] += 1
+        if is_mortale: T["atecoDivisioneMortali"][div] += 1
         if 1 <= mese_num <= 12: T["mensile"][mese_num] += 1
         r_stat = T["regioni"][reg_cod]
         r_stat["totale"] += 1
@@ -500,12 +509,24 @@ def main():
         durata_media_naz = round(c["giorni"] / c["casi_con_giorni"], 1) if c["casi_con_giorni"] > 0 else 0.0
         indice_gravita_naz = round(c["giorni"] / occ_tot_k, 1) if occ_tot_k else 0.0
 
-        # Top ATECO divisioni
-        top_div = sorted(
-            [{"key": k, "casi": v, "lavoro": c["atecoDivisioneLavoro"].get(k, 0), "itinere": c["atecoDivisioneItinere"].get(k, 0)} for k, v in c["atecoDivisione"].items() if k != "ND"],
-            key=lambda x: x["casi"],
-            reverse=True
-        )[:20]
+        # ATECO divisioni: tutte le divisioni (non solo top 20), con nome e sezione
+        div_list = []
+        for k, v in c["atecoDivisione"].items():
+            if k == "ND":
+                continue
+            macro_key = k[0]
+            div_list.append({
+                "key": k,
+                "nome": ATECO_DIVISIONI.get(k, k),
+                "sezione": macro_key,
+                "sezioneNome": ATECO_MACRO_NAMES.get(macro_key, macro_key),
+                "casi": v,
+                "lavoro": c["atecoDivisioneLavoro"].get(k, 0),
+                "itinere": c["atecoDivisioneItinere"].get(k, 0),
+                "mortali": c["atecoDivisioneMortali"].get(k, 0),
+            })
+        div_list.sort(key=lambda x: x["casi"], reverse=True)
+        top_div = div_list[:20]
         
         # ATECO Macro list con occupati settoriali e tassi (incidenza, gravita')
         macro_list = []
@@ -610,16 +631,37 @@ def main():
             "atecoMacro": macro_list,
             "atecoMacroLavoro": dict(c["atecoMacroLavoro"]),
             "atecoMacroItinere": dict(c["atecoMacroItinere"]),
-            "atecoDivisioni": top_div,
+            "atecoDivisioni": div_list,
+            "atecoDivisioniTop": top_div,
             "regioni": reg_list,
             "provinceAutonome": prov_list
         }
 
     output_multidim = {
-        "schemaVersion": 3,
+        "schemaVersion": 4,
         "anniDisponibili": YEARS,
         "perAnno": {y: format_container(dataset_by_year[y], y) for y in YEARS},
-        "consolidatoTotale": format_container(dataset_all, "ALL")
+        "consolidatoTotale": format_container(dataset_all, "ALL"),
+        "atecoDivisioneSerie": {
+            k: {y: dataset_by_year[y]["atecoDivisione"].get(k, 0) for y in YEARS}
+            for k in sorted(dataset_all["atecoDivisione"].keys())
+            if k != "ND"
+        },
+        "atecoDivisioneSerieLavoro": {
+            k: {y: dataset_by_year[y]["atecoDivisioneLavoro"].get(k, 0) for y in YEARS}
+            for k in sorted(dataset_all["atecoDivisioneLavoro"].keys())
+            if k != "ND"
+        },
+        "atecoDivisioneSerieItinere": {
+            k: {y: dataset_by_year[y]["atecoDivisioneItinere"].get(k, 0) for y in YEARS}
+            for k in sorted(dataset_all["atecoDivisioneItinere"].keys())
+            if k != "ND"
+        },
+        "atecoDivisioneSerieMortali": {
+            k: {y: dataset_by_year[y]["atecoDivisioneMortali"].get(k, 0) for y in YEARS}
+            for k in sorted(dataset_all["atecoDivisioneMortali"].keys())
+            if k != "ND"
+        },
     }
 
     out_file = GEN_DIR / "inail-multidimensionale.json"

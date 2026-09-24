@@ -43,6 +43,7 @@ L'ETL produce **aggregazioni** (conteggi per regione, provincia, settore ATECO, 
 
 - `src/data/generated/inail-infortuni-serie.json` — i dati aggregati;
 - `src/data/generated/inail-infortuni-serie.meta.json` — provenienza, copertura, limiti, metodologia, hash.
+- `src/data/generated/inail-multidimensionale.json` — consolidato multidimensionale con dettaglio **ATECO per divisione (2 cifre, tutte le 86)**: ogni divisione include nome, sezione di appartenenza, conteggi (totale, lavoro, itinere, mortali) e la **serie 2020–2025** (`atecoDivisioneSerie*`) per il trend.
 
 Mai record singoli negli artefatti pubblicati.
 

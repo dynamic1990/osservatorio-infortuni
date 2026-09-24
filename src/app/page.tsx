@@ -145,8 +145,8 @@ export default function HomePage() {
           <h2 className="card-title">Comparti Produttivi e Attività Economiche (Classificazione ATECO)</h2>
           <p className="card-desc">
             Analisi comparativa per macro-settori (Sezioni A–U) con <strong>tasso di incidenza su 1.000 occupati</strong>,
-            <strong>indice di gravità</strong> (giornate di assenza perse su occupati) e filtro annuale. I settori sono ordinati per
-            incidenza: tocca un box per aprire il dettaglio completo.
+            <strong>indice di gravità</strong> (giornate di assenza perse su occupati) e filtro annuale. È disponibile anche il
+            <strong>dettaglio per divisione ATECO (2 cifre)</strong> con ricerca per codice o settore, trend 2020 – 2025 e conteggi per singola attività economica. I settori sono ordinati per incidenza: tocca un box per aprire il dettaglio completo.
           </p>
         </div>
         <AtecoSettoriWidget />
