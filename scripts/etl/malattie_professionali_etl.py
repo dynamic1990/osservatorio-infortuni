@@ -230,12 +230,13 @@ def main():
         })
 
     # Regioni: ranking con delta %
+    # NB: totale = somma dei due semestri (I 2025 + I 2026). Non è un valore
+    # annuale né un confronto omogeneo: il widget non lo usa come vista.
     regioni = []
     for codice in sorted(REGIONI.values(), key=lambda c: int(c)):
         t = per_regione[codice]
         a25 = per_regione_anno[codice].get("2025", 0)
         a26 = per_regione_anno[codice].get("2026", 0)
-        d = (a26 + a25) if False else None
         g = per_regione_genere[codice]
         gM = g.get("M", 0); gF = g.get("F", 0)
         regioni.append({
@@ -321,7 +322,7 @@ def main():
         "datasetId": DATASET_ID,
         "generatedAt": utc_now(),
         "periodo": "Gennaio - Giugno 2025 e Gennaio - Giugno 2026",
-        "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. I CSV ufficiali coprono i primi due semestri: gen-giu 2025 e gen-giu 2026.",
+        "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. I CSV ufficiali coprono i primi due semestri: gen-giu 2025 e gen-giu 2026. Il campo totale regionale è la somma dei due semestri (I 2025 + I 2026): non è un valore annuale e non va usato come indicatore; il confronto corretto è tra i due semestri a pari periodo.",
         "fonte": "INAIL Open Data — DatiMensiliMalattieProfessionaliDataProt (denunce) + DatiSemestraliMalattieProfessionaliDataDec (decessi)",
         "nazionale": {
             "totale": totale,

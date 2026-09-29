@@ -40,6 +40,7 @@ export interface CategoriaPatologia {
 export interface RegioneMalattie {
   codice: string;
   nome: string;
+  /** Somma dei due semestri (I 2025 + I 2026): NON è un valore annuale e non va mostrato come indicatore. */
   totale: number;
   anno2025: number;
   anno2026: number;
