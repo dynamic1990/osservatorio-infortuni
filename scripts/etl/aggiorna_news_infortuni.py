@@ -22,7 +22,7 @@ import unicodedata
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 import hashlib
@@ -37,10 +37,14 @@ QUERIES = [
     "operaio morto cantiere",
     "infortunio grave lavoro oggi",
     "incidente sul lavoro mortale",
+    "caduto da impalcatura lavoro",
+    "investito sul lavoro",
+    "esplosione cantiere",
+    "schiacciato macchinario lavoro",
 ]
 
-MAX_ITEMS = 60
-MAX_KEEP = 25  # notizie conservate nel file
+MAX_ITEMS = 200
+MAX_KEEP = 120  # notizie conservate nel file (finestra 30 giorni)
 MIN_WORK_ACCIDENT_SCORE = 45
 
 # ---------------------------------------------------------------------------
@@ -126,7 +130,7 @@ def fetch_rss(query: str) -> list[dict]:
     q = urllib.parse.quote(query)
     url = (
         f"https://news.google.com/rss/search?q={q}"
-        f"+when:7d&hl=it&gl=IT&ceid=IT:it"
+        f"+when:30d&hl=it&gl=IT&ceid=IT:it"
     )
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=20) as resp:
@@ -165,6 +169,33 @@ def classify(titolo: str) -> str:
     if any(k in t for k in ("grav", "prognosi riservata", "rianimazion", "eliambulanza", "intubat", "amputazion")):
         return "grave"
     return "altro"
+
+
+# Marker di articoli che riportano numeri di periodo (report, bilanci, analisi)
+# e non descrivono un singolo evento di cronaca. Distinguere i due piani evita
+# che la timeline della cronaca venga inquinata da statistiche tipo "Inail,
+# 498 morti in 8 mesi" o "15 decessi nel semestre".
+REPORT_MARKERS = [
+    "inail", "denunce", "dati", "primi 8 mesi", "primi otto mesi",
+    "primi 7 mesi", "primi sette mesi", "primi sei mesi", "primo semestre",
+    "primi 9 mesi", "primi nove mesi", "bilancio", "rapporto", "studio",
+    "aumentano", "aumentati", "aumentate", "in aumento", "denunce in",
+    "decessi", "rischio", "analisi", "classifica", "percentuale",
+    "crescita", "calo", "calano", "record negativo", "media giornaliera",
+    "morti in", "morti sul lavoro in",
+]
+
+
+def classify_tipo(titolo: str, fonte: str = "") -> str:
+    """'evento' per la cronaca di un singolo fatto, 'report' per dati di periodo."""
+    text = f"{titolo} {fonte}".lower()
+    # Segnali forti di report: percentuali o numeri di periodo con andamento
+    if any(m in text for m in REPORT_MARKERS):
+        return "report"
+    # Fallback: titoli con "%" o "+xx%" sono quasi sempre statistiche
+    if "%" in text or "+8" in text or "+9" in text or "+10" in text:
+        return "report"
+    return "evento"
 
 
 # Il punteggio è un filtro prudenziale, non una classificazione ufficiale.
@@ -304,7 +335,10 @@ def estrai_luogo(titolo: str) -> tuple[str | None, str | None]:
     # 4) provincia citata (vince la più lunga, evita falsi positivi corti)
     best = None
     for prov, reg in PROVINCE:
-        if len(prov) < 5:
+        # Soglia a 4 per coprire i capoluoghi corti (Roma, Pisa, Enna, Como,
+        # Bari, Asti). "Lodi" è esclusa perché coincide con un sostantivo
+        # comune (plurale di lode) e genera falsi positivi.
+        if len(prov) < 4 or prov.lower() == "lodi":
             continue
         if prov.lower() in tl:
             if best is None or len(prov) > len(best[0]):
@@ -511,6 +545,64 @@ def dedupe_titoli(items: list[dict]) -> list[dict]:
     return out
 
 
+def calcola_stats(notizie: list[dict]) -> dict:
+    """Statistiche di periodo per KPI e contatore mensile (cronaca congiunturale).
+
+    Conta SOLO gli eventi di cronaca (tipo == 'evento'), non i report di
+    periodo: il contatore mensile deve rispecchiare i fatti registrati dalla
+    cronaca, non i numeri ufficiali diffusi dai report.
+    """
+    now = datetime.now(timezone.utc)
+    eventi = [n for n in notizie if n.get("tipo") == "evento"]
+
+    # Nomi mese in italiano senza dipendere dal locale di sistema (non
+    # disponibile in container: it_IT non installato).
+    MESI_IT = {
+        1: "Gennaio", 2: "Febbraio", 3: "Marzo", 4: "Aprile", 5: "Maggio", 6: "Giugno",
+        7: "Luglio", 8: "Agosto", 9: "Settembre", 10: "Ottobre", 11: "Novembre", 12: "Dicembre",
+    }
+
+    def giorni(n: dict) -> int:
+        return max(0, int((now - news_datetime(n)).total_seconds() / 86400))
+
+    def conta(cond) -> int:
+        return sum(1 for n in eventi if cond(n))
+
+    # Finestra mobile 7 giorni vs i 7 giorni precedenti (confronto parità)
+    ultimi7 = [n for n in eventi if giorni(n) <= 7]
+    precedenti7 = [n for n in eventi if 7 < giorni(n) <= 14]
+
+    def split_categorie(items: list[dict]) -> dict:
+        return {
+            "mortali": sum(1 for n in items if n["categoria"] == "mortale"),
+            "gravi": sum(1 for n in items if n["categoria"] == "grave"),
+            "totale": len(items),
+        }
+
+    # Contatore mensile alla data di generazione (per il dato LinkedIn)
+    mese_corrente = now.strftime("%Y-%m")
+    mese_precedente = (now.replace(day=1) - timedelta(days=1)).strftime("%Y-%m")
+    in_mese = [n for n in eventi if news_datetime(n).strftime("%Y-%m") == mese_corrente]
+    mese_scorso = [n for n in eventi if news_datetime(n).strftime("%Y-%m") == mese_precedente]
+
+    return {
+        "finestra": 30,
+        "generatoIl": utc_now(),
+        "ultimi7": split_categorie(ultimi7),
+        "precedenti7": split_categorie(precedenti7),
+        "mese": {
+            "codice": mese_corrente,
+            "etichetta": f"{MESI_IT[now.month]} {now.year}",
+            "mortali": sum(1 for n in in_mese if n["categoria"] == "mortale"),
+            "totale": len(in_mese),
+        },
+        "mesePrecedente": {
+            "codice": mese_precedente,
+            "mortali": sum(1 for n in mese_scorso if n["categoria"] == "mortale"),
+        },
+    }
+
+
 def main() -> int:
     tutti: list[dict] = []
     for q in QUERIES:
@@ -529,6 +621,7 @@ def main() -> int:
         prov, reg = estrai_luogo(n["titolo"])
         n["provincia"] = prov
         n["regione"] = reg
+        n["tipo"] = classify_tipo(n["titolo"], n["fonte"])
         score, reasons = work_accident_score(n["titolo"], n["fonte"])
         n["workAccidentScore"] = score
         n["scoreReasons"] = reasons
@@ -544,7 +637,8 @@ def main() -> int:
         "datasetId": "news_infortuni",
         "generatedAt": utc_now(),
         "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
-        "periodo": "ultimi 7 giorni",
+        "periodo": "ultimi 30 giorni",
+        "stats": calcola_stats(filtrate),
         "notizie": filtrate[:MAX_KEEP],
     }
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

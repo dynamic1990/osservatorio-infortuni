@@ -42,8 +42,13 @@ function formatData(dataStr: string): string {
 export function NewsInfortuniWidget() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
   const notizie = useMemo(() => {
+    const soglia = Date.now() - 7 * 86400_000;
     return (dati.notizie || [])
       .filter((n) => (n.workAccidentScore ?? 0) >= 40)
+      .filter((n) => {
+        const t = new Date(n.data).getTime();
+        return Number.isFinite(t) && t >= soglia;
+      })
       .sort((a, b) => {
         const ta = new Date(a.data).getTime() || 0;
         const tb = new Date(b.data).getTime() || 0;
