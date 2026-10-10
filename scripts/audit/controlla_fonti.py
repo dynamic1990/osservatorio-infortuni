@@ -33,6 +33,16 @@ SOURCES = [
     ("INL rapporti vigilanza", "https://www.ispettorato.gov.it/attivita-studi-e-statistiche/monitoraggio-e-report/rapporti-annuali-sullattivita-di-vigilanza-in-materia-di-lavoro-e-previdenziale/", "https://www.ispettorato.gov.it/files/2026/04/INL-Relazione-annuale-e-rapporto-vigilanza-2025.pdf"),
 ]
 
+# Endpoint che richiedono POST JSON (stessa chiamata che usa l'ETL).
+# Con GET rispondono 405: l'audit deve usare il metodo reale, altrimenti
+# produce falsi allarmi e non può fingerprintere il contenuto dati.
+POST_ENDPOINTS = {
+    "https://www.inail.it/nsol-informo/filtra.do": {
+        "listaFiltri": [], "dates": ["2024"], "tipoEvento": "1",
+        "numeroPagina": 0, "desc": "", "pericoli": [],
+    },
+}
+
 @dataclass
 class Check:
     label: str
@@ -51,8 +61,16 @@ class Check:
         }
 
 
-def fetch(url: str, *, inspect_body: bool = False) -> Check:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+def fetch(url: str, *, inspect_body: bool = False, post_payload: dict | None = None) -> Check:
+    headers = {"User-Agent": USER_AGENT}
+    data = None
+    method = "GET"
+    if post_payload is not None:
+        headers["Content-Type"] = "application/json"
+        headers["Accept"] = "application/json"
+        data = json.dumps(post_payload).encode("utf-8")
+        method = "POST"
+    request = urllib.request.Request(url, data=data, method=method, headers=headers)
     try:
         with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
             body = response.read(128_000) if inspect_body else b""
@@ -100,7 +118,9 @@ def main() -> int:
         for kind, url in (("landing", landing), ("endpoint", api)):
             # Il corpo della landing page cambia spesso per motivi editoriali.
             # Per rilevare nuovi dati confrontiamo solo gli endpoint dati.
-            result = fetch(url, inspect_body=(kind == "endpoint" and "informo" not in label.lower()))
+            # Il payload POST è già il metodo reale usato dall'ETL (es. Infor.MO).
+            result = fetch(url, inspect_body=(kind == "endpoint"),
+                           post_payload=POST_ENDPOINTS.get(url))
             result.label = label
             checks.append(result)
             if kind == "endpoint" and "fingerprint:" in result.signals:
