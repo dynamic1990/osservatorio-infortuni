@@ -30,6 +30,12 @@ GEN_DIR.mkdir(parents=True, exist_ok=True)
 DATASET_ID = "inail-malattie-professionali"
 SCHEMA_VERSION = 1
 
+# Finestra di confronto dichiarata dal sito (mesi inclusi, a pari periodo).
+# I CSV INAIL contengono una finestra mobile più ampia (ultimi ~24 mesi):
+# aggregare mesi fuori da questa finestra renderebbe i totali incoerenti
+# con la serie mensile pubblicata e con l'etichetta "I semestre".
+MESI_CONFRONTO = (1, 2, 3, 4, 5, 6)
+
 REGIONI = {
     "Piemonte": "01", "ValledAosta": "02", "Lombardia": "03", "TrentinoAltoAdige": "04",
     "Veneto": "05", "FriuliVeneziaGiulia": "06", "Liguria": "07", "EmiliaRomagna": "08",
@@ -147,6 +153,8 @@ def main():
             if len(dp) != 10:
                 continue
             anno, mese = dp[6:10], dp[3:5]
+            if int(mese) not in MESI_CONFRONTO:
+                continue
             per_mese[anno][int(mese)] += 1
             per_mese_genere[anno][int(mese)][r.get("Genere", "?")] += 1
             per_anno[anno] += 1
@@ -165,12 +173,12 @@ def main():
 
     print(f"   denunce totali: {totale}")
 
-    # Serie mensile nazionale (soli mesi coperti dai CSV ufficiali: gen-giu 2025 e gen-giu 2026).
-    # NB: non inserire zeri per mesi non pubblicati (lug-dic 2025): sarebbero falsi zero.
+    # Serie mensile nazionale (soli mesi della finestra di confronto: gen-giu).
+    # NB: non inserire zeri per mesi fuori finestra (lug-dic): sarebbero falsi zero.
     mesi_nomi = ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"]
     serie_mensile = []
     for anno in sorted(per_mese):
-        for m in range(1, 7):
+        for m in MESI_CONFRONTO:
             g = per_mese_genere[anno][m]
             serie_mensile.append({
                 "anno": anno, "mese": m, "meseNome": mesi_nomi[m - 1],
@@ -322,7 +330,7 @@ def main():
         "datasetId": DATASET_ID,
         "generatedAt": utc_now(),
         "periodo": "Gennaio - Giugno 2025 e Gennaio - Giugno 2026",
-        "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. I CSV ufficiali coprono i primi due semestri: gen-giu 2025 e gen-giu 2026. Il campo totale regionale è la somma dei due semestri (I 2025 + I 2026): non è un valore annuale e non va usato come indicatore; il confronto corretto è tra i due semestri a pari periodo.",
+        "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. Il sito pubblica il confronto a pari periodo (gen-giu 2025 vs gen-giu 2026); i CSV sorgente contengono una finestra mobile più ampia (ultimi 24 mesi), che consente estensioni future come una serie congiunturale mensile. Il campo totale regionale è la somma dei due semestri (I 2025 + I 2026): non è un valore annuale e non va usato come indicatore; il confronto corretto è tra i due semestri a pari periodo.",
         "fonte": "INAIL Open Data — DatiMensiliMalattieProfessionaliDataProt (denunce) + DatiSemestraliMalattieProfessionaliDataDec (decessi)",
         "nazionale": {
             "totale": totale,

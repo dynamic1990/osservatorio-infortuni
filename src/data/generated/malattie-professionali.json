@@ -1,24 +1,24 @@
 {
  "schemaVersion": 1,
  "datasetId": "inail-malattie-professionali",
- "generatedAt": "2026-09-29T15:08:41+00:00",
+ "generatedAt": "2026-10-10T08:33:17+00:00",
  "periodo": "Gennaio - Giugno 2025 e Gennaio - Giugno 2026",
- "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. I CSV ufficiali coprono i primi due semestri: gen-giu 2025 e gen-giu 2026. Il campo totale regionale è la somma dei due semestri (I 2025 + I 2026): non è un valore annuale e non va usato come indicatore; il confronto corretto è tra i due semestri a pari periodo.",
+ "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. Il sito pubblica il confronto a pari periodo (gen-giu 2025 vs gen-giu 2026); i CSV sorgente contengono una finestra mobile più ampia (ultimi 24 mesi), che consente estensioni future come una serie congiunturale mensile. Il campo totale regionale è la somma dei due semestri (I 2025 + I 2026): non è un valore annuale e non va usato come indicatore; il confronto corretto è tra i due semestri a pari periodo.",
  "fonte": "INAIL Open Data — DatiMensiliMalattieProfessionaliDataProt (denunce) + DatiSemestraliMalattieProfessionaliDataDec (decessi)",
  "nazionale": {
-  "totale": 110466,
+  "totale": 110279,
   "perAnno": {
-   "2026": 59480,
-   "2025": 50986
+   "2026": 59394,
+   "2025": 50885
   },
   "perGenere": {
-   "M": 82035,
-   "F": 28431
+   "M": 81885,
+   "F": 28394
   },
   "confrontoPrimoSemestre": {
-   "anno2025": 50986,
-   "anno2026": 59480,
-   "delta": 8494,
+   "anno2025": 50885,
+   "anno2026": 59394,
+   "delta": 8509,
    "deltaPerc": 16.7
   },
   "serieMensile": [
@@ -26,97 +26,97 @@
     "anno": "2025",
     "mese": 1,
     "meseNome": "gen",
-    "casi": 6531,
-    "maschi": 4931,
+    "casi": 6529,
+    "maschi": 4929,
     "femmine": 1600
    },
    {
     "anno": "2025",
     "mese": 2,
     "meseNome": "feb",
-    "casi": 8296,
-    "maschi": 6177,
-    "femmine": 2119
+    "casi": 8295,
+    "maschi": 6175,
+    "femmine": 2120
    },
    {
     "anno": "2025",
     "mese": 3,
     "meseNome": "mar",
-    "casi": 9488,
-    "maschi": 7039,
-    "femmine": 2449
+    "casi": 9479,
+    "maschi": 7032,
+    "femmine": 2447
    },
    {
     "anno": "2025",
     "mese": 4,
     "meseNome": "apr",
-    "casi": 8720,
-    "maschi": 6390,
-    "femmine": 2330
+    "casi": 8697,
+    "maschi": 6371,
+    "femmine": 2326
    },
    {
     "anno": "2025",
     "mese": 5,
     "meseNome": "mag",
-    "casi": 9285,
-    "maschi": 6930,
-    "femmine": 2355
+    "casi": 9264,
+    "maschi": 6916,
+    "femmine": 2348
    },
    {
     "anno": "2025",
     "mese": 6,
     "meseNome": "giu",
-    "casi": 8666,
-    "maschi": 6381,
-    "femmine": 2285
+    "casi": 8621,
+    "maschi": 6347,
+    "femmine": 2274
    },
    {
     "anno": "2026",
     "mese": 1,
     "meseNome": "gen",
-    "casi": 7474,
-    "maschi": 5645,
+    "casi": 7473,
+    "maschi": 5644,
     "femmine": 1829
    },
    {
     "anno": "2026",
     "mese": 2,
     "meseNome": "feb",
-    "casi": 9476,
-    "maschi": 7010,
+    "casi": 9473,
+    "maschi": 7007,
     "femmine": 2466
    },
    {
     "anno": "2026",
     "mese": 3,
     "meseNome": "mar",
-    "casi": 11448,
-    "maschi": 8395,
-    "femmine": 3053
+    "casi": 11439,
+    "maschi": 8390,
+    "femmine": 3049
    },
    {
     "anno": "2026",
     "mese": 4,
     "meseNome": "apr",
-    "casi": 10512,
-    "maschi": 7775,
-    "femmine": 2737
+    "casi": 10501,
+    "maschi": 7766,
+    "femmine": 2735
    },
    {
     "anno": "2026",
     "mese": 5,
     "meseNome": "mag",
-    "casi": 10550,
-    "maschi": 7833,
-    "femmine": 2717
+    "casi": 10534,
+    "maschi": 7821,
+    "femmine": 2713
    },
    {
     "anno": "2026",
     "mese": 6,
     "meseNome": "giu",
-    "casi": 10020,
-    "maschi": 7529,
-    "femmine": 2491
+    "casi": 9974,
+    "maschi": 7487,
+    "femmine": 2487
    }
   ]
  },
@@ -124,107 +124,95 @@
   {
    "key": "RACHIDE",
    "nome": "Ernie e discopatie del rachide",
-   "casi": 24527,
-   "quota": 22.2,
-   "anno2025": 11604,
-   "anno2026": 12923,
-   "maschi": 18595,
-   "femmine": 5932,
+   "casi": 27920,
+   "quota": 25.32,
+   "anno2025": 13177,
+   "anno2026": 14743,
+   "maschi": 21170,
+   "femmine": 6750,
    "quotaMaschi": 75.8,
    "topCodici": [
     {
      "codice": "M51.2",
-     "casi": 10359
+     "casi": 11659
     },
     {
      "codice": "M51.1",
-     "casi": 8108
+     "casi": 9310
     },
     {
      "codice": "M51.3",
-     "casi": 5050
+     "casi": 5777
     },
     {
      "codice": "M50",
-     "casi": 468
+     "casi": 553
     },
     {
      "codice": "M50.2",
-     "casi": 140
+     "casi": 167
     }
    ]
   },
   {
-   "key": "ND",
-   "nome": "Codice non indicato",
-   "casi": 23179,
-   "quota": 20.98,
-   "anno2025": 9673,
-   "anno2026": 13506,
-   "maschi": 17515,
-   "femmine": 5664,
-   "quotaMaschi": 75.6,
-   "topCodici": []
-  },
-  {
    "key": "SPALLA",
    "nome": "Patologie della spalla (cuffia dei rotatori)",
-   "casi": 20702,
-   "quota": 18.74,
-   "anno2025": 9746,
-   "anno2026": 10956,
-   "maschi": 14662,
-   "femmine": 6040,
-   "quotaMaschi": 70.8,
+   "casi": 23592,
+   "quota": 21.39,
+   "anno2025": 11166,
+   "anno2026": 12426,
+   "maschi": 16757,
+   "femmine": 6835,
+   "quotaMaschi": 71.0,
    "topCodici": [
     {
      "codice": "M75.1",
-     "casi": 12449
+     "casi": 14153
     },
     {
      "codice": "M75",
-     "casi": 5734
+     "casi": 6494
     },
     {
      "codice": "M75.4",
-     "casi": 1090
+     "casi": 1260
     },
     {
      "codice": "M75.3",
-     "casi": 712
+     "casi": 865
     },
     {
      "codice": "M75.2",
-     "casi": 451
+     "casi": 518
     }
    ]
   },
   {
    "key": "CANALICOLARI",
    "nome": "Sindromi canalicolari (tunnel carpale)",
-   "casi": 10415,
-   "quota": 9.43,
-   "anno2025": 4870,
-   "anno2026": 5545,
-   "maschi": 6587,
-   "femmine": 3828,
-   "quotaMaschi": 63.2,
+   "casi": 11644,
+   "quota": 10.56,
+   "anno2025": 5494,
+   "anno2026": 6150,
+   "maschi": 7369,
+   "femmine": 4275,
+   "quotaMaschi": 63.3,
    "topCodici": [
     {
      "codice": "G56.0",
-     "casi": 9844
+     "casi": 11018
     },
     {
      "codice": "G56.2",
-     "casi": 454
+     "casi": 493
     },
     {
      "codice": "G56",
-     "casi": 57
+     "casi": 65
     },
     {
      "codice": "G56.1",
-     "casi": 56
+     "casi": 64
     },
     {
      "codice": "G56.3",
@@ -233,268 +221,280 @@
    ]
   },
   {
+   "key": "ND",
+   "nome": "Codice non indicato",
+   "casi": 11186,
+   "quota": 10.14,
+   "anno2025": 3899,
+   "anno2026": 7287,
+   "maschi": 8530,
+   "femmine": 2656,
+   "quotaMaschi": 76.3,
+   "topCodici": []
+  },
+  {
    "key": "TENDINOPATIE",
    "nome": "Epicondiliti e tendinopatie",
-   "casi": 7637,
-   "quota": 6.91,
-   "anno2025": 3621,
-   "anno2026": 4016,
-   "maschi": 5390,
-   "femmine": 2247,
-   "quotaMaschi": 70.6,
+   "casi": 8769,
+   "quota": 7.95,
+   "anno2025": 4177,
+   "anno2026": 4592,
+   "maschi": 6221,
+   "femmine": 2548,
+   "quotaMaschi": 70.9,
    "topCodici": [
     {
      "codice": "M77.0",
-     "casi": 3934
+     "casi": 4580
     },
     {
      "codice": "M77.1",
-     "casi": 3441
+     "casi": 3875
     },
     {
      "codice": "M77",
-     "casi": 175
+     "casi": 214
     },
     {
      "codice": "M77.5",
-     "casi": 54
+     "casi": 62
     },
     {
      "codice": "M77.2",
-     "casi": 33
+     "casi": 38
     }
    ]
   },
   {
    "key": "IPOACUSIA",
    "nome": "Ipoacusia da rumore",
-   "casi": 5286,
-   "quota": 4.79,
-   "anno2025": 2485,
-   "anno2026": 2801,
-   "maschi": 5121,
-   "femmine": 165,
+   "casi": 5871,
+   "quota": 5.32,
+   "anno2025": 2752,
+   "anno2026": 3119,
+   "maschi": 5690,
+   "femmine": 181,
    "quotaMaschi": 96.9,
    "topCodici": [
     {
      "codice": "H83.3",
-     "casi": 5286
+     "casi": 5871
     }
    ]
   },
   {
    "key": "MENISCO",
    "nome": "Lesioni del menisco",
-   "casi": 3345,
-   "quota": 3.03,
-   "anno2025": 1563,
-   "anno2026": 1782,
-   "maschi": 3089,
-   "femmine": 256,
-   "quotaMaschi": 92.3,
+   "casi": 3779,
+   "quota": 3.43,
+   "anno2025": 1775,
+   "anno2026": 2004,
+   "maschi": 3475,
+   "femmine": 304,
+   "quotaMaschi": 92.0,
    "topCodici": [
     {
      "codice": "M23.3",
-     "casi": 2601
+     "casi": 2950
     },
     {
      "codice": "M23",
-     "casi": 744
+     "casi": 829
     }
    ]
   },
   {
    "key": "TENOSINOVITI",
    "nome": "Tenosinoviti e patologie dei tendini",
-   "casi": 3320,
-   "quota": 3.01,
-   "anno2025": 1544,
-   "anno2026": 1776,
-   "maschi": 1768,
-   "femmine": 1552,
-   "quotaMaschi": 53.3,
+   "casi": 3666,
+   "quota": 3.32,
+   "anno2025": 1707,
+   "anno2026": 1959,
+   "maschi": 1971,
+   "femmine": 1695,
+   "quotaMaschi": 53.8,
    "topCodici": [
     {
      "codice": "M65.8",
-     "casi": 1095
+     "casi": 1200
     },
     {
      "codice": "M65.4",
-     "casi": 922
+     "casi": 998
     },
     {
      "codice": "M65",
-     "casi": 862
+     "casi": 974
     },
     {
      "codice": "M65.3",
-     "casi": 441
+     "casi": 494
     }
    ]
   },
   {
    "key": "ARTROSI",
    "nome": "Artrosi da sovraccarico",
-   "casi": 2589,
-   "quota": 2.34,
-   "anno2025": 1214,
-   "anno2026": 1375,
-   "maschi": 1667,
-   "femmine": 922,
+   "casi": 3000,
+   "quota": 2.72,
+   "anno2025": 1399,
+   "anno2026": 1601,
+   "maschi": 1932,
+   "femmine": 1068,
    "quotaMaschi": 64.4,
    "topCodici": [
     {
      "codice": "M18",
-     "casi": 1204
+     "casi": 1411
     },
     {
      "codice": "M17",
-     "casi": 1064
+     "casi": 1213
     },
     {
      "codice": "M16",
-     "casi": 321
+     "casi": 376
     }
    ]
   },
   {
    "key": "SPONDILOSI",
    "nome": "Spondilosi e artrosi vertebrale",
-   "casi": 2325,
-   "quota": 2.1,
-   "anno2025": 1113,
-   "anno2026": 1212,
-   "maschi": 1791,
-   "femmine": 534,
+   "casi": 2628,
+   "quota": 2.38,
+   "anno2025": 1246,
+   "anno2026": 1382,
+   "maschi": 2024,
+   "femmine": 604,
    "quotaMaschi": 77.0,
    "topCodici": [
     {
      "codice": "M47.8",
-     "casi": 2325
+     "casi": 2628
     }
    ]
   },
   {
    "key": "ALTRO",
    "nome": "Altre patologie",
-   "casi": 1829,
-   "quota": 1.66,
-   "anno2025": 865,
-   "anno2026": 964,
-   "maschi": 1496,
-   "femmine": 333,
-   "quotaMaschi": 81.8,
+   "casi": 2136,
+   "quota": 1.94,
+   "anno2025": 1032,
+   "anno2026": 1104,
+   "maschi": 1749,
+   "femmine": 387,
+   "quotaMaschi": 81.9,
    "topCodici": [
     {
      "codice": "G55.1",
-     "casi": 153
+     "casi": 175
     },
     {
      "codice": "H90.3",
-     "casi": 139
+     "casi": 159
     },
     {
      "codice": "J44",
-     "casi": 135
-    },
-    {
-     "codice": "J45",
-     "casi": 123
+     "casi": 155
     },
     {
      "codice": "J42",
-     "casi": 123
+     "casi": 142
+    },
+    {
+     "codice": "J45",
+     "casi": 138
     }
    ]
   },
   {
    "key": "MUSCOLOSCHELETRICO_ALTRO",
    "nome": "Altre malattie muscolo-scheletriche",
-   "casi": 1349,
-   "quota": 1.22,
-   "anno2025": 658,
-   "anno2026": 691,
-   "maschi": 1037,
-   "femmine": 312,
-   "quotaMaschi": 76.9,
+   "casi": 1565,
+   "quota": 1.42,
+   "anno2025": 768,
+   "anno2026": 797,
+   "maschi": 1199,
+   "femmine": 366,
+   "quotaMaschi": 76.6,
    "topCodici": [
     {
      "codice": "M19.2",
-     "casi": 460
+     "casi": 538
     },
     {
      "codice": "M76.8",
-     "casi": 174
-    },
-    {
-     "codice": "M15",
-     "casi": 165
+     "casi": 201
     },
     {
      "codice": "M72.0",
-     "casi": 161
+     "casi": 187
     },
     {
-     "codice": "M70.4",
-     "casi": 99
+     "codice": "M15",
+     "casi": 184
+    },
+    {
+     "codice": "M19",
+     "casi": 120
     }
    ]
   },
   {
    "key": "POLVERI",
    "nome": "Patologie pleuro-polmonari da polveri",
-   "casi": 914,
-   "quota": 0.83,
-   "anno2025": 483,
-   "anno2026": 431,
-   "maschi": 892,
-   "femmine": 22,
-   "quotaMaschi": 97.6,
+   "casi": 1046,
+   "quota": 0.95,
+   "anno2025": 538,
+   "anno2026": 508,
+   "maschi": 1023,
+   "femmine": 23,
+   "quotaMaschi": 97.8,
    "topCodici": [
     {
      "codice": "J92",
-     "casi": 400
+     "casi": 477
     },
     {
      "codice": "J61",
-     "casi": 328
+     "casi": 354
     },
     {
      "codice": "J62.8",
-     "casi": 134
-    },
-    {
-     "codice": "J64",
-     "casi": 19
+     "casi": 152
     },
     {
      "codice": "J63",
-     "casi": 18
+     "casi": 21
+    },
+    {
+     "codice": "J64",
+     "casi": 21
     }
    ]
   },
   {
    "key": "MESOTELIOMA",
    "nome": "Mesoteliomi (amianto)",
-   "casi": 728,
-   "quota": 0.66,
-   "anno2025": 392,
-   "anno2026": 336,
-   "maschi": 660,
-   "femmine": 68,
-   "quotaMaschi": 90.7,
+   "casi": 818,
+   "quota": 0.74,
+   "anno2025": 434,
+   "anno2026": 384,
+   "maschi": 741,
+   "femmine": 77,
+   "quotaMaschi": 90.6,
    "topCodici": [
     {
      "codice": "C45.0",
-     "casi": 661
+     "casi": 743
     },
     {
      "codice": "C45",
-     "casi": 32
+     "casi": 37
     },
     {
      "codice": "C45.1",
-     "casi": 31
+     "casi": 34
     },
     {
      "codice": "C45.7",
@@ -509,150 +509,150 @@
   {
    "key": "STRESS",
    "nome": "Disturbi psichici (stress lavoro-correlato)",
-   "casi": 596,
-   "quota": 0.54,
-   "anno2025": 240,
-   "anno2026": 356,
-   "maschi": 290,
-   "femmine": 306,
-   "quotaMaschi": 48.7,
+   "casi": 681,
+   "quota": 0.62,
+   "anno2025": 275,
+   "anno2026": 406,
+   "maschi": 335,
+   "femmine": 346,
+   "quotaMaschi": 49.2,
    "topCodici": [
     {
      "codice": "F43.2",
-     "casi": 267
+     "casi": 312
     },
     {
      "codice": "F41",
-     "casi": 67
+     "casi": 73
     },
     {
      "codice": "F43",
-     "casi": 60
+     "casi": 71
     },
     {
      "codice": "F43.1",
-     "casi": 56
+     "casi": 61
     },
     {
      "codice": "F33",
-     "casi": 31
+     "casi": 36
     }
    ]
   },
   {
    "key": "TUMORE_POLMONE",
    "nome": "Tumori del polmone",
-   "casi": 499,
-   "quota": 0.45,
-   "anno2025": 289,
-   "anno2026": 210,
-   "maschi": 480,
-   "femmine": 19,
-   "quotaMaschi": 96.2,
+   "casi": 569,
+   "quota": 0.52,
+   "anno2025": 316,
+   "anno2026": 253,
+   "maschi": 549,
+   "femmine": 20,
+   "quotaMaschi": 96.5,
    "topCodici": [
     {
      "codice": "C34",
-     "casi": 499
-    }
-   ]
-  },
-  {
-   "key": "TUMORE_ALTRO",
-   "nome": "Altri tumori professionali",
-   "casi": 428,
-   "quota": 0.39,
-   "anno2025": 218,
-   "anno2026": 210,
-   "maschi": 376,
-   "femmine": 52,
-   "quotaMaschi": 87.9,
-   "topCodici": [
-    {
-     "codice": "C32",
-     "casi": 50
-    },
-    {
-     "codice": "C18",
-     "casi": 42
-    },
-    {
-     "codice": "C30",
-     "casi": 40
-    },
-    {
-     "codice": "C43",
-     "casi": 39
-    },
-    {
-     "codice": "C64",
-     "casi": 24
+     "casi": 569
     }
    ]
   },
   {
    "key": "CUTE",
    "nome": "Dermatosi professionali",
-   "casi": 426,
-   "quota": 0.39,
-   "anno2025": 219,
-   "anno2026": 207,
-   "maschi": 277,
-   "femmine": 149,
-   "quotaMaschi": 65.0,
+   "casi": 509,
+   "quota": 0.46,
+   "anno2025": 266,
+   "anno2026": 243,
+   "maschi": 343,
+   "femmine": 166,
+   "quotaMaschi": 67.4,
    "topCodici": [
     {
      "codice": "L57.0",
-     "casi": 208
+     "casi": 258
     },
     {
      "codice": "L23",
-     "casi": 114
-    },
-    {
-     "codice": "L23.0",
-     "casi": 17
+     "casi": 136
     },
     {
      "codice": "L24",
-     "casi": 15
+     "casi": 18
+    },
+    {
+     "codice": "L23.0",
+     "casi": 18
     },
     {
      "codice": "L25",
-     "casi": 12
+     "casi": 13
+    }
+   ]
+  },
+  {
+   "key": "TUMORE_ALTRO",
+   "nome": "Altri tumori professionali",
+   "casi": 492,
+   "quota": 0.45,
+   "anno2025": 253,
+   "anno2026": 239,
+   "maschi": 434,
+   "femmine": 58,
+   "quotaMaschi": 88.2,
+   "topCodici": [
+    {
+     "codice": "C32",
+     "casi": 60
+    },
+    {
+     "codice": "C30",
+     "casi": 46
+    },
+    {
+     "codice": "C18",
+     "casi": 45
+    },
+    {
+     "codice": "C43",
+     "casi": 42
+    },
+    {
+     "codice": "C64",
+     "casi": 30
     }
    ]
   },
   {
    "key": "TUMORE_VESCICA",
    "nome": "Tumori della vescica",
-   "casi": 224,
-   "quota": 0.2,
-   "anno2025": 119,
-   "anno2026": 105,
-   "maschi": 213,
+   "casi": 239,
+   "quota": 0.22,
+   "anno2025": 128,
+   "anno2026": 111,
+   "maschi": 228,
    "femmine": 11,
-   "quotaMaschi": 95.1,
+   "quotaMaschi": 95.4,
    "topCodici": [
     {
      "codice": "C67",
-     "casi": 224
+     "casi": 239
     }
    ]
   },
   {
    "key": "TUMORE_CUTE",
    "nome": "Tumori della cute",
-   "casi": 148,
-   "quota": 0.13,
-   "anno2025": 70,
-   "anno2026": 78,
-   "maschi": 129,
-   "femmine": 19,
-   "quotaMaschi": 87.2,
+   "casi": 169,
+   "quota": 0.15,
+   "anno2025": 83,
+   "anno2026": 86,
+   "maschi": 145,
+   "femmine": 24,
+   "quotaMaschi": 85.8,
    "topCodici": [
     {
      "codice": "C44",
-     "casi": 148
+     "casi": 169
     }
    ]
   }
@@ -661,209 +661,209 @@
   {
    "codice": "09",
    "nome": "Toscana",
-   "totale": 18869,
-   "anno2025": 8435,
-   "anno2026": 10434,
-   "deltaPerc": 23.7,
-   "maschi": 13737,
-   "femmine": 5132,
+   "totale": 18837,
+   "anno2025": 8412,
+   "anno2026": 10425,
+   "deltaPerc": 23.9,
+   "maschi": 13711,
+   "femmine": 5126,
    "quotaMaschi": 72.8
   },
   {
    "codice": "16",
    "nome": "Puglia",
-   "totale": 12822,
-   "anno2025": 5846,
-   "anno2026": 6976,
+   "totale": 12794,
+   "anno2025": 5833,
+   "anno2026": 6961,
    "deltaPerc": 19.3,
-   "maschi": 10197,
-   "femmine": 2625,
+   "maschi": 10173,
+   "femmine": 2621,
    "quotaMaschi": 79.5
   },
   {
    "codice": "13",
    "nome": "Abruzzo",
-   "totale": 9673,
-   "anno2025": 4645,
-   "anno2026": 5028,
+   "totale": 9668,
+   "anno2025": 4643,
+   "anno2026": 5025,
    "deltaPerc": 8.2,
-   "maschi": 7386,
-   "femmine": 2287,
-   "quotaMaschi": 76.4
-  },
-  {
-   "codice": "11",
-   "nome": "Marche",
-   "totale": 9086,
-   "anno2025": 4116,
-   "anno2026": 4970,
-   "deltaPerc": 20.7,
-   "maschi": 6635,
-   "femmine": 2451,
-   "quotaMaschi": 73.0
+   "maschi": 7377,
+   "femmine": 2291,
+   "quotaMaschi": 76.3
   },
   {
    "codice": "08",
    "nome": "EmiliaRomagna",
-   "totale": 9084,
-   "anno2025": 4152,
-   "anno2026": 4932,
-   "deltaPerc": 18.8,
-   "maschi": 5481,
-   "femmine": 3603,
-   "quotaMaschi": 60.3
+   "totale": 9073,
+   "anno2025": 4144,
+   "anno2026": 4929,
+   "deltaPerc": 18.9,
+   "maschi": 5476,
+   "femmine": 3597,
+   "quotaMaschi": 60.4
+  },
+  {
+   "codice": "11",
+   "nome": "Marche",
+   "totale": 9063,
+   "anno2025": 4104,
+   "anno2026": 4959,
+   "deltaPerc": 20.8,
+   "maschi": 6621,
+   "femmine": 2442,
+   "quotaMaschi": 73.1
   },
   {
    "codice": "20",
    "nome": "Sardegna",
-   "totale": 7482,
-   "anno2025": 3525,
-   "anno2026": 3957,
+   "totale": 7459,
+   "anno2025": 3514,
+   "anno2026": 3945,
    "deltaPerc": 12.3,
-   "maschi": 6065,
-   "femmine": 1417,
+   "maschi": 6048,
+   "femmine": 1411,
    "quotaMaschi": 81.1
   },
   {
    "codice": "05",
    "nome": "Veneto",
-   "totale": 6681,
-   "anno2025": 2935,
+   "totale": 6678,
+   "anno2025": 2932,
    "anno2026": 3746,
-   "deltaPerc": 27.6,
-   "maschi": 4523,
+   "deltaPerc": 27.8,
+   "maschi": 4520,
    "femmine": 2158,
    "quotaMaschi": 67.7
   },
   {
    "codice": "12",
    "nome": "Lazio",
-   "totale": 6447,
-   "anno2025": 3055,
-   "anno2026": 3392,
-   "deltaPerc": 11.0,
-   "maschi": 4886,
-   "femmine": 1561,
+   "totale": 6431,
+   "anno2025": 3042,
+   "anno2026": 3389,
+   "deltaPerc": 11.4,
+   "maschi": 4875,
+   "femmine": 1556,
    "quotaMaschi": 75.8
   },
   {
    "codice": "03",
    "nome": "Lombardia",
-   "totale": 5427,
-   "anno2025": 2562,
-   "anno2026": 2865,
-   "deltaPerc": 11.8,
-   "maschi": 3825,
-   "femmine": 1602,
-   "quotaMaschi": 70.5
+   "totale": 5424,
+   "anno2025": 2564,
+   "anno2026": 2860,
+   "deltaPerc": 11.5,
+   "maschi": 3817,
+   "femmine": 1607,
+   "quotaMaschi": 70.4
   },
   {
    "codice": "10",
    "nome": "Umbria",
-   "totale": 4673,
-   "anno2025": 2353,
-   "anno2026": 2320,
+   "totale": 4670,
+   "anno2025": 2351,
+   "anno2026": 2319,
    "deltaPerc": -1.4,
-   "maschi": 3463,
-   "femmine": 1210,
+   "maschi": 3461,
+   "femmine": 1209,
    "quotaMaschi": 74.1
   },
   {
    "codice": "15",
    "nome": "Campania",
-   "totale": 4014,
-   "anno2025": 1731,
-   "anno2026": 2283,
-   "deltaPerc": 31.9,
-   "maschi": 3241,
-   "femmine": 773,
+   "totale": 4004,
+   "anno2025": 1725,
+   "anno2026": 2279,
+   "deltaPerc": 32.1,
+   "maschi": 3232,
+   "femmine": 772,
    "quotaMaschi": 80.7
   },
   {
    "codice": "18",
    "nome": "Calabria",
    "totale": 3490,
-   "anno2025": 1651,
-   "anno2026": 1839,
-   "deltaPerc": 11.4,
-   "maschi": 2971,
-   "femmine": 519,
-   "quotaMaschi": 85.1
+   "anno2025": 1660,
+   "anno2026": 1830,
+   "deltaPerc": 10.2,
+   "maschi": 2973,
+   "femmine": 517,
+   "quotaMaschi": 85.2
   },
   {
    "codice": "07",
    "nome": "Liguria",
-   "totale": 2582,
-   "anno2025": 1168,
-   "anno2026": 1414,
-   "deltaPerc": 21.1,
-   "maschi": 2024,
+   "totale": 2583,
+   "anno2025": 1167,
+   "anno2026": 1416,
+   "deltaPerc": 21.3,
+   "maschi": 2025,
    "femmine": 558,
    "quotaMaschi": 78.4
   },
   {
    "codice": "06",
    "nome": "FriuliVeneziaGiulia",
-   "totale": 2231,
-   "anno2025": 1189,
-   "anno2026": 1042,
-   "deltaPerc": -12.4,
-   "maschi": 1556,
-   "femmine": 675,
-   "quotaMaschi": 69.7
+   "totale": 2217,
+   "anno2025": 1183,
+   "anno2026": 1034,
+   "deltaPerc": -12.6,
+   "maschi": 1544,
+   "femmine": 673,
+   "quotaMaschi": 69.6
   },
   {
    "codice": "14",
    "nome": "Molise",
-   "totale": 2125,
-   "anno2025": 1045,
+   "totale": 2121,
+   "anno2025": 1041,
    "anno2026": 1080,
-   "deltaPerc": 3.3,
-   "maschi": 1532,
-   "femmine": 593,
+   "deltaPerc": 3.7,
+   "maschi": 1529,
+   "femmine": 592,
    "quotaMaschi": 72.1
   },
   {
    "codice": "19",
    "nome": "Sicilia",
-   "totale": 2046,
-   "anno2025": 866,
-   "anno2026": 1180,
-   "deltaPerc": 36.3,
-   "maschi": 1771,
-   "femmine": 275,
-   "quotaMaschi": 86.6
+   "totale": 2039,
+   "anno2025": 865,
+   "anno2026": 1174,
+   "deltaPerc": 35.7,
+   "maschi": 1767,
+   "femmine": 272,
+   "quotaMaschi": 86.7
   },
   {
    "codice": "01",
    "nome": "Piemonte",
-   "totale": 2041,
-   "anno2025": 915,
+   "totale": 2034,
+   "anno2025": 908,
    "anno2026": 1126,
-   "deltaPerc": 23.1,
-   "maschi": 1422,
+   "deltaPerc": 24.0,
+   "maschi": 1415,
    "femmine": 619,
-   "quotaMaschi": 69.7
+   "quotaMaschi": 69.6
   },
   {
    "codice": "17",
    "nome": "Basilicata",
-   "totale": 878,
-   "anno2025": 422,
-   "anno2026": 456,
-   "deltaPerc": 8.1,
-   "maschi": 712,
+   "totale": 881,
+   "anno2025": 424,
+   "anno2026": 457,
+   "deltaPerc": 7.8,
+   "maschi": 715,
    "femmine": 166,
-   "quotaMaschi": 81.1
+   "quotaMaschi": 81.2
   },
   {
    "codice": "04",
    "nome": "TrentinoAltoAdige",
-   "totale": 749,
-   "anno2025": 339,
+   "totale": 747,
+   "anno2025": 337,
    "anno2026": 410,
-   "deltaPerc": 20.9,
-   "maschi": 562,
+   "deltaPerc": 21.7,
+   "maschi": 560,
    "femmine": 187,
    "quotaMaschi": 75.0
   },
