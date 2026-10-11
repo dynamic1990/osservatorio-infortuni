@@ -9,7 +9,6 @@ import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
 import { DimensioniWidget } from "@/components/charts/dimensioni-widget";
 import { StagionalitaWidget } from "@/components/charts/stagionalita-widget";
 import { SerieDecennaleWidget } from "@/components/charts/serie-decennale-widget";
-import { NewsInfortuniWidget } from "@/components/charts/news-infortuni-widget";
 import { BenchmarkEurostatWidget } from "@/components/charts/benchmark-eurostat-widget";
 import { InfoModalButton } from "@/components/ui/info-modal";
 
@@ -17,7 +16,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Osservatorio Infortuni sul Lavoro | Dati e Indicatori Statistici INAIL",
   description:
-    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: radar quotidiano delle segnalazioni pertinenti, serie storica 2014-2025, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
+    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: cronaca quotidiana degli infortuni gravi e mortali, serie storica 2014-2025, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
 };
 
 export default function HomePage() {
@@ -75,6 +74,22 @@ export default function HomePage() {
         <HeroCongiunturaleKpi />
       </section>
 
+      {/* 2bis. CTA Cronaca: la rassegna stampa è in pagina dedicata */}
+      <section className="card" aria-label="Cronaca di infortuni">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-3)" }}>
+          <div>
+            <h2 className="card-title" style={{ marginBottom: "var(--space-1)" }}>Cronaca di infortuni</h2>
+            <p className="card-desc" style={{ margin: 0 }}>
+              La rassegna stampa quotidiana degli infortuni gravi e mortali sul lavoro: i fatti del giorno,
+              raggruppati per evento quando più testate raccontano lo stesso infortunio.
+            </p>
+          </div>
+          <a href="/cronaca-infortuni" className="btn-pill" style={{ textDecoration: "none" }}>
+            Vai alla cronaca →
+          </a>
+        </div>
+      </section>
+
       {/* 3. Serie Storica 2014-2025 */}
       <section className="card" aria-label="Serie Storica">
         <div className="card-header">
@@ -99,19 +114,6 @@ export default function HomePage() {
           </p>
         </div>
         <TrendDoppiaScalaWidget />
-      </section>
-
-      {/* 2bis. Radar automatico quotidiano delle segnalazioni sul lavoro */}
-      <section className="card" aria-label="Notizie sugli Infortuni sul Lavoro">
-        <div className="card-header">
-          <h2 className="card-title">Radar degli infortuni sul lavoro</h2>
-          <p className="card-desc">
-            Rassegna quotidiana curata da un filtro automatico che seleziona le notizie più
-            rilevanti sugli infortuni sul lavoro. Ogni voce rimanda alla fonte originale: per i
-            dati statistici vedi le sezioni precedenti.
-          </p>
-        </div>
-        <NewsInfortuniWidget />
       </section>
 
       {/* 4. Mappa Territoriale Interattiva: Colore = Tasso di Incidenza */}

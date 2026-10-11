@@ -23,12 +23,12 @@ const sections = [
     body: "Aggiornato non significa in tempo reale. Ogni fonte ha una propria cadenza e una propria definizione: mensile, semestrale o annuale. La data di riferimento e i limiti sono riportati nelle pagine e nel registro delle fonti. Un nuovo file non viene pubblicato automaticamente: prima controlliamo definizioni, copertura e compatibilità con la serie esistente.",
   },
   {
-    title: "Il Radar degli infortuni sul lavoro",
-    body: "Il Radar è una rassegna quotidiana costruita da Google News RSS. Un filtro interno valuta la pertinenza al lavoro e penalizza, tra gli altri casi, gli articoli sportivi e gli incidenti non professionali. È uno strumento editoriale per orientarsi nella cronaca, non un archivio statistico e non sostituisce i dati INAIL.",
+    title: "La Cronaca degli infortuni sul lavoro",
+    body: "La Cronaca è una rassegna stampa quotidiana costruita da Google News RSS. Un filtro interno valuta la pertinenza al lavoro e penalizza, tra gli altri casi, gli articoli sportivi e gli incidenti non professionali. Gli articoli che raccontano lo stesso infortunio vengono raggruppati in un unico evento. È uno strumento editoriale per orientarsi nella cronaca, non un archivio statistico e non sostituisce i dati INAIL.",
   },
   {
     title: "Un controllo mensile, senza import automatici",
-    body: "Il 15 di ogni mese un audit separato dal Radar controlla gli endpoint delle fonti ufficiali e confronta la loro impronta con la baseline precedente. Se rileva una variazione, invia una segnalazione. Non modifica dataset e non integra nuove annualità senza una decisione e una verifica manuale.",
+    body: "Il 15 di ogni mese un audit separato dalla rassegna controlla gli endpoint delle fonti ufficiali e confronta la loro impronta con la baseline precedente. Se rileva una variazione, invia una segnalazione. Non modifica dataset e non integra nuove annualità senza una decisione e una verifica manuale.",
   },
   {
     title: "Licenza: codice aperto, dati pubblici",

@@ -101,7 +101,7 @@ export const SOURCE_STATUS: SourceStatus[] = [
   {
     sourceId: "google-news-rss",
     dataState: "manual-review",
-    label: "Radar automatico",
+    label: "Rassegna stampa automatica",
     period: "Ultimi 7 giorni dalla raccolta",
     checkedAt: "2026-09-14",
     freshness: "Aggiornamento quotidiano",

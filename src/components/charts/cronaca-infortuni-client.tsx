@@ -6,6 +6,14 @@ import newsRaw from "@/data/generated/news-infortuni.json";
 import { ItalyMap } from "@/components/charts/italy-map";
 import { REGIONI } from "@/lib/labels";
 
+interface FonteExtra {
+  titolo: string;
+  data: string;
+  fonte: string;
+  link: string;
+  score?: number;
+}
+
 interface Notizia {
   titolo: string;
   fonte: string;
@@ -17,6 +25,7 @@ interface Notizia {
   regione?: string | null;
   workAccidentScore: number;
   scoreReasons?: string[];
+  fonti?: FonteExtra[];
 }
 
 interface StatsPayload {
@@ -111,7 +120,7 @@ function KpiCard({
               gap: 4,
               marginLeft: 6,
               fontWeight: 700,
-              color: up ? "var(--color-accent)" : down ? "#1e7a4e" : "var(--color-text-muted)",
+              color: up ? "var(--color-accent)" : down ? "var(--color-success)" : "var(--color-text-muted)",
             }}
           >
             {up ? <TrendingUp size={13} /> : down ? <TrendingDown size={13} /> : null}
@@ -164,6 +173,7 @@ export function CronacaInfortuniClient() {
   const [regione, setRegione] = useState<string>("tutte");
   const [periodo, setPeriodo] = useState<string>("tutto");
   const [limite, setLimite] = useState<number>(40);
+  const [fontiAperte, setFontiAperte] = useState<string | null>(null);
 
   const filtroPeriodo = (dataStr: string): boolean => {
     const t = new Date(dataStr).getTime();
@@ -191,35 +201,36 @@ export function CronacaInfortuniClient() {
         <div className="card-header">
           <h2 className="card-title">La settimana in cifre</h2>
           <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
-            Eventi di cronaca rilevati dal radar · confronto con la settimana precedente
+            Eventi di cronaca rilevati dalla rassegna stampa · confronto con la settimana precedente
           </span>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--space-3)" }}>
           <KpiCard
-            label="Eventi totali"
+            label="Eventi gravi/mortali"
             valore={stats?.ultimi7.totale ?? 0}
             confronto={stats?.precedenti7.totale}
             su="ultimi 7 giorni"
           />
           <KpiCard
-            label="Mortali"
+            label="Eventi mortali"
             valore={stats?.ultimi7.mortali ?? 0}
             confronto={stats?.precedenti7.mortali}
             su="ultimi 7 giorni"
           />
           <KpiCard
-            label="Gravi"
+            label="Eventi gravi"
             valore={stats?.ultimi7.gravi ?? 0}
             confronto={stats?.precedenti7.gravi}
             su="ultimi 7 giorni"
           />
         </div>
         <p className="source-note" style={{ marginTop: "var(--space-3)" }}>
+          Un evento = lo stesso infortunio raccontato da una o più testate, contato una sola volta.
           {stats?.mese.etichetta
-            ? `Contatore mensile: a ${stats.mese.etichetta.toLowerCase()} la cronaca registra ${stats.mese.mortali} morti sul lavoro e ${stats.mese.totale} eventi gravi/mortali.`
-            : "Contatore mensile non disponibile."}
+            ? ` Contatore mensile: a ${stats.mese.etichetta.toLowerCase()} la cronaca registra ${stats.mese.mortali} morti sul lavoro e ${stats.mese.totale} eventi gravi/mortali.`
+            : " Contatore mensile non disponibile."}
           {" "}
-          Numeri da rassegna stampa automatica, non da banche dati ufficiali.
+          Numeri da rassegna stampa automatica (soglia di rilevanza del filtro), non da banche dati ufficiali.
         </p>
       </section>
 
@@ -229,10 +240,19 @@ export function CronacaInfortuniClient() {
           <h2 className="card-title">Dove è successo</h2>
           <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
             {Object.keys(regioniEvento).length} regioni con almeno un evento negli ultimi 30 giorni
+            {regione !== "tutte" ? ` · filtro attivo: ${regione}` : " · clicca una regione per filtrare"}
           </span>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--space-4)", alignItems: "start" }}>
-          <ItalyMap regions={regioniEvento} onSelect={() => {}} selected={null} title="Eventi per regione" />
+          <ItalyMap
+            regions={regioniEvento}
+            onSelect={(code) => {
+              const nome = Object.entries(NOME_REGIONE_TO_CODE).find(([, c]) => c === code)?.[0];
+              setRegione(nome ? (regione === nome ? "tutte" : nome) : "tutte");
+            }}
+            selected={regione !== "tutte" ? (NOME_REGIONE_TO_CODE[regione] ?? null) : null}
+            title="Eventi per regione"
+          />
           <div style={{ display: "grid", gap: "var(--space-2)" }}>
             {regioniLista.map((reg) => {
               const code = NOME_REGIONE_TO_CODE[reg];
@@ -345,22 +365,18 @@ export function CronacaInfortuniClient() {
             const data = new Date(n.data);
             const oggi = new Date();
             const giorniFa = Math.max(0, Math.round((oggi.getTime() - data.getTime()) / 86400_000));
+            const numFonti = (n.fonti?.length ?? 0) + 1;
+            const aperto = fontiAperte === `${n.link}-${i}`;
             return (
-              <a
+              <div
                 key={`${n.link}-${i}`}
-                href={n.link}
-                target="_blank"
-                rel="noreferrer"
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "auto 1fr auto",
+                  gridTemplateColumns: "auto 1fr",
                   gap: "var(--space-3)",
-                  alignItems: "center",
                   padding: "var(--space-3) var(--space-4)",
                   borderRadius: 8,
                   background: "var(--color-surface-2)",
-                  textDecoration: "none",
-                  color: "inherit",
                   border: "1px solid var(--color-divider)",
                 }}
               >
@@ -378,16 +394,95 @@ export function CronacaInfortuniClient() {
                     {formatData(n.data).split(" ")[0]}
                   </div>
                 </div>
-                <div style={{ fontSize: "0.9rem", lineHeight: 1.35 }}>
-                  {n.titolo}
+                <div>
+                  <a
+                    href={n.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ fontSize: "0.9rem", lineHeight: 1.35, color: "inherit", textDecoration: "none" }}
+                  >
+                    {n.titolo}
+                  </a>
                   <span style={{ display: "block", fontSize: "0.75rem", color: "var(--color-text-muted)", marginTop: 2 }}>
                     {localita ? <strong style={{ color: "var(--color-text-soft)" }}>{localita}</strong> : null}
                     {localita ? " · " : ""}
                     {n.fonte} · {formatDataCompleta(n.data)}
                   </span>
+                  {numFonti > 1 && (
+                    <>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+                        <span
+                          style={{
+                            fontSize: "0.68rem",
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.04em",
+                            color: "var(--color-text-soft)",
+                            background: "var(--color-surface-1)",
+                            border: "1px solid var(--color-divider)",
+                            borderRadius: "var(--radius-md)",
+                            padding: "2px 8px",
+                          }}
+                        >
+                          {numFonti} testate raccontano questo evento
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setFontiAperte(aperto ? null : `${n.link}-${i}`);
+                          }}
+                          aria-expanded={aperto}
+                          aria-controls={`fonti-${i}`}
+                          style={{
+                            padding: "2px 10px",
+                            borderRadius: "var(--radius-md)",
+                            border: "1px solid var(--color-divider)",
+                            background: "transparent",
+                            color: "inherit",
+                            fontSize: "0.72rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {aperto ? "Nascondi altre fonti" : `Altre ${numFonti - 1} fonti sullo stesso evento`}
+                        </button>
+                      </div>
+                      {aperto && (
+                        <div id={`fonti-${i}`} style={{ marginTop: 8, display: "grid", gap: 4 }}>
+                          {n.fonti!.map((f, j) => (
+                            <a
+                              key={`${f.link}-${j}`}
+                              href={f.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                fontSize: "0.78rem",
+                                color: "var(--color-text-soft)",
+                                textDecoration: "none",
+                                display: "flex",
+                                gap: 6,
+                                alignItems: "center",
+                                padding: "4px 6px",
+                                borderRadius: "var(--radius-md)",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "var(--color-surface-1)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "transparent";
+                              }}
+                            >
+                              <span style={{ color: "var(--color-text-muted)" }}>↳</span>
+                              <span style={{ flex: 1 }}>{f.titolo}</span>
+                              <span style={{ color: "var(--color-text-muted)", whiteSpace: "nowrap" }}>{f.fonte}</span>
+                              <ExternalLink size={12} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
-                <ExternalLink size={15} strokeWidth={1.8} style={{ color: "var(--color-text-muted)" }} />
-              </a>
+              </div>
             );
           })}
           {visibili.length === 0 && (
@@ -415,7 +510,8 @@ export function CronacaInfortuniClient() {
         <h2 className="card-title">Cronaca e dati ufficiali: due piani diversi</h2>
         <p style={{ fontSize: "0.92rem", color: "var(--color-text-soft)", maxWidth: "78ch", lineHeight: 1.55, margin: 0 }}>
           Questa pagina raccoglie la <strong>rassegna stampa automatica</strong> degli infortuni gravi e mortali
-          sul lavoro: ogni voce è un articolo di cronaca locale o nazionale, filtrato e deduplicato dal radar.
+          sul lavoro: gli articoli dello stesso infortunio vengono <strong>raggruppati in un unico evento</strong>
+          (quando più testate raccontano lo stesso fatto, si contano una volta sola).
           I numeri qui sopra <strong>non sono dati INAIL</strong>: sono un indicatore congiunturale della
           cronaca, soggetto alla copertura delle testate. Per le statistiche ufficiali certificate dell&apos;istituto,
           con serie storiche e incidenze, vai alla pagina{" "}

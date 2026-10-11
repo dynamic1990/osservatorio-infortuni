@@ -103,6 +103,56 @@ ALIAS_COMUNI = {
     "origgio": ("Varese", "Lombardia"),
 }
 
+# Comuni ricorrenti nella cronaca degli infortuni (capoluoghi e comuni citati
+# spesso nei titoli). Servono per l'estrazione del luogo e per il confronto
+# "stesso comune" nella deduplicazione: senza questo dizionario i titoli che
+# citano solo il comune ("morto a Caivano", "tragedia a Faenza") non si
+# accorpan perché il comune non è una provincia.
+COMUNI_NOTI = {
+    "caivano": ("Napoli", "Campania"),
+    "faenza": ("Ravenna", "Emilia-Romagna"),
+    "rimini": ("Rimini", "Emilia-Romagna"),
+    "palagonia": ("Catania", "Sicilia"),
+    "gallese": ("Viterbo", "Lazio"),
+    "filago": ("Bergamo", "Lombardia"),
+    "ornago": ("Monza-Brianza", "Lombardia"),
+    "robbecco sul naviglio": ("Milano", "Lombardia"),
+    "castelfiorentino": ("Firenze", "Toscana"),
+    "borgo valsugana": ("Trento", "Trentino-Alto Adige"),
+    "aponte san nicolò": ("Padova", "Veneto"),
+    "borso del grappa": ("Treviso", "Veneto"),
+    "castellammare": ("Napoli", "Campania"),
+    "prata principato ultra": ("Avellino", "Campania"),
+    "apollosa": ("Benevento", "Campania"),
+    "frascineto": ("Cosenza", "Calabria"),
+    "sant'agostino": ("Pistoia", "Toscana"),
+    "rocco": ("Milano", "Lombardia"),
+    "pistoia": ("Pistoia", "Toscana"),
+    "sapri": ("Salerno", "Campania"),
+    "zevio": ("Verona", "Veneto"),
+    "altavilla vicentina": ("Vicenza", "Veneto"),
+    "san giovanni in persiceto": ("Bologna", "Emilia-Romagna"),
+    # Entità-luogo ricorrenti nella cronaca: non sono comuni, ma identificano
+    # un luogo preciso anche senza citare la città. Servono al confronto evento:
+    # "Fincantieri" e "cantiere del porto" nella stessa finestra temporale
+    # indicano lo stesso fatto anche se il titolo non dice "Ancona".
+    "fincantieri": ("Ancona", "Marche"),
+    "cantiere del porto": ("Ancona", "Marche"),
+    "cantiere navale": ("Ancona", "Marche"),
+    "al porto": ("Ancona", "Marche"),
+    "del porto": ("Ancona", "Marche"),
+}
+
+# Unisce i due dizionari per la ricerca luogo: prima i comuni (più specifici),
+# poi le province. L'ordine conta: "Rimini" è sia comune che provincia, ma il
+# comune è più specifico e ha lo stesso risultato.
+LUOGHI_ORDINATI = sorted(
+    [(nome, prov, reg) for nome, (prov, reg) in COMUNI_NOTI.items()]
+    + [(nome.lower(), prov, reg) for nome, (prov, reg) in ALIAS_COMUNI.items()]
+    + [(prov.lower(), prov, reg) for prov, reg in PROVINCE],
+    key=lambda x: -len(x[0]),
+)
+
 # Alcune testate non riportano il luogo nel titolo, ma lo rendono evidente
 # nel nome della fonte. Serve come informazione ausiliaria per la deduplica.
 SOURCE_PLACES = {
@@ -318,9 +368,9 @@ def estrai_luogo(titolo: str) -> tuple[str | None, str | None]:
             if prov.lower() == nome or prov.lower().startswith(nome):
                 return prov, reg
 
-    # 2) comuni noti (alias)
-    for alias, (prov, reg) in ALIAS_COMUNI.items():
-        if alias in tl:
+    # 2) comuni noti (alias + dizionario comuni ricorrenti)
+    for nome, prov, reg in LUOGHI_ORDINATI:
+        if nome in tl:
             return prov, reg
 
     # 3) regione citata
@@ -415,6 +465,100 @@ def is_followup(item: dict) -> bool:
     return any(marker in titolo for marker in FOLLOWUP_MARKERS)
 
 
+AGE_PATTERN = re.compile(r"\b(\d{1,3})\s*(?:anni|enne|enne)\b")
+
+def victim_age(titolo: str) -> set[int]:
+    """Età della vittima quando il titolo la riporta ('operaio di 52 anni', '52enne').
+
+    L'età è un identificatore quasi univoco quanto il nome: due articoli che
+    citano la stessa età nello stesso luogo e nello stesso giorno descrivono
+    quasi certamente la stessa persona. Età fuori range (0 o >110) scartate.
+    """
+    out = set()
+    for m in AGE_PATTERN.finditer(titolo):
+        try:
+            eta = int(m.group(1))
+        except ValueError:
+            continue
+        if 10 <= eta <= 110:
+            out.add(eta)
+    return out
+
+
+def title_similarity(a: str, b: str) -> float:
+    """Coefficiente Dice sui token significativi (stopword escluse).
+
+    Cattura le parafrasi delle testate: 'Muore operaio schiacciato a Caivano'
+    vs 'Caivano, operaio schiacciato dal muro: muore in ospedale' hanno quasi
+    gli stessi token evento pur non essendo titoli identici.
+    """
+    ta = event_tokens({"titolo": a})
+    tb = event_tokens({"titolo": b})
+    if not ta or not tb:
+        return 0.0
+    inter = len(ta & tb)
+    return 2 * inter / (len(ta) + len(tb))
+
+
+# Nomi propri: pattern "Nome Cognome" nel titolo. È la chiave più forte per
+# accorpare articoli dello stesso evento (la vittima è univoca), anche quando
+# titoli e testate cambiano completamente.
+NAME_PATTERN = re.compile(
+    r"\b([A-ZÀ-Ž][a-zà-ž]+)\s+([A-ZÀ-Ž][a-zà-ž]+)\b"
+)
+
+def victim_names(item: dict) -> set[str]:
+    """Nomi propri (Nome Cognome) estraibili dal titolo."""
+    testo = item.get("titolo", "")
+    nomi = set()
+    for m in NAME_PATTERN.finditer(testo):
+        name = m.group(0)
+        low = name.lower()
+        # Esclude falsi positivi: inizio frase, saluti, toponimi composti noti
+        if low in {"di che", "non è", "il titolare", "il datore", "la cgil", "la figlia", "la moglie"}:
+            continue
+        # Esclude le parole stop/vuote che sembrano nomi
+        if not re.search(r"[aeiouàèéìòù]", name):
+            continue
+        nomi.add(name)
+    return nomi
+
+
+def extract_comune(titolo: str) -> str | None:
+    """Cerca nel titolo un comune/provincia noto anche fuori dal pattern 'in provincia di'."""
+    tl = normalize_place(titolo)
+    for nome, _, _ in LUOGHI_ORDINATI:
+        nome_norm = normalize_place(nome)
+        if nome_norm and re.search(rf"(?<![a-z]){re.escape(nome_norm)}(?![a-z])", tl):
+            return nome
+    return None
+
+
+def is_aggregate_report(titolo: str) -> bool:
+    """Titoli che riassumono piu' eventi distinti ('Tre operai morti a Pistoia, Faenza e Treviso').
+
+    Sono casi limite: non sono la cronaca di un singolo infortunio, ma un
+    panorama di piu' fatti. Contarli come 'uno' distorcerebbe il contatore
+    (contengono gia' eventi contati singolarmente), quindi vanno marcati come
+    report e non entrano nel calcolo dei KPI.
+    """
+    tl = normalize_place(titolo)
+    # Conteggio toponimi provincia/regione nel titolo: se ce ne sono piu' di
+    # uno con la virgola o 'e', e' un riassunto di piu' eventi.
+    toponimi = set()
+    for prov, _ in PROVINCE:
+        pn = normalize_place(prov)
+        if len(pn) >= 4 and re.search(rf"(?<![a-z]){re.escape(pn)}(?![a-z])", tl):
+            toponimi.add(pn)
+    for reg in REGIONI_NOMI:
+        rn = normalize_place(reg)
+        if len(rn) >= 4 and re.search(rf"(?<![a-z]){re.escape(rn)}(?![a-z])", tl):
+            toponimi.add(rn)
+    # Numeri di vittime multiple nel titolo ("tre operai", "due operai", "3 morti")
+    numeri = re.findall(r"\b(?:tre|due|quattro|cinque|3|4|5)\s+operai?\b", tl)
+    return len(toponimi) >= 2 or bool(numeri)
+
+
 def normalize_place(value: str) -> str:
     return unicodedata.normalize("NFKD", value.lower()).encode("ascii", "ignore").decode()
 
@@ -424,18 +568,15 @@ def event_places(item: dict) -> set[str]:
     titolo = normalize_place(item.get("titolo", ""))
     places: set[str] = set()
 
-    # Comune, provincia e regione del titolo. Conserviamo tutti i livelli:
-    # Bivona deve poter combaciare con un articolo che cita solo Agrigento.
-    for alias in sorted(ALIAS_COMUNI, key=len, reverse=True):
-        alias_norm = normalize_place(alias)
-        if re.search(rf"(?<![a-z]){re.escape(alias_norm)}(?![a-z])", titolo):
-            provincia, regione = ALIAS_COMUNI[alias]
-            places.update({alias_norm, normalize_place(provincia), normalize_place(regione)})
-
-    for provincia, regione in PROVINCE:
-        provincia_norm = normalize_place(provincia)
-        if re.search(rf"(?<![a-z]){re.escape(provincia_norm)}(?![a-z])", titolo):
-            places.update({provincia_norm, normalize_place(regione)})
+    # Comuni noti, alias e province: tutto ciò che è riconoscibile nel titolo.
+    # Conserviamo tutti i livelli: Bivona deve poter combaciare con un
+    # articolo che cita solo Agrigento.
+    for nome, prov, reg in LUOGHI_ORDINATI:
+        nome_norm = normalize_place(nome)
+        if not nome_norm:
+            continue
+        if re.search(rf"(?<![a-z]){re.escape(nome_norm)}(?![a-z])", titolo):
+            places.update({nome_norm, normalize_place(prov), normalize_place(reg)})
 
     for regione in REGIONI_NOMI:
         regione_norm = normalize_place(regione)
@@ -455,6 +596,60 @@ def event_places(item: dict) -> set[str]:
     return places
 
 
+def semantic_dinamica(titolo: str) -> set[str]:
+    """Categorie di dinamica condivise tra fonti diverse.
+
+    Permette di riconoscere la stessa dinamica anche quando le parole sono
+    diverse: 'investito da una fiammata', 'esplosione', 'gravi ustioni' e
+    'fuga di gas' appartengono tutte al batch fuoco.
+    """
+    t = normalize_place(titolo)
+    fuoco = ("fiammata", "ustion", "incendio", "esplos", "vapore", "scoppio", "fuga di gas")
+    caduta = ("cadut", "precipit", "croll", "volo", "tetto", "pontegg", "impalcatura", "sottotetto", "solaio", "scaffal")
+    schiacciamento = ("schiacci", "travol", "investit", "colpit", "carico caduto", "ribalt")
+    elettrico = ("folgor", "elettrocuzion", "scossa", "elettrico")
+    annegamento = ("anneg", "caduto in acqua", "canale", "fiume", "vasca")
+    out = set()
+    if any(k in t for k in fuoco):
+        out.add("fuoco")
+    if any(k in t for k in caduta):
+        out.add("caduta")
+    if any(k in t for k in schiacciamento):
+        out.add("schiacciamento")
+    if any(k in t for k in elettrico):
+        out.add("elettrico")
+    if any(k in t for k in annegamento):
+        out.add("annegamento")
+    return out
+
+
+DINAMICHE_RARE = {"fuoco", "elettrico", "annegamento"}
+
+# Grandi città ad alta densità di eventi: il solo comune condiviso non basta
+# ad accorpare (due fatti diversi nello stesso giorno a Roma o Napoli non
+# sono lo stesso evento). Per queste serve un aggancio forte (età, nome,
+# dinamica rara, anchor).
+METROPOLI = {
+    "roma", "napoli", "milano", "torino", "bologna", "firenze", "genova",
+    "palermo", "bari", "catania", "verona", "venezia", "brescia", "bergamo",
+    "salerno", "taranto", "reggio calabria", "cagliari", "messina", "padova",
+    "trieste", "parma", "modena", "reggio emilia", "perugia", "rimini",
+}
+
+
+def luogo_specifico(item: dict) -> set[str]:
+    """Solo i luoghi specifici (comune, provincia, entità), senza la regione.
+
+    La regione da sola è una prova troppo debole: due incidenti in città
+    diverse della stessa regione finirebbero per essere considerati lo stesso
+    evento. Rimini e Faenza sono entrambe in Emilia-Romagna, ma non sono lo
+    stesso fatto solo per questo.
+    """
+    places = event_places(item)
+    regioni = {normalize_place(r) for r in REGIONI_NOMI}
+    return places - regioni
+
+
 def is_same_event(a: dict, b: dict) -> bool:
     """Confronto prudente tra articoli sullo stesso evento.
 
@@ -467,9 +662,49 @@ def is_same_event(a: dict, b: dict) -> bool:
     if delta_days > 4:
         return False
 
-    places_a = event_places(a)
-    places_b = event_places(b)
+    # I report statistici vivono su un piano diverso: un bilancio di periodo
+    # ("Emergenza sicurezza a Roma, +8,1%") NON è lo stesso evento di una
+    # cronaca singola ("Esplosione in officina a Roma"). Mescolarli farebbe
+    # sparire l'evento vero dal gruppo e gonfierebbe/azzera i KPI.
+    if (a.get("tipo") == "report") != (b.get("tipo") == "report"):
+        return False
+
+    # Chiave fortissima: stesso nome della vittima -> stesso evento
+    nomi_a = victim_names(a)
+    nomi_b = victim_names(b)
+    if nomi_a & nomi_b:
+        return True
+
+    # Chiave forte: stessa età dichiarata + stesso luogo (specifico o regione)
+    # nella stessa finestra. Un "52enne" e un "operaio di 53 anni" nello stesso
+    # comune nello stesso giorno sono quasi certamente la stessa persona.
+    età_a = victim_age(a.get("titolo", ""))
+    età_b = victim_age(b.get("titolo", ""))
+    if età_a & età_b and delta_days <= 3:
+        places_match = bool(luogo_specifico(a) & luogo_specifico(b))
+        region_match = bool(
+            (event_places(a) & {normalize_place(r) for r in REGIONI_NOMI})
+            & (event_places(b) & {normalize_place(r) for r in REGIONI_NOMI})
+        )
+        if places_match or region_match:
+            return True
+
+    # Parafrasi delle testate: stesso luogo + titoli con alta sovrapposizione
+    # di token evento (Dice >= 0.6) nella stessa finestra. Cattura "Muore
+    # operaio schiacciato a Caivano" vs "Caivano, operaio schiacciato dal
+    # muro: muore in ospedale" senza richiedere il nome della vittima.
+    places_a = luogo_specifico(a)
+    places_b = luogo_specifico(b)
     same_place = bool(places_a & places_b)
+    if delta_days <= 3 and same_place:
+        sim = title_similarity(a.get("titolo", ""), b.get("titolo", ""))
+        if sim >= 0.6:
+            return True
+
+    # La sola regione condivisa (senza luogo specifico) è una prova debole.
+    region_a = event_places(a) & {normalize_place(r) for r in REGIONI_NOMI}
+    region_b = event_places(b) & {normalize_place(r) for r in REGIONI_NOMI}
+    same_region_only = bool(region_a & region_b) and not same_place
 
     tokens_a = event_tokens(a)
     tokens_b = event_tokens(b)
@@ -488,39 +723,72 @@ def is_same_event(a: dict, b: dict) -> bool:
         return True
 
     # Alcune fonti riprendono l'evento senza ripetere il comune o la
-    # provincia nel titolo. Per collegarle in modo prudente richiediamo una
-    # dinamica concreta e almeno un altro dettaglio comune, oppure due
-    # elementi della dinamica, nello stesso arco di 48 ore.
+    # provincia nel titolo. Per collegarle in modo prudente richiediamo un
+    # aggancio forte (età o nome) oltre alla dinamica, nello stesso arco di
+    # 48 ore. Due soli anchor generici ("schiacciato", "macchinario")
+    # senza luogo non bastano: è così che Zevio finiva dentro il gruppo
+    # Faenza (stessa dinamica, eventi diversi).
     if not same_place and delta_days <= 2:
-        if len(anchors) >= 2:
+        if numbers and anchors:
             return True
-        if anchors and (numbers or len(concrete) >= 2):
+        if anchors and len(concrete) >= 2 and numbers:
             return True
 
-    # Due articoli che citano lo stesso comune nello stesso arco di 48 ore
-    # descrivono normalmente lo stesso fatto anche quando uno dei titoli è
-    # una semplice scheda di aggiornamento e non ripete la dinamica.
-    alias_places = {normalize_place(alias) for alias in ALIAS_COMUNI}
-    if places_a & places_b & alias_places and delta_days <= 2:
+    # Comune/provincia esplicito condiviso + stessa finestra di 3 giorni:
+    # descrivono normalmente lo stesso fatto anche se le dinamiche nei titoli
+    # sono rese in modo diverso ("morto a Caivano", "tragedia a Caivano").
+    comune_a = extract_comune(a.get("titolo", ""))
+    comune_b = extract_comune(b.get("titolo", ""))
+    if comune_a and comune_b and comune_a == comune_b and delta_days <= 3:
+        # Nelle grandi città il solo comune non basta: due eventi diversi
+        # nello stesso giorno a Roma o Napoli condividono il capoluogo senza
+        # essere lo stesso fatto. Serve un aggancio forte (anchor, età, o
+        # dinamica rara) oltre al luogo.
+        if normalize_place(comune_a) in METROPOLI:
+            dyn_rare = semantic_dinamica(a.get("titolo", "")) & semantic_dinamica(b.get("titolo", "")) & DINAMICHE_RARE
+            if anchors or numbers or dyn_rare:
+                return True
+        else:
+            return True
+
+    # Dinamica rara e inequivocabile condivisa (fuoco, elettrico, annegamento)
+    # nello stesso luogo specifico e nella stessa finestra temporale: quasi
+    # certamente lo stesso evento anche con titoli molto diversi. Copre il
+    # caso Fincantieri ("investito da una fiammata", "esplosione", "gravi
+    # ustioni", "cantiere del porto") dove manca il nome della vittima.
+    dyn_a = semantic_dinamica(a.get("titolo", ""))
+    dyn_b = semantic_dinamica(b.get("titolo", ""))
+    if same_place and (dyn_a & dyn_b & DINAMICHE_RARE) and delta_days <= 6:
         return True
 
-    # Le fonti pubblicano spesso un secondo pezzo sul lutto, sulla vittima o
-    # sulle richieste di sicurezza senza ripetere luogo e dinamica. Se il
-    # seguito è nella stessa provincia e nello stesso arco di 48 ore di un
-    # articolo che contiene una dinamica concreta o un'età, è lo stesso evento
-    # con elevata probabilità. È il caso Bivona/Santo Stefano Quisquina del
-    # 1 settembre 2026.
+    # Follow-up sulla stessa provincia con un aggancio (nome, età o dinamica)
     if delta_days <= 2 and same_place:
         if is_followup(a) != is_followup(b):
             other = b if is_followup(a) else a
             if event_anchors(other) or any(t.isdigit() for t in event_tokens(other)):
                 return True
 
+    # Solo la regione condivisa: serve una combinazione forte (età identica
+    # + almeno un dettaglio concreto) nello stesso giorno. È l'unico caso in
+    # cui la regione da sola può bastare, per non perdere eventi regionali
+    # raccontati da testate che non ripetono la città.
+    if same_region_only and delta_days <= 1:
+        if numbers and len(concrete - numbers) >= 1:
+            return True
+
     return False
 
 
 def dedupe_eventi(items: list[dict]) -> list[dict]:
-    """Riduce i diversi articoli dello stesso incidente a una sola voce."""
+    """Riduce i diversi articoli dello stesso incidente a una sola voce.
+
+    Ogni gruppo evento produce il rappresentante (capo), arricchito con:
+    - `eventGroupId`: id stabile del gruppo;
+    - `fonti`: le notizie raggruppate (titolo, data, fonte, link, score) così
+      la UI può mostrare "1 evento · N fonti" ed eventualmente un elenco
+      espandibile delle testate che ne hanno parlato.
+    Il contatore dei KPI resta quindi "eventi distinti", non notizie.
+    """
     ordinati = sorted(items, key=news_datetime, reverse=True)
     gruppi: list[list[dict]] = []
     for item in ordinati:
@@ -529,7 +797,36 @@ def dedupe_eventi(items: list[dict]) -> list[dict]:
             gruppi.append([item])
         else:
             gruppo.append(item)
-    return [gruppo[0] for gruppo in gruppi]
+
+    out = []
+    for g in gruppi:
+        # Il rappresentante è l'articolo più fresco del gruppo, con la
+        # localizzazione migliore (provincia/regione nota se disponibile).
+        g_ordinato = sorted(
+            g,
+            key=lambda x: (
+                1 if x.get("provincia") or x.get("regione") else 0,
+                news_datetime(x),
+            ),
+            reverse=True,
+        )
+        capo = g_ordinato[0]
+        gid = f"evt-{abs(hash(capo['link'])):012x}"
+        for m in g:
+            m["eventGroupId"] = gid
+        capo["fonti"] = [
+            {
+                "titolo": m.get("titolo"),
+                "data": m.get("data"),
+                "fonte": m.get("fonte"),
+                "link": m.get("link"),
+                "score": m.get("workAccidentScore"),
+            }
+            for m in sorted(g, key=news_datetime, reverse=True)
+            if m is not capo
+        ]
+        out.append(capo)
+    return out
 
 
 def dedupe_titoli(items: list[dict]) -> list[dict]:
@@ -622,6 +919,11 @@ def main() -> int:
         n["provincia"] = prov
         n["regione"] = reg
         n["tipo"] = classify_tipo(n["titolo"], n["fonte"])
+        # I riassunti di più eventi ("Tre operai morti a Pistoia, Faenza e
+        # Treviso") vanno trattati come report: contengono già eventi contati
+        # singolarmente e distorcerebbero i KPI.
+        if is_aggregate_report(n["titolo"]):
+            n["tipo"] = "report"
         score, reasons = work_accident_score(n["titolo"], n["fonte"])
         n["workAccidentScore"] = score
         n["scoreReasons"] = reasons
@@ -632,13 +934,17 @@ def main() -> int:
     filtrate = dedupe_eventi(filtrate)
     filtrate.sort(key=news_datetime, reverse=True)
 
+    # Le stats devono contare gli EVENTI DISTINTI (un capo per gruppo), non
+    # le notizie: altrimenti i KPI tornano gonfiati dai doppioni della cronaca
+    # (stesso infortunio raccontato da più testate).
+    stats = calcola_stats(filtrate)
     payload = {
         "schemaVersion": 3,
         "datasetId": "news_infortuni",
         "generatedAt": utc_now(),
         "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
         "periodo": "ultimi 30 giorni",
-        "stats": calcola_stats(filtrate),
+        "stats": stats,
         "notizie": filtrate[:MAX_KEEP],
     }
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
