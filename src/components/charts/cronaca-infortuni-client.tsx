@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Filter, TrendingDown, TrendingUp } from "lucide-react";
 import newsRaw from "@/data/generated/news-infortuni.json";
 import { ItalyMap } from "@/components/charts/italy-map";
@@ -75,6 +75,10 @@ function formatDataCompleta(dataStr: string): string {
   } catch {
     return dataStr;
   }
+}
+
+function numFontiPerEvento(n: Notizia): number {
+  return (n.fonti?.length ?? 0) + 1;
 }
 
 function KpiCard({
@@ -173,7 +177,17 @@ export function CronacaInfortuniClient() {
   const [regione, setRegione] = useState<string>("tutte");
   const [periodo, setPeriodo] = useState<string>("tutto");
   const [limite, setLimite] = useState<number>(40);
-  const [fontiAperte, setFontiAperte] = useState<string | null>(null);
+  const [popupFonti, setPopupFonti] = useState<Notizia | null>(null);
+
+  // Esc chiude il popup delle fonti
+  useEffect(() => {
+    if (!popupFonti) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPopupFonti(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [popupFonti]);
 
   const filtroPeriodo = (dataStr: string): boolean => {
     const t = new Date(dataStr).getTime();
@@ -205,12 +219,6 @@ export function CronacaInfortuniClient() {
           </span>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--space-3)" }}>
-          <KpiCard
-            label="Eventi gravi/mortali"
-            valore={stats?.ultimi7.totale ?? 0}
-            confronto={stats?.precedenti7.totale}
-            su="ultimi 7 giorni"
-          />
           <KpiCard
             label="Eventi mortali"
             valore={stats?.ultimi7.mortali ?? 0}
@@ -366,7 +374,6 @@ export function CronacaInfortuniClient() {
             const oggi = new Date();
             const giorniFa = Math.max(0, Math.round((oggi.getTime() - data.getTime()) / 86400_000));
             const numFonti = (n.fonti?.length ?? 0) + 1;
-            const aperto = fontiAperte === `${n.link}-${i}`;
             return (
               <div
                 key={`${n.link}-${i}`}
@@ -429,10 +436,9 @@ export function CronacaInfortuniClient() {
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            setFontiAperte(aperto ? null : `${n.link}-${i}`);
+                            setPopupFonti(n);
                           }}
-                          aria-expanded={aperto}
-                          aria-controls={`fonti-${i}`}
+                          aria-haspopup="dialog"
                           style={{
                             padding: "2px 10px",
                             borderRadius: "var(--radius-md)",
@@ -443,42 +449,9 @@ export function CronacaInfortuniClient() {
                             cursor: "pointer",
                           }}
                         >
-                          {aperto ? "Nascondi altre fonti" : `Altre ${numFonti - 1} fonti sullo stesso evento`}
+                          Vedi le {numFonti} testate →
                         </button>
                       </div>
-                      {aperto && (
-                        <div id={`fonti-${i}`} style={{ marginTop: 8, display: "grid", gap: 4 }}>
-                          {n.fonti!.map((f, j) => (
-                            <a
-                              key={`${f.link}-${j}`}
-                              href={f.link}
-                              target="_blank"
-                              rel="noreferrer"
-                              style={{
-                                fontSize: "0.78rem",
-                                color: "var(--color-text-soft)",
-                                textDecoration: "none",
-                                display: "flex",
-                                gap: 6,
-                                alignItems: "center",
-                                padding: "4px 6px",
-                                borderRadius: "var(--radius-md)",
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = "var(--color-surface-1)";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = "transparent";
-                              }}
-                            >
-                              <span style={{ color: "var(--color-text-muted)" }}>↳</span>
-                              <span style={{ flex: 1 }}>{f.titolo}</span>
-                              <span style={{ color: "var(--color-text-muted)", whiteSpace: "nowrap" }}>{f.fonte}</span>
-                              <ExternalLink size={12} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
-                            </a>
-                          ))}
-                        </div>
-                      )}
                     </>
                   )}
                 </div>
@@ -518,6 +491,130 @@ export function CronacaInfortuniClient() {
           <a href="/casi-mortali" style={{ color: "var(--color-link)" }}>Casi mortali e statistiche INAIL</a>.
         </p>
       </section>
+
+      {/* Popup fonti: tutte le testate sullo stesso evento */}
+      {popupFonti && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Fonti su ${popupFonti.titolo}`}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.45)",
+            zIndex: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "var(--space-6)",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPopupFonti(null);
+          }}
+        >
+          <div
+            role="document"
+            style={{
+              background: "var(--color-surface-2)",
+              border: "1px solid var(--color-divider)",
+              borderRadius: "var(--radius-md)",
+              maxWidth: 560,
+              maxHeight: "80vh",
+              overflowY: "auto",
+              width: "100%",
+              padding: "var(--space-5)",
+              boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "var(--space-3)" }}>
+              <div style={{ minWidth: 0 }}>
+                <h3 style={{ fontSize: "0.95rem", fontWeight: 800, margin: 0 }}>{popupFonti.titolo}</h3>
+                <span style={{ display: "block", fontSize: "0.75rem", color: "var(--color-text-muted)", marginTop: 4 }}>
+                  {numFontiPerEvento(popupFonti)} testate raccontano questo evento · {formatDataCompleta(popupFonti.data)}
+                </span>
+              </div>
+              <button
+                onClick={() => setPopupFonti(null)}
+                aria-label="Chiudi popup"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--color-text-muted)",
+                  fontSize: "1.2rem",
+                  lineHeight: 1,
+                  cursor: "pointer",
+                  padding: "var(--space-1) var(--space-2)",
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <ul style={{ display: "grid", gap: "var(--space-2)", margin: "var(--space-4) 0 0", padding: 0, listStyle: "none" }}>
+              <li>
+                <a
+                  href={popupFonti.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    alignItems: "center",
+                    padding: "var(--space-2) var(--space-3)",
+                    borderRadius: "var(--radius-md)",
+                    background: "var(--color-surface-1)",
+                    textDecoration: "none",
+                    color: "var(--color-text)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "var(--color-raised)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "var(--color-surface-1)";
+                  }}
+                >
+                  <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--color-text-soft)", whiteSpace: "nowrap" }}>
+                    {popupFonti.fonte}
+                  </span>
+                  <span style={{ flex: 1, fontSize: "0.82rem", lineHeight: 1.3 }}>{popupFonti.titolo}</span>
+                  <ExternalLink size={14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+                </a>
+              </li>
+              {(popupFonti.fonti || []).map((f, j) => (
+                <li key={`${f.link}-${j}`}>
+                  <a
+                    href={f.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: "flex",
+                      gap: 8,
+                      alignItems: "center",
+                      padding: "var(--space-2) var(--space-3)",
+                      borderRadius: "var(--radius-md)",
+                      background: "var(--color-surface-1)",
+                      textDecoration: "none",
+                      color: "var(--color-text)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--color-raised)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "var(--color-surface-1)";
+                    }}
+                  >
+                    <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--color-text-soft)", whiteSpace: "nowrap" }}>
+                      {f.fonte}
+                    </span>
+                    <span style={{ flex: 1, fontSize: "0.82rem", lineHeight: 1.3 }}>{f.titolo}</span>
+                    <ExternalLink size={14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
