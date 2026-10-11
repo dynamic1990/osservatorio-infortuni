@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Filter, TrendingDown, TrendingUp } from "lucide-react";
 import newsRaw from "@/data/generated/news-infortuni.json";
-import { ItalyMap } from "@/components/charts/italy-map";
-import { REGIONI } from "@/lib/labels";
 
 interface FonteExtra {
   titolo: string;
@@ -46,11 +44,6 @@ interface NewsPayload {
   stats?: StatsPayload;
   notizie: Notizia[];
 }
-
-// Nome regione (ETL) -> codice INAIL (mappa SVG)
-const NOME_REGIONE_TO_CODE: Record<string, string> = Object.fromEntries(
-  Object.entries(REGIONI).map(([code, nome]) => [nome, code]),
-);
 
 function formatData(dataStr: string): string {
   try {
@@ -152,18 +145,7 @@ export function CronacaInfortuniClient() {
       });
   }, [dati]);
 
-  // Mappa regione -> conteggio eventi (per ItalyMap) e lista regioni presenti
-  const regioniEvento = useMemo(() => {
-    const counts: Record<string, number> = {};
-    for (const n of eventi) {
-      if (n.regione && NOME_REGIONE_TO_CODE[n.regione]) {
-        const code = NOME_REGIONE_TO_CODE[n.regione];
-        counts[code] = (counts[code] || 0) + 1;
-      }
-    }
-    return counts;
-  }, [eventi]);
-
+  // Lista regioni presenti (per il filtro a tendina)
   const regioniLista = useMemo(() => {
     const set = new Set<string>();
     for (const n of eventi) {
@@ -240,55 +222,6 @@ export function CronacaInfortuniClient() {
           {" "}
           Numeri da rassegna stampa automatica (soglia di rilevanza del filtro), non da banche dati ufficiali.
         </p>
-      </section>
-
-      {/* 2. Mappa regionale */}
-      <section className="card" aria-label="Mappa regionale della cronaca">
-        <div className="card-header">
-          <h2 className="card-title">Dove è successo</h2>
-          <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
-            {Object.keys(regioniEvento).length} regioni con almeno un evento negli ultimi 30 giorni
-            {regione !== "tutte" ? ` · filtro attivo: ${regione}` : " · clicca una regione per filtrare"}
-          </span>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--space-4)", alignItems: "start" }}>
-          <ItalyMap
-            regions={regioniEvento}
-            onSelect={(code) => {
-              const nome = Object.entries(NOME_REGIONE_TO_CODE).find(([, c]) => c === code)?.[0];
-              setRegione(nome ? (regione === nome ? "tutte" : nome) : "tutte");
-            }}
-            selected={regione !== "tutte" ? (NOME_REGIONE_TO_CODE[regione] ?? null) : null}
-            title="Eventi per regione"
-          />
-          <div style={{ display: "grid", gap: "var(--space-2)" }}>
-            {regioniLista.map((reg) => {
-              const code = NOME_REGIONE_TO_CODE[reg];
-              const count = code ? regioniEvento[code] || 0 : 0;
-              return (
-                <button
-                  key={reg}
-                  onClick={() => setRegione(regione === reg ? "tutte" : reg)}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "var(--space-2) var(--space-3)",
-                    background: regione === reg ? "var(--color-surface-2)" : "var(--color-raised)",
-                    border: `1px solid ${regione === reg ? "var(--color-accent)" : "var(--color-divider)"}`,
-                    borderRadius: 6,
-                    cursor: "pointer",
-                    textAlign: "left",
-                    fontSize: "0.88rem",
-                  }}
-                >
-                  <span>{reg}</span>
-                  <span style={{ fontWeight: 700, color: "var(--color-text-soft)" }}>{count}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </section>
 
       {/* 3. Timeline con filtri */}
@@ -368,8 +301,6 @@ export function CronacaInfortuniClient() {
         {/* Timeline */}
         <div style={{ display: "grid", gap: "var(--space-2)" }}>
           {visibili.map((n, i) => {
-            const localitaParts = [n.provincia, n.regione].filter(Boolean);
-            const localita = localitaParts.length ? localitaParts.join(" · ") : null;
             const data = new Date(n.data);
             const oggi = new Date();
             const giorniFa = Math.max(0, Math.round((oggi.getTime() - data.getTime()) / 86400_000));
@@ -410,10 +341,11 @@ export function CronacaInfortuniClient() {
                   >
                     {n.titolo}
                   </a>
-                  <span style={{ display: "block", fontSize: "0.75rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-                    {localita ? <strong style={{ color: "var(--color-text-soft)" }}>{localita}</strong> : null}
-                    {localita ? " · " : ""}
-                    {n.fonte} · {formatDataCompleta(n.data)}
+                  <span style={{ display: "block", fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+                    {n.provincia ? <strong style={{ color: "var(--color-text-soft)" }}>{n.provincia}</strong> : null}
+                    {n.provincia && n.regione ? " · " : ""}
+                    {n.regione || ""}
+                    <span style={{ color: "var(--color-text-muted)" }}> · {n.fonte} · {formatDataCompleta(n.data)}</span>
                   </span>
                   {numFonti > 1 && (
                     <>
