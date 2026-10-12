@@ -4,6 +4,9 @@ import { VigilanzaTrendWidget } from "@/components/charts/vigilanza-trend-widget
 import { VigilanzaViolazioniWidget } from "@/components/charts/vigilanza-violazioni-widget";
 import { VigilanzaPanoramicaWidget } from "@/components/charts/vigilanza-panoramica-widget";
 import { VigilanzaTipologieWidget } from "@/components/charts/vigilanza-tipologie-widget";
+import { VigilanzaCasisticheWidget } from "@/components/charts/vigilanza-casistiche-widget";
+import { VigilanzaSospensioniSettoreWidget } from "@/components/charts/vigilanza-sospensioni-settore-widget";
+import { VigilanzaViolazioniDettaglioWidget } from "@/components/charts/vigilanza-violazioni-dettaglio-widget";
 import { InfoModalVigilanza } from "@/components/ui/info-modal-vigilanza";
 
 export const revalidate = 86_400;
@@ -125,6 +128,42 @@ export default function VigilanzaPage() {
           </p>
         </div>
         <VigilanzaPanoramicaWidget />
+      </section>
+
+      {/* 6. Sospensioni per settore: serie completa e composizione */}
+      <section className="card" aria-label="Sospensioni per Settore">
+        <div className="card-header">
+          <h2 className="card-title">Sospensioni per settore: la serie completa</h2>
+          <p className="card-desc">
+            L&apos;evoluzione 2018-2025 dei provvedimenti di sospensione per macro-settore, con la composizione
+            tra lavoro nero e gravi violazioni in materia di salute e sicurezza (disponibile dal 2022).
+          </p>
+        </div>
+        <VigilanzaSospensioniSettoreWidget />
+      </section>
+
+      {/* 7. Casistiche SSL: perché si sospende */}
+      <section className="card" aria-label="Casistiche Sospensioni SSL">
+        <div className="card-header">
+          <h2 className="card-title">Perché si sospende: le casistiche delle gravi violazioni SSL</h2>
+          <p className="card-desc">
+            Le carenze che nel 2025 hanno fatto scattare la sospensione dell&apos;attività per gravi violazioni
+            in materia di sicurezza: mancanza di DVR, protezioni verso il vuoto, POS, formazione.
+          </p>
+        </div>
+        <VigilanzaCasisticheWidget />
+      </section>
+
+      {/* 8. Violazioni SSL per settore e ATECO */}
+      <section className="card" aria-label="Violazioni SSL per Settore e ATECO">
+        <div className="card-header">
+          <h2 className="card-title">Dove si viola di più la sicurezza</h2>
+          <p className="card-desc">
+            Le violazioni accertate in materia di salute e sicurezza per settore produttivo (2021-2025)
+            e per sezione ATECO (2021-2024), con la quota a rilevanza penale.
+          </p>
+        </div>
+        <VigilanzaViolazioniDettaglioWidget />
       </section>
     </div>
   );
