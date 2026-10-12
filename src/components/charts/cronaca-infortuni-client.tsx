@@ -19,6 +19,7 @@ interface Notizia {
   data: string;
   categoria: string;
   tipo?: string;
+  sintesi?: string;
   provincia?: string | null;
   regione?: string | null;
   workAccidentScore: number;
@@ -333,14 +334,36 @@ export function CronacaInfortuniClient() {
                   </div>
                 </div>
                 <div>
-                  <a
-                    href={n.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ fontSize: "0.9rem", lineHeight: 1.35, color: "inherit", textDecoration: "none" }}
-                  >
-                    {n.titolo}
-                  </a>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 2 }}>
+                    <a
+                      href={n.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ fontSize: "0.9rem", lineHeight: 1.35, color: "inherit", textDecoration: "none" }}
+                    >
+                      {n.titolo}
+                    </a>
+                    <span
+                      style={{
+                        fontSize: "0.62rem",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
+                        padding: "2px 7px",
+                        borderRadius: "var(--radius-sm)",
+                        background: n.categoria === "mortale" ? "var(--color-accent-soft)" : "var(--color-warning-soft)",
+                        border: `1px solid ${n.categoria === "mortale" ? "var(--color-accent)" : "var(--color-warning)"}`,
+                        color: n.categoria === "mortale" ? "var(--color-accent-strong)" : "var(--color-warning)",
+                      }}
+                    >
+                      {n.categoria === "mortale" ? "mortale" : "grave"}
+                    </span>
+                  </div>
+                  {n.sintesi && n.sintesi !== "Infortunio sul lavoro" && (
+                    <span style={{ display: "block", fontSize: "0.78rem", color: "var(--color-text-soft)", fontStyle: "italic", marginTop: 4 }}>
+                      {n.sintesi}
+                    </span>
+                  )}
                   <span style={{ display: "block", fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: 2 }}>
                     {n.provincia ? <strong style={{ color: "var(--color-text-soft)" }}>{n.provincia}</strong> : null}
                     {n.provincia && n.regione ? " · " : ""}

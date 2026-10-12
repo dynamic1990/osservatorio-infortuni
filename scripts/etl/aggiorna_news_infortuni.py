@@ -625,6 +625,93 @@ def semantic_dinamica(titolo: str) -> set[str]:
 
 DINAMICHE_RARE = {"fuoco", "elettrico", "annegamento"}
 
+# ---------------------------------------------------------------------------
+# Sintesi breve "cosa è successo" per la card della cronaca
+# ---------------------------------------------------------------------------
+# Regole deterministiche di estrazione: il titolo RSS è l'unica fonte, quindi
+# la sintesi resta prudente e basata su pattern riconoscibili. Quando non si
+# riesce a identificare una dinamica, si produce una descrizione generica
+# invece di inventare dettagli.
+
+DINAMICA_PATTERNS: list[tuple[str, tuple[str, ...], str]] = [
+    # (chiave, termini, frase)
+    ("caduta", ("caduto", "caduta", "cadde", "precipitato", "precipita", "volo", "crollo", "crollato", "crollata", "cedimento", "sprofondato"), "caduto dall'alto"),
+    ("schiacciamento", ("schiacciato", "schiacciata", "schiacciamento", "schiaccia", "muro", "muri", "sepolto", "sepolta", "sommerso", "carico caduto", "ribaltat", "colpito da un escavatore", "colpito da escavatore"), "schiacciato da un carico/macchinario"),
+    ("folgorazione", ("folgorato", "folgorata", "elettrocuzione", "scossa elettrica", "scossa", "elettrico", "elettrica"), "folgorato da corrente elettrica"),
+    ("fuoco", ("ustionato", "ustionata", "incendio", "esplosione", "esplode", "esplosa", "esploso", "vapore", "scoppio", "fiammata", "fuga di gas", "bruciato", "ustioni"), "colpito da fuoco/esplosione"),
+    ("annegamento", ("annegato", "annegata", "caduta in acqua", "caduto in acqua", "finisce in acqua", "canale", "vasca"), "annegato"),
+    ("investimento", ("investito", "investita", "travolto", "travolta"), "investito da un veicolo/mezzo"),
+    ("malore", ("malore", "colto da malore", "perde i sensi", "malore fatale"), "colto da malore"),
+    ("amputazione", ("amputazione", "amputato", "perso un arto", "perde un braccio", "perde una mano"), "amputazione di un arto"),
+    ("trauma", ("trauma cranico", "trauma", "lesioni", "ferito al braccio", "ferito alla mano", "frattur"), "trauma/lesione fisica"),
+]
+
+# I follow-up (arresti, processo, famiglia, sindacati) raccontano le
+# conseguenze, non la dinamica: il titolo può citare la frase di un terzo
+# ("Di' che ti hanno investito") che non descrive l'evento reale.
+FOLLOWUP_DINAMICA_TERMS = ("arrest", "processo", "procedimento", "giudizi", "condann", "assoluzion", "indagini", "famiglia", "famigliari", "cordoglio", "lutto", "funeral", "ricordo", "chi era", "sindacat", "commissione", "inchiesta")
+
+# Sostantivi/verbi che segnalano la vittima senza specificare la dinamica
+GENERIC_DEATH = ("morto", "morta", "morti", "muore", "muoiono", "deceduto", "deceduta", "perde la vita", "perdono la vita", "ucciso", "uccisa")
+
+
+def estrai_sintesi(titolo: str) -> str:
+    """Produce una breve descrizione dell'evento per la card.
+
+    Esempi reali:
+      'Caivano, Salvatore Calignano è morto dopo una caduta da un capannone'
+        -> 'Caduto dall'alto, vittima deceduta'
+      'Operaio folgorato a Milano' -> 'Folgorato da corrente elettrica'
+      'Infortunio sul lavoro a Rimini: operaio schiacciato da un muletto'
+        -> 'Schiacciato da un carico/macchinario'
+    Quando non si riconosce la dinamica:
+      'Infortunio sul lavoro a Treviso, operaio grave in ospedale'
+        -> 'Infortunio con conseguenze gravi'
+    """
+    t = titolo.lower()
+
+    # I follow-up descrivono conseguenze, non dinamica: sintesi generica.
+    # Se però il titolo descrive anche la dinamica dell'evento (es. "Esplosione
+    # in un'officina a Roma: morto un operaio, indagini in corso"), la dinamica
+    # vince: 'indagini' da solo non rende il titolo un follow-up.
+    has_dinamica_titolo = any(
+        any(k in t for k in termini) for _, termini, _ in DINAMICA_PATTERNS
+    )
+    # Discorso riportato tra virgolette ("…"): di solito è la citazione di un
+    # terzo (datore, sindacalista) e può contenere parole di dinamica che non
+    # descrivono l'evento reale ("Di' che ti hanno investito").
+    has_quoted = '"' in titolo or "“" in titolo or "”" in titolo
+    if any(k in t for k in FOLLOWUP_DINAMICA_TERMS) and (not has_dinamica_titolo or (has_quoted and "arrest" in t)):
+        if re.search(r"\b(?:mort|decedut|muore|perde la vita|uccis)", t):
+            return "Infortunio con vittima deceduta"
+        return "Infortunio sul lavoro"
+
+    dinamica = None
+    for chiave, termini, frase in DINAMICA_PATTERNS:
+        if any(k in t for k in termini):
+            dinamica = frase
+            break
+
+    esito = None
+    # 'mort' senza \b finale: matcha morto/morta/mortali ecc.
+    if re.search(r"\b(?:mort|decedut|muore|muoiono|perde la vita|perdono la vita|uccis)", t):
+        esito = "vittima deceduta"
+    elif re.search(r"\b(?:grav|prognosi|rianimazion|eliambulanza|intubat|amputazion|ospedale)", t):
+        esito = "conseguenze gravi"
+
+    if dinamica and esito:
+        # La dinamica 'Trauma/lesione fisica' include già la gravità: evitare
+        # la ripetizione 'Trauma/lesione fisica, conseguenze gravi'.
+        if dinamica == "trauma/lesione fisica" and esito == "conseguenze gravi":
+            return dinamica.capitalize()
+        return f"{dinamica.capitalize()}, {esito}"
+    if dinamica:
+        return dinamica.capitalize()
+    if esito:
+        return f"Infortunio con {esito}" if esito != "vittima deceduta" else "Infortunio con vittima deceduta"
+    return "Infortunio sul lavoro"
+
+
 # Grandi città ad alta densità di eventi: il solo comune condiviso non basta
 # ad accorpare (due fatti diversi nello stesso giorno a Roma o Napoli non
 # sono lo stesso evento). Per queste serve un aggancio forte (età, nome,
@@ -927,6 +1014,7 @@ def main() -> int:
         score, reasons = work_accident_score(n["titolo"], n["fonte"])
         n["workAccidentScore"] = score
         n["scoreReasons"] = reasons
+        n["sintesi"] = estrai_sintesi(n["titolo"])
         if score < MIN_WORK_ACCIDENT_SCORE:
             continue
         filtrate.append(n)

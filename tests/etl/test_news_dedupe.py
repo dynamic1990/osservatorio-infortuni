@@ -108,5 +108,64 @@ class TestDedupeEventi(unittest.TestCase):
         self.assertEqual(len(out), 2)
 
 
+class TestSintesi(unittest.TestCase):
+    """Sintesi breve 'cosa è successo' estratta dal titolo."""
+
+    def test_caduta_con_esito_mortale(self):
+        self.assertEqual(
+            etl.estrai_sintesi("Caivano, Salvatore Calignano è morto dopo una caduta da un capannone"),
+            "Caduto dall'alto, vittima deceduta",
+        )
+
+    def test_folgorazione_senza_esito(self):
+        self.assertEqual(
+            etl.estrai_sintesi("Operaio folgorato a Milano in cantiere"),
+            "Folgorato da corrente elettrica",
+        )
+
+    def test_schiacciamento_con_esito_mortale(self):
+        self.assertEqual(
+            etl.estrai_sintesi("L'escavatore si ribalta e lo travolge: muore schiacciato in azienda"),
+            "Schiacciato da un carico/macchinario, vittima deceduta",
+        )
+
+    def test_fuoco_con_esito_mortale(self):
+        self.assertEqual(
+            etl.estrai_sintesi("Esplosione in un'officina a Roma: morto un operaio, indagini in corso"),
+            "Colpito da fuoco/esplosione, vittima deceduta",
+        )
+
+    def test_investimento(self):
+        self.assertEqual(
+            etl.estrai_sintesi("Bracciante investito in bicicletta sulla strada per il lavoro"),
+            "Investito da un veicolo/mezzo",
+        )
+
+    def test_malore_con_esito_mortale(self):
+        self.assertEqual(
+            etl.estrai_sintesi("Operaio colto da malore in cantiere, muore in ospedale"),
+            "Colto da malore, vittima deceduta",
+        )
+
+    def test_followup_arresto_non_descrive_dinamica(self):
+        # Il titolo riporta la frase del datore, non la dinamica reale
+        self.assertEqual(
+            etl.estrai_sintesi("Morte Salvatore Calignano, datore di lavoro agli arresti: \"Di' che ti hanno investito\""),
+            "Infortunio con vittima deceduta",
+        )
+
+    def test_titolo_generico(self):
+        self.assertEqual(
+            etl.estrai_sintesi("Incidente sul lavoro a Treviso, operaio grave in ospedale"),
+            "Infortunio con conseguenze gravi",
+        )
+
+    def test_trauma_fisico(self):
+        self.assertEqual(
+            etl.estrai_sintesi("Infortunio sul lavoro a Castelfiorentino, grave trauma ad una mano"),
+            "Trauma/lesione fisica",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
