@@ -219,6 +219,28 @@ def main() -> int:
         })
     famiglie_out.sort(key=lambda x: x["riconosciute"] + x["rigettate"], reverse=True)
 
+    # --- Per patologia, distinto per anno (per i filtri) ---
+    patologie_per_anno: dict[str, list[dict]] = {}
+    ANNI_FILTRO = ("2021", "2022", "2023", "2024", "2025")
+    for anno in ANNI_FILTRO:
+        rows = []
+        for icd, c in pat_anno[anno].items():
+            if icd == "ND":
+                continue
+            defi = c.get("P", 0) + c.get("N", 0)
+            if defi < 100:  # soglia per anno: tassi stabili anche su finestra singola
+                continue
+            rows.append({
+                "codice": icd,
+                "nome": DESCRIZIONI_ICD.get(icd, icd),
+                "riconosciute": c.get("P", 0),
+                "rigettate": c.get("N", 0),
+                "inIstruttoria": patologie[icd].get("I", 0),
+                "tassoPerc": _tasso(c),
+            })
+        rows.sort(key=lambda x: x["tassoPerc"], reverse=True)  # da più riconosciute
+        patologie_per_anno[anno] = rows
+
     anagrafica: dict[str, dict] = {}
     for anno, c in sorted(per_anno.items()):
         if anno == "?":
@@ -284,6 +306,7 @@ def main() -> int:
         ),
         "lavoratoriCoinvolti": {"2025": 63136},  # dalla Relazione: lavoratori, non pratiche
         "perPatologia": per_patologia,
+        "patologiePerAnno": patologie_per_anno,
         "famiglie": famiglie_out,
         "nonDeterminati": {
             "definitiNonD": nd_esiti.get("N", 0) + nd_esiti.get("P", 0),

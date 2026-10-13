@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -16,6 +16,7 @@ import { exactNumber } from "@/lib/format";
 
 export function MalattieEsitiWidget() {
   const dati = useMemo(() => getEsitiMalattieData(), []);
+  const [annoFiltro, setAnnoFiltro] = useState<string>("2025");
 
   const anno2025 = dati["2025"];
   const istruttoriaPerc = dati.istruttoriaPerc2025;
@@ -29,6 +30,11 @@ export function MalattieEsitiWidget() {
     riconosciutePerc: a.riconosciutePerc,
     rigettatePerc: a.rigettatePerc,
   }));
+
+  // Patologie per l'anno selezionato (ordinate per tasso decrescente dall'ETL)
+  const patologieAnno = (dati.patologiePerAnno?.[annoFiltro] ?? dati.perPatologia)
+    .slice()
+    .sort((a, b) => b.tassoPerc - a.tassoPerc);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
@@ -56,7 +62,12 @@ export function MalattieEsitiWidget() {
             }}
           >
             <div className="metric-label">Riconosciute</div>
-            <div className="metric-value">{exactNumber(anno2025.riconosciute)}</div>
+            <div className="metric-value">
+              {exactNumber(anno2025.riconosciute)}{" "}
+              <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
+                ({anno2025.riconosciutePerc.toLocaleString("it-IT")}%)
+              </span>
+            </div>
             <div className="metric-sub">al {dati.dataRilevazione}</div>
           </div>
           <div
@@ -68,7 +79,12 @@ export function MalattieEsitiWidget() {
             }}
           >
             <div className="metric-label">Rigettate</div>
-            <div className="metric-value">{exactNumber(anno2025.rigettate)}</div>
+            <div className="metric-value">
+              {exactNumber(anno2025.rigettate)}{" "}
+              <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
+                ({anno2025.rigettatePerc.toLocaleString("it-IT")}%)
+              </span>
+            </div>
             <div className="metric-sub">definite negativamente</div>
           </div>
           <div
@@ -80,9 +96,14 @@ export function MalattieEsitiWidget() {
             }}
           >
             <div className="metric-label">In istruttoria</div>
-            <div className="metric-value">{exactNumber(anno2025.inIstruttoria)}</div>
+            <div className="metric-value">
+              {exactNumber(anno2025.inIstruttoria)}{" "}
+              <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
+                ({istruttoriaPerc != null ? istruttoriaPerc.toLocaleString("it-IT") : ""}%)
+              </span>
+            </div>
             <div className="metric-sub">
-              {istruttoriaPerc != null ? `il ${istruttoriaPerc.toLocaleString("it-IT")}% delle denunce ${anno2025.anno}` : ""}
+              delle denunce {anno2025.anno}, al {dati.dataRilevazione}
             </div>
           </div>
         </div>
@@ -96,7 +117,39 @@ export function MalattieEsitiWidget() {
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={52} />
             <Tooltip
-              formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]}
+              content={({ active, payload }) => {
+                if (!active || !payload || !payload.length || !payload[0].payload) return null;
+                const p = payload[0].payload as Record<string, number | string>;
+                const denunce = Number(p.riconosciute ?? 0) + Number(p.rigettate ?? 0) + Number(p.inIstruttoria ?? 0);
+                const def = Number(p.riconosciute ?? 0) + Number(p.rigettate ?? 0);
+                return (
+                  <div className="custom-chart-tooltip">
+                    <div className="tooltip-title">Anno {String(p.anno ?? "")}</div>
+                    <div className="tooltip-row">
+                      <span>Denunce:</span>
+                      <strong>{exactNumber(denunce)}</strong>
+                    </div>
+                    <div className="tooltip-row">
+                      <span>Riconosciute:</span>
+                      <strong style={{ color: "var(--color-success)" }}>
+                        {exactNumber(p.riconosciute)} ({def ? Math.round((Number(p.riconosciute) * 100) / def) : 0}% dei definiti)
+                      </strong>
+                    </div>
+                    <div className="tooltip-row">
+                      <span>Rigettate:</span>
+                      <strong style={{ color: "var(--color-accent)" }}>
+                        {exactNumber(p.rigettate)} ({def ? Math.round((Number(p.rigettate) * 100) / def) : 0}% dei definiti)
+                      </strong>
+                    </div>
+                    <div className="tooltip-row">
+                      <span>In istruttoria:</span>
+                      <strong style={{ color: "var(--color-warning)" }}>
+                        {exactNumber(p.inIstruttoria)} ({denunce ? Math.round((Number(p.inIstruttoria) * 100) / denunce) : 0}% delle denunce)
+                      </strong>
+                    </div>
+                  </div>
+                );
+              }}
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
             <Legend wrapperStyle={{ fontSize: "0.78rem" }} />
@@ -107,66 +160,59 @@ export function MalattieEsitiWidget() {
         </ResponsiveContainer>
       </div>
 
-      {/* Tasso di riconoscimento per anno */}
+      {/* Riconoscimento per patologia, con filtro per anno */}
       <div>
-        <div style={{ fontSize: "0.9rem", fontWeight: 700, marginBottom: "var(--space-2)" }}>
-          Riconoscimento sui casi definiti, per anno di denuncia
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap", marginBottom: "var(--space-2)" }}>
+          <div style={{ fontSize: "0.9rem", fontWeight: 700 }}>Riconoscimento per patologia</div>
+          <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+            {["2021", "2022", "2023", "2024", "2025"].map((a) => (
+              <button
+                key={a}
+                type="button"
+                className={`btn-pill ${annoFiltro === a ? "active" : ""}`}
+                onClick={() => setAnnoFiltro(a)}
+              >
+                {a}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", marginBottom: "var(--space-2)" }}>
+          Patologie ordinate per tasso di riconoscimento decrescente, anno {annoFiltro}, sui casi definiti
+          con patologia accertata.
         </div>
         <div style={{ display: "grid", gap: "var(--space-2)" }}>
-          {serie
-            .slice()
-            .reverse()
-            .map((a) => (
+          {patologieAnno.length === 0 && (
+            <div style={{ fontSize: "0.86rem", color: "var(--color-text-soft)" }}>Nessuna patologia con casi definiti sufficienti per questo anno.</div>
+          )}
+          {patologieAnno.slice(0, 15).map((p) => {
+            const def = p.riconosciute + p.rigettate;
+            const colore = p.tassoPerc >= 60 ? "var(--color-success)" : p.tassoPerc >= 45 ? "var(--color-warning)" : "var(--color-accent)";
+            return (
               <div
-                key={a.anno}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "baseline",
-                  borderBottom: "1px solid var(--color-border)",
-                  padding: "6px 2px",
-                  fontSize: "0.86rem",
-                  gap: "var(--space-3)",
-                }}
+                key={`${annoFiltro}-${p.codice}`}
+                style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 150px 200px", gap: "var(--space-2)", alignItems: "center", fontSize: "0.84rem", borderBottom: "1px solid var(--color-border)", padding: "5px 2px" }}
               >
-                <span style={{ fontWeight: 550 }}>Denunce {a.anno}</span>
-                <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
-                  {a.riconosciutePerc.toLocaleString("it-IT")}% riconosciute
-                </span>
-              </div>
-            ))}
-        </div>
-      </div>
-
-      {/* Riconoscimento per patologia specifica (casi definiti) */}
-      {dati.perPatologia.length > 0 && (
-        <div>
-          <div style={{ fontSize: "0.9rem", fontWeight: 700, marginBottom: "var(--space-2)" }}>
-            Riconoscimento per patologia (casi definiti)
-          </div>
-          <div style={{ display: "grid", gap: "var(--space-2)" }}>
-            {dati.perPatologia.slice(0, 12).map((p) => (
-              <div key={p.codice} style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 120px 90px", gap: "var(--space-2)", alignItems: "center", fontSize: "0.84rem", borderBottom: "1px solid var(--color-border)", padding: "5px 2px" }}>
                 <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 500 }}>
                   {p.nome} <span style={{ color: "var(--color-text-muted)", fontWeight: 400 }}>({p.codice})</span>
                 </span>
                 <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span style={{ width: `${Math.min(p.tassoPerc, 100)}%`, maxWidth: 100, height: 8, background: p.tassoPerc >= 55 ? "var(--color-success)" : p.tassoPerc >= 45 ? "var(--color-warning)" : "var(--color-accent)", borderRadius: 4, display: "inline-block" }} />
+                  <span style={{ width: `${Math.min(p.tassoPerc, 100)}%`, maxWidth: 100, height: 8, background: colore, borderRadius: 4, display: "inline-block" }} />
                   <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{p.tassoPerc.toLocaleString("it-IT")}%</span>
                 </span>
                 <span style={{ textAlign: "right", color: "var(--color-text-soft)", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
-                  {p.riconosciute.toLocaleString("it-IT")} / {(p.riconosciute + p.rigettate).toLocaleString("it-IT")}
+                  {p.riconosciute.toLocaleString("it-IT")} ricon. / {def.toLocaleString("it-IT")} definite
                 </span>
               </div>
-            ))}
-          </div>
-          <div style={{ fontSize: "0.8rem", color: "var(--color-text-soft)", marginTop: "var(--space-2)" }}>
-            {dati.notaPatologie} Inoltre {dati.nonDeterminati.rigettatiNonD.toLocaleString("it-IT")} pratiche
-            rigettate e {dati.nonDeterminati.riconosciutiNonD.toLocaleString("it-IT")} riconosciute hanno ICD non determinato
-            (escluse dal tasso per patologia).
-          </div>
+            );
+          })}
         </div>
-      )}
+        <div style={{ fontSize: "0.8rem", color: "var(--color-text-soft)", marginTop: "var(--space-2)" }}>
+          {dati.notaPatologie} Inoltre {dati.nonDeterminati.rigettatiNonD.toLocaleString("it-IT")} pratiche
+          rigettate e {dati.nonDeterminati.riconosciutiNonD.toLocaleString("it-IT")} riconosciute (tutti gli anni)
+          hanno ICD non determinato (escluse dal tasso per patologia).
+        </div>
+      </div>
 
       {/* Nota metodologica */}
       <div style={{ background: "var(--color-surface)", borderRadius: "var(--radius-md)", padding: "var(--space-3) var(--space-4)", fontSize: "0.84rem", color: "var(--color-text-soft)" }}>
@@ -182,9 +228,7 @@ export function MalattieEsitiWidget() {
 
       <p className="source-note">
         Fonte: INAIL Open Data, DatiSemestraliMalattieProfessionaliDataProt, rilevazione{" "}
-        {dati.dataRilevazione}. Elaborazione Osservatorio: {exactNumber(serie.reduce((s, a) => s + a.riconosciute, 0))}{" "}
-        pratiche riconosciute, {exactNumber(serie.reduce((s, a) => s + a.rigettate, 0))} rigettate e{" "}
-        {exactNumber(serie.reduce((s, a) => s + a.inIstruttoria, 0))} in istruttoria nella serie 2021-2025.
+        {dati.dataRilevazione}. Elaborazione Osservatorio.
       </p>
     </div>
   );

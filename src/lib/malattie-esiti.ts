@@ -50,6 +50,7 @@ export interface DatasetEsitiMalattie {
   istruttoriaPerc2025: number | null;
   lavoratoriCoinvolti: { "2025": number };
   perPatologia: PatologiaEsito[];
+  patologiePerAnno: Record<string, PatologiaEsito[]>;
   famiglie: FamigliaEsito[];
   nonDeterminati: {
     definitiNonD: number;
