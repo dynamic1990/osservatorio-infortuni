@@ -213,6 +213,28 @@ h3 {
   gap: 12px;
 }
 
+/* Tooltip contenuto: non esce dallo schermo, specialmente su mobile */
+.custom-chart-tooltip {
+  max-width: min(92vw, 340px);
+  box-sizing: border-box;
+}
+
+.custom-chart-tooltip .tooltip-row {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 560px) {
+  .recharts-wrapper,
+  .recharts-surface {
+    max-width: 100%;
+    overflow: visible;
+  }
+  .custom-chart-tooltip {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+}
+
 /* Responsive grid helpers */
 .grid-kpi {
   display: grid;
@@ -326,4 +348,8 @@ h3 {
     flex-basis: 100%;
   }
   .pat-row .pat-delta { order:  2; }
+  .pat-row .pat-bar {
+    order:  4;
+    width: 100%;
+  }
 }

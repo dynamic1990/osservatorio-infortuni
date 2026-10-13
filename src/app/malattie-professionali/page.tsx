@@ -121,7 +121,7 @@ export default function MalattieProfessionaliPage() {
       </section>
 
       {/* Esiti delle denunce */}
-      <section className="card" aria-label="Esiti delle denunce malattie professionali">
+      <section className="card" aria-label="Esiti delle denunce malattie professionali" style={{ overflow: "hidden" }}>
         <div className="card-header">
           <h2 className="card-title">Quante denunce vengono riconosciute?</h2>
           <p className="card-desc">

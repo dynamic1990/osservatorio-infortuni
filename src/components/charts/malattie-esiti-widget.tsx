@@ -47,10 +47,11 @@ export function MalattieEsitiWidget() {
               borderRadius: "var(--radius-md)",
               padding: "var(--space-4)",
               borderLeft: "3px solid var(--color-link)",
+              minWidth: 0,
             }}
           >
             <div className="metric-label">Denunce {anno2025.anno}</div>
-            <div className="metric-value">{exactNumber(anno2025.denunce)}</div>
+            <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>{exactNumber(anno2025.denunce)}</div>
             <div className="metric-sub">protocollate nell&apos;anno</div>
           </div>
           <div
@@ -59,10 +60,11 @@ export function MalattieEsitiWidget() {
               borderRadius: "var(--radius-md)",
               padding: "var(--space-4)",
               borderLeft: "3px solid var(--color-success)",
+              minWidth: 0,
             }}
           >
             <div className="metric-label">Riconosciute</div>
-            <div className="metric-value">
+            <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.riconosciute)}{" "}
               <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
                 ({anno2025.riconosciutePerc.toLocaleString("it-IT")}%)
@@ -76,10 +78,11 @@ export function MalattieEsitiWidget() {
               borderRadius: "var(--radius-md)",
               padding: "var(--space-4)",
               borderLeft: "3px solid var(--color-accent)",
+              minWidth: 0,
             }}
           >
             <div className="metric-label">Rigettate</div>
-            <div className="metric-value">
+            <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.rigettate)}{" "}
               <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
                 ({anno2025.rigettatePerc.toLocaleString("it-IT")}%)
@@ -93,10 +96,11 @@ export function MalattieEsitiWidget() {
               borderRadius: "var(--radius-md)",
               padding: "var(--space-4)",
               borderLeft: "3px solid var(--color-warning)",
+              minWidth: 0,
             }}
           >
             <div className="metric-label">In istruttoria</div>
-            <div className="metric-value">
+            <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.inIstruttoria)}{" "}
               <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
                 ({istruttoriaPerc != null ? istruttoriaPerc.toLocaleString("it-IT") : ""}%)
@@ -110,7 +114,7 @@ export function MalattieEsitiWidget() {
       )}
 
       {/* Serie storica esiti per anno di protocollo */}
-      <div style={{ width: "100%", height: 280 }}>
+      <div style={{ width: "100%", height: 280, minWidth: 0, overflow: "hidden" }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={serie} margin={{ top: 8, right: 8, bottom: 8, left: 4 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
@@ -191,18 +195,24 @@ export function MalattieEsitiWidget() {
             return (
               <div
                 key={`${annoFiltro}-${p.codice}`}
-                style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 150px 200px", gap: "var(--space-2)", alignItems: "center", fontSize: "0.84rem", borderBottom: "1px solid var(--color-border)", padding: "5px 2px" }}
+                className="pat-row"
+                style={{ padding: "7px 2px", borderBottom: "1px solid var(--color-border)", flexWrap: "wrap" }}
               >
-                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 500 }}>
-                  {p.nome} <span style={{ color: "var(--color-text-muted)", fontWeight: 400 }}>({p.codice})</span>
+                <span className="pat-codice" style={{ minWidth: 44, height: 24, display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: "var(--radius-sm)", background: colore, color: "var(--color-raised)", fontWeight: 750, fontSize: "0.62rem", padding: "0 6px", flexShrink: 0 }}>
+                  {p.codice.slice(0, 6)}
                 </span>
-                <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span style={{ width: `${Math.min(p.tassoPerc, 100)}%`, maxWidth: 100, height: 8, background: colore, borderRadius: 4, display: "inline-block" }} />
-                  <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{p.tassoPerc.toLocaleString("it-IT")}%</span>
+                <span className="pat-main" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <span className="pat-nome">
+                    {p.nome}
+                  </span>
+                  <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.78rem", color: "var(--color-text-soft)" }}>
+                    {p.riconosciute.toLocaleString("it-IT")} riconosciute / {def.toLocaleString("it-IT")} definite
+                  </span>
                 </span>
-                <span style={{ textAlign: "right", color: "var(--color-text-soft)", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
-                  {p.riconosciute.toLocaleString("it-IT")} ricon. / {def.toLocaleString("it-IT")} definite
+                <span className="pat-valore" style={{ fontWeight: 750, fontVariantNumeric: "tabular-nums", fontSize: "0.86rem", whiteSpace: "nowrap", flexShrink: 0 }}>
+                  {p.tassoPerc.toLocaleString("it-IT")}%
                 </span>
+                <span className="pat-bar" style={{ display: "block", height: 5, borderRadius: 3, marginTop: 2, background: `linear-gradient(to right, ${colore} ${Math.min(p.tassoPerc, 100)}%, rgba(0,0,0,0.07) ${Math.min(p.tassoPerc, 100)}%)` }} />
               </div>
             );
           })}
