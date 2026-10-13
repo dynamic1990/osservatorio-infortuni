@@ -86,7 +86,32 @@ export function VigilanzaCasisticheWidget() {
             <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
             <YAxis type="category" dataKey="nome" width={236} tick={{ fontSize: 11 }} />
             <Tooltip
-              formatter={(val) => [exactNumber(Number(val ?? 0)), "Motivazioni"]}
+              content={({ active, payload }) => {
+                if (!active || !payload || !payload.length) return null;
+                const row = payload[0].payload as Record<string, unknown>;
+                const casi = Number(row.casi ?? 0);
+                return (
+                  <div className="custom-chart-tooltip">
+                    <div className="tooltip-title">{String(row.nome ?? "")} (2025)</div>
+                    <div className="tooltip-row">
+                      <span>Sospensioni con questa carenza:</span>
+                      <strong>
+                        {exactNumber(casi)}{" "}
+                        <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>
+                          ({totale > 0 ? Math.round((casi * 100) / totale) : 0}%)
+                        </span>
+                      </strong>
+                    </div>
+                    <div
+                      className="tooltip-row"
+                      style={{ marginTop: 4, borderTop: "1px solid var(--color-divider)", paddingTop: 4 }}
+                    >
+                      <span>Totale motivazioni (2025):</span>
+                      <strong>{exactNumber(totale)}</strong>
+                    </div>
+                  </div>
+                );
+              }}
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
             <Bar dataKey="casi" name="Motivazioni" fill="#057dbc" radius={[0, 3, 3, 0]} maxBarSize={22} isAnimationActive={false}>

@@ -37,16 +37,28 @@ export function VigilanzaViolazioniDettaglioWidget() {
     if (vista === "settori") {
       return SETTORI_ORDINE.map((s) => {
         const r = dati.irregolaritaSettori.find((x) => x.anno === anno && x.settore === s);
-        return { nome: s, violazioni: r?.violazioniSicurezza ?? 0, penali: r?.violazioniPenali ?? 0 };
+        const viol = r?.violazioniSicurezza ?? 0;
+        const pen = r?.violazioniPenali ?? 0;
+        return {
+          nome: s,
+          violazioni: viol,
+          penali: pen,
+          nonPenali: viol - pen >= 0 ? viol - pen : 0,
+        };
       });
     }
     const righe = dati.irregolaritaAteco
       .filter((r) => r.anno === anno && r.sezione)
-      .map((r) => ({
-        nome: `${r.sezione} — ${(r.descrizione ?? "").split(";")[0].slice(0, 32)}`,
-        violazioni: r.violazioniSicurezza ?? 0,
-        penali: r.violazioniPenali ?? 0,
-      }))
+      .map((r) => {
+        const viol = r.violazioniSicurezza ?? 0;
+        const pen = r.violazioniPenali ?? 0;
+        return {
+          nome: `${r.sezione} — ${(r.descrizione ?? "").split(";")[0].slice(0, 32)}`,
+          violazioni: viol,
+          penali: pen,
+          nonPenali: viol - pen >= 0 ? viol - pen : 0,
+        };
+      })
       .sort((a, b) => b.violazioni - a.violazioni);
     return righe.slice(0, 12);
   }, [dati, vista, anno]);
@@ -88,13 +100,49 @@ export function VigilanzaViolazioniDettaglioWidget() {
             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="nome" tick={{ fontSize: 11 }} interval={0} angle={vista === "settori" ? 0 : -18} textAnchor={vista === "settori" ? "middle" : "end"} height={vista === "settori" ? 40 : 70} />
             <YAxis tick={{ fontSize: 11 }} width={52} />
-            <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), name === "violazioni" ? "Violazioni SSL" : "di cui penali"]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-            <Bar dataKey="violazioni" name="Violazioni SSL" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false}>
+            <Tooltip
+              content={({ active, payload }) => {
+                if (!active || !payload || !payload.length) return null;
+                const row = payload[0].payload as Record<string, unknown>;
+                const viol = Number(row.violazioni ?? 0);
+                const pen = Number(row.penali ?? 0);
+                return (
+                  <div className="custom-chart-tooltip">
+                    <div className="tooltip-title">{String(row.nome ?? "")} ({anno})</div>
+                    <div className="tooltip-row">
+                      <span>Violazioni SSL:</span>
+                      <strong>{exactNumber(viol)}</strong>
+                    </div>
+                    <div className="tooltip-row">
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                        <i aria-hidden="true" style={{ width: 8, height: 8, display: "inline-block", background: "#f36458", borderRadius: 2 }} />
+                        di cui con rilevanza penale:
+                      </span>
+                      <strong>
+                        {exactNumber(pen)}{" "}
+                        <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>
+                          ({viol > 0 ? Math.round((pen * 100) / viol) : 0}%)
+                        </span>
+                      </strong>
+                    </div>
+                    {viol - pen > 0 ? (
+                      <div className="tooltip-row">
+                        <span>Violazioni non penali:</span>
+                        <strong>{exactNumber(viol - pen)}</strong>
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              }}
+              cursor={{ fill: "rgba(0,0,0,0.04)" }}
+            />
+            {/* pila: in basso il "di cui" con rilevanza penale (accento), sopra il resto */}
+            <Bar dataKey="penali" name="di cui penali" stackId="v" fill="#f36458" radius={[0, 0, 0, 0]} maxBarSize={44} isAnimationActive={false} />
+            <Bar dataKey="nonPenali" name="Violazioni senza rilevanza penale" stackId="v" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false}>
               {vista === "settori" && (
                 <LabelList dataKey="violazioni" position="top" formatter={(v: unknown) => exactNumber(Number(v ?? 0))} style={{ fontSize: 10, fill: "#757575" }} />
               )}
             </Bar>
-            <Bar dataKey="penali" name="di cui penali" fill="#f36458" radius={[3, 3, 0, 0]} maxBarSize={20} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -111,7 +159,7 @@ export function VigilanzaViolazioniDettaglioWidget() {
       <p className="source-note" style={{ margin: 0 }}>
         Fonte: INL, Monitoraggio attività di vigilanza, Irregolarità accertate per settore produttivo (2021-2025)
         e per sezione ATECO (2021-2024). Le violazioni in materia di salute e sicurezza si riferiscono al
-        D.Lgs. 81/2008; la serie "penali" è la quota con rilevanza penale.
+        D.Lgs. 81/2008; la serie &quot;penali&quot; è la quota con rilevanza penale.
       </p>
     </div>
   );

@@ -56,6 +56,14 @@ export function RegioniIncidenzaSection() {
     return map;
   }, [annoData]);
 
+  // Totali nazionali per le quote nel tooltip (dall'anno selezionato)
+  const totMortaliNazionali = useMemo(() => {
+    const regs = annoData.regioni ?? [];
+    let tot = 0;
+    for (const r of regs) tot += Number(r.mortali ?? 0);
+    return tot;
+  }, [annoData]);
+
   // Calcolo valori min/max per la scala cromatica
   const { minVal, maxVal, mediaNazionale } = useMemo(() => {
     let min = Infinity;
@@ -103,7 +111,7 @@ export function RegioniIncidenzaSection() {
 
   // Dati ordinati per il barchart con eventuale dettaglio Province Autonome Bolzano/Trento
   const sortedChartData = useMemo(() => {
-    let items: Array<{
+    const items: Array<{
       code: string;
       name: string;
       isProvincia?: boolean;
@@ -555,9 +563,15 @@ export function RegioniIncidenzaSection() {
                     data={sortedChartData}
                     layout="vertical"
                     margin={{ top: 8, right: 24, bottom: 4, left: 20 }}
-                    onClick={(state: any) => {
-                      if (state && state.activePayload && state.activePayload.length) {
-                        const code = state.activePayload[0].payload.code;
+                    onClick={(nextState) => {
+                      const activePayload = (
+                        nextState as {
+                          activePayload?: ReadonlyArray<{ payload?: { code?: string } | null }>;
+                        } | null | undefined
+                      )?.activePayload;
+                      if (activePayload && activePayload.length) {
+                        const code = activePayload[0]?.payload?.code;
+                        if (code === undefined || code === null) return;
                         if (code === "021" || code === "022") {
                           setSelectedReg("04");
                         } else {
@@ -579,6 +593,8 @@ export function RegioniIncidenzaSection() {
                       content={({ active, payload }) => {
                         if (!active || !payload || !payload.length) return null;
                         const p = payload[0].payload;
+                        const totaleNazionale = Number(annoData.totale ?? 0);
+                        const totaleMortali = totMortaliNazionali;
                         return (
                           <div className="custom-chart-tooltip">
                             <div className="tooltip-title">{p.name} ({anno})</div>
@@ -596,11 +612,25 @@ export function RegioniIncidenzaSection() {
                             </div>
                             <div className="tooltip-row">
                               <span>Casi totali denunciati:</span>
-                              <strong>{exactNumber(p.totale)}</strong>
+                              <strong>
+                                {exactNumber(p.totale)}
+                                {totaleNazionale > 0 ? (
+                                  <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>
+                                    {" "}({Math.round((Number(p.totale ?? 0) * 100) / totaleNazionale)}%)
+                                  </span>
+                                ) : null}
+                              </strong>
                             </div>
                             <div className="tooltip-row">
                               <span>Infortuni mortali:</span>
-                              <strong>{exactNumber(p.mortali)}</strong>
+                              <strong>
+                                {exactNumber(p.mortali)}
+                                {totaleMortali > 0 ? (
+                                  <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>
+                                    {" "}({Math.round((Number(p.mortali ?? 0) * 100) / totaleMortali)}%)
+                                  </span>
+                                ) : null}
+                              </strong>
                             </div>
                             <div className="tooltip-row">
                               <span>Occupati di riferimento:</span>

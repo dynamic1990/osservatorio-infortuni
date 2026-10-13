@@ -16,6 +16,7 @@ import {
 import { getMalattieProfessionaliData } from "@/lib/malattie-professionali";
 import { exactNumber } from "@/lib/format";
 import { QuotaGenere } from "@/components/charts/quota-genere";
+import { ChartTooltip } from "./chart-tooltip";
 
 type Vista = "totale" | "silicosi" | "genere";
 type AnnoSel = string;
@@ -90,7 +91,17 @@ export function MalattieDecessiWidget() {
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
-              <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
+              <Tooltip
+                content={({ active, payload, label }) => (
+                  <ChartTooltip
+                    active={active}
+                    payload={payload}
+                    label={label}
+                    labelFormatter={(l) => `Anno ${l}`}
+                  />
+                )}
+                cursor={{ fill: "rgba(0,0,0,0.04)" }}
+              />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
               <Bar dataKey="maschi" name="Maschi" stackId="g" fill="#057dbc" isAnimationActive={false} />
               <Bar dataKey="femmine" name="Femmine" stackId="g" fill="#f36458" isAnimationActive={false} />
@@ -102,7 +113,18 @@ export function MalattieDecessiWidget() {
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
-              <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
+              <Tooltip
+                content={({ active, payload, label }) => (
+                  <ChartTooltip
+                    active={active}
+                    payload={payload}
+                    label={label}
+                    labelFormatter={(l) => `Anno ${l}`}
+                    totalKey={vista === "totale" ? "casi" : undefined}
+                  />
+                )}
+                cursor={{ fill: "rgba(0,0,0,0.04)" }}
+              />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
               {vista === "totale" ? (
                 <>
@@ -136,7 +158,7 @@ export function MalattieDecessiWidget() {
       <p className="source-note">
         Fonte: INAIL Open Data, dataset <em>DatiSemestraliMalattieProfessionaliDataDec</em> (decessi per malattia
         professionale riconosciuta, esiti di casi protocollati). Serie per anno di morte nel quinquennio 2021-2025.
-        La vista "Amianto" isola i decessi da silicosi e asbestosi, malattie che emergono a distanza di anni
+        La vista &quot;Amianto&quot; isola i decessi da silicosi e asbestosi, malattie che emergono a distanza di anni
         dall&apos;esposizione. Ranking regionale e dato di genere si riferiscono all&apos;anno selezionato ({annoSel}),
         per seguire l&apos;evoluzione senza appiattirla sull&apos;aggregato quinquennale.
       </p>

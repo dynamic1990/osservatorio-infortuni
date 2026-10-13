@@ -181,6 +181,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
               boxShadow: "-16px 0 36px rgba(0,0,0,0.14)",
               display: "flex",
               flexDirection: "column",
+              overflow: "hidden",
             }}
           >
             <div
@@ -205,7 +206,18 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 <X aria-hidden="true" size={20} strokeWidth={1.8} />
               </button>
             </div>
-            <div style={{ display: "grid", gap: "var(--space-4)", padding: "var(--space-4) var(--space-3)" }}>
+            <div
+              style={{
+                flex: 1,
+                minHeight: 0,
+                overflowY: "auto",
+                overscrollBehavior: "contain",
+                WebkitOverflowScrolling: "touch",
+                display: "grid",
+                gap: "var(--space-4)",
+                padding: "var(--space-4) var(--space-3)",
+              }}
+            >
               {["Esplora", "Strumenti", "Trasparenza"].map((group) => (
                 <div key={group}>
                   <div style={{ color: "var(--color-text-muted)", fontSize: "0.68rem", fontWeight: 750, letterSpacing: "0.1em", textTransform: "uppercase", padding: "0 14px 6px" }}>{group}</div>

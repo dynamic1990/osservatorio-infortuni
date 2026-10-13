@@ -37,6 +37,11 @@ export function VigilanzaTrendWidget() {
       controlli: s.controlliAvviati,
       sospensioni: s.sospensioni,
       sospensioniSicurezza: s.sospensioniSicurezza,
+      // resto = sospensioni non per gravi violazioni SSL (per la pila)
+      sospensioniResto:
+        s.sospensioni - (s.sospensioniSicurezza ?? 0) >= 0
+          ? s.sospensioni - (s.sospensioniSicurezza ?? 0)
+          : 0,
       tassoIrregolarita: s.tassoIrregolarita,
     }));
   }, [dati]);
@@ -70,20 +75,58 @@ export function VigilanzaTrendWidget() {
             <YAxis yAxisId="bar" tick={{ fontSize: 11 }} width={54} tickFormatter={formatEtichetta} />
             <YAxis yAxisId="line" orientation="right" domain={[0, 100]} tick={{ fontSize: 11 }} width={42} tickFormatter={(v) => `${v}%`} />
             <Tooltip
-              formatter={(val, name) => {
-                const v = Number(val ?? 0);
-                if (name === "Tasso di irregolarità") return [`${v.toLocaleString("it-IT", { maximumFractionDigits: 1 })}%`, String(name)];
-                return [exactNumber(v), String(name)];
+              content={({ active, payload, label }) => {
+                if (!active || !payload || !payload.length) return null;
+                const row = payload[0].payload as Record<string, unknown>;
+                const v = Number(row[isSospensioni ? "sospensioni" : "controlli"] ?? 0);
+                const tasso = row.tassoIrregolarita;
+                return (
+                  <div className="custom-chart-tooltip">
+                    <div className="tooltip-title">Anno {label}</div>
+                    {isSospensioni ? (
+                      <>
+                        <div className="tooltip-row">
+                          <span>Sospensioni totali:</span>
+                          <strong>{exactNumber(v)}</strong>
+                        </div>
+                        <div className="tooltip-row">
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                            <i aria-hidden="true" style={{ width: 8, height: 8, display: "inline-block", background: "#f36458", borderRadius: 2 }} />
+                            di cui gravi violazioni SSL:
+                          </span>
+                          <strong>
+                            {exactNumber(Number(row.sospensioniSicurezza ?? 0))}{" "}
+                            <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>
+                              ({v > 0 ? Math.round((Number(row.sospensioniSicurezza ?? 0) * 100) / v) : 0}%)
+                            </span>
+                          </strong>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="tooltip-row">
+                          <span>Controlli avviati:</span>
+                          <strong>{exactNumber(v)}</strong>
+                        </div>
+                        <div className="tooltip-row">
+                          <span>Tasso di irregolarità:</span>
+                          <strong>{String(tasso ?? "")}%</strong>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
               }}
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {isSospensioni ? (
               <>
-                <Bar yAxisId="bar" dataKey="sospensioni" name="Sospensioni totali" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
+                {/* pila: in basso il "di cui" in evidenza, sopra il resto (neutro) */}
+                <Bar yAxisId="bar" dataKey="sospensioniSicurezza" name="di cui gravi violazioni SSL" stackId="sosp" fill="#f36458" radius={[0, 0, 0, 0]} maxBarSize={46} isAnimationActive={false} />
+                <Bar yAxisId="bar" dataKey="sospensioniResto" name="Altre sospensioni" stackId="sosp" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
                   <LabelList dataKey="sospensioni" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#757575" }} />
                 </Bar>
-                <Bar yAxisId="bar" dataKey="sospensioniSicurezza" name="di cui per gravi violazioni sicurezza" fill="#f36458" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false} />
               </>
             ) : (
               <>

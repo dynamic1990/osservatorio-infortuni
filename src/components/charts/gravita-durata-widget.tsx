@@ -16,6 +16,7 @@ import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { GRAVITA_LABEL, DURATA_LABEL, labelOf } from "@/lib/approfondimenti";
 import { PALETTE } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "./filtro-modalita";
+import { ChartTooltip } from "./chart-tooltip";
 
 type Dim = "gravita" | "durata";
 
@@ -90,7 +91,17 @@ export function GravitaDurataWidget() {
             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 12 }} />
             <YAxis tick={{ fontSize: 11 }} width={64} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : v)} />
-            <Tooltip formatter={(val, name) => [Number(val ?? 0).toLocaleString("it-IT"), String(name)]} />
+            <Tooltip
+              content={({ active, payload, label }) => (
+                <ChartTooltip
+                  active={active}
+                  payload={payload}
+                  label={label}
+                  labelFormatter={(l) => `Anno ${l}`}
+                  excludeKeys={["totale"]}
+                />
+              )}
+            />
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {ordine.map((k, i) => (
               <Bar

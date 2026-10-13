@@ -63,6 +63,9 @@ export function InformoTrendWidget() {
                 const p = payload[0].payload;
                 const copertura =
                   p.totale > 0 ? Math.round((p.casi / p.totale) * 1000) / 10 : 0;
+                const casiPct = p.totale > 0 ? Math.round((p.casi / p.totale) * 1000) / 10 : 0;
+                const nonCopertePct =
+                  p.totale > 0 ? Math.round((p.nonCoperti / p.totale) * 1000) / 10 : 0;
                 return (
                   <div className="custom-chart-tooltip">
                     <div className="tooltip-title">Anno {label}</div>
@@ -71,8 +74,21 @@ export function InformoTrendWidget() {
                       <strong>{p.totale}</strong>
                     </div>
                     <div className="tooltip-row">
-                      <span>Casi analizzati Infor.MO:</span>
-                      <strong>{p.casi}</strong>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                        <i aria-hidden="true" style={{ width: 8, height: 8, display: "inline-block", background: "#f36458", borderRadius: 2 }} />
+                        Casi analizzati Infor.MO:
+                      </span>
+                      <strong>
+                        {p.casi}{" "}
+                        <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>({casiPct}%)</span>
+                      </strong>
+                    </div>
+                    <div className="tooltip-row">
+                      <span>Non analizzati (senza scheda):</span>
+                      <strong>
+                        {p.nonCoperti}{" "}
+                        <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>({nonCopertePct}%)</span>
+                      </strong>
                     </div>
                     <div className="tooltip-row">
                       <span>Copertura dell&apos;archivio:</span>
