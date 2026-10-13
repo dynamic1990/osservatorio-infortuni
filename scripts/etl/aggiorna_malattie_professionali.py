@@ -2,9 +2,10 @@
 """
 Aggiorna i CSV raw delle malattie professionali da dati.inail.it.
 
-Scarica per le 20 regioni i due file ufficiali INAIL Open Data:
+Scarica per le 20 regioni i tre file ufficiali INAIL Open Data:
 - DatiMensiliMalattieProfessionaliDataProt_<Regione>.csv  (denunce, cadenza mensile)
 - DatiSemestraliMalattieProfessionaliDataDec_<Regione>.csv (decessi, cadenza semestrale)
+- DatiSemestraliMalattieProfessionaliDataProt_<Regione>.csv (esiti per pratica, cadenza semestrale)
 
 Gli URL seguono il pattern pubblico del portale (niente API CKAN, che non esiste più:
 dati.inail.it/opendata/downloads/...). Verificato il 10/10/2026: pattern attivo su
@@ -13,6 +14,7 @@ tutte le regioni, CSV con dati fino ad agosto 2026.
 Output:
 - data/raw/malattie-professionali/mensile_<Regione>.csv
 - data/raw/malattie-professionali/decessi_<Regione>.csv
+- data/raw/malattie-professionali/semestrale_prot_<Regione>.csv
 
 I file vengono sovrascritti SOLO se il contenuto cambia (confronto sha256), così
 i timestamp dei raw riflettono l'ultimo aggiornamento reale del dato.
@@ -20,6 +22,7 @@ i timestamp dei raw riflettono l'ultimo aggiornamento reale del dato.
 Uso:
   python3 scripts/etl/aggiorna_malattie_professionali.py [--etl]
     --etl  esegue anche l'ETL per rigenerare src/data/generated/malattie-professionali.json
+           e src/data/generated/malattie-esiti.json (esiti semestrali)
 """
 
 import argparse
@@ -38,6 +41,7 @@ BASE = "https://dati.inail.it/opendata/downloads"
 PATTERNS = {
     "mensile": "datimensilimalattieprofessionali/csv/DatiMensiliMalattieProfessionaliDataProt{reg}.csv",
     "decessi": "datisemestralimalattieprofessionali/csv/DatiSemestraliMalattieProfessionaliDataDec{reg}.csv",
+    "esiti": "datisemestralimalattieprofessionali/csv/DatiSemestraliMalattieProfessionaliDataProt{reg}.csv",
 }
 
 REGIONI = [
@@ -94,7 +98,7 @@ def main() -> int:
     print(f"Aggiornamento fonti malattie professionali | {time.strftime('%Y-%m-%d %H:%M')}")
     print(f"Output: {RAW_DIR}\n")
 
-    totali = {"mensile": 0, "decessi": 0}
+    totali = {"mensile": 0, "decessi": 0, "esiti": 0}
     errori = []
 
     for reg in REGIONI:
@@ -110,7 +114,7 @@ def main() -> int:
             if stato.startswith("ERRORE"):
                 errori.append((reg, kind, stato))
 
-    print(f"\nFile aggiornati: mensili={totali['mensile']}, decessi={totali['decessi']}")
+    print(f"\nFile aggiornati: mensili={totali['mensile']}, decessi={totali['decessi']}, esiti={totali['esiti']}")
     if errori:
         print("Errori:")
         for reg, kind, stato in errori:
@@ -120,10 +124,10 @@ def main() -> int:
     if args.etl:
         print("\nEseguo ETL...")
         import subprocess
-        script = ROOT / "scripts" / "etl" / "malattie_professionali_etl.py"
-        r = subprocess.run([sys.executable, str(script)], cwd=ROOT)
-        return r.returncode
-
+        for script in ("malattie_professionali_etl.py", "estrai_esiti_malattie.py"):
+            r = subprocess.run([sys.executable, str(ROOT / "scripts" / "etl" / script)], cwd=ROOT)
+            if r.returncode:
+                return r.returncode
     return 0
 
 
