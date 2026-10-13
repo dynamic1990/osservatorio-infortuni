@@ -65,7 +65,7 @@ export function VigilanzaTrendWidget() {
       <div style={{ width: "100%", height: 340 }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 18, right: 8, bottom: 16, left: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis yAxisId="bar" tick={{ fontSize: 11 }} width={54} tickFormatter={formatEtichetta} />
             <YAxis yAxisId="line" orientation="right" domain={[0, 100]} tick={{ fontSize: 11 }} width={42} tickFormatter={(v) => `${v}%`} />
@@ -80,17 +80,17 @@ export function VigilanzaTrendWidget() {
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {isSospensioni ? (
               <>
-                <Bar yAxisId="bar" dataKey="sospensioni" name="Sospensioni totali" fill="var(--color-link)" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
-                  <LabelList dataKey="sospensioni" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
+                <Bar yAxisId="bar" dataKey="sospensioni" name="Sospensioni totali" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
+                  <LabelList dataKey="sospensioni" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#757575" }} />
                 </Bar>
-                <Bar yAxisId="bar" dataKey="sospensioniSicurezza" name="di cui per gravi violazioni sicurezza" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false} />
+                <Bar yAxisId="bar" dataKey="sospensioniSicurezza" name="di cui per gravi violazioni sicurezza" fill="#f36458" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false} />
               </>
             ) : (
               <>
-                <Bar yAxisId="bar" dataKey="controlli" name="Controlli avviati (INL+INPS+INAIL)" fill="var(--color-link)" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
-                  <LabelList dataKey="controlli" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
+                <Bar yAxisId="bar" dataKey="controlli" name="Controlli avviati (INL+INPS+INAIL)" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={46} isAnimationActive={false}>
+                  <LabelList dataKey="controlli" position="top" formatter={formatEtichetta} style={{ fontSize: 10, fill: "#757575" }} />
                 </Bar>
-                <Line yAxisId="line" type="monotone" dataKey="tassoIrregolarita" name="Tasso di irregolarità" stroke="var(--color-accent)" strokeWidth={2.5} dot={{ r: 4, fill: "var(--color-accent)" }} isAnimationActive={false} />
+                <Line yAxisId="line" type="monotone" dataKey="tassoIrregolarita" name="Tasso di irregolarità" stroke="#f36458" strokeWidth={2.5} dot={{ r: 4, fill: "#f36458" }} isAnimationActive={false} />
               </>
             )}
           </ComposedChart>

@@ -54,7 +54,7 @@ export function InformoTrendWidget() {
       <div style={{ width: "100%", height: 330 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 12, right: 16, bottom: 16, left: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={52} allowDecimals={false} />
             <Tooltip
@@ -87,7 +87,7 @@ export function InformoTrendWidget() {
               dataKey="casi"
               name="Casi analizzati Infor.MO"
               stackId="mortali"
-              fill="var(--color-accent)"
+              fill="#f36458"
               radius={[0, 0, 0, 0]}
               isAnimationActive={false}
             />
@@ -96,7 +96,7 @@ export function InformoTrendWidget() {
               dataKey="nonCoperti"
               name="Morti senza analisi Infor.MO"
               stackId="mortali"
-              fill="var(--color-surface)"
+              fill="#f5f5f5"
               radius={[3, 3, 0, 0]}
               isAnimationActive={false}
             />

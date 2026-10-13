@@ -544,12 +544,12 @@ export function AtecoSettoriWidget() {
                               const x = i * (100 / Math.max(1, trendPunti.length - 1));
                               const y = v === 0 ? 28 : 28 - (v / maxTrend) * 26;
                               return (
-                                <circle key={i} cx={x} cy={y} r="1.6" fill="var(--color-accent)" />
+                                <circle key={i} cx={x} cy={y} r="1.6" fill="#f36458" />
                               );
                             })}
                             <polyline
                               fill="none"
-                              stroke="var(--color-accent)"
+                              stroke="#f36458"
                               strokeWidth="1.4"
                               strokeLinejoin="round"
                               strokeLinecap="round"

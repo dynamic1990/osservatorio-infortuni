@@ -76,7 +76,7 @@ export function SerieDecennaleWidget() {
       <div style={{ width: "100%", height: 354 }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={serieCorrente} margin={{ top: 12, right: 16, bottom: 16, left: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis
               yAxisId="left"
@@ -122,20 +122,20 @@ export function SerieDecennaleWidget() {
             <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
             {modalita === "totale" ? (
               <>
-                <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="var(--color-accent)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Line yAxisId="right" type="monotone" dataKey="incidenza" name="Incidenza ‰ (asse des.)" stroke="var(--color-link)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-link)" }} isAnimationActive={false} />
+                <Bar yAxisId="left" dataKey="casi" name="Denunce (asse sin.)" fill="#f36458" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Line yAxisId="right" type="monotone" dataKey="incidenza" name="Incidenza ‰ (asse des.)" stroke="#057dbc" strokeWidth={3} dot={{ r: 4, fill: "#057dbc" }} isAnimationActive={false} />
               </>
             ) : (
               <>
-                <Bar yAxisId="left" dataKey="mortali" name="Casi mortali (asse sin.)" fill="var(--color-accent)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-                <Line yAxisId="right" type="monotone" dataKey="indiceMortali" name="Incidenza mortalità ‰ (asse des.)" stroke="var(--color-link)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-link)" }} isAnimationActive={false} />
+                <Bar yAxisId="left" dataKey="mortali" name="Casi mortali (asse sin.)" fill="#f36458" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Line yAxisId="right" type="monotone" dataKey="indiceMortali" name="Incidenza mortalità ‰ (asse des.)" stroke="#057dbc" strokeWidth={3} dot={{ r: 4, fill: "#057dbc" }} isAnimationActive={false} />
               </>
             )}
             <Brush
               dataKey="anno"
               height={28}
-              stroke="var(--color-text-muted)"
-              fill="var(--color-surface)"
+              stroke="#9e9e9e"
+              fill="#f5f5f5"
               travellerWidth={2}
               startIndex={0}
               endIndex={chartData.length - 1}

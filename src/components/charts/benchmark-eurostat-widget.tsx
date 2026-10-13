@@ -111,7 +111,7 @@ export function BenchmarkEurostatWidget() {
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 12, right: 16, bottom: 16, left: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={48} />
             <Tooltip

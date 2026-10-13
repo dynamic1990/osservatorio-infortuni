@@ -82,15 +82,15 @@ export function VigilanzaCasisticheWidget() {
       <div style={{ width: "100%", height: 340 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 48, bottom: 4, left: 8 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
             <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
             <YAxis type="category" dataKey="nome" width={236} tick={{ fontSize: 11 }} />
             <Tooltip
               formatter={(val) => [exactNumber(Number(val ?? 0)), "Motivazioni"]}
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
-            <Bar dataKey="casi" name="Motivazioni" fill="var(--color-link)" radius={[0, 3, 3, 0]} maxBarSize={22} isAnimationActive={false}>
-              <LabelList dataKey="casi" position="right" formatter={(v: unknown) => exactNumber(Number(v ?? 0))} style={{ fontSize: 11, fill: "var(--color-text-soft)" }} />
+            <Bar dataKey="casi" name="Motivazioni" fill="#057dbc" radius={[0, 3, 3, 0]} maxBarSize={22} isAnimationActive={false}>
+              <LabelList dataKey="casi" position="right" formatter={(v: unknown) => exactNumber(Number(v ?? 0))} style={{ fontSize: 11, fill: "#757575" }} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

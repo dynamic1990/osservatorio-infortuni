@@ -61,7 +61,7 @@ export function TrendDoppiaScalaWidget() {
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 12, right: 16, bottom: 16, left: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 12 }} />
 
             {/* Asse Y Sinistro: Volume Casi */}
@@ -122,7 +122,7 @@ export function TrendDoppiaScalaWidget() {
               yAxisId="left"
               dataKey="casi"
               name="Volume infortuni (asse sin.)"
-              fill="var(--color-accent)"
+              fill="#f36458"
               radius={[3, 3, 0, 0]}
               isAnimationActive={false}
             />
@@ -133,9 +133,9 @@ export function TrendDoppiaScalaWidget() {
               type="monotone"
               dataKey="incidenza"
               name="Incidenza ‰ occ. (asse des.)"
-              stroke="var(--color-link)"
+              stroke="#057dbc"
               strokeWidth={3}
-              dot={{ r: 4, fill: "var(--color-link)" }}
+              dot={{ r: 4, fill: "#057dbc" }}
               isAnimationActive={false}
             />
           </ComposedChart>

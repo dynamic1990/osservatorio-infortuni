@@ -85,16 +85,16 @@ export function VigilanzaViolazioniDettaglioWidget() {
       <div style={{ width: "100%", height: 360 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 8, right: 8, bottom: 16, left: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="nome" tick={{ fontSize: 11 }} interval={0} angle={vista === "settori" ? 0 : -18} textAnchor={vista === "settori" ? "middle" : "end"} height={vista === "settori" ? 40 : 70} />
             <YAxis tick={{ fontSize: 11 }} width={52} />
             <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), name === "violazioni" ? "Violazioni SSL" : "di cui penali"]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-            <Bar dataKey="violazioni" name="Violazioni SSL" fill="var(--color-link)" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false}>
+            <Bar dataKey="violazioni" name="Violazioni SSL" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false}>
               {vista === "settori" && (
-                <LabelList dataKey="violazioni" position="top" formatter={(v: unknown) => exactNumber(Number(v ?? 0))} style={{ fontSize: 10, fill: "var(--color-text-soft)" }} />
+                <LabelList dataKey="violazioni" position="top" formatter={(v: unknown) => exactNumber(Number(v ?? 0))} style={{ fontSize: 10, fill: "#757575" }} />
               )}
             </Bar>
-            <Bar dataKey="penali" name="di cui penali" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={20} isAnimationActive={false} />
+            <Bar dataKey="penali" name="di cui penali" fill="#f36458" radius={[3, 3, 0, 0]} maxBarSize={20} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>

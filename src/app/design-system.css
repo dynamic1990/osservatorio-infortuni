@@ -190,8 +190,9 @@ h3 {
 
 /* Tooltip grafici personalizzato e isolato */
 .custom-chart-tooltip {
-  background: var(--color-text);
-  color: var(--color-raised);
+  background: var(--color-raised);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   font-size: 0.82rem;
@@ -203,7 +204,7 @@ h3 {
 .custom-chart-tooltip .tooltip-title {
   font-weight: 700;
   margin-bottom: 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid var(--color-divider);
   padding-bottom: 2px;
 }
 
@@ -224,11 +225,6 @@ h3 {
 }
 
 @media (max-width: 560px) {
-  .recharts-wrapper,
-  .recharts-surface {
-    max-width: 100%;
-    overflow: visible;
-  }
   .custom-chart-tooltip {
     font-size: 0.75rem;
     padding: 6px 10px;

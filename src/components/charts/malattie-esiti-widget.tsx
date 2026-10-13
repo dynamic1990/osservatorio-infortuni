@@ -117,7 +117,7 @@ export function MalattieEsitiWidget() {
       <div style={{ width: "100%", height: 280, minWidth: 0, overflow: "hidden" }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={serie} margin={{ top: 8, right: 8, bottom: 8, left: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} width={52} />
             <Tooltip
@@ -157,9 +157,9 @@ export function MalattieEsitiWidget() {
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
             <Legend wrapperStyle={{ fontSize: "0.78rem" }} />
-            <Bar dataKey="riconosciute" name="Riconosciute" stackId="est" fill="var(--color-success)" radius={[0, 0, 0, 0]} isAnimationActive={false} />
-            <Bar dataKey="rigettate" name="Rigettate" stackId="est" fill="var(--color-accent)" radius={[0, 0, 0, 0]} isAnimationActive={false} />
-            <Bar dataKey="inIstruttoria" name="In istruttoria" stackId="est" fill="var(--color-warning)" radius={[4, 4, 0, 0]} isAnimationActive={false} maxBarSize={56} />
+            <Bar dataKey="riconosciute" name="Riconosciute" stackId="est" fill="#1e7a4e" radius={[0, 0, 0, 0]} isAnimationActive={false} />
+            <Bar dataKey="rigettate" name="Rigettate" stackId="est" fill="#f36458" radius={[0, 0, 0, 0]} isAnimationActive={false} />
+            <Bar dataKey="inIstruttoria" name="In istruttoria" stackId="est" fill="#9a6700" radius={[4, 4, 0, 0]} isAnimationActive={false} maxBarSize={56} />
           </BarChart>
         </ResponsiveContainer>
       </div>

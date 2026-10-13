@@ -87,32 +87,32 @@ export function MalattieDecessiWidget() {
         {vista === "genere" ? (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} margin={{ top: 8, right: 8, bottom: 16, left: 4 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
-              <Bar dataKey="maschi" name="Maschi" stackId="g" fill="var(--color-link)" isAnimationActive={false} />
-              <Bar dataKey="femmine" name="Femmine" stackId="g" fill="var(--color-accent)" isAnimationActive={false} />
+              <Bar dataKey="maschi" name="Maschi" stackId="g" fill="#057dbc" isAnimationActive={false} />
+              <Bar dataKey="femmine" name="Femmine" stackId="g" fill="#f36458" isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={chartData} margin={{ top: 8, right: 8, bottom: 16, left: 4 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
               {vista === "totale" ? (
                 <>
-                  <Bar dataKey="casi" name="Decessi totali" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false} />
-                  <Line type="monotone" dataKey="silicosi" name="Silicosi/asbestosi" stroke="var(--color-link)" strokeWidth={2.5} dot={{ r: 3, fill: "var(--color-link)" }} isAnimationActive={false} />
+                  <Bar dataKey="casi" name="Decessi totali" fill="#f36458" radius={[3, 3, 0, 0]} maxBarSize={44} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="silicosi" name="Silicosi/asbestosi" stroke="#057dbc" strokeWidth={2.5} dot={{ r: 3, fill: "#057dbc" }} isAnimationActive={false} />
                 </>
               ) : (
                 <>
-                  <Bar dataKey="altri" name="Altri decessi" stackId="a" fill="var(--color-text-muted)" isAnimationActive={false} />
-                  <Bar dataKey="silicosi" name="Silicosi/asbestosi" stackId="a" fill="var(--color-link)" isAnimationActive={false} />
+                  <Bar dataKey="altri" name="Altri decessi" stackId="a" fill="#9e9e9e" isAnimationActive={false} />
+                  <Bar dataKey="silicosi" name="Silicosi/asbestosi" stackId="a" fill="#057dbc" isAnimationActive={false} />
                 </>
               )}
             </ComposedChart>

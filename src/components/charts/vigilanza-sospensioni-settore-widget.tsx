@@ -105,7 +105,7 @@ export function VigilanzaSospensioniSettoreWidget() {
         {vista === "serie" ? (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={serieChart} margin={{ top: 8, right: 8, bottom: 16, left: 4 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="anno" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip
@@ -116,21 +116,21 @@ export function VigilanzaSospensioniSettoreWidget() {
                 cursor={{ fill: "rgba(0,0,0,0.04)" }}
               />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
-              <Bar dataKey="totale" name="Totale" fill="var(--color-accent)" radius={[3, 3, 0, 0]} maxBarSize={40} isAnimationActive={false} />
-              <Bar dataKey="graviSsl" name="Gravi SSL" fill="var(--color-link)" radius={[3, 3, 0, 0]} maxBarSize={40} isAnimationActive={false} />
+              <Bar dataKey="totale" name="Totale" fill="#f36458" radius={[3, 3, 0, 0]} maxBarSize={40} isAnimationActive={false} />
+              <Bar dataKey="graviSsl" name="Gravi SSL" fill="#057dbc" radius={[3, 3, 0, 0]} maxBarSize={40} isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dettaglioData} margin={{ top: 8, right: 8, bottom: 16, left: 4 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="nome" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} width={44} />
               <Tooltip formatter={(val, name) => [exactNumber(Number(val ?? 0)), String(name)]} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
-              <Bar dataKey="inNero" name="Lavoro nero" stackId="a" fill="var(--color-text-muted)" isAnimationActive={false} />
-              <Bar dataKey="graviSsl" name="Gravi violazioni SSL" stackId="a" fill="var(--color-link)" isAnimationActive={false} />
-              <Bar dataKey="nonSpecificato" name="Solo lavoro nero" stackId="a" fill="var(--color-accent)" isAnimationActive={false} />
+              <Bar dataKey="inNero" name="Lavoro nero" stackId="a" fill="#9e9e9e" isAnimationActive={false} />
+              <Bar dataKey="graviSsl" name="Gravi violazioni SSL" stackId="a" fill="#057dbc" isAnimationActive={false} />
+              <Bar dataKey="nonSpecificato" name="Solo lavoro nero" stackId="a" fill="#f36458" isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         )}

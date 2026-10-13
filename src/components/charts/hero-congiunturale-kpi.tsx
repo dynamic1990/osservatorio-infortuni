@@ -290,7 +290,7 @@ export function HeroCongiunturaleKpi() {
         <div style={{ width: "100%", height: 244 }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} margin={{ top: 8, right: 12, bottom: 16, left: -10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="mese" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => compactNumber(v)} width={50} />
               <Tooltip
@@ -300,7 +300,7 @@ export function HeroCongiunturaleKpi() {
                 ]}
               />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
-              <Bar dataKey="2025" name="Dati YTD 2025" fill="var(--color-text-muted)" isAnimationActive={false} radius={[2, 2, 0, 0]} />
+              <Bar dataKey="2025" name="Dati YTD 2025" fill="#9e9e9e" isAnimationActive={false} radius={[2, 2, 0, 0]} />
               <Bar dataKey="2026" name="Dati YTD 2026" fill={MODAL_COLORS.lavoro} isAnimationActive={false} radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>

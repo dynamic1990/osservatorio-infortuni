@@ -87,7 +87,7 @@ export function GravitaDurataWidget() {
       <div style={{ width: "100%", height: 360 }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={conTotale} margin={{ top: 8, right: 16, bottom: 16, left: 8 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
             <XAxis dataKey="anno" tick={{ fontSize: 12 }} />
             <YAxis tick={{ fontSize: 11 }} width={64} tickFormatter={(v) => (Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(0)}k` : v)} />
             <Tooltip formatter={(val, name) => [Number(val ?? 0).toLocaleString("it-IT"), String(name)]} />
@@ -102,7 +102,7 @@ export function GravitaDurataWidget() {
                 isAnimationActive={false}
               />
             ))}
-            <Line type="monotone" dataKey="totale" name="Totale" stroke="var(--color-link)" dot={false} isAnimationActive={false} />
+            <Line type="monotone" dataKey="totale" name="Totale" stroke="#057dbc" dot={false} isAnimationActive={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>

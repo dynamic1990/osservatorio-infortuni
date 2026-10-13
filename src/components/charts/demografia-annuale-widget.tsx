@@ -45,7 +45,7 @@ export function DemografiaAnnualeWidget() {
         casi: casiM,
         mortali: mortaliM,
         quota: totalGen > 0 ? (casiM / totalGen) * 100 : 0,
-        fill: "var(--color-link)",
+        fill: "#057dbc",
       },
       {
         key: "F",
@@ -53,7 +53,7 @@ export function DemografiaAnnualeWidget() {
         casi: casiF,
         mortali: mortaliF,
         quota: totalGen > 0 ? (casiF / totalGen) * 100 : 0,
-        fill: "var(--color-violet)",
+        fill: "#7a4d8f",
       },
     ];
   }, [annoData, modalita]);
@@ -133,7 +133,7 @@ export function DemografiaAnnualeWidget() {
                 layout="vertical"
                 margin={{ top: 8, right: 24, bottom: 4, left: 10 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={(v) => compactNumber(v)} />
                 <YAxis type="category" dataKey="name" tick={{ fontSize: 12, fontWeight: 600 }} width={65} />
                 <Tooltip
@@ -199,7 +199,7 @@ export function DemografiaAnnualeWidget() {
                 data={etaData}
                 margin={{ top: 8, right: 12, bottom: 4, left: -10 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                 <XAxis dataKey="fascia" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => compactNumber(v)} width={45} />
                 <Tooltip
@@ -221,7 +221,7 @@ export function DemografiaAnnualeWidget() {
                     );
                   }}
                 />
-                <Bar dataKey="casi" name="Infortuni" fill="var(--color-teal)" isAnimationActive={false} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="casi" name="Infortuni" fill="#0e7c8a" isAnimationActive={false} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

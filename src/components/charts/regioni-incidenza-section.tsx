@@ -85,7 +85,7 @@ export function RegioniIncidenzaSection() {
 
   // Colore per regione sulla mappa
   const colorForRegion = (code?: string): string => {
-    if (!code || !regMap[code]) return "var(--color-divider)";
+    if (!code || !regMap[code]) return "#e0e0e0";
     const val =
       metrica === "incidenza"
         ? incidenzaAmbito(regMap[code])
@@ -323,7 +323,7 @@ export function RegioniIncidenzaSection() {
                   onMouseEnter={() => setHoverMapId(loc.id)}
                   onMouseLeave={() => setHoverMapId(null)}
                   fill={colorForRegion(code)}
-                  stroke={isSelected || isHovered ? "var(--color-text)" : "var(--color-raised)"}
+                  stroke={isSelected || isHovered ? "#1a1a1a" : "#ffffff"}
                   strokeWidth={isSelected ? 2.5 : isHovered ? 1.8 : 0.7}
                   style={{
                     cursor: code ? "pointer" : "default",
@@ -566,7 +566,7 @@ export function RegioniIncidenzaSection() {
                       }
                     }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-divider)" horizontal={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
                     <XAxis type="number" tick={{ fontSize: 11 }} />
                     <YAxis
                       type="category"
@@ -612,7 +612,7 @@ export function RegioniIncidenzaSection() {
                     />
                     <ReferenceLine
                       x={mediaNazionale}
-                      stroke="var(--color-accent)"
+                      stroke="#f36458"
                       strokeDasharray="4 4"
                       strokeWidth={1.8}
                     />
@@ -620,8 +620,8 @@ export function RegioniIncidenzaSection() {
                       {sortedChartData.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={selectedReg === entry.code ? "var(--color-accent)" : colorForRegion(entry.code === "021" || entry.code === "022" ? "04" : entry.code)}
-                          stroke={selectedReg === entry.code ? "var(--color-text)" : "none"}
+                          fill={selectedReg === entry.code ? "#f36458" : colorForRegion(entry.code === "021" || entry.code === "022" ? "04" : entry.code)}
+                          stroke={selectedReg === entry.code ? "#1a1a1a" : "none"}
                           strokeWidth={selectedReg === entry.code ? 2 : 0}
                         />
                       ))}
