@@ -22,7 +22,6 @@ export function MalattieEsitiWidget() {
   const istruttoriaPerc = dati.istruttoriaPerc2025;
 
   // Composizione delle denunce su base denunce totali (le tre quote sommano a 100%).
-  // Le percentuali sui casi definiti (riconosciute/rigettate) restano come indicatore a parte.
   const den2025 = anno2025 ? anno2025.denunce : 0;
   const quotaDen = (n: number) => (den2025 ? Math.round((n * 1000) / den2025) / 10 : 0);
 
@@ -76,7 +75,7 @@ export function MalattieEsitiWidget() {
               </span>
             </div>
             <div className="metric-sub">
-              {anno2025.riconosciutePerc.toLocaleString("it-IT")}% sui casi definiti
+              al {dati.dataRilevazione}
             </div>
           </div>
           <div
@@ -96,7 +95,7 @@ export function MalattieEsitiWidget() {
               </span>
             </div>
             <div className="metric-sub">
-              {anno2025.rigettatePerc.toLocaleString("it-IT")}% sui casi definiti
+              al {dati.dataRilevazione}
             </div>
           </div>
           <div
