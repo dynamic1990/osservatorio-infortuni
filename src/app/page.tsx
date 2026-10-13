@@ -16,7 +16,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Osservatorio Infortuni sul Lavoro | Dati e Indicatori Statistici INAIL",
   description:
-    "Piattaforma di analisi statistica indipendente sugli infortuni sul lavoro in Italia: cronaca quotidiana degli infortuni gravi e mortali, serie storica 2014-2025, benchmark europeo Eurostat, monitoraggio congiunturale 2026 vs 2025, indici di incidenza, mappe del rischio, gravità e comparti ATECO.",
+    "Piattaforma indipendente di trasparenza e monitoraggio statistico sugli infortuni sul lavoro in Italia: dati congiunturali a parità di periodo, media giornaliera dei morti sul lavoro, tassi di incidenza e gravità normalizzati sugli occupati, serie storica, benchmark europeo, mappa del rischio territoriale e comparti produttivi ATECO.",
 };
 
 export default function HomePage() {
@@ -56,9 +56,9 @@ export default function HomePage() {
             </h1>
             <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
               Piattaforma indipendente di trasparenza e monitoraggio statistico: dati congiunturali
-              a parità di periodo (2026 vs 2025), media giornaliera dei morti sul lavoro, tassi di
-              incidenza e gravità normalizzati sugli occupati, serie storica 2014-2024, benchmark
-              europeo, mappa del rischio territoriale e comparti produttivi ATECO.
+              a parità di periodo, media giornaliera dei morti sul lavoro, tassi di incidenza e
+              gravità normalizzati sugli occupati, serie storica, benchmark europeo, mappa del
+              rischio territoriale e comparti produttivi ATECO.
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
               Progetto a cura di{" "}

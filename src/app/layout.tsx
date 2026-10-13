@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Osservatorio Infortuni sul Lavoro",
   },
   description:
-    "Piattaforma indipendente di analisi statistica sugli infortuni sul lavoro in Italia: monitoraggio congiunturale, media giornaliera dei morti sul lavoro, serie storica 2014-2025, benchmark europeo Eurostat, mappa del rischio per regione e incidenza per comparto ATECO. Realizzata da Ing. Damiano Salvati.",
+    "Piattaforma indipendente di trasparenza e monitoraggio statistico sugli infortuni sul lavoro in Italia: dati congiunturali a parità di periodo, media giornaliera dei morti sul lavoro, tassi di incidenza e gravità normalizzati sugli occupati, serie storica, benchmark europeo Eurostat, mappa del rischio territoriale e comparti produttivi ATECO. Realizzata da Ing. Damiano Salvati.",
   keywords: [
     "infortuni sul lavoro Italia",
     "morti sul lavoro",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: "Osservatorio Infortuni sul Lavoro",
     title: "Osservatorio Infortuni sul Lavoro | Dati INAIL ed Eurostat",
     description:
-      "Monitoraggio indipendente di infortuni e morti sul lavoro in Italia: congiunturale, media giornaliera YTD, serie storica, benchmark UE e mappa del rischio per regione.",
+      "Piattaforma indipendente di trasparenza e monitoraggio statistico sugli infortuni sul lavoro in Italia: dati congiunturali a parità di periodo, media giornaliera dei morti sul lavoro, tassi di incidenza e gravità, serie storica, benchmark UE e mappa del rischio territoriale.",
     locale: "it_IT",
     images: [
       {
@@ -109,7 +109,7 @@ export default function RootLayout({
               "@type": "WebSite",
               name: "Osservatorio Infortuni sul Lavoro",
               description:
-                "Piattaforma indipendente di monitoraggio statistico sugli infortuni sul lavoro in Italia: dati INAIL, Eurostat e ISTAT.",
+                "Piattaforma indipendente di trasparenza e monitoraggio statistico sugli infortuni sul lavoro in Italia: dati congiunturali, media giornaliera dei morti sul lavoro, tassi di incidenza e gravità, serie storica, benchmark europeo, mappa del rischio territoriale e comparti ATECO. Dati INAIL, ISTAT ed Eurostat.",
               publishes: "Ing. Damiano Salvati",
               inLanguage: "it-IT",
               url: SITO_URL,

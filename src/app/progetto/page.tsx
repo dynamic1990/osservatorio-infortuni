@@ -11,6 +11,10 @@ export const metadata: Metadata = {
 
 const sections = [
   {
+    title: "Cosa trovi all'interno",
+    body: "Una piattaforma di trasparenza e monitoraggio statistico: dati congiunturali confrontati a parità di periodo per leggere l'andamento dell'anno in corso rispetto a quello precedente; la media giornaliera dei morti sul lavoro; tassi di incidenza e di gravità normalizzati sugli occupati, per separare il rischio dalla dimensione della platea occupazionale; la serie storica degli infortuni; il benchmark europeo Eurostat; la mappa del rischio territoriale e il dettaglio dei comparti produttivi ATECO. Il sito non si limita ai numeri aggregati: raccoglie la cronaca quotidiana degli infortuni gravi e mortali, approfondisce i casi mortali con il dettaglio Infor.MO e analizza le cause, i settori e i territori a maggior rischio.",
+  },
+  {
     title: "Un progetto di lettura dei dati",
     body: "Osservatorio Infortuni raccoglie e rende leggibili dati pubblici sugli infortuni sul lavoro in Italia. Non sostituisce INAIL, Eurostat, ISTAT o INL: collega le fonti, esplicita il perimetro delle misure e riduce il lavoro necessario per passare dal dato alla sua interpretazione.",
   },
