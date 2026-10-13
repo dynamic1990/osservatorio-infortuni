@@ -4,6 +4,7 @@ import { MalattieAndamentoWidget } from "@/components/charts/malattie-andamento-
 import { MalattiePatologieWidget } from "@/components/charts/malattie-patologie-widget";
 import { MalattieRegioniWidget } from "@/components/charts/malattie-regioni-widget";
 import { MalattieDecessiWidget } from "@/components/charts/malattie-decessi-widget";
+import { MalattieEsitiWidget } from "@/components/charts/malattie-esiti-widget";
 import { InfoModalButton } from "@/components/ui/info-modal";
 
 export const revalidate = 86_400;
@@ -11,7 +12,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Malattie Professionali | Osservatorio Infortuni sul Lavoro",
   description:
-    "Dashboard sulle malattie professionali in Italia: denunce INAIL a confronto tra i semestri 2025 e 2026, patologie ICD-10 più denunciate, distribuzione per regione e decessi per malattia professionale riconosciuta (2021-2025).",
+    "Dashboard sulle malattie professionali in Italia: denunce INAIL a confronto tra i semestri 2025 e 2026, patologie ICD-10 più denunciate, distribuzione per regione, decessi per malattia professionale riconosciuta (2021-2025) e tasso di riconoscimento delle denunce dalla Relazione Annuale INAIL.",
   alternates: { canonical: "/malattie-professionali" },
 };
 
@@ -117,6 +118,19 @@ export default function MalattieProfessionaliPage() {
           </p>
         </div>
         <MalattieDecessiWidget />
+      </section>
+
+      {/* Esiti delle denunce */}
+      <section className="card" aria-label="Esiti delle denunce malattie professionali">
+        <div className="card-header">
+          <h2 className="card-title">Quante denunce vengono riconosciute?</h2>
+          <p className="card-desc">
+            Le denunce raccontano metà della storia: l&apos;esito arriva dopo. Dalla Relazione
+            Annuale INAIL 2025, il tasso di riconoscimento delle malattie professionali sui casi
+            definiti e il dettaglio per patologia, con le pratiche ancora in istruttoria dichiarate.
+          </p>
+        </div>
+        <MalattieEsitiWidget />
       </section>
     </div>
   );
