@@ -1,7 +1,7 @@
 {
  "schemaVersion": 2,
  "datasetId": "malattie_esiti",
- "generatedAt": "2026-10-13T14:19:32+00:00",
+ "generatedAt": "2026-10-13T14:32:15+00:00",
  "fonte": "INAIL Open Data — DatiSemestraliMalattieProfessionaliDataProt (CSV per regione)",
  "dataRilevazione": "30/04/2026",
  "nota": "Dato preciso ricavato dal dataset open data semestrale, non dal valore arrotondato della Relazione Annuale ('36 mila'). Ogni riga corrisponde a una pratica con la sua definizione amministrativa (P=riconosciuta, N=rigettata, I=in istruttoria) alla data di rilevazione. Il numero è una fotografia: le pratiche in istruttoria dell'anno più recente potranno essere definite nella rilevazione successiva. Le denunce possono essere plurime (più pratiche per lo stesso lavoratore).",
@@ -61,5 +61,409 @@
  "lavoratoriCoinvolti": {
   "2025": 63136
  },
- "perPatologia": null
+ "perPatologia": [
+  {
+   "codice": "M75.1",
+   "nome": "Lesioni della cuffia dei rotatori (spalla)",
+   "riconosciute": 27961,
+   "rigettate": 13940,
+   "inIstruttoria": 99,
+   "tassoPerc": 66.7
+  },
+  {
+   "codice": "G56.0",
+   "nome": "Sindrome del tunnel carpale",
+   "riconosciute": 22273,
+   "rigettate": 11726,
+   "inIstruttoria": 75,
+   "tassoPerc": 65.5
+  },
+  {
+   "codice": "M51.1",
+   "nome": "Ernia o protrusione discale lombare",
+   "riconosciute": 16280,
+   "rigettate": 14384,
+   "inIstruttoria": 76,
+   "tassoPerc": 53.1
+  },
+  {
+   "codice": "M51.2",
+   "nome": "Spostamento di disco intervertebrale lombare",
+   "riconosciute": 20513,
+   "rigettate": 7106,
+   "inIstruttoria": 52,
+   "tassoPerc": 74.3
+  },
+  {
+   "codice": "M51.3",
+   "nome": "Degenerazione di disco intervertebrale lombare",
+   "riconosciute": 11716,
+   "rigettate": 10281,
+   "inIstruttoria": 52,
+   "tassoPerc": 53.3
+  },
+  {
+   "codice": "M75",
+   "nome": "Borsiti e lesioni della spalla",
+   "riconosciute": 11161,
+   "rigettate": 8036,
+   "inIstruttoria": 34,
+   "tassoPerc": 58.1
+  },
+  {
+   "codice": "H83.3",
+   "nome": "Ipoacusia da rumore",
+   "riconosciute": 10115,
+   "rigettate": 5190,
+   "inIstruttoria": 39,
+   "tassoPerc": 66.1
+  },
+  {
+   "codice": "M77.0",
+   "nome": "Epicondilite mediale (gomito del golfista)",
+   "riconosciute": 11032,
+   "rigettate": 3120,
+   "inIstruttoria": 61,
+   "tassoPerc": 78.0
+  },
+  {
+   "codice": "M77.1",
+   "nome": "Epicondilite laterale (gomito del tennista)",
+   "riconosciute": 5601,
+   "rigettate": 3736,
+   "inIstruttoria": 30,
+   "tassoPerc": 60.0
+  },
+  {
+   "codice": "M47.8",
+   "nome": "Spondilosi (artrosi della colonna)",
+   "riconosciute": 2713,
+   "rigettate": 5565,
+   "inIstruttoria": 18,
+   "tassoPerc": 32.8
+  },
+  {
+   "codice": "M23.3",
+   "nome": "Meniscopatia del ginocchio",
+   "riconosciute": 4745,
+   "rigettate": 3463,
+   "inIstruttoria": 13,
+   "tassoPerc": 57.8
+  },
+  {
+   "codice": "M75.4",
+   "nome": "Tendinite della spalla",
+   "riconosciute": 1962,
+   "rigettate": 3078,
+   "inIstruttoria": 5,
+   "tassoPerc": 38.9
+  },
+  {
+   "codice": "M17",
+   "nome": "Gonartrosi (artrosi del ginocchio)",
+   "riconosciute": 479,
+   "rigettate": 4221,
+   "inIstruttoria": 8,
+   "tassoPerc": 10.2
+  },
+  {
+   "codice": "M18",
+   "nome": "Artrosi della prima articolazione carpo-metacarpale",
+   "riconosciute": 1182,
+   "rigettate": 3258,
+   "inIstruttoria": 6,
+   "tassoPerc": 26.6
+  },
+  {
+   "codice": "M75.3",
+   "nome": "Tendinite calcificante della spalla",
+   "riconosciute": 2182,
+   "rigettate": 1203,
+   "inIstruttoria": 23,
+   "tassoPerc": 64.5
+  },
+  {
+   "codice": "M65.8",
+   "nome": "Altre sinoviti e tenosinoviti",
+   "riconosciute": 2272,
+   "rigettate": 913,
+   "inIstruttoria": 6,
+   "tassoPerc": 71.3
+  },
+  {
+   "codice": "C45.0",
+   "nome": "Mesotelioma della pleura",
+   "riconosciute": 2559,
+   "rigettate": 435,
+   "inIstruttoria": 5,
+   "tassoPerc": 85.5
+  },
+  {
+   "codice": "M65.4",
+   "nome": "Tenosinovite della stiloide radiale (de Quervain)",
+   "riconosciute": 1543,
+   "rigettate": 1077,
+   "inIstruttoria": 5,
+   "tassoPerc": 58.9
+  },
+  {
+   "codice": "M65",
+   "nome": "Sinoviti e tenosinoviti",
+   "riconosciute": 1118,
+   "rigettate": 1180,
+   "inIstruttoria": 4,
+   "tassoPerc": 48.7
+  },
+  {
+   "codice": "M23",
+   "nome": "M23",
+   "riconosciute": 681,
+   "rigettate": 1514,
+   "inIstruttoria": 7,
+   "tassoPerc": 31.0
+  },
+  {
+   "codice": "M19.2",
+   "nome": "M19.2",
+   "riconosciute": 541,
+   "rigettate": 1519,
+   "inIstruttoria": 3,
+   "tassoPerc": 26.3
+  },
+  {
+   "codice": "J92",
+   "nome": "J92",
+   "riconosciute": 1726,
+   "rigettate": 254,
+   "inIstruttoria": 5,
+   "tassoPerc": 87.2
+  },
+  {
+   "codice": "M50",
+   "nome": "M50",
+   "riconosciute": 62,
+   "rigettate": 1872,
+   "inIstruttoria": 0,
+   "tassoPerc": 3.2
+  },
+  {
+   "codice": "C34",
+   "nome": "Tumore maligno del bronco-polmonare",
+   "riconosciute": 1044,
+   "rigettate": 580,
+   "inIstruttoria": 3,
+   "tassoPerc": 64.3
+  },
+  {
+   "codice": "M65.3",
+   "nome": "M65.3",
+   "riconosciute": 564,
+   "rigettate": 808,
+   "inIstruttoria": 6,
+   "tassoPerc": 41.1
+  },
+  {
+   "codice": "M16",
+   "nome": "M16",
+   "riconosciute": 39,
+   "rigettate": 1228,
+   "inIstruttoria": 1,
+   "tassoPerc": 3.1
+  },
+  {
+   "codice": "M75.2",
+   "nome": "M75.2",
+   "riconosciute": 734,
+   "rigettate": 502,
+   "inIstruttoria": 5,
+   "tassoPerc": 59.4
+  },
+  {
+   "codice": "M15",
+   "nome": "M15",
+   "riconosciute": 90,
+   "rigettate": 1096,
+   "inIstruttoria": 2,
+   "tassoPerc": 7.6
+  },
+  {
+   "codice": "G56.2",
+   "nome": "G56.2",
+   "riconosciute": 518,
+   "rigettate": 630,
+   "inIstruttoria": 5,
+   "tassoPerc": 45.1
+  },
+  {
+   "codice": "H90.3",
+   "nome": "H90.3",
+   "riconosciute": 220,
+   "rigettate": 831,
+   "inIstruttoria": 1,
+   "tassoPerc": 20.9
+  },
+  {
+   "codice": "J61",
+   "nome": "J61",
+   "riconosciute": 675,
+   "rigettate": 102,
+   "inIstruttoria": 1,
+   "tassoPerc": 86.9
+  },
+  {
+   "codice": "M50.1",
+   "nome": "M50.1",
+   "riconosciute": 37,
+   "rigettate": 738,
+   "inIstruttoria": 1,
+   "tassoPerc": 4.8
+  },
+  {
+   "codice": "M75.5",
+   "nome": "M75.5",
+   "riconosciute": 446,
+   "rigettate": 293,
+   "inIstruttoria": 3,
+   "tassoPerc": 60.4
+  },
+  {
+   "codice": "M76.8",
+   "nome": "M76.8",
+   "riconosciute": 362,
+   "rigettate": 327,
+   "inIstruttoria": 4,
+   "tassoPerc": 52.5
+  },
+  {
+   "codice": "M72.0",
+   "nome": "M72.0",
+   "riconosciute": 125,
+   "rigettate": 545,
+   "inIstruttoria": 2,
+   "tassoPerc": 18.7
+  },
+  {
+   "codice": "M77",
+   "nome": "Altre entesopatie",
+   "riconosciute": 197,
+   "rigettate": 439,
+   "inIstruttoria": 2,
+   "tassoPerc": 31.0
+  },
+  {
+   "codice": "M50.3",
+   "nome": "M50.3",
+   "riconosciute": 8,
+   "rigettate": 627,
+   "inIstruttoria": 0,
+   "tassoPerc": 1.3
+  },
+  {
+   "codice": "C67",
+   "nome": "C67",
+   "riconosciute": 242,
+   "rigettate": 391,
+   "inIstruttoria": 2,
+   "tassoPerc": 38.2
+  },
+  {
+   "codice": "M50.2",
+   "nome": "M50.2",
+   "riconosciute": 19,
+   "rigettate": 597,
+   "inIstruttoria": 1,
+   "tassoPerc": 3.1
+  },
+  {
+   "codice": "C44",
+   "nome": "C44",
+   "riconosciute": 455,
+   "rigettate": 118,
+   "inIstruttoria": 1,
+   "tassoPerc": 79.4
+  },
+  {
+   "codice": "F43.2",
+   "nome": "F43.2",
+   "riconosciute": 63,
+   "rigettate": 507,
+   "inIstruttoria": 3,
+   "tassoPerc": 11.1
+  },
+  {
+   "codice": "J42",
+   "nome": "J42",
+   "riconosciute": 66,
+   "rigettate": 492,
+   "inIstruttoria": 1,
+   "tassoPerc": 11.8
+  },
+  {
+   "codice": "G55.1",
+   "nome": "G55.1",
+   "riconosciute": 314,
+   "rigettate": 227,
+   "inIstruttoria": 0,
+   "tassoPerc": 58.0
+  },
+  {
+   "codice": "L57.0",
+   "nome": "L57.0",
+   "riconosciute": 426,
+   "rigettate": 107,
+   "inIstruttoria": 1,
+   "tassoPerc": 79.9
+  }
+ ],
+ "famiglie": [
+  {
+   "famiglia": "Apparato osteomuscolare",
+   "riconosciute": 126760,
+   "rigettate": 97904,
+   "tassoPerc": 56.4
+  },
+  {
+   "famiglia": "Sistema nervoso",
+   "riconosciute": 23748,
+   "rigettate": 13439,
+   "tassoPerc": 63.9
+  },
+  {
+   "famiglia": "Ipoacusia",
+   "riconosciute": 10115,
+   "rigettate": 5193,
+   "tassoPerc": 66.1
+  },
+  {
+   "famiglia": "Tumori",
+   "riconosciute": 4952,
+   "rigettate": 2706,
+   "tassoPerc": 64.7
+  },
+  {
+   "famiglia": "Apparato respiratorio",
+   "riconosciute": 3379,
+   "rigettate": 2822,
+   "tassoPerc": 54.5
+  },
+  {
+   "famiglia": "Altre patologie",
+   "riconosciute": 357,
+   "rigettate": 2640,
+   "tassoPerc": 11.9
+  },
+  {
+   "famiglia": "Occhio",
+   "riconosciute": 342,
+   "rigettate": 2353,
+   "tassoPerc": 12.7
+  }
+ ],
+ "nonDeterminati": {
+  "definitiNonD": 60520,
+  "rigettatiNonD": 60506,
+  "riconosciutiNonD": 14,
+  "inIstruttoriaNonD": 15726
+ },
+ "notaPatologie": "Il tasso di riconoscimento per patologia si calcola sui casi definiti con patologia accertata (ICD10accertato valorizzato). I casi con ICD non determinato (ND) hanno l'esito amministrativo ma non la patologia accertata nel dataset: sono esclusi dal tasso per patologia e indicati a parte. Le famiglie cliniche seguono la Relazione Annuale INAIL per il confronto."
 }

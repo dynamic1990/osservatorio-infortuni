@@ -45,6 +45,60 @@ REGIONI = {
 }
 NOMI = {v: k for k, v in REGIONI.items()}
 
+# Nome leggibile per i codici ICD-10 più frequenti nelle malattie professionali.
+# Solo i codici osservati nei dati hanno una descrizione; gli altri mostrano il codice.
+DESCRIZIONI_ICD = {
+    "M75.1": "Lesioni della cuffia dei rotatori (spalla)",
+    "G56.0": "Sindrome del tunnel carpale",
+    "M51.1": "Ernia o protrusione discale lombare",
+    "M51.2": "Spostamento di disco intervertebrale lombare",
+    "M51.3": "Degenerazione di disco intervertebrale lombare",
+    "M75": "Borsiti e lesioni della spalla",
+    "M77.0": "Epicondilite mediale (gomito del golfista)",
+    "M77.1": "Epicondilite laterale (gomito del tennista)",
+    "H83.3": "Ipoacusia da rumore",
+    "M47.8": "Spondilosi (artrosi della colonna)",
+    "M23.3": "Meniscopatia del ginocchio",
+    "M75.4": "Tendinite della spalla",
+    "M18": "Artrosi della prima articolazione carpo-metacarpale",
+    "M17": "Gonartrosi (artrosi del ginocchio)",
+    "L23": "Dermatite allergica da contatto",
+    "L24": "Dermatite irritante da contatto",
+    "L25": "Dermatite da contatto non specificata",
+    "C45.0": "Mesotelioma della pleura",
+    "C34": "Tumore maligno del bronco-polmonare",
+    "J45": "Asma",
+    "J45.0": "Asma allergico",
+    "A15": "Tubercolosi respiratoria",
+    "G62": "Polineuropatie",
+    "M65.8": "Altre sinoviti e tenosinoviti",
+    "M65.4": "Tenosinovite della stiloide radiale (de Quervain)",
+    "M65": "Sinoviti e tenosinoviti",
+    "M70": "Malattie dei tessuti molli da uso e pressione",
+    "M70.2": "Borsite dell'olecrano",
+    "M70.4": "Borsite prepatellare",
+    "M75.3": "Tendinite calcificante della spalla",
+    "F43": "Reazione a stress grave e disturbi dell'adattamento",
+    "M77": "Altre entesopatie",
+    "H83": "Altre malattie dell'orecchio interno",
+    "M54.5": "Lombalgia",
+    "M54": "Dorsalgia",
+    "R06": "Anomalie della respirazione",
+    "G56": "Mononeuropatie dell'arto superiore",
+    "C45": "Mesotelioma",
+}
+
+# Famiglie cliniche usate dalla Relazione Annuale INAIL per il confronto.
+FAMIGLIE_RELAZIONE = [
+    ("Sistema nervoso", ("G",)),
+    ("Cute", ("L",)),
+    ("Apparato osteomuscolare", ("M",)),
+    ("Ipoacusia", ("H83",)),
+    ("Tumori", ("C",)),
+    ("Apparato respiratorio", ("J",)),
+    ("Occhio", ("H",)),
+]
+
 # Rilevazione attesa: la cadenza semestrale pubblica con rilevazione 30/04 e 31/10.
 # Il dataset con DataRilevazione == RILEVAZIONE_ATTESA è la fotografia più recente.
 RILEVAZIONE_ATTESA = "30/04/2026"
@@ -93,6 +147,77 @@ def main() -> int:
     print(f"   {len(files)} file regionali, {len(righe):,} pratiche alla rilevazione {RILEVAZIONE_ATTESA}")
 
     per_anno = esito_da_rilevazioni(righe)
+
+    # --- Per patologia (ICD10 accertato) ---
+    patologie: dict[str, Counter] = defaultdict(Counter)   # icd -> esito (+ include I e ND)
+    patologie_def: dict[str, Counter] = defaultdict(Counter)
+    pat_anno: dict[str, dict[str, Counter]] = defaultdict(lambda: defaultdict(Counter))
+    famiglie: dict[str, Counter] = defaultdict(Counter)      # famiglia di patologia -> esito
+    famiglie_def: dict[str, Counter] = defaultdict(Counter)
+    nd_esiti = Counter()
+
+    def _famiglia(icd: str) -> str:
+        icd = (icd or "").strip().upper()
+        if not icd or icd in ("ND", "N.D.", "N.D"):
+            return "Non determinata"
+        for nome, prefissi in FAMIGLIE_RELAZIONE:
+            for p in prefissi:
+                if icd.startswith(p):
+                    return nome
+        return "Altre patologie"
+
+    for r in righe:
+        dp = (r.get("DataProtocollo") or "").strip()
+        anno = dp[6:10] if len(dp) == 10 and dp[6:10].isdigit() else "?"
+        esito = (r.get("DefinizioneAmministrativaCaso") or "").strip() or "?"
+        icd = (r.get("ICD10accertato") or "").strip().upper()
+        if not icd or icd in ("ND", "N.D.", "N.D"):
+            nd_esiti[esito] += 1
+            icd = "ND"
+        fam = _famiglia(icd)
+        patologie[icd][esito] += 1
+        famiglie[fam][esito] += 1
+        if esito in ("P", "N"):
+            patologie_def[icd][esito] += 1
+            famiglie_def[fam][esito] += 1
+        if anno in ("2021", "2022", "2023", "2024", "2025"):
+            pat_anno[anno][icd][esito] += 1
+
+    def _tasso(c: Counter) -> float | None:
+        defi = c.get("P", 0) + c.get("N", 0)
+        return round(c.get("P", 0) * 100 / defi, 1) if defi else None
+
+    per_patologia = []
+    for icd, c in patologie_def.items():
+        if icd == "ND":
+            continue
+        defi = c.get("P", 0) + c.get("N", 0)
+        if defi < 500:  # soglia: abbastanza casi per un tasso stabile
+            continue
+        per_patologia.append({
+            "codice": icd,
+            "nome": DESCRIZIONI_ICD.get(icd, icd),
+            "riconosciute": c.get("P", 0),
+            "rigettate": c.get("N", 0),
+            "inIstruttoria": patologie[icd].get("I", 0),
+            "tassoPerc": _tasso(c),
+        })
+    per_patologia.sort(key=lambda x: x["riconosciute"] + x["rigettate"], reverse=True)
+
+    famiglie_out = []
+    for fam, c in famiglie_def.items():
+        if fam == "Non determinata":
+            continue
+        defi = c.get("P", 0) + c.get("N", 0)
+        if defi < 2000:
+            continue
+        famiglie_out.append({
+            "famiglia": fam,
+            "riconosciute": c.get("P", 0),
+            "rigettate": c.get("N", 0),
+            "tassoPerc": _tasso(c),
+        })
+    famiglie_out.sort(key=lambda x: x["riconosciute"] + x["rigettate"], reverse=True)
 
     anagrafica: dict[str, dict] = {}
     for anno, c in sorted(per_anno.items()):
@@ -158,7 +283,21 @@ def main() -> int:
             if anagrafica.get("2025") and anagrafica["2025"]["denunce"] else None
         ),
         "lavoratoriCoinvolti": {"2025": 63136},  # dalla Relazione: lavoratori, non pratiche
-        "perPatologia": None,  # in sviluppo: top ICD10 accertati con esiti
+        "perPatologia": per_patologia,
+        "famiglie": famiglie_out,
+        "nonDeterminati": {
+            "definitiNonD": nd_esiti.get("N", 0) + nd_esiti.get("P", 0),
+            "rigettatiNonD": nd_esiti.get("N", 0),
+            "riconosciutiNonD": nd_esiti.get("P", 0),
+            "inIstruttoriaNonD": nd_esiti.get("I", 0),
+        },
+        "notaPatologie": (
+            "Il tasso di riconoscimento per patologia si calcola sui casi definiti con patologia "
+            "accertata (ICD10accertato valorizzato). I casi con ICD non determinato (ND) hanno "
+            "l'esito amministrativo ma non la patologia accertata nel dataset: sono esclusi dal "
+            "tasso per patologia e indicati a parte. Le famiglie cliniche seguono la Relazione "
+            "Annuale INAIL per il confronto."
+        ),
     }
 
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")

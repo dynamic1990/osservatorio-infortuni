@@ -13,6 +13,22 @@ export interface EsitoAnno {
   rigettatePerc: number;
 }
 
+export interface PatologiaEsito {
+  codice: string;
+  nome: string;
+  riconosciute: number;
+  rigettate: number;
+  inIstruttoria: number;
+  tassoPerc: number;
+}
+
+export interface FamigliaEsito {
+  famiglia: string;
+  riconosciute: number;
+  rigettate: number;
+  tassoPerc: number;
+}
+
 export interface DatasetEsitiMalattie {
   schemaVersion: number;
   datasetId: string;
@@ -33,7 +49,15 @@ export interface DatasetEsitiMalattie {
   } | null;
   istruttoriaPerc2025: number | null;
   lavoratoriCoinvolti: { "2025": number };
-  perPatologia: null;
+  perPatologia: PatologiaEsito[];
+  famiglie: FamigliaEsito[];
+  nonDeterminati: {
+    definitiNonD: number;
+    rigettatiNonD: number;
+    riconosciutiNonD: number;
+    inIstruttoriaNonD: number;
+  };
+  notaPatologie: string;
 }
 
 export function getEsitiMalattieData(): DatasetEsitiMalattie {

@@ -138,6 +138,36 @@ export function MalattieEsitiWidget() {
         </div>
       </div>
 
+      {/* Riconoscimento per patologia specifica (casi definiti) */}
+      {dati.perPatologia.length > 0 && (
+        <div>
+          <div style={{ fontSize: "0.9rem", fontWeight: 700, marginBottom: "var(--space-2)" }}>
+            Riconoscimento per patologia (casi definiti)
+          </div>
+          <div style={{ display: "grid", gap: "var(--space-2)" }}>
+            {dati.perPatologia.slice(0, 12).map((p) => (
+              <div key={p.codice} style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 120px 90px", gap: "var(--space-2)", alignItems: "center", fontSize: "0.84rem", borderBottom: "1px solid var(--color-border)", padding: "5px 2px" }}>
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 500 }}>
+                  {p.nome} <span style={{ color: "var(--color-text-muted)", fontWeight: 400 }}>({p.codice})</span>
+                </span>
+                <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ width: `${Math.min(p.tassoPerc, 100)}%`, maxWidth: 100, height: 8, background: p.tassoPerc >= 55 ? "var(--color-success)" : p.tassoPerc >= 45 ? "var(--color-warning)" : "var(--color-accent)", borderRadius: 4, display: "inline-block" }} />
+                  <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{p.tassoPerc.toLocaleString("it-IT")}%</span>
+                </span>
+                <span style={{ textAlign: "right", color: "var(--color-text-soft)", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+                  {p.riconosciute.toLocaleString("it-IT")} / {(p.riconosciute + p.rigettate).toLocaleString("it-IT")}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: "0.8rem", color: "var(--color-text-soft)", marginTop: "var(--space-2)" }}>
+            {dati.notaPatologie} Inoltre {dati.nonDeterminati.rigettatiNonD.toLocaleString("it-IT")} pratiche
+            rigettate e {dati.nonDeterminati.riconosciutiNonD.toLocaleString("it-IT")} riconosciute hanno ICD non determinato
+            (escluse dal tasso per patologia).
+          </div>
+        </div>
+      )}
+
       {/* Nota metodologica */}
       <div style={{ background: "var(--color-surface)", borderRadius: "var(--radius-md)", padding: "var(--space-3) var(--space-4)", fontSize: "0.84rem", color: "var(--color-text-soft)" }}>
         <strong style={{ color: "var(--color-text)" }}>Come leggere questo numero.</strong>{" "}
