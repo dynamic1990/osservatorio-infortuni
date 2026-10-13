@@ -26,9 +26,9 @@ const formatEtichetta = (v: unknown): string => {
 type Vista = "violazioni" | "nero" | "irregolari";
 
 const VISTE: Record<Vista, { label: string; dataKey: string; nome: string; colore: string }> = {
-  violazioni: { label: "Violazioni sicurezza", dataKey: "violazioniSicurezza", nome: "Violazioni penali salute e sicurezza", colore: "var(--color-accent)" },
-  nero: { label: "Lavoro nero", dataKey: "lavoratoriInNero", nome: "Lavoratori totalmente in nero", colore: "var(--color-warning)" },
-  irregolari: { label: "Lavoratori irregolari", dataKey: "lavoratoriIrregolari", nome: "Lavoratori irregolari (INL+INPS+INAIL)", colore: "var(--color-link)" },
+  violazioni: { label: "Violazioni sicurezza", dataKey: "violazioniSicurezza", nome: "Violazioni penali salute e sicurezza", colore: "#f36458" },
+  nero: { label: "Lavoro nero", dataKey: "lavoratoriInNero", nome: "Lavoratori totalmente in nero", colore: "#9a6700" },
+  irregolari: { label: "Lavoratori irregolari", dataKey: "lavoratoriIrregolari", nome: "Lavoratori irregolari (INL+INPS+INAIL)", colore: "#057dbc" },
 };
 
 export function VigilanzaViolazioniWidget() {

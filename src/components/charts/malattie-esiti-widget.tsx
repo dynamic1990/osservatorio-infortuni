@@ -21,6 +21,11 @@ export function MalattieEsitiWidget() {
   const anno2025 = dati["2025"];
   const istruttoriaPerc = dati.istruttoriaPerc2025;
 
+  // Composizione delle denunce su base denunce totali (le tre quote sommano a 100%).
+  // Le percentuali sui casi definiti (riconosciute/rigettate) restano come indicatore a parte.
+  const den2025 = anno2025 ? anno2025.denunce : 0;
+  const quotaDen = (n: number) => (den2025 ? Math.round((n * 1000) / den2025) / 10 : 0);
+
   // Serie per il grafico stacked: una riga per anno con le tre componenti
   const serie = dati.denuncePerAnno.map((a) => ({
     anno: a.anno,
@@ -52,7 +57,7 @@ export function MalattieEsitiWidget() {
           >
             <div className="metric-label">Denunce {anno2025.anno}</div>
             <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>{exactNumber(anno2025.denunce)}</div>
-            <div className="metric-sub">protocollate nell&apos;anno</div>
+            <div className="metric-sub">protocollate nell&apos;anno, al {dati.dataRilevazione}</div>
           </div>
           <div
             style={{
@@ -67,10 +72,12 @@ export function MalattieEsitiWidget() {
             <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.riconosciute)}{" "}
               <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
-                ({anno2025.riconosciutePerc.toLocaleString("it-IT")}%)
+                ({quotaDen(anno2025.riconosciute).toLocaleString("it-IT")}% delle denunce)
               </span>
             </div>
-            <div className="metric-sub">al {dati.dataRilevazione}</div>
+            <div className="metric-sub">
+              {anno2025.riconosciutePerc.toLocaleString("it-IT")}% sui casi definiti
+            </div>
           </div>
           <div
             style={{
@@ -85,10 +92,12 @@ export function MalattieEsitiWidget() {
             <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.rigettate)}{" "}
               <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
-                ({anno2025.rigettatePerc.toLocaleString("it-IT")}%)
+                ({quotaDen(anno2025.rigettate).toLocaleString("it-IT")}% delle denunce)
               </span>
             </div>
-            <div className="metric-sub">definite negativamente</div>
+            <div className="metric-sub">
+              {anno2025.rigettatePerc.toLocaleString("it-IT")}% sui casi definiti
+            </div>
           </div>
           <div
             style={{
@@ -103,11 +112,11 @@ export function MalattieEsitiWidget() {
             <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.inIstruttoria)}{" "}
               <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
-                ({istruttoriaPerc != null ? istruttoriaPerc.toLocaleString("it-IT") : ""}%)
+                ({quotaDen(anno2025.inIstruttoria).toLocaleString("it-IT")}% delle denunce)
               </span>
             </div>
             <div className="metric-sub">
-              delle denunce {anno2025.anno}, al {dati.dataRilevazione}
+              non ancora definite, al {dati.dataRilevazione}
             </div>
           </div>
         </div>
@@ -136,13 +145,13 @@ export function MalattieEsitiWidget() {
                     <div className="tooltip-row">
                       <span>Riconosciute:</span>
                       <strong style={{ color: "var(--color-success)" }}>
-                        {exactNumber(p.riconosciute)} ({def ? Math.round((Number(p.riconosciute) * 100) / def) : 0}% dei definiti)
+                        {exactNumber(p.riconosciute)} ({denunce ? Math.round((Number(p.riconosciute) * 100) / denunce) : 0}% delle denunce)
                       </strong>
                     </div>
                     <div className="tooltip-row">
                       <span>Rigettate:</span>
                       <strong style={{ color: "var(--color-accent)" }}>
-                        {exactNumber(p.rigettate)} ({def ? Math.round((Number(p.rigettate) * 100) / def) : 0}% dei definiti)
+                        {exactNumber(p.rigettate)} ({denunce ? Math.round((Number(p.rigettate) * 100) / denunce) : 0}% delle denunce)
                       </strong>
                     </div>
                     <div className="tooltip-row">
@@ -150,6 +159,10 @@ export function MalattieEsitiWidget() {
                       <strong style={{ color: "var(--color-warning)" }}>
                         {exactNumber(p.inIstruttoria)} ({denunce ? Math.round((Number(p.inIstruttoria) * 100) / denunce) : 0}% delle denunce)
                       </strong>
+                    </div>
+                    <div className="tooltip-row" style={{ marginTop: 4, borderTop: "1px solid var(--color-divider)", paddingTop: 4 }}>
+                      <span>Riconoscimento sui casi definiti:</span>
+                      <strong>{def ? Math.round((Number(p.riconosciute) * 100) / def) : 0}%</strong>
                     </div>
                   </div>
                 );
