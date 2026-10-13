@@ -45,8 +45,11 @@ REGIONI = {
 }
 NOMI = {v: k for k, v in REGIONI.items()}
 
-# Nome leggibile per i codici ICD-10 più frequenti nelle malattie professionali.
-# Solo i codici osservati nei dati hanno una descrizione; gli altri mostrano il codice.
+# Nome leggibile per i codici ICD-10 osservati nelle malattie professionali.
+# Fonti: tabelle delle malattie professionali industria/agricoltura (d.m. 10.10.2023,
+# G.U. n. 270 del 18.11.2023) per i codici ivi tabellati; per gli altri codici la
+# traduzione ufficiale italiana ICD-10 (OMS, gruppo interregionale codifica mortalità).
+# Tutti i codici osservati nei dati hanno una descrizione; nessun codice nudo in pagina.
 DESCRIZIONI_ICD = {
     "M75.1": "Lesioni della cuffia dei rotatori (spalla)",
     "G56.0": "Sindrome del tunnel carpale",
@@ -86,6 +89,36 @@ DESCRIZIONI_ICD = {
     "R06": "Anomalie della respirazione",
     "G56": "Mononeuropatie dell'arto superiore",
     "C45": "Mesotelioma",
+    # --- Aggiunte: descrizioni ufficiali per i codici prima mostrati nudi ---
+    # Tabelle d.m. 10.10.2023 (industria/agricoltura), voce tabellare:
+    "C44": "Altri tumori maligni della cute",
+    "C67": "Tumore maligno della vescica",
+    "J42": "Bronchite cronica",
+    "J61": "Pneumoconiosi da asbesto (amianto)",
+    "J92": "Placca o ispessimento pleurico",
+    "L57.0": "Cheratosi attinica",
+    "M19.2": "Osteoartropatie del polso, gomito e spalla",
+    "M75.5": "Borsite cronica della spalla",
+    "M76.8": "Tendinopatia degenerativa del quadricipite femorale",
+    # Codici non tabellati: traduzione ufficiale ICD-10 (OMS)
+    "F43.2": "Disturbi dell'adattamento",
+    "G54.1": "Disturbi del plesso lombosacrale",
+    "G55.1": "Compressioni delle radici nervose e dei plessi in disturbi dei dischi intervertebrali",
+    "G56.1": "Altre lesioni del nervo mediano",
+    "G56.2": "Lesione del nervo ulnare",
+    "H90": "Sordità da difetto di trasmissione e/o neurosensoriale",
+    "H90.3": "Sordità neurosensoriale bilaterale",
+    "H91.1": "Presbiacusia",
+    "M15": "Poliartrosi",
+    "M16": "Coxartrosi (artrosi dell'anca)",
+    "M23": "Lesione interna del ginocchio",
+    "M50": "Disturbi dei dischi intervertebrali cervicali",
+    "M50.1": "Disturbo di disco cervicale associato a radicolopatia",
+    "M50.2": "Altra ernia di disco cervicale",
+    "M50.3": "Altra degenerazione di disco cervicale",
+    "M65.3": "Dito a scatto",
+    "M72.0": "Fibromatosi della fascia palmare (Dupuytren)",
+    "M75.2": "Tendinite bicipitale",
 }
 
 # Famiglie cliniche usate dalla Relazione Annuale INAIL per il confronto.
@@ -188,12 +221,15 @@ def main() -> int:
         return round(c.get("P", 0) * 100 / defi, 1) if defi else None
 
     per_patologia = []
+    non_mappati = set()
     for icd, c in patologie_def.items():
         if icd == "ND":
             continue
         defi = c.get("P", 0) + c.get("N", 0)
         if defi < 500:  # soglia: abbastanza casi per un tasso stabile
             continue
+        if icd not in DESCRIZIONI_ICD:
+            non_mappati.add(icd)
         per_patologia.append({
             "codice": icd,
             "nome": DESCRIZIONI_ICD.get(icd, icd),
@@ -203,6 +239,8 @@ def main() -> int:
             "tassoPerc": _tasso(c),
         })
     per_patologia.sort(key=lambda x: x["riconosciute"] + x["rigettate"], reverse=True)
+    if non_mappati:
+        print(f"   ATTENZIONE: {len(non_mappati)} codice/i senza descrizione: {sorted(non_mappati)}")
 
     famiglie_out = []
     for fam, c in famiglie_def.items():

@@ -71,8 +71,8 @@ export function MalattieEsitiWidget() {
             <div className="metric-label">Riconosciute</div>
             <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.riconosciute)}{" "}
-              <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
-                ({quotaDen(anno2025.riconosciute).toLocaleString("it-IT")}% delle denunce)
+              <span style={{ fontSize: "0.68em", fontWeight: 600, color: "var(--color-text-soft)" }}>
+                {quotaDen(anno2025.riconosciute).toLocaleString("it-IT")}%
               </span>
             </div>
             <div className="metric-sub">
@@ -91,8 +91,8 @@ export function MalattieEsitiWidget() {
             <div className="metric-label">Rigettate</div>
             <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.rigettate)}{" "}
-              <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
-                ({quotaDen(anno2025.rigettate).toLocaleString("it-IT")}% delle denunce)
+              <span style={{ fontSize: "0.68em", fontWeight: 600, color: "var(--color-text-soft)" }}>
+                {quotaDen(anno2025.rigettate).toLocaleString("it-IT")}%
               </span>
             </div>
             <div className="metric-sub">
@@ -111,8 +111,8 @@ export function MalattieEsitiWidget() {
             <div className="metric-label">In istruttoria</div>
             <div className="metric-value" style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>
               {exactNumber(anno2025.inIstruttoria)}{" "}
-              <span style={{ fontSize: "0.85em", fontWeight: 600, color: "var(--color-text-soft)" }}>
-                ({quotaDen(anno2025.inIstruttoria).toLocaleString("it-IT")}% delle denunce)
+              <span style={{ fontSize: "0.68em", fontWeight: 600, color: "var(--color-text-soft)" }}>
+                {quotaDen(anno2025.inIstruttoria).toLocaleString("it-IT")}%
               </span>
             </div>
             <div className="metric-sub">
@@ -145,19 +145,19 @@ export function MalattieEsitiWidget() {
                     <div className="tooltip-row">
                       <span>Riconosciute:</span>
                       <strong style={{ color: "var(--color-success)" }}>
-                        {exactNumber(p.riconosciute)} ({denunce ? Math.round((Number(p.riconosciute) * 100) / denunce) : 0}% delle denunce)
+                        {exactNumber(p.riconosciute)} ({denunce ? Math.round((Number(p.riconosciute) * 100) / denunce) : 0}%)
                       </strong>
                     </div>
                     <div className="tooltip-row">
                       <span>Rigettate:</span>
                       <strong style={{ color: "var(--color-accent)" }}>
-                        {exactNumber(p.rigettate)} ({denunce ? Math.round((Number(p.rigettate) * 100) / denunce) : 0}% delle denunce)
+                        {exactNumber(p.rigettate)} ({denunce ? Math.round((Number(p.rigettate) * 100) / denunce) : 0}%)
                       </strong>
                     </div>
                     <div className="tooltip-row">
                       <span>In istruttoria:</span>
                       <strong style={{ color: "var(--color-warning)" }}>
-                        {exactNumber(p.inIstruttoria)} ({denunce ? Math.round((Number(p.inIstruttoria) * 100) / denunce) : 0}% delle denunce)
+                        {exactNumber(p.inIstruttoria)} ({denunce ? Math.round((Number(p.inIstruttoria) * 100) / denunce) : 0}%)
                       </strong>
                     </div>
                     <div className="tooltip-row" style={{ marginTop: 4, borderTop: "1px solid var(--color-divider)", paddingTop: 4 }}>
@@ -170,8 +170,8 @@ export function MalattieEsitiWidget() {
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
             />
             <Legend wrapperStyle={{ fontSize: "0.78rem" }} />
-            <Bar dataKey="riconosciute" name="Riconosciute" stackId="est" fill="#1e7a4e" radius={[0, 0, 0, 0]} isAnimationActive={false} />
-            <Bar dataKey="rigettate" name="Rigettate" stackId="est" fill="#f36458" radius={[0, 0, 0, 0]} isAnimationActive={false} />
+            <Bar dataKey="riconosciute" name="Riconosciute" stackId="est" fill="#1e7a4e" radius={[0, 0, 0, 0]} isAnimationActive={false} maxBarSize={56} />
+            <Bar dataKey="rigettate" name="Rigettate" stackId="est" fill="#f36458" radius={[0, 0, 0, 0]} isAnimationActive={false} maxBarSize={56} />
             <Bar dataKey="inIstruttoria" name="In istruttoria" stackId="est" fill="#9a6700" radius={[4, 4, 0, 0]} isAnimationActive={false} maxBarSize={56} />
           </BarChart>
         </ResponsiveContainer>
