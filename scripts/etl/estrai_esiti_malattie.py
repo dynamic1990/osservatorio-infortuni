@@ -1,142 +1,169 @@
 #!/usr/bin/env python3
-"""ETL esiti malattie professionali: quante denunce vengono riconosciute.
+"""ETL esiti malattie professionali: denunce, riconosciute, rigettate, in istruttoria.
 
-Fonte: INAIL, Relazione Annuale 2025, "Focus statistico sulle malattie
-professionali" (pagg. 65-74 del PDF ufficiale, presentato alla Camera il
-22/09/2026). Il focus contiene sia le denunce sia l'esito delle pratiche:
-riconosciute positivamente, definite negativamente e ancora in istruttoria.
+Fonte: INAIL Open Data, DatiSemestraliMalattieProfessionaliDataProt (CSV per
+regione, rilevazione 30/04/2026). Ogni riga è una pratica con la sua
+DefinizioneAmministrativaCaso (P = positivo/riconosciuta, N = negativo,
+I = in istruttoria), DataProtocollo e DataDefinizione.
 
-Questo ETL NON fa parsing euristico dei numeri dal PDF: i valori sono stati
-letti e verificati a mano sul testo ufficiale il 13/10/2026, e lo script
-verifica che i marker testuali chiave siano ancora presenti nel PDF prima di
-scrivere il dataset. Se l'edizione del prossimo anno cambia layout o cifre,
-lo script fallisce in modo esplicito: i valori andranno ri-verificati.
+A differenza della Relazione Annuale (che pubblica "36 mila" arrotondato),
+questo dataset permette il conteggio PRECISO alla data di rilevazione delle
+pratiche riconosciute, rigettate e ancora in istruttoria, per anno di
+protocollo della denuncia.
 
 Output: src/data/generated/malattie-esiti.json
 
 Uso:
   python3 scripts/etl/estrai_esiti_malattie.py
+  (i CSV raw vanno aggiornati prima con aggiorna_malattie_professionali.py
+   esteso al semestrale DataProt, oppure scaricati come da RAW_FONTE)
 """
 
 from __future__ import annotations
 
+import csv
+import glob
 import hashlib
 import json
 import sys
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PDF = ROOT / "data" / "raw" / "relazione-annuale" / "relazione-annuale-inail-2025.pdf"
+RAW_DIR = ROOT / "data" / "raw" / "malattie-professionali"
 OUT = ROOT / "src" / "data" / "generated" / "malattie-esiti.json"
 REGISTRY = ROOT / "scripts" / "ci" / "generated-artifacts.json"
 
-# Marker testuali che devono comparire nel testo estratto (salvaguardia
-# anti-regressione: se la fonte cambia, l'ETL si ferma).
-REQUIRED_MARKERS = [
-    "98.312",        # denunce 2025
-    "88.338",        # denunce 2024
-    "72.575",        # denunce 2023
-    "60.623",        # denunce 2022
-    "55.198",        # denunce 2021
-    "63.136",        # lavoratori coinvolti 2025
-    "36 mila",       # riconosciute positivamente alla rilevazione 30/04/2026
-    "circa la metà", # esiti sui casi definiti 2021-2025
-    "55%",           # soglia nervoso/cute
-    "15%",           # pratiche ancora in istruttoria nell'ultimo anno
-    "30 aprile 2026",  # data di rilevazione
-]
-
-# Valori verificati a mano sul PDF (13/10/2026). Non modificare senza
-# ri-verificare i marker sopra.
-VALORI = {
-    "denunce": {
-        "2021": 55198,
-        "2022": 60623,
-        "2023": 72575,
-        "2024": 88338,
-        "2025": 98312,
-    },
-    "lavoratoriCoinvolti": {
-        "2024": 58000,   # "58 mila" nel testo (cifra arrotondata dalla fonte)
-        "2025": 63136,   # cifra esatta nel testo
-    },
-    "esiti2025": {
-        "denunce": 98312,
-        "riconosciute": 36000,  # "36 mila" circa, alla rilevazione 30/04/2026
-        "inIstruttoriaNota": "diverse migliaia di pratiche ancora in istruttoria",
-    },
-    "casiDefiniti2021_2025": {
-        "riconosciutePerc": 50,   # "circa la metà"
-        "nonRiconosciutePerc": 50,  # il complemento sui casi definiti
-        "nota": "Percentuali sui soli casi definiti (positive e negative), escluse le pratiche in istruttoria.",
-    },
-    "istruttoriaUltimoAnnoPerc": 15,
-    "perPatologia": [
-        {"patologia": "Malattie del sistema nervoso", "tasso": ">55%"},
-        {"patologia": "Malattie della cute", "tasso": ">55%"},
-        {"patologia": "Malattie osteomuscolari", "tasso": "≈50%"},
-        {"patologia": "Ipoacusie", "tasso": "≈50%"},
-        {"patologia": "Tumori professionali", "tasso": "≈50%"},
-        {"patologia": "Tutte le altre patologie", "tasso": "<50%"},
-    ],
-    "denuncePlurime": {
-        "denunce2025": 98312,
-        "lavoratori2025": 63136,
-        "nota": "Una stessa segnalazione può aprire più pratiche (denunce plurime): il numero di denunce non coincide con il numero di lavoratori ammalati.",
-    },
+REGIONI = {
+    "Abruzzo": "13", "Basilicata": "17", "Calabria": "18", "Campania": "15",
+    "EmiliaRomagna": "08", "FriuliVeneziaGiulia": "06", "Lazio": "12",
+    "Liguria": "07", "Lombardia": "03", "Marche": "11", "Molise": "14",
+    "Piemonte": "01", "Puglia": "16", "Sardegna": "20", "Sicilia": "19",
+    "Toscana": "09", "TrentinoAltoAdige": "04", "Umbria": "10",
+    "ValledAosta": "02", "Veneto": "05",
 }
+NOMI = {v: k for k, v in REGIONI.items()}
+
+# Rilevazione attesa: la cadenza semestrale pubblica con rilevazione 30/04 e 31/10.
+# Il dataset con DataRilevazione == RILEVAZIONE_ATTESA è la fotografia più recente.
+RILEVAZIONE_ATTESA = "30/04/2026"
+
+# Coerenza con la Relazione Annuale 2025: le denunce 2025 devono combaciare.
+# Se il totale dei record per anno di protocollo 2025 non è 98.312, lo script
+# avvisa: la fonte è cambiata (nuova rilevazione, altro aggiornamento).
+DENUNCE_2025_ATTESE = 98312
 
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def extract_text(pdf: Path) -> str:
-    try:
-        import pdfplumber
-    except ImportError as exc:  # pragma: no cover
-        raise SystemExit("pdfplumber non installato (venv ETL: /root/.scrapling-venv/bin/python)") from exc
-    parts: list[str] = []
-    with pdfplumber.open(str(pdf)) as doc:
-        for page in doc.pages:
-            t = page.extract_text() or ""
-            parts.append(t)
-    return "\n".join(parts)
+def leggi_rilevazione(rilevazione: str) -> list[dict]:
+    """Legge tutti i CSV regionali e ritorna SOLO le pratiche della rilevazione data."""
+    righe: list[dict] = []
+    for f in sorted(glob.glob(str(RAW_DIR / "semestrale_prot_*.csv"))):
+        with open(f, encoding="latin-1", newline="") as fh:
+            for r in csv.DictReader(fh, delimiter=";"):
+                if (r.get("DataRilevazione") or "").strip() == rilevazione:
+                    righe.append(r)
+    return righe
+
+
+def esito_da_rilevazioni(righe: list[dict]) -> dict:
+    """Aggrega per anno di protocollo: P/N/I per DefinizioneAmministrativaCaso."""
+    per_anno = defaultdict(Counter)
+    for r in righe:
+        dp = (r.get("DataProtocollo") or "").strip()
+        anno = dp[6:10] if len(dp) == 10 and dp[6:10].isdigit() else "?"
+        esito = (r.get("DefinizioneAmministrativaCaso") or "").strip() or "?"
+        per_anno[anno][esito] += 1
+    return per_anno
 
 
 def main() -> int:
-    if not PDF.exists():
-        raise SystemExit(f"Manca il PDF: {PDF} (copiare il PDF ufficiale della Relazione Annuale in data/raw/relazione-annuale/)")
-    print(f"1. Estrazione testo da {PDF.name} ...")
-    testo = extract_text(PDF)
-    # normalizza gli spazi (il testo estratto ha spesso spazi doppi)
-    testo_norm = " ".join(testo.split())
-    print(f"   testo estratto: {len(testo_norm):,} caratteri")
-
-    print("2. Verifica marker testuali...")
-    mancanti = [m for m in REQUIRED_MARKERS if m not in testo_norm]
-    if mancanti:
+    print(f"1. Lettura CSV semestrali DataProt (rilevazione {RILEVAZIONE_ATTESA})")
+    files = sorted(glob.glob(str(RAW_DIR / "semestrale_prot_*.csv")))
+    if not files:
         raise SystemExit(
-            f"Marker mancanti nel PDF (fonte cambiata?): {mancanti}. "
-            "Rileggere il focus e aggiornare VALORI prima di rigenerare."
+            f"Nessun CSV in {RAW_DIR}: scaricare i DatiSemestraliMalattieProfessionaliDataProt"
+            " per tutte le regioni prima di eseguire questo ETL."
         )
-    print("   OK: tutti i marker presenti.")
+    righe = leggi_rilevazione(RILEVAZIONE_ATTESA)
+    print(f"   {len(files)} file regionali, {len(righe):,} pratiche alla rilevazione {RILEVAZIONE_ATTESA}")
+
+    per_anno = esito_da_rilevazioni(righe)
+
+    anagrafica: dict[str, dict] = {}
+    for anno, c in sorted(per_anno.items()):
+        if anno == "?":
+            continue
+        p = c.get("P", 0)
+        n = c.get("N", 0)
+        i = c.get("I", 0)
+        tot = p + n + i
+        def_tot = p + n
+        anagrafica[anno] = {
+            "anno": anno,
+            "denunce": tot,
+            "riconosciute": p,
+            "rigettate": n,
+            "inIstruttoria": i,
+            "definite": def_tot,
+        }
+        if def_tot:
+            anagrafica[anno]["riconosciutePerc"] = round(p * 100 / def_tot, 1)
+            anagrafica[anno]["rigettatePerc"] = round(n * 100 / def_tot, 1)
+
+    # Controllo di coerenza vs Relazione Annuale
+    a2025 = anagrafica.get("2025", {})
+    print(f"   2025: riconosciute={a2025.get('riconosciute')}, rigettate={a2025.get('rigettate')}, "
+          f"istruttoria={a2025.get('inIstruttoria')}, denunce={a2025.get('denunce')}")
+    if a2025.get("denunce") != DENUNCE_2025_ATTESE:
+        print(f"   [ATTENZIONE] Denunce 2025 nel dataset ({a2025.get('denunce')}) != {DENUNCE_2025_ATTESE} "
+              f"(Relazione Annuale). Fonte cambiata o rilevazione non aggiornata: verificare.")
+    else:
+        print("   OK: denunce 2025 coincidono con la Relazione Annuale (98.312).")
+
+    serie = []
+    for anno in sorted(anagrafica):
+        serie.append({
+            "anno": anno,
+            "riconosciute": anagrafica[anno]["riconosciute"],
+            "rigettate": anagrafica[anno]["rigettate"],
+            "inIstruttoria": anagrafica[anno]["inIstruttoria"],
+            "riconosciutePerc": anagrafica[anno]["riconosciutePerc"],
+            "rigettatePerc": anagrafica[anno]["rigettatePerc"],
+        })
 
     payload = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "datasetId": "malattie_esiti",
         "generatedAt": utc_now(),
-        "fonte": "INAIL, Relazione Annuale 2025, Focus statistico sulle malattie professionali (pagg. 65-74 del PDF ufficiale)",
-        "dataRilevazione": "2026-04-30",
-        "nota": "Dato curato, non open data mensile: arriva una volta l'anno dalla Relazione Annuale INAIL. I valori sono stati verificati a mano sul testo ufficiale il 13/10/2026; l'ETL fallisce se i marker testuali chiave spariscono dal PDF.",
-        **VALORI,
+        "fonte": "INAIL Open Data — DatiSemestraliMalattieProfessionaliDataProt (CSV per regione)",
+        "dataRilevazione": RILEVAZIONE_ATTESA,
+        "nota": (
+            "Dato preciso ricavato dal dataset open data semestrale, non dal valore "
+            "arrotondato della Relazione Annuale ('36 mila'). Ogni riga corrisponde a una "
+            "pratica con la sua definizione amministrativa (P=riconosciuta, N=rigettata, "
+            "I=in istruttoria) alla data di rilevazione. Il numero è una fotografia: "
+            "le pratiche in istruttoria dell'anno più recente potranno essere definite "
+            "nella rilevazione successiva. Le denunce possono essere plurime (più pratiche "
+            "per lo stesso lavoratore)."
+        ),
+        "denuncePerAnno": serie,
+        "2025": anagrafica.get("2025"),
+        "istruttoriaPerc2025": (
+            round(anagrafica["2025"]["inIstruttoria"] * 100 / anagrafica["2025"]["denunce"], 1)
+            if anagrafica.get("2025") and anagrafica["2025"]["denunce"] else None
+        ),
+        "lavoratoriCoinvolti": {"2025": 63136},  # dalla Relazione: lavoratori, non pratiche
+        "perPatologia": None,  # in sviluppo: top ICD10 accertati con esiti
     }
 
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"3. Scritto {OUT} ({OUT.stat().st_size / 1024:.0f} KB)")
+    print(f"2. Scritto {OUT} ({OUT.stat().st_size / 1024:.0f} KB)")
 
-    # Allinea il registry degli artifact (come aggiorna_news_infortuni.py)
     if REGISTRY.exists():
         registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
         entries = registry.get("artifacts", registry)

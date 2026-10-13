@@ -1,11 +1,16 @@
 // Client loader e tipi per il dataset Esiti Malattie Professionali
-// (generato da scripts/etl/estrai_esiti_malattie.py dalla Relazione Annuale INAIL)
+// (generato da scripts/etl/estrai_esiti_malattie.py dagli open data INAIL
+// DatiSemestraliMalattieProfessionaliDataProt: conteggio preciso alla rilevazione)
 
 import data from "@/data/generated/malattie-esiti.json";
 
-export interface EsitiPerPatologia {
-  patologia: string;
-  tasso: string;
+export interface EsitoAnno {
+  anno: string;
+  riconosciute: number;
+  rigettate: number;
+  inIstruttoria: number;
+  riconosciutePerc: number;
+  rigettatePerc: number;
 }
 
 export interface DatasetEsitiMalattie {
@@ -15,25 +20,20 @@ export interface DatasetEsitiMalattie {
   fonte: string;
   dataRilevazione: string;
   nota: string;
-  denunce: Record<string, number>;
-  lavoratoriCoinvolti: Record<string, number>;
-  esiti2025: {
+  denuncePerAnno: EsitoAnno[];
+  "2025": {
+    anno: string;
     denunce: number;
     riconosciute: number;
-    inIstruttoriaNota: string;
-  };
-  casiDefiniti2021_2025: {
+    rigettate: number;
+    inIstruttoria: number;
+    definite: number;
     riconosciutePerc: number;
-    nonRiconosciutePerc: number;
-    nota: string;
-  };
-  istruttoriaUltimoAnnoPerc: number;
-  perPatologia: EsitiPerPatologia[];
-  denuncePlurime: {
-    denunce2025: number;
-    lavoratori2025: number;
-    nota: string;
-  };
+    rigettatePerc: number;
+  } | null;
+  istruttoriaPerc2025: number | null;
+  lavoratoriCoinvolti: { "2025": number };
+  perPatologia: null;
 }
 
 export function getEsitiMalattieData(): DatasetEsitiMalattie {

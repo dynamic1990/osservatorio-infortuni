@@ -1,61 +1,65 @@
 {
- "schemaVersion": 1,
+ "schemaVersion": 2,
  "datasetId": "malattie_esiti",
- "generatedAt": "2026-10-13T13:09:49+00:00",
- "fonte": "INAIL, Relazione Annuale 2025, Focus statistico sulle malattie professionali (pagg. 65-74 del PDF ufficiale)",
- "dataRilevazione": "2026-04-30",
- "nota": "Dato curato, non open data mensile: arriva una volta l'anno dalla Relazione Annuale INAIL. I valori sono stati verificati a mano sul testo ufficiale il 13/10/2026; l'ETL fallisce se i marker testuali chiave spariscono dal PDF.",
- "denunce": {
-  "2021": 55198,
-  "2022": 60623,
-  "2023": 72575,
-  "2024": 88338,
-  "2025": 98312
- },
- "lavoratoriCoinvolti": {
-  "2024": 58000,
-  "2025": 63136
- },
- "esiti2025": {
-  "denunce": 98312,
-  "riconosciute": 36000,
-  "inIstruttoriaNota": "diverse migliaia di pratiche ancora in istruttoria"
- },
- "casiDefiniti2021_2025": {
-  "riconosciutePerc": 50,
-  "nonRiconosciutePerc": 50,
-  "nota": "Percentuali sui soli casi definiti (positive e negative), escluse le pratiche in istruttoria."
- },
- "istruttoriaUltimoAnnoPerc": 15,
- "perPatologia": [
+ "generatedAt": "2026-10-13T14:19:32+00:00",
+ "fonte": "INAIL Open Data — DatiSemestraliMalattieProfessionaliDataProt (CSV per regione)",
+ "dataRilevazione": "30/04/2026",
+ "nota": "Dato preciso ricavato dal dataset open data semestrale, non dal valore arrotondato della Relazione Annuale ('36 mila'). Ogni riga corrisponde a una pratica con la sua definizione amministrativa (P=riconosciuta, N=rigettata, I=in istruttoria) alla data di rilevazione. Il numero è una fotografia: le pratiche in istruttoria dell'anno più recente potranno essere definite nella rilevazione successiva. Le denunce possono essere plurime (più pratiche per lo stesso lavoratore).",
+ "denuncePerAnno": [
   {
-   "patologia": "Malattie del sistema nervoso",
-   "tasso": ">55%"
+   "anno": "2021",
+   "riconosciute": 28826,
+   "rigettate": 26314,
+   "inIstruttoria": 58,
+   "riconosciutePerc": 52.3,
+   "rigettatePerc": 47.7
   },
   {
-   "patologia": "Malattie della cute",
-   "tasso": ">55%"
+   "anno": "2022",
+   "riconosciute": 31163,
+   "rigettate": 29376,
+   "inIstruttoria": 84,
+   "riconosciutePerc": 51.5,
+   "rigettatePerc": 48.5
   },
   {
-   "patologia": "Malattie osteomuscolari",
-   "tasso": "≈50%"
+   "anno": "2023",
+   "riconosciute": 35299,
+   "rigettate": 36743,
+   "inIstruttoria": 533,
+   "riconosciutePerc": 49.0,
+   "rigettatePerc": 51.0
   },
   {
-   "patologia": "Ipoacusie",
-   "tasso": "≈50%"
+   "anno": "2024",
+   "riconosciute": 39317,
+   "rigettate": 45731,
+   "inIstruttoria": 3290,
+   "riconosciutePerc": 46.2,
+   "rigettatePerc": 53.8
   },
   {
-   "patologia": "Tumori professionali",
-   "tasso": "≈50%"
-  },
-  {
-   "patologia": "Tutte le altre patologie",
-   "tasso": "<50%"
+   "anno": "2025",
+   "riconosciute": 36019,
+   "rigettate": 49803,
+   "inIstruttoria": 12490,
+   "riconosciutePerc": 42.0,
+   "rigettatePerc": 58.0
   }
  ],
- "denuncePlurime": {
-  "denunce2025": 98312,
-  "lavoratori2025": 63136,
-  "nota": "Una stessa segnalazione può aprire più pratiche (denunce plurime): il numero di denunce non coincide con il numero di lavoratori ammalati."
- }
+ "2025": {
+  "anno": "2025",
+  "denunce": 98312,
+  "riconosciute": 36019,
+  "rigettate": 49803,
+  "inIstruttoria": 12490,
+  "definite": 85822,
+  "riconosciutePerc": 42.0,
+  "rigettatePerc": 58.0
+ },
+ "istruttoriaPerc2025": 12.7,
+ "lavoratoriCoinvolti": {
+  "2025": 63136
+ },
+ "perPatologia": null
 }
