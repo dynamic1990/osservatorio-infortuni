@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, Filter, TrendingDown, TrendingUp } from "lucide-react";
+import { ExternalLink, Filter } from "lucide-react";
 import newsRaw from "@/data/generated/news-infortuni.json";
 
 interface FonteExtra {
@@ -27,22 +27,12 @@ interface Notizia {
   fonti?: FonteExtra[];
 }
 
-interface StatsPayload {
-  finestra: number;
-  generatoIl: string;
-  ultimi7: { mortali: number; gravi: number; totale: number };
-  precedenti7: { mortali: number; gravi: number; totale: number };
-  mese: { codice: string; etichetta: string; mortali: number; totale: number };
-  mesePrecedente: { codice: string; mortali: number };
-}
-
 interface NewsPayload {
   schemaVersion: number;
   datasetId: string;
   generatedAt: string;
   fonte: string;
   periodo: string;
-  stats?: StatsPayload;
   notizie: Notizia[];
 }
 
@@ -75,69 +65,22 @@ function numFontiPerEvento(n: Notizia): number {
   return (n.fonti?.length ?? 0) + 1;
 }
 
-function KpiCard({
-  label,
-  valore,
-  confronto,
-  su,
-  unita = "",
-}: {
-  label: string;
-  valore: number;
-  confronto?: number;
-  su: string;
-  unita?: string;
-}) {
-  const delta = confronto !== undefined ? valore - confronto : null;
-  const up = delta !== null && delta > 0;
-  const down = delta !== null && delta < 0;
-  return (
-    <div
-      style={{
-        background: "var(--color-raised)",
-        border: "1px solid var(--color-divider)",
-        padding: "var(--space-4)",
-        display: "grid",
-        gap: "var(--space-1)",
-      }}
-    >
-      <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
-        {label}
-      </span>
-      <span style={{ fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1 }}>
-        {valore}
-        {unita && <span style={{ fontSize: "1rem", fontWeight: 600, color: "var(--color-text-soft)" }}> {unita}</span>}
-      </span>
-      <span style={{ fontSize: "0.8rem", color: "var(--color-text-soft)" }}>
-        {su}
-        {delta !== null && (
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              marginLeft: 6,
-              fontWeight: 700,
-              color: up ? "var(--color-accent)" : down ? "var(--color-success)" : "var(--color-text-muted)",
-            }}
-          >
-            {up ? <TrendingUp size={13} /> : down ? <TrendingDown size={13} /> : null}
-            {delta > 0 ? `+${delta}` : delta} vs sett. prec.
-          </span>
-        )}
-      </span>
-    </div>
-  );
+function badgeFor(categoria: string): { label: string; bg: string; border: string; fg: string } {
+  if (categoria === "mortale") {
+    return { label: "mortale", bg: "var(--color-accent-soft)", border: "var(--color-accent)", fg: "var(--color-accent-strong)" };
+  }
+  if (categoria === "grave") {
+    return { label: "grave", bg: "var(--color-warning-soft)", border: "var(--color-warning)", fg: "var(--color-warning)" };
+  }
+  return { label: "analisi", bg: "var(--color-surface-1)", border: "var(--color-divider)", fg: "var(--color-text-muted)" };
 }
 
 export function CronacaInfortuniClient() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
-  const stats = dati.stats;
 
-  // Solo eventi di cronaca, ordinati per data desc
+  // Tutte le voci (eventi imminenti + analisi), ordinate per data desc
   const eventi = useMemo(() => {
     return (dati.notizie || [])
-      .filter((n) => n.tipo !== "report")
       .sort((a, b) => {
         const ta = new Date(a.data).getTime() || 0;
         const tb = new Date(b.data).getTime() || 0;
@@ -159,6 +102,7 @@ export function CronacaInfortuniClient() {
   const [categoria, setCategoria] = useState<string>("tutte");
   const [regione, setRegione] = useState<string>("tutte");
   const [periodo, setPeriodo] = useState<string>("tutto");
+  const [soloImminenti, setSoloImminenti] = useState<boolean>(false);
   const [limite, setLimite] = useState<number>(40);
   const [popupFonti, setPopupFonti] = useState<Notizia | null>(null);
 
@@ -183,54 +127,23 @@ export function CronacaInfortuniClient() {
   const filtrate = useMemo(() => {
     return eventi.filter((n) => {
       if (categoria !== "tutte" && n.categoria !== categoria) return false;
+      if (soloImminenti && n.categoria !== "mortale" && n.categoria !== "grave") return false;
       if (regione !== "tutte" && n.regione !== regione) return false;
       if (!filtroPeriodo(n.data)) return false;
       return true;
     });
-  }, [eventi, categoria, regione, periodo]);
+  }, [eventi, categoria, soloImminenti, regione, periodo]);
 
   const visibili = filtrate.slice(0, limite);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-6)" }}>
-      {/* 1. KPI di periodo */}
-      <section className="card" aria-label="Cronaca degli ultimi 7 giorni">
-        <div className="card-header">
-          <h2 className="card-title">La settimana in cifre</h2>
-          <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
-            Eventi di cronaca rilevati dalla rassegna stampa · confronto con la settimana precedente
-          </span>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--space-3)" }}>
-          <KpiCard
-            label="Eventi mortali"
-            valore={stats?.ultimi7.mortali ?? 0}
-            confronto={stats?.precedenti7.mortali}
-            su="ultimi 7 giorni"
-          />
-          <KpiCard
-            label="Eventi gravi"
-            valore={stats?.ultimi7.gravi ?? 0}
-            confronto={stats?.precedenti7.gravi}
-            su="ultimi 7 giorni"
-          />
-        </div>
-        <p className="source-note" style={{ marginTop: "var(--space-3)" }}>
-          Un evento = lo stesso infortunio raccontato da una o più testate, contato una sola volta.
-          {stats?.mese.etichetta
-            ? ` Contatore mensile: a ${stats.mese.etichetta.toLowerCase()} la cronaca registra ${stats.mese.mortali} morti sul lavoro e ${stats.mese.totale} eventi gravi/mortali.`
-            : " Contatore mensile non disponibile."}
-          {" "}
-          Numeri da rassegna stampa automatica (soglia di rilevanza del filtro), non da banche dati ufficiali.
-        </p>
-      </section>
-
-      {/* 3. Timeline con filtri */}
+      {/* Timeline con filtri */}
       <section className="card" aria-label="Timeline della cronaca">
         <div className="card-header">
           <h2 className="card-title">La cronaca giorno per giorno</h2>
           <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
-            {filtrate.length} eventi{regione !== "tutte" ? ` in ${regione}` : ""}
+            {filtrate.length} voci{regione !== "tutte" ? ` in ${regione}` : ""}
           </span>
         </div>
 
@@ -261,6 +174,7 @@ export function CronacaInfortuniClient() {
             <option value="tutte">Tutte le categorie</option>
             <option value="mortale">Mortali</option>
             <option value="grave">Gravi</option>
+            <option value="analisi">Analisi e approfondimenti</option>
           </select>
           <select
             aria-label="Filtra per regione"
@@ -297,12 +211,31 @@ export function CronacaInfortuniClient() {
             <option value="7">Ultimi 7 giorni</option>
             <option value="30">Ultimi 30 giorni</option>
           </select>
+          <label
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              fontSize: "0.85rem",
+              color: "var(--color-text-soft)",
+              cursor: "pointer",
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={soloImminenti}
+              onChange={(e) => setSoloImminenti(e.target.checked)}
+              style={{ cursor: "pointer" }}
+            />
+            Solo fatti imminenti (48 ore)
+          </label>
         </div>
 
         {/* Timeline */}
         <div style={{ display: "grid", gap: "var(--space-2)" }}>
           {visibili.map((n, i) => {
             const data = new Date(n.data);
+            const badge = badgeFor(n.categoria);
             const oggi = new Date();
             const giorniFa = Math.max(0, Math.round((oggi.getTime() - data.getTime()) / 86400_000));
             const numFonti = (n.fonti?.length ?? 0) + 1;
@@ -351,12 +284,12 @@ export function CronacaInfortuniClient() {
                         letterSpacing: "0.05em",
                         padding: "2px 7px",
                         borderRadius: "var(--radius-sm)",
-                        background: n.categoria === "mortale" ? "var(--color-accent-soft)" : "var(--color-warning-soft)",
-                        border: `1px solid ${n.categoria === "mortale" ? "var(--color-accent)" : "var(--color-warning)"}`,
-                        color: n.categoria === "mortale" ? "var(--color-accent-strong)" : "var(--color-warning)",
+                        background: badge.bg,
+                        border: `1px solid ${badge.border}`,
+                        color: badge.fg,
                       }}
                     >
-                      {n.categoria === "mortale" ? "mortale" : "grave"}
+                      {badge.label}
                     </span>
                   </div>
                   {n.sintesi && n.sintesi !== "Infortunio sul lavoro" && (

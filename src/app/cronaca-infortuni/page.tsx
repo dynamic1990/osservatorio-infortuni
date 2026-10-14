@@ -64,7 +64,9 @@ export default function CronacaInfortuniPage() {
             <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
               Gli infortuni gravi e mortali sul lavoro raccontati dalla cronaca italiana, giorno per giorno.
               Una rassegna automatica interroga le testate nazionali e locali, filtra i fatti pertinenti e li
-              ordina in una timeline. I numeri di questa pagina sono un indicatore congiunturale della
+              ordina in una timeline. Sono classificati {"mortale"} o {"grave"} solo gli eventi pubblicati
+              entro 48 ore; bilanci, dati di periodo e approfondimenti (come i report INAIL regionali) finiscono
+              nella categoria {"analisi"}. I numeri di questa pagina sono un indicatore congiunturale della
               rassegna stampa: <strong>non sostituiscono</strong> i dati ufficiali INAIL, disponibili nella
               sezione statistiche.
             </p>

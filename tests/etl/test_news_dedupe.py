@@ -167,5 +167,67 @@ class TestSintesi(unittest.TestCase):
         )
 
 
+class TestClassifyCategoria(unittest.TestCase):
+    """Categoria pubblica: mortale/grave solo entro 48h, tutto il resto analisi."""
+
+    H = 3600  # secondi in un'ora
+
+    def _data(self, ore_fa):
+        from datetime import datetime, timedelta, timezone
+        ref = datetime.now(timezone.utc) - timedelta(hours=ore_fa)
+        return ref.strftime("%a, %d %b %Y %H:%M:%S GMT")
+
+    def test_evento_fresco_mortale(self):
+        self.assertEqual(
+            etl.classify_categoria("Operaio muore schiacciato in cantiere", "evento", self._data(2)),
+            "mortale",
+        )
+
+    def test_evento_fresco_grave(self):
+        self.assertEqual(
+            etl.classify_categoria("Operaio grave dopo caduta da impalcatura", "evento", self._data(10)),
+            "grave",
+        )
+
+    def test_evento_vecchio_diventa_analisi(self):
+        # Oltre le 48 ore: non è più un fatto imminente, ma resta nel quadro.
+        self.assertEqual(
+            etl.classify_categoria("Operaio muore schiacciato in cantiere", "evento", self._data(72)),
+            "analisi",
+        )
+
+    def test_report_sempre_analisi(self):
+        self.assertEqual(
+            etl.classify_categoria("Lavoro Abruzzo: meno morti ma più infortuni", "report", self._data(2)),
+            "analisi",
+        )
+
+    def test_titolo_rete8_classificato_report(self):
+        titolo = "Lavoro Abruzzo: meno morti ma più infortuni. Terza regione in Italia per malattie professionali"
+        self.assertEqual(etl.classify_tipo(titolo, "Rete8"), "report")
+
+    def test_bilancio_numeri_periodo_report(self):
+        # "18 morti ... in un anno", "15 morti in sette mesi": quadro statistico,
+        # non cronaca di un singolo fatto imminente.
+        self.assertEqual(
+            etl.classify_tipo("A Bari e provincia il lavoro fa ancora paura: 18 morti e oltre 10mila infortuni in un anno", "Borderline24.com"),
+            "report",
+        )
+        self.assertEqual(
+            etl.classify_tipo("Un infortunio ogni mezz'ora e 15 morti sul lavoro in sette mesi", "Corriere Brescia"),
+            "report",
+        )
+
+    def test_followup_giudiziario_diventa_analisi(self):
+        # Follow-up processuale/commemorativo: non è un fatto accaduto
+        # nell'imminente anche se cita la vittima.
+        cat = etl.classify_categoria(
+            "In otto rischiano il processo per l'operaio morto folgorato sul cantiere della Regionale 8",
+            "evento",
+            "Tue, 13 Oct 2026 09:00:00 GMT",
+        )
+        self.assertEqual(cat, "analisi")
+
+
 if __name__ == "__main__":
     unittest.main()

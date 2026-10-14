@@ -10,6 +10,7 @@ interface Notizia {
   link: string;
   data: string;
   categoria: string;
+  tipo?: string;
   provincia?: string | null;
   regione?: string | null;
   workAccidentScore: number;
@@ -44,6 +45,7 @@ export function NewsInfortuniWidget() {
   const notizie = useMemo(() => {
     const soglia = Date.now() - 7 * 86400_000;
     return (dati.notizie || [])
+      .filter((n) => n.tipo !== "report")
       .filter((n) => (n.workAccidentScore ?? 0) >= 40)
       .filter((n) => {
         const t = new Date(n.data).getTime();

@@ -226,13 +226,18 @@ def classify(titolo: str) -> str:
 # che la timeline della cronaca venga inquinata da statistiche tipo "Inail,
 # 498 morti in 8 mesi" o "15 decessi nel semestre".
 REPORT_MARKERS = [
-    "inail", "denunce", "dati", "primi 8 mesi", "primi otto mesi",
+    "inail", "denunce", "dati", "istat", "eurostat",
+    "primi 8 mesi", "primi otto mesi",
     "primi 7 mesi", "primi sette mesi", "primi sei mesi", "primo semestre",
     "primi 9 mesi", "primi nove mesi", "bilancio", "rapporto", "studio",
     "aumentano", "aumentati", "aumentate", "in aumento", "denunce in",
     "decessi", "rischio", "analisi", "classifica", "percentuale",
     "crescita", "calo", "calano", "record negativo", "media giornaliera",
     "morti in", "morti sul lavoro in",
+    # Titoli di bilancio regionale/periodo come "Lavoro Abruzzo: meno morti ma
+    # più infortuni. Terza regione in Italia per malattie professionali"
+    "meno morti", "più infortuni", "malattie professionali",
+    "giornata nazionale", "regione in italia",
 ]
 
 
@@ -245,7 +250,63 @@ def classify_tipo(titolo: str, fonte: str = "") -> str:
     # Fallback: titoli con "%" o "+xx%" sono quasi sempre statistiche
     if "%" in text or "+8" in text or "+9" in text or "+10" in text:
         return "report"
+    # Bilanci con numeri di periodo: "18 morti e oltre 10mila infortuni in un
+    # anno", "15 morti sul lavoro in sette mesi", "un infortunio ogni mezz'ora".
+    # Un numero vicino a morti/infortuni/decessi più un periodo esplicito è
+    # quasi sempre un quadro statistico, non un singolo fatto imminente.
+    if re.search(r"\d[\d.'\u202f]*\s*(?:morti?|infortuni?|decessi|denunce|vittime)\b", text) and re.search(
+        r"(?:in un anno|in \w+ mesi|nel semestre|nel trimestre|ogni \w+|in 8 mesi|in 7 mesi|in 9 mesi)", text
+    ):
+        return "report"
     return "evento"
+
+
+# Follow-up giudiziari o commemorativi: l'articolo parla delle conseguenze
+# (processo, arresto, anniversario), non dell'evento accaduto nell'imminente.
+# Se il titolo è chiaramente un follow-up, la categoria non può essere
+# 'mortale'/'grave' anche se cita la vittima o l'esito.
+HARD_FOLLOWUP_MARKERS = (
+    "rischiano il processo", "rischiano un processo", "rinvio a giudizio",
+    "processo per la morte", "processo per l'operaio", "processo per il",
+    "chiesto il processo", "chiede il processo", "condannat", "assolt",
+    "commemorazion", "a un anno dalla", "anniversario", "giornata della memoria",
+)
+
+
+def classify_categoria(titolo: str, tipo: str, data: str) -> str:
+    """Categoria pubblica della notizia.
+
+    Regola (14/10/2026):
+    - 'mortale' / 'grave' solo per eventi di cronaca pubblicati entro 48 ore
+      (proxy prudente di un fatto accaduto 'oggi o al massimo due giorni fa');
+    - 'analisi' per report di periodo, bilanci, dati regionali, approfondimenti
+      e per eventi di cronaca pubblicati oltre le 48 ore (la notizia resta
+      utile come quadro, ma non è più un fatto imminente);
+    - 'altro' per tutto ciò che non è riconducibile a un evento grave/mortale.
+    """
+    if tipo != "evento":
+        return "analisi"
+    # Follow-up giudiziari/commemorativi: non raccontano l'evento imminente.
+    # I marker forti valgono sempre; gli altri (processo, arresto, indagini)
+    # valgono solo se il titolo non descrive anche una dinamica dell'evento
+    # ("Esplosione in un'officina a Roma: morto un operaio, indagini in corso"
+    #  resta un evento con dinamica, non un follow-up).
+    t = titolo.lower()
+    if any(m in t for m in HARD_FOLLOWUP_MARKERS):
+        return "analisi"
+    if ("processo" in t or "arrest" in t or "indagini" in t or "inchiesta" in t):
+        if not semantic_dinamica(titolo):
+            return "analisi"
+    try:
+        dt = parsedate_to_datetime(data)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        eta_ore = (datetime.now(timezone.utc) - dt.astimezone(timezone.utc)).total_seconds() / 3600
+    except (TypeError, ValueError, OverflowError):
+        eta_ore = float("inf")
+    if eta_ore <= 48:
+        return classify(titolo)
+    return "analisi"
 
 
 # Il punteggio è un filtro prudenziale, non una classificazione ufficiale.
@@ -889,9 +950,14 @@ def dedupe_eventi(items: list[dict]) -> list[dict]:
     for g in gruppi:
         # Il rappresentante è l'articolo più fresco del gruppo, con la
         # localizzazione migliore (provincia/regione nota se disponibile).
+        # La categoria guida la scelta: un evento raccontato subito come
+        # mortale e ripreso nei giorni successivi come analisi deve restare
+        # un evento mortale nei KPI (la cronaca imminente vince sul follow-up).
+        PRIORITA_CATEGORIA = {"mortale": 3, "grave": 2, "analisi": 1}
         g_ordinato = sorted(
             g,
             key=lambda x: (
+                PRIORITA_CATEGORIA.get(x.get("categoria", "analisi"), 0),
                 1 if x.get("provincia") or x.get("regione") else 0,
                 news_datetime(x),
             ),
@@ -932,12 +998,17 @@ def dedupe_titoli(items: list[dict]) -> list[dict]:
 def calcola_stats(notizie: list[dict]) -> dict:
     """Statistiche di periodo per KPI e contatore mensile (cronaca congiunturale).
 
-    Conta SOLO gli eventi di cronaca (tipo == 'evento'), non i report di
-    periodo: il contatore mensile deve rispecchiare i fatti registrati dalla
-    cronaca, non i numeri ufficiali diffusi dai report.
+    Conta gli eventi di cronaca (tipo == 'evento') per il loro esito grezzo
+    (`esito`), inclusi quelli pubblicati oltre 48 ore: la categoria è solo
+    l'etichetta di display (gli eventi invecchiati diventano 'analisi' in UI,
+    ma restano fatti di cronaca nei KPI di periodo). I report e i bilanci
+    (tipo 'report') restano fuori per non mischiare i fatti con i numeri.
     """
     now = datetime.now(timezone.utc)
-    eventi = [n for n in notizie if n.get("tipo") == "evento"]
+    eventi = [
+        n for n in notizie
+        if n.get("tipo") == "evento" and n.get("esito") in ("mortale", "grave")
+    ]
 
     # Nomi mese in italiano senza dipendere dal locale di sistema (non
     # disponibile in container: it_IT non installato).
@@ -958,8 +1029,8 @@ def calcola_stats(notizie: list[dict]) -> dict:
 
     def split_categorie(items: list[dict]) -> dict:
         return {
-            "mortali": sum(1 for n in items if n["categoria"] == "mortale"),
-            "gravi": sum(1 for n in items if n["categoria"] == "grave"),
+            "mortali": sum(1 for n in items if n["esito"] == "mortale"),
+            "gravi": sum(1 for n in items if n["esito"] == "grave"),
             "totale": len(items),
         }
 
@@ -977,12 +1048,12 @@ def calcola_stats(notizie: list[dict]) -> dict:
         "mese": {
             "codice": mese_corrente,
             "etichetta": f"{MESI_IT[now.month]} {now.year}",
-            "mortali": sum(1 for n in in_mese if n["categoria"] == "mortale"),
+            "mortali": sum(1 for n in in_mese if n["esito"] == "mortale"),
             "totale": len(in_mese),
         },
         "mesePrecedente": {
             "codice": mese_precedente,
-            "mortali": sum(1 for n in mese_scorso if n["categoria"] == "mortale"),
+            "mortali": sum(1 for n in mese_scorso if n["esito"] == "mortale"),
         },
     }
 
@@ -997,9 +1068,6 @@ def main() -> int:
 
     filtrate: list[dict] = []
     for n in dedupe_titoli(tutti):
-        n["categoria"] = classify(n["titolo"])
-        if n["categoria"] not in ("mortale", "grave"):
-            continue
         if is_itinere(n["titolo"]):
             continue
         prov, reg = estrai_luogo(n["titolo"])
@@ -1011,10 +1079,19 @@ def main() -> int:
         # singolarmente e distorcerebbero i KPI.
         if is_aggregate_report(n["titolo"]):
             n["tipo"] = "report"
+        # Esito grezzo dal titolo: resta il gate di ammissione (come prima,
+        # solo articoli che segnalano mortale o grave entrano nel dataset).
+        n["esito"] = classify(n["titolo"])
+        if n["esito"] not in ("mortale", "grave"):
+            continue
+        # Categoria pubblica: mortale/grave solo per eventi pubblicati entro
+        # 48 ore, tutto il resto (report, approfondimenti, eventi invecchiati)
+        # diventa 'analisi'. La soglia di pertinenza si applica dopo.
+        n["categoria"] = classify_categoria(n["titolo"], n["tipo"], n["data"])
         score, reasons = work_accident_score(n["titolo"], n["fonte"])
         n["workAccidentScore"] = score
         n["scoreReasons"] = reasons
-        n["sintesi"] = estrai_sintesi(n["titolo"])
+        n["sintesi"] = "" if n["categoria"] == "analisi" else estrai_sintesi(n["titolo"])
         if score < MIN_WORK_ACCIDENT_SCORE:
             continue
         filtrate.append(n)
@@ -1027,7 +1104,7 @@ def main() -> int:
     # (stesso infortunio raccontato da più testate).
     stats = calcola_stats(filtrate)
     payload = {
-        "schemaVersion": 3,
+        "schemaVersion": 4,
         "datasetId": "news_infortuni",
         "generatedAt": utc_now(),
         "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
