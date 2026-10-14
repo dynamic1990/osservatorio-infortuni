@@ -11,7 +11,6 @@ const VOCI = [
   { href: "/", label: "Quadro generale", icon: Home, group: "Esplora" },
   { href: "/cronaca-infortuni", label: "Cronaca di infortuni", icon: Newspaper, group: "Esplora" },
   { href: "/analisi-delle-cause", label: "Analisi delle cause", icon: Workflow, group: "Esplora" },
-  { href: "/professioni", label: "Professioni", icon: UserSearch, group: "Esplora" },
   { href: "/malattie-professionali", label: "Malattie professionali", icon: Cross, group: "Esplora" },
   { href: "/vigilanza", label: "Vigilanza", icon: UserSearch, group: "Esplora" },
   { href: "/bandi-e-finanziamenti", label: "Bandi e finanziamenti", icon: Landmark, group: "Esplora" },
