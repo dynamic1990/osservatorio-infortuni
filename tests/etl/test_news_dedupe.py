@@ -194,25 +194,58 @@ class TestClassifyTipo(unittest.TestCase):
 
 
 class TestClassifyCategoria(unittest.TestCase):
-    """Categoria pubblica: NATURA del fatto (mortale/grave), stabile nel tempo.
+    """Categoria: fatto di cronaca (mortale/grave) o analisi (approfondimento).
 
-    Il tag non cambia quando l'articolo invecchia: un evento mortale resta
-    mortale anche oltre le 48 ore. Solo i report di periodo (tipo != 'evento')
-    sono 'analisi'. L'imminenza (48 ore) è un flag separato."""
+    Il tag riflette la natura dell'articolo, non la data di pubblicazione:
+    un fatto mortale resta mortale anche dopo 48h; un approfondimento sul
+    tema (appello, cerimonia, processo, dati di periodo) è 'analisi' anche
+    se il titolo cita 'morti' o 'infortuni'."""
 
-    def test_evento_mortale_sempre_mortale(self):
-        # Anche "vecchio": la categoria è la natura del fatto, non l'età.
+    def test_evento_mortale(self):
         self.assertEqual(etl.classify_categoria("Operaio muore schiacciato in cantiere", "evento"), "mortale")
 
-    def test_evento_grave_sempre_grave(self):
+    def test_evento_grave(self):
         self.assertEqual(etl.classify_categoria("Operaio grave dopo caduta da impalcatura", "evento"), "grave")
 
     def test_amputazione_resta_grave(self):
-        # Amputazione (zazoom 09/10): oltre le 48 ore ma il fatto
-        # resta grave (amputazione). Categoria stabile, imminenza separata.
+        # Amputazione (zazoom 09/10): fatto grave, indipendentemente dall'età.
         self.assertEqual(
             etl.classify_categoria("Grave incidente sul lavoro giovane operaio ferito a una mano, amputate le falangi di tre dita", "evento"),
             "grave",
+        )
+
+    def test_appello_istituzioni_analisi(self):
+        # Carlino Reggio Emilia 12/10: cerimonia Anmil e
+        # appello alle istituzioni, nessun fatto raccontato: analisi, non
+        # mortale, anche se il titolo dice "morti sul lavoro".
+        self.assertEqual(
+            etl.classify_categoria("Infortuni e morti sul lavoro. L'appello alle istituzioni: \"La sicurezza è un diritto\"", "evento"),
+            "analisi",
+        )
+
+    def test_processo_analisi_anche_con_dinamica(self):
+        # Follow-up giudiziario inequivocabile: non racconta un fatto nuovo.
+        cat = etl.classify_categoria(
+            "In otto rischiano il processo per l'operaio morto folgorato sul cantiere della Regionale 8",
+            "evento",
+        )
+        self.assertEqual(cat, "analisi")
+
+    def test_fatto_con_sciopero_resta_mortale(self):
+        # "Travolto e ucciso" è la dinamica del fatto: lo sciopero Cgil e
+        # 'basta morti' sono il contesto, non trasformano l'articolo in
+        # un approfondimento.
+        self.assertEqual(
+            etl.classify_categoria("Operaio travolto e ucciso in A14, scatta lo sciopero proclamato dalla Cgil: \"Basta morti sul lavoro\"", "evento"),
+            "mortale",
+        )
+
+    def test_indagine_con_dinamica_resta_mortale(self):
+        # "Esplosione ... morto un operaio, indagini in corso": la dinamica
+        # racconta il fatto, l'indagine è il seguito.
+        self.assertEqual(
+            etl.classify_categoria("Esplosione in un'officina a Roma: morto un operaio, indagini in corso", "evento"),
+            "mortale",
         )
 
     def test_report_sempre_analisi(self):
@@ -221,52 +254,13 @@ class TestClassifyCategoria(unittest.TestCase):
             "analisi",
         )
 
-    def test_followup_giudiziario_mantiene_tag_del_fatto(self):
-        # Il follow-up del processo non racconta l'evento imminente, ma il
-        # fatto resta mortale: la categoria non cambia, lo dirà il flag.
-        cat = etl.classify_categoria(
-            "In otto rischiano il processo per l'operaio morto folgorato sul cantiere della Regionale 8",
-            "evento",
-        )
-        self.assertEqual(cat, "mortale")
-
-
-class TestIsImminente(unittest.TestCase):
-    """Flag 'imminente': articolo che racconta il fatto appena accaduto (<=48h).
-
-    Le 48h separano la cronaca del fatto dagli approfondimenti sul medesimo
-    evento, pubblicati a distanza di giorni o settimane."""
-
-    H = 3600
-
-    def _data(self, ore_fa):
-        from datetime import timedelta
-        ref = datetime.now(timezone.utc) - timedelta(hours=ore_fa)
-        return ref.strftime("%a, %d %b %Y %H:%M:%S GMT")
-
-    def test_fresco_imminente(self):
-        self.assertTrue(etl.is_imminente(self._data(2)))
-
-    def test_oltre_48h_non_imminente(self):
-        self.assertFalse(etl.is_imminente(self._data(72)))
-
-    def test_followup_giudiziario_mai_imminente(self):
-        # Anche se pubblicato oggi, un "rischiano il processo" è un
-        # approfondimento sulle conseguenze, non il racconto del fatto.
-        self.assertFalse(etl.is_imminente(self._data(2), "In otto rischiano il processo per l'operaio morto folgorato"))
-
-    def test_amputazione_oltre_48h_non_imminente(self):
-        # La notizia del 09/10 (più di 48h fa): il fatto resta grave, ma non
-        # è più cronaca imminente.
-        self.assertFalse(
-            etl.is_imminente(self._data(120), "Grave incidente sul lavoro giovane operaio ferito a una mano, amputate le falangi di tre dita")
-        )
-
-    def test_indagini_con_dinamica_restano_imminenti(self):
-        # "Esplosione ... morto un operaio, indagini in corso" racconta
-        # l'evento (ha la dinamica), non è un follow-up: resta imminente
-        # se pubblicato entro 48h.
-        self.assertTrue(etl.is_imminente(self._data(4), "Esplosione in un'officina a Roma: morto un operaio, indagini in corso"))
+    def test_bilancio_numeri_periodo_report(self):
+        # Nel flusso reale classify_tipo riconosce il report (numeri+periodo),
+        # quindi la categoria è analisi.
+        titolo = "A Bari e provincia il lavoro fa ancora paura: 18 morti e oltre 10mila infortuni in un anno"
+        tipo = etl.classify_tipo(titolo, "Borderline24.com")
+        self.assertEqual(tipo, "report")
+        self.assertEqual(etl.classify_categoria(titolo, tipo), "analisi")
 
 
 if __name__ == "__main__":

@@ -261,71 +261,58 @@ def classify_tipo(titolo: str, fonte: str = "") -> str:
     return "evento"
 
 
-# Follow-up giudiziari o commemorativi: l'articolo parla delle conseguenze
-# (processo, arresto, anniversario), non dell'evento accaduto nell'imminente.
-# Non cambiano la categoria (il fatto resta mortale/grave), ma escludono
-# l'articolo dal flag di cronaca recente: un "rischiano il processo" non è il
-# racconto del fatto appena accaduto, è un approfondimento sul medesimo evento.
-HARD_FOLLOWUP_MARKERS = (
+# Approfondimenti tematici, cerimonie e conseguenze: l'articolo parla del
+# tema (numeri, prevenzione, appelli, processi, commemorazioni) senza
+# raccontare un singolo fatto di cronaca. Non va in 'mortale'/'grave' anche
+# se il titolo cita 'morti' o 'infortuni'.
+#
+# Marker FORTI: l'articolo è inequivocabilmente un approfondimento, anche se
+# il titolo descrive una dinamica nel riferirsi alla vittima
+# ("In otto rischiano il processo per l'operaio morto folgorato..." → analisi).
+ANALISI_FORTE_MARKERS = (
     "rischiano il processo", "rischiano un processo", "rinvio a giudizio",
     "processo per la morte", "processo per l'operaio", "processo per il",
     "chiesto il processo", "chiede il processo", "condannat", "assolt",
     "commemorazion", "a un anno dalla", "anniversario", "giornata della memoria",
 )
 
-
-def is_followup_event(titolo: str) -> bool:
-    """True se il titolo racconta le conseguenze di un evento, non l'evento.
-
-    I marker forti valgono sempre; gli altri (processo, arresto, indagini,
-    inchiesta) solo se il titolo non descrive anche una dinamica dell'evento
-    ("Esplosione in un'officina a Roma: morto un operaio, indagini in corso"
-    resta un evento con dinamica, non un follow-up).
-    """
-    t = titolo.lower()
-    if any(m in t for m in HARD_FOLLOWUP_MARKERS):
-        return True
-    if ("processo" in t or "arrest" in t or "indagini" in t or "inchiesta" in t):
-        return not semantic_dinamica(titolo)
-    return False
+# Marker DEBOLI: approfondimento solo se il titolo non racconta anche la
+# dinamica del fatto ("Operaio travolto e ucciso in A14, scatta lo sciopero
+# proclamato dalla Cgil" resta un fatto mortale perché 'travolto' è la
+# dinamica; "L'appello alle istituzioni" senza dinamica è un approfondimento).
+ANALISI_DEBOLI_MARKERS = (
+    "appello", "la sicurezza è un diritto", "cerimonia", "convegno",
+    "iniziativa", "manifestazione", "basta morti", "basta stragi",
+    "processo", "arrest", "indagini", "inchiesta", "sciopero",
+    "cgil", "sindacat", "lutto", "cordoglio", "ricordo", "chi era",
+    "funerali", "funerale", "prevenzione",
+)
 
 
 def classify_categoria(titolo: str, tipo: str) -> str:
-    """Categoria pubblica della notizia: NATURA dell'evento, stabile nel tempo.
+    """Categoria pubblica della notizia: fatto (mortale/grave) o analisi.
 
-    Regola (v5, 14/10/2026):
-    - 'mortale' / 'grave' derivano dall'esito reale del fatto (classify) e NON
-      cambiano con il passare delle ore: un infortunio mortale resta mortale
-      anche quando l'articolo ha più di 48 ore; un'amputazione resta grave;
-    - 'analisi' per report di periodo, bilanci, dati regionali e aggregati
-      (tipo != 'evento'), che non raccontano un singolo fatto;
-    La distinzione temporale (articolo che racconta il fatto appena accaduto
-    vs approfondimento a distanza di giorni/settimane) è un flag separato,
-    'imminente', calcolato sulla data di pubblicazione: non tocca la categoria.
+    Regola (v6, 14/10/2026): il tag riflette la NATURA DELL'ARTICOLO, non
+    la data di pubblicazione.
+    - 'mortale' o 'grave' per gli articoli che RACCONTANO un fatto di cronaca
+      (l'esito deriva da classify: morte, amputazione, prognosi riservata…)
+      e il tag è stabile nel tempo;
+    - 'analisi' per gli approfondimenti: bilanci di periodo e dati (tipo
+      report), appelli, cerimonie, processi, commemorazioni e discorsi sul
+      tema che non raccontano un singolo evento, anche quando citano
+      'mortali' o 'gravi' nel titolo.
     """
+    t = titolo.lower()
     if tipo != "evento":
         return "analisi"
+    # Approfondimento tematico/giudiziario/commemorativo inequivocabile
+    if any(m in t for m in ANALISI_FORTE_MARKERS):
+        return "analisi"
+    # Approfondimento probabile: il racconto del fatto vince solo se nel
+    # titolo c'è la dinamica dell'evento (caduta, esplosione, schiacciamento)
+    if any(m in t for m in ANALISI_DEBOLI_MARKERS) and not semantic_dinamica(titolo):
+        return "analisi"
     return classify(titolo)
-
-
-def is_imminente(data: str, titolo: str = "") -> bool:
-    """Articolo raccontato come fatto appena accaduto (proxy pubDate <= 48 ore).
-
-    Le 48 ore separano la cronaca del fatto dagli approfondimenti sul medesimo
-    evento, pubblicati a distanza di giorni o settimane. Un follow-up
-    giudiziario o commemorativo non è mai 'imminente', anche se pubblicato
-    oggi: racconta le conseguenze, non il fatto.
-    """
-    if titolo and is_followup_event(titolo):
-        return False
-    try:
-        dt = parsedate_to_datetime(data)
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
-        eta_ore = (datetime.now(timezone.utc) - dt.astimezone(timezone.utc)).total_seconds() / 3600
-    except (TypeError, ValueError, OverflowError):
-        eta_ore = float("inf")
-    return eta_ore <= 48
 
 
 # Il punteggio è un filtro prudenziale, non una classificazione ufficiale.
@@ -969,15 +956,13 @@ def dedupe_eventi(items: list[dict]) -> list[dict]:
     for g in gruppi:
         # Il rappresentante è l'articolo più fresco del gruppo, con la
         # localizzazione migliore (provincia/regione nota se disponibile).
-        # L'articolo "imminente" (cronaca del fatto) vince sul follow-up
-        # pubblicato dopo: la categoria è ormai stabile (natura del fatto),
-        # quindi l'ordine serve solo per scegliere il capo del gruppo.
+        # La categoria guida la scelta: un fatto mortale raccontato poi come
+        # analisi (processo, commemorazione) deve restare mortale nel gruppo.
         PRIORITA_CATEGORIA = {"mortale": 3, "grave": 2, "analisi": 1}
         g_ordinato = sorted(
             g,
             key=lambda x: (
                 PRIORITA_CATEGORIA.get(x.get("categoria", "analisi"), 0),
-                1 if x.get("imminente") else 0,
                 1 if x.get("provincia") or x.get("regione") else 0,
                 news_datetime(x),
             ),
@@ -1105,14 +1090,9 @@ def main() -> int:
         n["esito"] = classify(n["titolo"])
         if n["esito"] not in ("mortale", "grave"):
             continue
-        # Categoria pubblica: NATURA del fatto (mortale/grave dal titolo),
-        # stabile nel tempo: non declassa gli eventi quando invecchiano.
+        # Categoria pubblica: NATURA dell'articolo (fatto mortale/grave o
+        # analisi), stabile nel tempo: non cambia con l'età della notizia.
         n["categoria"] = classify_categoria(n["titolo"], n["tipo"])
-        # Imminenza: articolo che racconta il fatto appena accaduto (<=48h,
-        # esclusi i follow-up giudiziari/commemorativi). Separata dalla
-        # categoria: un evento vecchio resta mortale/grave, ma non è
-        # più "cronaca imminente". La soglia di pertinenza si applica dopo.
-        n["imminente"] = is_imminente(n["data"], n["titolo"])
         score, reasons = work_accident_score(n["titolo"], n["fonte"])
         n["workAccidentScore"] = score
         n["scoreReasons"] = reasons
@@ -1129,7 +1109,7 @@ def main() -> int:
     # (stesso infortunio raccontato da più testate).
     stats = calcola_stats(filtrate)
     payload = {
-        "schemaVersion": 5,
+        "schemaVersion": 6,
         "datasetId": "news_infortuni",
         "generatedAt": utc_now(),
         "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",

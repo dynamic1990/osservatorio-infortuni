@@ -19,7 +19,6 @@ interface Notizia {
   data: string;
   categoria: string;
   tipo?: string;
-  imminente?: boolean;
   sintesi?: string;
   provincia?: string | null;
   regione?: string | null;
@@ -103,7 +102,6 @@ export function CronacaInfortuniClient() {
   const [categoria, setCategoria] = useState<string>("tutte");
   const [regione, setRegione] = useState<string>("tutte");
   const [periodo, setPeriodo] = useState<string>("tutto");
-  const [soloImminenti, setSoloImminenti] = useState<boolean>(false);
   const [limite, setLimite] = useState<number>(40);
   const [popupFonti, setPopupFonti] = useState<Notizia | null>(null);
 
@@ -128,12 +126,11 @@ export function CronacaInfortuniClient() {
   const filtrate = useMemo(() => {
     return eventi.filter((n) => {
       if (categoria !== "tutte" && n.categoria !== categoria) return false;
-      if (soloImminenti && !n.imminente) return false;
       if (regione !== "tutte" && n.regione !== regione) return false;
       if (!filtroPeriodo(n.data)) return false;
       return true;
     });
-  }, [eventi, categoria, soloImminenti, regione, periodo]);
+  }, [eventi, categoria, regione, periodo]);
 
   const visibili = filtrate.slice(0, limite);
 
@@ -175,7 +172,7 @@ export function CronacaInfortuniClient() {
             <option value="tutte">Tutte le categorie</option>
             <option value="mortale">Mortali</option>
             <option value="grave">Gravi</option>
-            <option value="analisi">Report e analisi</option>
+            <option value="analisi">Analisi e approfondimenti</option>
           </select>
           <select
             aria-label="Filtra per regione"
@@ -212,24 +209,6 @@ export function CronacaInfortuniClient() {
             <option value="7">Ultimi 7 giorni</option>
             <option value="30">Ultimi 30 giorni</option>
           </select>
-          <label
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              fontSize: "0.85rem",
-              color: "var(--color-text-soft)",
-              cursor: "pointer",
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={soloImminenti}
-              onChange={(e) => setSoloImminenti(e.target.checked)}
-              style={{ cursor: "pointer" }}
-            />
-            Solo cronaca entro 48 ore
-          </label>
         </div>
 
         {/* Timeline */}
@@ -292,23 +271,6 @@ export function CronacaInfortuniClient() {
                     >
                       {badge.label}
                     </span>
-                    {n.tipo === "evento" && n.imminente === false && (
-                      <span
-                        style={{
-                          fontSize: "0.62rem",
-                          fontWeight: 700,
-                          textTransform: "uppercase",
-                          letterSpacing: "0.05em",
-                          padding: "2px 7px",
-                          borderRadius: "var(--radius-sm)",
-                          background: "var(--color-surface-1)",
-                          border: "1px dashed var(--color-divider)",
-                          color: "var(--color-text-muted)",
-                        }}
-                      >
-                        fatto non recente
-                      </span>
-                    )}
                   </div>
                   {n.sintesi && n.sintesi !== "Infortunio sul lavoro" && (
                     <span style={{ display: "block", fontSize: "0.78rem", color: "var(--color-text-soft)", fontStyle: "italic", marginTop: 4 }}>

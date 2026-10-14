@@ -64,13 +64,14 @@ export default function CronacaInfortuniPage() {
             <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
               Gli infortuni gravi e mortali sul lavoro raccontati dalla cronaca italiana, giorno per giorno.
               Una rassegna automatica interroga le testate nazionali e locali, filtra i fatti pertinenti e li
-              ordina in una timeline. Ogni evento è classificato {"mortale"} o {"grave"} in base alla
-              natura del fatto, e il tag non cambia con il passare del tempo; i bilanci e i dati di periodo
-              (come i report INAIL regionali) sono etichettati {"analisi"}. Il filtro {"Solo cronaca entro 48 ore"}
-              separa gli articoli che raccontano il fatto appena accaduto dagli approfondimenti sul medesimo
-              evento pubblicati a distanza di giorni o settimane. I numeri di questa pagina sono un indicatore
-              congiunturale della rassegna stampa: <strong>non sostituiscono</strong> i dati ufficiali INAIL,
-              disponibili nella sezione statistiche.
+              ordina in una timeline. Ogni voce è classificata in base al contenuto: {"mortale"} quando
+              racconta un infortunio con esito fatale, {"grave"} quando l&apos;evento non è mortale ma ha
+              provocato conseguenze serie (amputazioni, prognosi riservata), {"analisi"} per gli
+              approfondimenti che commentano i numeri e il fenomeno: bilanci di periodo, dati INAIL, appelli,
+              cerimonie e processi, anche quando citano &ldquo;morti sul lavoro&rdquo;. Il tag riflette la natura
+              dell&apos;articolo e non cambia con il passare del tempo. I numeri di questa pagina sono un
+              indicatore congiunturale della rassegna stampa: <strong>non sostituiscono</strong> i dati
+              ufficiali INAIL, disponibili nella sezione statistiche.
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
               Finestra di osservazione: ultimi 30 giorni · ogni voce rimanda all&apos;articolo originale
