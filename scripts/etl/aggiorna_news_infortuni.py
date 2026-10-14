@@ -44,8 +44,9 @@ QUERIES = [
 ]
 
 MAX_ITEMS = 200
-MAX_KEEP = 120  # notizie conservate nel file (finestra 30 giorni)
+MAX_KEEP = 5000  # archivio: fino a 365 giorni di notizie (cap prudenziale)
 MIN_WORK_ACCIDENT_SCORE = 45
+ARCHIVIO_GIORNI = 365
 
 # ---------------------------------------------------------------------------
 # Riferimenti geografici (provincia -> regione)
@@ -176,11 +177,11 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def fetch_rss(query: str) -> list[dict]:
+def fetch_rss(query: str, when: str = "30d") -> list[dict]:
     q = urllib.parse.quote(query)
     url = (
         f"https://news.google.com/rss/search?q={q}"
-        f"+when:30d&hl=it&gl=IT&ceid=IT:it"
+        f"+when:{when}&hl=it&gl=IT&ceid=IT:it"
     )
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=20) as resp:
@@ -1047,7 +1048,7 @@ def calcola_stats(notizie: list[dict]) -> dict:
     mese_scorso = [n for n in eventi if news_datetime(n).strftime("%Y-%m") == mese_precedente]
 
     return {
-        "finestra": 30,
+        "finestra": 365,
         "generatoIl": utc_now(),
         "ultimi7": split_categorie(ultimi7),
         "precedenti7": split_categorie(precedenti7),
@@ -1064,13 +1065,39 @@ def calcola_stats(notizie: list[dict]) -> dict:
     }
 
 
+def carica_archivio() -> list[dict]:
+    """Legge le notizie già salvate nel file (archivio storico).
+
+    L'archivio si accumula giorno per giorno: ogni run aggiunge ciò che i
+    fetch giornalieri raccolgono e il trim a 365 giorni scarta il resto.
+    Non c'è scansione retroattiva del web.
+    """
+    if not OUT.exists():
+        return []
+    try:
+        payload = json.loads(OUT.read_text(encoding="utf-8"))
+        return payload.get("notizie", []) if isinstance(payload, dict) else []
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
 def main() -> int:
+    archivio = carica_archivio()
     tutti: list[dict] = []
+    # Fetch giornaliero: finestra 30 giorni (densa, per la cronaca corrente).
+    # L'archivio non va a cercare articoli passati: si accumula con quello
+    # che raccogliamo ogni giorno fino a coprire gli ultimi 365 giorni.
     for q in QUERIES:
         try:
-            tutti.extend(fetch_rss(q))
+            tutti.extend(fetch_rss(q, when="30d"))
         except Exception as exc:  # noqa: BLE001
-            print(f"[warn] query '{q}' fallita: {exc}")
+            print(f"[warn] query '{q}' (30d) fallita: {exc}")
+
+    # Merge con l'archivio già salvato: gli item storici vengono riprocessati
+    # dal pipeline attuale (stesse regole, deterministiche), quindi quando i
+    # parametri di classificazione migliorano tutto l'archivio si rietichetta
+    # da solo. I doppioni per titolo vengono eliminati da dedupe_titoli.
+    tutti.extend(archivio)
 
     filtrate: list[dict] = []
     for n in dedupe_titoli(tutti):
@@ -1102,6 +1129,13 @@ def main() -> int:
         filtrate.append(n)
 
     filtrate = dedupe_eventi(filtrate)
+    # Archivio: conserva gli ultimi 365 giorni di cronaca (gli item con data
+    # non parsabile cadono, come già succedeva in coda all'ordinamento).
+    ora = datetime.now(timezone.utc)
+    filtrate = [
+        n for n in filtrate
+        if (ora - news_datetime(n)).total_seconds() / 86400 <= ARCHIVIO_GIORNI
+    ]
     filtrate.sort(key=news_datetime, reverse=True)
 
     # Le stats devono contare gli EVENTI DISTINTI (un capo per gruppo), non
@@ -1109,11 +1143,11 @@ def main() -> int:
     # (stesso infortunio raccontato da più testate).
     stats = calcola_stats(filtrate)
     payload = {
-        "schemaVersion": 6,
+        "schemaVersion": 7,
         "datasetId": "news_infortuni",
         "generatedAt": utc_now(),
         "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
-        "periodo": "ultimi 30 giorni",
+        "periodo": "ultimi 365 giorni (archivio)",
         "stats": stats,
         "notizie": filtrate[:MAX_KEEP],
     }

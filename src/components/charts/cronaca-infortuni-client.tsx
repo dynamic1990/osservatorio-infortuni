@@ -102,6 +102,7 @@ export function CronacaInfortuniClient() {
   const [categoria, setCategoria] = useState<string>("tutte");
   const [regione, setRegione] = useState<string>("tutte");
   const [periodo, setPeriodo] = useState<string>("tutto");
+  const [ricerca, setRicerca] = useState<string>("");
   const [limite, setLimite] = useState<number>(40);
   const [popupFonti, setPopupFonti] = useState<Notizia | null>(null);
 
@@ -120,7 +121,25 @@ export function CronacaInfortuniClient() {
     if (!Number.isFinite(t)) return true;
     if (periodo === "7") return Date.now() - t <= 7 * 86400_000;
     if (periodo === "30") return Date.now() - t <= 30 * 86400_000;
+    if (periodo === "90") return Date.now() - t <= 90 * 86400_000;
+    if (periodo === "180") return Date.now() - t <= 180 * 86400_000;
     return true;
+  };
+
+  // Filtro per parole chiave (titolo, fonte, luogo, sintesi)
+  const matchRicerca = (n: Notizia): boolean => {
+    const q = ricerca.trim().toLowerCase();
+    if (!q) return true;
+    const testo = [
+      n.titolo,
+      n.fonte,
+      n.provincia || "",
+      n.regione || "",
+      n.sintesi || "",
+      ...(n.fonti || []).map((f) => f.titolo),
+    ].join(" ").toLowerCase();
+    // supporta più parole: tutte devono comparire (AND)
+    return q.split(/\s+/).every((term) => testo.includes(term));
   };
 
   const filtrate = useMemo(() => {
@@ -128,9 +147,11 @@ export function CronacaInfortuniClient() {
       if (categoria !== "tutte" && n.categoria !== categoria) return false;
       if (regione !== "tutte" && n.regione !== regione) return false;
       if (!filtroPeriodo(n.data)) return false;
+      if (!matchRicerca(n)) return false;
       return true;
     });
-  }, [eventi, categoria, regione, periodo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventi, categoria, regione, periodo, ricerca]);
 
   const visibili = filtrate.slice(0, limite);
 
@@ -205,10 +226,32 @@ export function CronacaInfortuniClient() {
               color: "inherit",
             }}
           >
-            <option value="tutto">Tutto il periodo (30 giorni)</option>
+            <option value="tutto">Tutto il periodo (365 giorni)</option>
             <option value="7">Ultimi 7 giorni</option>
-            <option value="30">Ultimi 30 giorni</option>
+            <option value="30">Ultimo mese</option>
+            <option value="90">Ultimi 3 mesi</option>
+            <option value="180">Ultimi 6 mesi</option>
           </select>
+          <input
+            type="search"
+            aria-label="Cerca nelle notizie"
+            placeholder="Cerca per parola chiave…"
+            value={ricerca}
+            onChange={(e) => {
+              setRicerca(e.target.value);
+              setLimite(40);
+            }}
+            style={{
+              background: "var(--color-surface-2)",
+              border: "1px solid var(--color-divider)",
+              borderRadius: 6,
+              padding: "6px 10px",
+              fontSize: "0.85rem",
+              color: "inherit",
+              minWidth: 200,
+              flex: "1 1 200px",
+            }}
+          />
         </div>
 
         {/* Timeline */}
