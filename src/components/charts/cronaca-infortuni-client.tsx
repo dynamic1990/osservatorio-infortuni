@@ -19,6 +19,7 @@ interface Notizia {
   data: string;
   categoria: string;
   tipo?: string;
+  imminente?: boolean;
   sintesi?: string;
   provincia?: string | null;
   regione?: string | null;
@@ -127,7 +128,7 @@ export function CronacaInfortuniClient() {
   const filtrate = useMemo(() => {
     return eventi.filter((n) => {
       if (categoria !== "tutte" && n.categoria !== categoria) return false;
-      if (soloImminenti && n.categoria !== "mortale" && n.categoria !== "grave") return false;
+      if (soloImminenti && !n.imminente) return false;
       if (regione !== "tutte" && n.regione !== regione) return false;
       if (!filtroPeriodo(n.data)) return false;
       return true;
@@ -174,7 +175,7 @@ export function CronacaInfortuniClient() {
             <option value="tutte">Tutte le categorie</option>
             <option value="mortale">Mortali</option>
             <option value="grave">Gravi</option>
-            <option value="analisi">Analisi e approfondimenti</option>
+            <option value="analisi">Report e analisi</option>
           </select>
           <select
             aria-label="Filtra per regione"
@@ -227,7 +228,7 @@ export function CronacaInfortuniClient() {
               onChange={(e) => setSoloImminenti(e.target.checked)}
               style={{ cursor: "pointer" }}
             />
-            Solo fatti imminenti (48 ore)
+            Solo cronaca entro 48 ore
           </label>
         </div>
 
@@ -291,6 +292,23 @@ export function CronacaInfortuniClient() {
                     >
                       {badge.label}
                     </span>
+                    {n.tipo === "evento" && n.imminente === false && (
+                      <span
+                        style={{
+                          fontSize: "0.62rem",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                          padding: "2px 7px",
+                          borderRadius: "var(--radius-sm)",
+                          background: "var(--color-surface-1)",
+                          border: "1px dashed var(--color-divider)",
+                          color: "var(--color-text-muted)",
+                        }}
+                      >
+                        fatto non recente
+                      </span>
+                    )}
                   </div>
                   {n.sintesi && n.sintesi !== "Infortunio sul lavoro" && (
                     <span style={{ display: "block", fontSize: "0.78rem", color: "var(--color-text-soft)", fontStyle: "italic", marginTop: 4 }}>

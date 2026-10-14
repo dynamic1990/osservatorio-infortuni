@@ -167,40 +167,8 @@ class TestSintesi(unittest.TestCase):
         )
 
 
-class TestClassifyCategoria(unittest.TestCase):
-    """Categoria pubblica: mortale/grave solo entro 48h, tutto il resto analisi."""
-
-    H = 3600  # secondi in un'ora
-
-    def _data(self, ore_fa):
-        from datetime import datetime, timedelta, timezone
-        ref = datetime.now(timezone.utc) - timedelta(hours=ore_fa)
-        return ref.strftime("%a, %d %b %Y %H:%M:%S GMT")
-
-    def test_evento_fresco_mortale(self):
-        self.assertEqual(
-            etl.classify_categoria("Operaio muore schiacciato in cantiere", "evento", self._data(2)),
-            "mortale",
-        )
-
-    def test_evento_fresco_grave(self):
-        self.assertEqual(
-            etl.classify_categoria("Operaio grave dopo caduta da impalcatura", "evento", self._data(10)),
-            "grave",
-        )
-
-    def test_evento_vecchio_diventa_analisi(self):
-        # Oltre le 48 ore: non è più un fatto imminente, ma resta nel quadro.
-        self.assertEqual(
-            etl.classify_categoria("Operaio muore schiacciato in cantiere", "evento", self._data(72)),
-            "analisi",
-        )
-
-    def test_report_sempre_analisi(self):
-        self.assertEqual(
-            etl.classify_categoria("Lavoro Abruzzo: meno morti ma più infortuni", "report", self._data(2)),
-            "analisi",
-        )
+class TestClassifyTipo(unittest.TestCase):
+    """Riconoscimento report/bilanci di periodo (quadri statistici)."""
 
     def test_titolo_rete8_classificato_report(self):
         titolo = "Lavoro Abruzzo: meno morti ma più infortuni. Terza regione in Italia per malattie professionali"
@@ -218,15 +186,87 @@ class TestClassifyCategoria(unittest.TestCase):
             "report",
         )
 
-    def test_followup_giudiziario_diventa_analisi(self):
-        # Follow-up processuale/commemorativo: non è un fatto accaduto
-        # nell'imminente anche se cita la vittima.
+    def test_esplosione_evento_non_report(self):
+        self.assertEqual(
+            etl.classify_tipo("Esplosione in un'officina a Roma: morto un operaio, indagini in corso"),
+            "evento",
+        )
+
+
+class TestClassifyCategoria(unittest.TestCase):
+    """Categoria pubblica: NATURA del fatto (mortale/grave), stabile nel tempo.
+
+    Il tag non cambia quando l'articolo invecchia: un evento mortale resta
+    mortale anche oltre le 48 ore. Solo i report di periodo (tipo != 'evento')
+    sono 'analisi'. L'imminenza (48 ore) è un flag separato."""
+
+    def test_evento_mortale_sempre_mortale(self):
+        # Anche "vecchio": la categoria è la natura del fatto, non l'età.
+        self.assertEqual(etl.classify_categoria("Operaio muore schiacciato in cantiere", "evento"), "mortale")
+
+    def test_evento_grave_sempre_grave(self):
+        self.assertEqual(etl.classify_categoria("Operaio grave dopo caduta da impalcatura", "evento"), "grave")
+
+    def test_amputazione_resta_grave(self):
+        # Amputazione (zazoom 09/10): oltre le 48 ore ma il fatto
+        # resta grave (amputazione). Categoria stabile, imminenza separata.
+        self.assertEqual(
+            etl.classify_categoria("Grave incidente sul lavoro giovane operaio ferito a una mano, amputate le falangi di tre dita", "evento"),
+            "grave",
+        )
+
+    def test_report_sempre_analisi(self):
+        self.assertEqual(
+            etl.classify_categoria("Lavoro Abruzzo: meno morti ma più infortuni", "report"),
+            "analisi",
+        )
+
+    def test_followup_giudiziario_mantiene_tag_del_fatto(self):
+        # Il follow-up del processo non racconta l'evento imminente, ma il
+        # fatto resta mortale: la categoria non cambia, lo dirà il flag.
         cat = etl.classify_categoria(
             "In otto rischiano il processo per l'operaio morto folgorato sul cantiere della Regionale 8",
             "evento",
-            "Tue, 13 Oct 2026 09:00:00 GMT",
         )
-        self.assertEqual(cat, "analisi")
+        self.assertEqual(cat, "mortale")
+
+
+class TestIsImminente(unittest.TestCase):
+    """Flag 'imminente': articolo che racconta il fatto appena accaduto (<=48h).
+
+    Le 48h separano la cronaca del fatto dagli approfondimenti sul medesimo
+    evento, pubblicati a distanza di giorni o settimane."""
+
+    H = 3600
+
+    def _data(self, ore_fa):
+        from datetime import timedelta
+        ref = datetime.now(timezone.utc) - timedelta(hours=ore_fa)
+        return ref.strftime("%a, %d %b %Y %H:%M:%S GMT")
+
+    def test_fresco_imminente(self):
+        self.assertTrue(etl.is_imminente(self._data(2)))
+
+    def test_oltre_48h_non_imminente(self):
+        self.assertFalse(etl.is_imminente(self._data(72)))
+
+    def test_followup_giudiziario_mai_imminente(self):
+        # Anche se pubblicato oggi, un "rischiano il processo" è un
+        # approfondimento sulle conseguenze, non il racconto del fatto.
+        self.assertFalse(etl.is_imminente(self._data(2), "In otto rischiano il processo per l'operaio morto folgorato"))
+
+    def test_amputazione_oltre_48h_non_imminente(self):
+        # La notizia del 09/10 (più di 48h fa): il fatto resta grave, ma non
+        # è più cronaca imminente.
+        self.assertFalse(
+            etl.is_imminente(self._data(120), "Grave incidente sul lavoro giovane operaio ferito a una mano, amputate le falangi di tre dita")
+        )
+
+    def test_indagini_con_dinamica_restano_imminenti(self):
+        # "Esplosione ... morto un operaio, indagini in corso" racconta
+        # l'evento (ha la dinamica), non è un follow-up: resta imminente
+        # se pubblicato entro 48h.
+        self.assertTrue(etl.is_imminente(self._data(4), "Esplosione in un'officina a Roma: morto un operaio, indagini in corso"))
 
 
 if __name__ == "__main__":

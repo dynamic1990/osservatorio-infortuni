@@ -1,27 +1,27 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "datasetId": "news_infortuni",
-  "generatedAt": "2026-10-14T08:20:29+00:00",
+  "generatedAt": "2026-10-14T09:12:18+00:00",
   "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
   "periodo": "ultimi 30 giorni",
   "stats": {
     "finestra": 30,
-    "generatoIl": "2026-10-14T08:20:29+00:00",
+    "generatoIl": "2026-10-14T09:12:18+00:00",
     "ultimi7": {
-      "mortali": 33,
+      "mortali": 32,
       "gravi": 6,
-      "totale": 39
+      "totale": 38
     },
     "precedenti7": {
-      "mortali": 45,
+      "mortali": 47,
       "gravi": 10,
-      "totale": 55
+      "totale": 57
     },
     "mese": {
       "codice": "2026-10",
       "etichetta": "Ottobre 2026",
-      "mortali": 65,
-      "totale": 80
+      "mortali": 66,
+      "totale": 81
     },
     "mesePrecedente": {
       "codice": "2026-09",
@@ -39,6 +39,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": true,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -47,7 +48,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-7607efcc51558b41",
+      "eventGroupId": "evt-104a5530e80c0d56",
       "fonti": []
     },
     {
@@ -60,6 +61,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": true,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -68,7 +70,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-32b4eb282390e211",
+      "eventGroupId": "evt-6be94ca155b78f9a",
       "fonti": []
     },
     {
@@ -81,6 +83,7 @@
       "tipo": "evento",
       "esito": "mortale",
       "categoria": "mortale",
+      "imminente": true,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -89,7 +92,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-35dc23feb737943f",
+      "eventGroupId": "evt-479042b86a7c1810",
       "fonti": []
     },
     {
@@ -102,6 +105,7 @@
       "tipo": "evento",
       "esito": "mortale",
       "categoria": "mortale",
+      "imminente": true,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -110,7 +114,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-47a681258741c162",
+      "eventGroupId": "evt-65338fcf2ff48c77",
       "fonti": []
     },
     {
@@ -123,6 +127,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": true,
       "workAccidentScore": 47,
       "scoreReasons": [
         "contesto lavorativo",
@@ -131,7 +136,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-3968883a02b6a173",
+      "eventGroupId": "evt-17675c9dc7a2eed",
       "fonti": []
     },
     {
@@ -144,6 +149,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": true,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
@@ -151,7 +157,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-7c566c3e5be05c5c",
+      "eventGroupId": "evt-591545736f962315",
       "fonti": []
     },
     {
@@ -163,15 +169,16 @@
       "regione": "Campania",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-78fe93eb5bd135a6",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-7bec2f0c305be207",
       "fonti": [
         {
           "titolo": "Caivano, Salvatore Calignano è morto dopo una caduta da un capannone: arrestato il datore di lavoro. Gli avrebbe detto: «Di' che sei stato investito da un'auto»",
@@ -255,6 +262,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": true,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -263,7 +271,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-5bf81725475de65e",
+      "eventGroupId": "evt-3a3ab22db9de40ac",
       "fonti": []
     },
     {
@@ -276,6 +284,7 @@
       "tipo": "evento",
       "esito": "mortale",
       "categoria": "mortale",
+      "imminente": true,
       "workAccidentScore": 65,
       "scoreReasons": [
         "contesto lavorativo",
@@ -283,7 +292,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6958bfe27d94e38d",
+      "eventGroupId": "evt-40a3bbe90154eeba",
       "fonti": [
         {
           "titolo": "Tragico incidente sul lavoro a Fiano Romano, operaio muore cadendo da un tetto",
@@ -303,15 +312,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 80,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-493a0dcb18d78f4f",
+      "sintesi": "Folgorato da corrente elettrica, vittima deceduta",
+      "eventGroupId": "evt-5ca53de96ef0b9e8",
       "fonti": []
     },
     {
@@ -324,6 +334,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": true,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
@@ -331,7 +342,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-67bd295aa5c6a7ae",
+      "eventGroupId": "evt-3190af55dfb07063",
       "fonti": []
     },
     {
@@ -343,15 +354,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 66,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-4d5acc23b5418fec",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-5a280f5174764af5",
       "fonti": []
     },
     {
@@ -363,15 +375,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-dea1608289aff1b",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-4299df102b9617f2",
       "fonti": []
     },
     {
@@ -384,6 +397,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 47,
       "scoreReasons": [
         "contesto lavorativo",
@@ -392,7 +406,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-4173a2e2a9413943",
+      "eventGroupId": "evt-515af24db4189865",
       "fonti": []
     },
     {
@@ -405,6 +419,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -413,7 +428,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-26849d6368485fd5",
+      "eventGroupId": "evt-4292d5b169bfd02e",
       "fonti": []
     },
     {
@@ -426,6 +441,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -434,7 +450,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-4d45858af2b1b031",
+      "eventGroupId": "evt-714af911677906a5",
       "fonti": []
     },
     {
@@ -446,15 +462,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-421e1bf179e57200",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-4f491b1c0173493e",
       "fonti": []
     },
     {
@@ -467,6 +484,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -475,7 +493,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-3bd0b52938b31d0d",
+      "eventGroupId": "evt-80358dd3c45139b",
       "fonti": []
     },
     {
@@ -488,6 +506,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 47,
       "scoreReasons": [
         "contesto lavorativo",
@@ -496,7 +515,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-50282a74aacf83e9",
+      "eventGroupId": "evt-543f4b98c24ff34d",
       "fonti": []
     },
     {
@@ -509,6 +528,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
@@ -516,7 +536,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-29d84104371ed27e",
+      "eventGroupId": "evt-72b0d5af6f76442a",
       "fonti": []
     },
     {
@@ -529,6 +549,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -537,7 +558,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-b0f4e5a7373f006",
+      "eventGroupId": "evt-846526cc21fb416",
       "fonti": []
     },
     {
@@ -549,7 +570,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 71,
       "scoreReasons": [
         "contesto lavorativo",
@@ -557,8 +579,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-762b887f89eee8dd",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-74c96b27dca1d81f",
       "fonti": []
     },
     {
@@ -571,6 +593,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -579,7 +602,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-344778761834f706",
+      "eventGroupId": "evt-2434187c53533a51",
       "fonti": []
     },
     {
@@ -591,15 +614,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 52,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-7576c23faa366cae",
+      "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
+      "eventGroupId": "evt-6ccc2c5f154a3f97",
       "fonti": []
     },
     {
@@ -611,15 +635,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-4bd728f41c4e7ddb",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6dc449bf5e5be072",
       "fonti": []
     },
     {
@@ -631,15 +656,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 72,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-3e09edb49341cba9",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-7377306b8cedf20b",
       "fonti": []
     },
     {
@@ -651,15 +677,16 @@
       "regione": "Lombardia",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 71,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-57c2588c2627b195",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-7c9dd28b46714800",
       "fonti": [
         {
           "titolo": "Operaio 62enne di Ornago morto in cantiere, la Cgil: «Non rassegniamoci a chiamarle fatalità",
@@ -707,7 +734,8 @@
       "regione": "Lombardia",
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 82,
       "scoreReasons": [
         "contesto lavorativo",
@@ -715,8 +743,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-244f01ed7986247c",
+      "sintesi": "Caduto dall'alto, conseguenze gravi",
+      "eventGroupId": "evt-4e236ace641ecc24",
       "fonti": []
     },
     {
@@ -728,7 +756,8 @@
       "regione": "Piemonte",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 57,
       "scoreReasons": [
         "contesto lavorativo",
@@ -736,8 +765,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-51f370e7e35137a6",
+      "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
+      "eventGroupId": "evt-7507ffaaeb068665",
       "fonti": []
     },
     {
@@ -749,15 +778,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 72,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-415a0722f097e233",
+      "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
+      "eventGroupId": "evt-448aa331f43eeadd",
       "fonti": []
     },
     {
@@ -769,15 +799,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-2a42cd7dce3ec4ec",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-628bd8c7d7e6786e",
       "fonti": []
     },
     {
@@ -789,7 +820,8 @@
       "regione": "Lombardia",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
@@ -797,8 +829,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-244fb2b7c5fc8b7",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-7f5dac03a21015dc",
       "fonti": []
     },
     {
@@ -810,7 +842,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
@@ -818,8 +851,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-4033f51df7dc7b19",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-199e87285030a403",
       "fonti": []
     },
     {
@@ -832,6 +865,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -840,7 +874,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-645ba65363b501bb",
+      "eventGroupId": "evt-143d4aaf08864941",
       "fonti": []
     },
     {
@@ -852,15 +886,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-11ed08c7d89df354",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-25ba81ab29c5db25",
       "fonti": []
     },
     {
@@ -872,7 +907,8 @@
       "regione": "Lazio",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 90,
       "scoreReasons": [
         "contesto lavorativo",
@@ -880,8 +916,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-40cbd66bdad83e77",
+      "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
+      "eventGroupId": "evt-4b4d1f6a3bea4f54",
       "fonti": [
         {
           "titolo": "Tragedia in un'autofficina a Roma: esplode la sospensione di un camion, morto un uomo",
@@ -908,15 +944,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-7fcd0c6cf611b224",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-3181331defe336b0",
       "fonti": []
     },
     {
@@ -928,15 +965,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 80,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-662967e81fac3138",
+      "sintesi": "Colto da malore, vittima deceduta",
+      "eventGroupId": "evt-3365b711dfe3497",
       "fonti": []
     },
     {
@@ -948,7 +986,8 @@
       "regione": "Campania",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
@@ -956,8 +995,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-45a9404514b845d0",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-ee53ac5b21cc3b2",
       "fonti": []
     },
     {
@@ -969,15 +1008,16 @@
       "regione": "Campania",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-3344455b7d7f8984",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-18faaafbd85f9f7d",
       "fonti": [
         {
           "titolo": "Operaio 46enne muore schiacciato da un muro ad Apollosa (Benevento): sequestrato il cantiere",
@@ -1004,15 +1044,16 @@
       "regione": "Calabria",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-1fcd71f7af26ea0e",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-3483f52a73c1b3fe",
       "fonti": []
     },
     {
@@ -1024,7 +1065,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1032,8 +1074,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-7ee43bd72165e396",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-52518ff4626ab756",
       "fonti": []
     },
     {
@@ -1045,15 +1087,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-1200ded97af6cfd3",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-103101873a21f1bb",
       "fonti": []
     },
     {
@@ -1065,15 +1108,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 66,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-76a3c1e5d85d89a3",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-536e81fb3a2ff24e",
       "fonti": []
     },
     {
@@ -1085,15 +1129,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-15c3775605f3f5fb",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-4c651c433e6ced0f",
       "fonti": []
     },
     {
@@ -1105,15 +1150,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 57,
       "scoreReasons": [
         "contesto lavorativo",
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-7faa4b969c2afbf1",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-50eac4de8b6fcd5e",
       "fonti": []
     },
     {
@@ -1125,7 +1171,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 67,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1133,8 +1180,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-460eb1ee5f1cbe70",
+      "sintesi": "Caduto dall'alto, conseguenze gravi",
+      "eventGroupId": "evt-cb965cd50f55a08",
       "fonti": []
     },
     {
@@ -1146,7 +1193,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1154,8 +1202,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-21a7376cf1025f89",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-2c82100281bec99f",
       "fonti": []
     },
     {
@@ -1167,14 +1215,15 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 52,
       "scoreReasons": [
         "contesto lavorativo",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-16db7dee5772fb72",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-39a520d4fd5c161c",
       "fonti": []
     },
     {
@@ -1186,7 +1235,8 @@
       "regione": "Emilia-Romagna",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1194,8 +1244,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-6980833dbb5f06c0",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-237512e3a2e39819",
       "fonti": [
         {
           "titolo": "Tragedia a Rimini: operaio perde la vita dopo caduta da impalcatura",
@@ -1215,7 +1265,8 @@
       "regione": "Lazio",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 71,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1223,8 +1274,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-264ffcffd5db78b1",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-a4023198db1fe9c",
       "fonti": []
     },
     {
@@ -1236,7 +1287,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1244,8 +1296,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-fd58a3322815039",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-2a98cbbe6974b4c4",
       "fonti": []
     },
     {
@@ -1257,7 +1309,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1265,8 +1318,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-7bf6f5cfecea644c",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-67ce765f23045232",
       "fonti": []
     },
     {
@@ -1278,15 +1331,16 @@
       "regione": "Emilia-Romagna",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-59e7afef8c919c13",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-b8556c3df153b9c",
       "fonti": []
     },
     {
@@ -1298,15 +1352,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-6ceb54a92f5e555d",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-211d57584b254621",
       "fonti": []
     },
     {
@@ -1318,15 +1373,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 66,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-7c3eea12404a0bd4",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-1369f22a276de8f8",
       "fonti": []
     },
     {
@@ -1338,7 +1394,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 67,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1346,8 +1403,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-5625371c7750cf",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-3ad948eaa81d59f7",
       "fonti": []
     },
     {
@@ -1359,15 +1416,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 57,
       "scoreReasons": [
         "contesto lavorativo",
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-b6094fe920dc01b",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-221538d12b6a9562",
       "fonti": []
     },
     {
@@ -1379,7 +1437,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 90,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1387,8 +1446,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-63030f20bd938270",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-6f2f561afd6fdf52",
       "fonti": []
     },
     {
@@ -1400,7 +1459,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 76,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1408,8 +1468,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-42a602f7e4a6a868",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-32d310ba362e95f0",
       "fonti": []
     },
     {
@@ -1421,15 +1481,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-93cb8ac3fa5cfe4",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-1ffa14ca0370d372",
       "fonti": []
     },
     {
@@ -1441,14 +1502,15 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 52,
       "scoreReasons": [
         "contesto lavorativo",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-e581c8fe0cc219b",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-6707f0c47223aedb",
       "fonti": []
     },
     {
@@ -1460,15 +1522,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 58,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-286929718b7c532a",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-54525cc365d512ee",
       "fonti": []
     },
     {
@@ -1480,7 +1543,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 63,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1488,8 +1552,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-59227fc528249011",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-465462474e202dae",
       "fonti": []
     },
     {
@@ -1501,7 +1565,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1509,8 +1574,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-3e21836b47d7434e",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-43e09255864c544c",
       "fonti": []
     },
     {
@@ -1522,15 +1587,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 72,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-444995b45fc4e732",
+      "sintesi": "Infortunio con conseguenze gravi",
+      "eventGroupId": "evt-5825af4337ff2f46",
       "fonti": []
     },
     {
@@ -1542,7 +1608,8 @@
       "regione": "Sicilia",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1550,8 +1617,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-498f0b717726f9a1",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-4771a8190fe0652",
       "fonti": [
         {
           "titolo": "Autopsia sul corpo di un operaio morto in un cantiere a Palagonia, due indagati",
@@ -1571,7 +1638,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 57,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1579,8 +1647,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-69b63979bda15ca1",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-415adf6829beaa57",
       "fonti": []
     },
     {
@@ -1592,7 +1660,8 @@
       "regione": "Trentino",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1600,8 +1669,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-191fee2c0ae955a8",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-973c3c784836695",
       "fonti": []
     },
     {
@@ -1613,15 +1682,16 @@
       "regione": "Trentino-Alto Adige",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 71,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-603eafef69d322a4",
+      "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
+      "eventGroupId": "evt-c3e69e8c56a6d40",
       "fonti": [
         {
           "titolo": "\"L'ADIGE\" - RASSEGNA STAMPA / IN EDICOLA IL 03/10/2026 * «LA TRAGEDIA IL GIOVANE, DI BORGO VALSUGANA, ERA DIPENDENTE DI UN CASEIFICIO DI BORSO DEL GRAPPA / MORTO SUL LAVORO A 27 ANNI / DANIELE GREMES È STATO INVE",
@@ -1655,7 +1725,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 57,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1663,8 +1734,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-f1c1278373af27",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-51df3299c3e9016b",
       "fonti": []
     },
     {
@@ -1676,7 +1747,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1684,8 +1756,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-691a6324bb9cf702",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-1f5ee6555421880a",
       "fonti": []
     },
     {
@@ -1697,15 +1769,16 @@
       "regione": "Trentino-Alto Adige",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 80,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-1af84661fe0e77a",
+      "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
+      "eventGroupId": "evt-22fa0387c85a2cac",
       "fonti": [
         {
           "titolo": "Morto in un incidente sul lavoro: si farà l’autopsia sul corpo di Daniele Gremes. Il dolore della famiglia: «Aveva tanti progetti di vita»",
@@ -1725,7 +1798,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1733,8 +1807,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-2eb47a831d37c4da",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-3896af0297d07a6f",
       "fonti": []
     },
     {
@@ -1746,7 +1820,8 @@
       "regione": "Emilia-Romagna",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1754,8 +1829,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-45068a0d1dd15e0e",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6f320528bffb4b91",
       "fonti": [
         {
           "titolo": "Operaio morto a 43 anni schiacciato dal carico di una gru: tragedia in un cantiere edile di Faenza",
@@ -1796,15 +1871,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 80,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-31e4f0a528cb2f37",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-68e1071f3c17d2e8",
       "fonti": []
     },
     {
@@ -1816,7 +1892,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 53,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1824,8 +1901,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-10445efca7c9566e",
+      "sintesi": "Investito da un veicolo/mezzo, conseguenze gravi",
+      "eventGroupId": "evt-4601817b8e8a61e6",
       "fonti": []
     },
     {
@@ -1837,15 +1914,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-3c7fb0fe7760fec1",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-7fef29b4ad131211",
       "fonti": []
     },
     {
@@ -1857,15 +1935,16 @@
       "regione": "Marche",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-37ce0e80e5d946b5",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-5a8c42b7d49f5a0c",
       "fonti": []
     },
     {
@@ -1877,7 +1956,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1885,8 +1965,30 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-6a25311920ef9acd",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-32a01f055d1d37cc",
+      "fonti": []
+    },
+    {
+      "titolo": "Esplosione in azienda, morto il 27enne. Vertice in Prefettura: «Serve fare fronte comune»",
+      "fonte": "TrevisoToday",
+      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPZlQ2dWpxYl9La3RsODZtQndZeHk4MURGdmMybVNzUVkwVllGd2J5emVOVHBmTTU5UmNkTHdGVW1ZTlhpTHdqa2RpM3IyRlNQU2I1cWpOa2xkQVVDYWM4M04wNU5seVpMRmt3amp5a3VyLTE5anRYdG9Hb3ZQSHE0VGxYaExWYkxJWGNsVlllZy1pT1g5bEduZ2ljdU4?oc=5",
+      "data": "Thu, 01 Oct 2026 07:00:00 GMT",
+      "provincia": null,
+      "regione": null,
+      "tipo": "evento",
+      "esito": "mortale",
+      "categoria": "mortale",
+      "imminente": false,
+      "workAccidentScore": 71,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale",
+        "localizzazione geografica"
+      ],
+      "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
+      "eventGroupId": "evt-4af19a83f73d7a29",
       "fonti": []
     },
     {
@@ -1898,15 +2000,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 80,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-620ac27eb7d52574",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-121f875d112e4041",
       "fonti": []
     },
     {
@@ -1918,15 +2021,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-a02457e03bff45b",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-4519419b6326e4fe",
       "fonti": []
     },
     {
@@ -1938,7 +2042,8 @@
       "regione": "Emilia-Romagna",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1946,8 +2051,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-617f403339cfd4fb",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6128e6dc8a206cec",
       "fonti": [
         {
           "titolo": "Morto sul lavoro in A14 a Bologna, i sindacati proclamano 2 ore di sciopero",
@@ -1988,7 +2093,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -1996,8 +2102,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-2ebcb9ecc1ca187",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-561cdb9e54f761d",
       "fonti": [
         {
           "titolo": "Fissato l'ultimo saluto ad Andrea Moretti, l'operaio abruzzese morto a 22 anni per un incidente sul lavoro al Colosseo",
@@ -2018,6 +2124,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 90,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2026,7 +2133,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-751967710ab5d4e0",
+      "eventGroupId": "evt-442871a31153dd8c",
       "fonti": []
     },
     {
@@ -2038,15 +2145,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-4a4565667b79168e",
+      "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
+      "eventGroupId": "evt-1ea8fc4f018aacbf",
       "fonti": []
     },
     {
@@ -2058,7 +2166,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 61,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2066,8 +2175,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-5e116cdc1fe50225",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6d2cab0a88f465bc",
       "fonti": []
     },
     {
@@ -2079,7 +2188,8 @@
       "regione": "Marche",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 47,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2087,8 +2197,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-103fe8f891fbf791",
+      "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
+      "eventGroupId": "evt-3c84bfd4a20ed56b",
       "fonti": [
         {
           "titolo": "Incidenti sul lavoro, un morto e un ferito grave alla Fincantieri di Ancona",
@@ -2119,6 +2229,13 @@
           "score": 71
         },
         {
+          "titolo": "Incidente alla Fincantieri Ancona: operaio ucciso da una fiammata, un altro è gravissimo",
+          "data": "Wed, 30 Sep 2026 07:00:00 GMT",
+          "fonte": "Il Sole 24 ORE",
+          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPaHhaSFhQY1F0YkxfLVJCbGdCTkk2WC13TS1iX0FmTkFPaW5KbUViZUhFNkdWOTluNFZraHN6dFpmc2xQMTBTWG0xS2liWTkydWY1aVR2aF8tXzg2d3h4Y3VvQXlKUWJQVU1wMzhLR0t2X04zZ2lid3BwR0ZKS0RXeEgtdEctWGcybl9uNUkzXzM5NEdPSHNMWTAxeW1odXFLRGRkdGFyVWQtVUR1WXA1ZXZsQTRiUEE?oc=5",
+          "score": 71
+        },
+        {
           "titolo": "Muore operaio alla Fincantieri Ancona travolto da una fiammata. Sindacati: \"Inaccettabile\"",
           "data": "Wed, 30 Sep 2026 07:00:00 GMT",
           "fonte": "Il Fatto Quotidiano",
@@ -2126,11 +2243,11 @@
           "score": 71
         },
         {
-          "titolo": "Incidente alla Fincantieri Ancona: operaio ucciso da una fiammata, un altro è gravissimo",
+          "titolo": "Incidenti sul lavoro: morto un operaio ad Ancona e un altro nel Milanese",
           "data": "Wed, 30 Sep 2026 07:00:00 GMT",
-          "fonte": "Il Sole 24 ORE",
-          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPaHhaSFhQY1F0YkxfLVJCbGdCTkk2WC13TS1iX0FmTkFPaW5KbUViZUhFNkdWOTluNFZraHN6dFpmc2xQMTBTWG0xS2liWTkydWY1aVR2aF8tXzg2d3h4Y3VvQXlKUWJQVU1wMzhLR0t2X04zZ2lid3BwR0ZKS0RXeEgtdEctWGcybl9uNUkzXzM5NEdPSHNMWTAxeW1odXFLRGRkdGFyVWQtVUR1WXA1ZXZsQTRiUEE?oc=5",
-          "score": 71
+          "fonte": "Tgcom24",
+          "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNS0lLN29qa2EtdXd6ZlJCTzY1eWNFdHVhQUYzVnJMRHlGb2pvNzRkd1V3eEtQaWRSZ05fZlFFUS1wTVRMWEs4dENjVlhqRHpMRXpyZXY2RWVXZGloSG1SVUhqMkplMDBVYTg2N2hoZjM1bDFYUWhxODA2UmVSdnRNeEt0ZXVkX3hrR2E4ckl2QUJ1V0JpbjZOaUhnNmlfTUJab1pfS3FHeFFNUdIBaEFVX3lxTE5TWHdBVVNTNzlMTHhaODFHdWJPOEYyZkw5M3JiRndyS01SalFKUWxIajIxZU1vQW5HbHBNZHg4WlRQVUhJLXMxMFdNUW81UFpteXc4a1ZUMzFRdllYcjdjcUVYaEg1bDNr?oc=5",
+          "score": 75
         },
         {
           "titolo": "Incidente a Fincantieri Ancona, morto un operaio e un altro gravissimo",
@@ -2178,7 +2295,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 90,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2186,8 +2304,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-43d5776e7334e1ee",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-30f14b2620a09ed6",
       "fonti": []
     },
     {
@@ -2199,7 +2317,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2207,8 +2326,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-253486487a8d73d7",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-1364d4294c5d6690",
       "fonti": []
     },
     {
@@ -2220,7 +2339,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2228,8 +2348,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-10af6a288c63058d",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6076ca736a416f7b",
       "fonti": []
     },
     {
@@ -2241,7 +2361,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 76,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2249,8 +2370,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-3e0201cac4d9c3b8",
+      "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
+      "eventGroupId": "evt-43eef99d35a0688b",
       "fonti": []
     },
     {
@@ -2262,7 +2383,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 76,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2270,8 +2392,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-712fe6fc5eefc077",
+      "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
+      "eventGroupId": "evt-65df6279c6c34dc6",
       "fonti": []
     },
     {
@@ -2283,15 +2405,16 @@
       "regione": "Campania",
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 72,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-6a20ac1050265550",
+      "sintesi": "Investito da un veicolo/mezzo, conseguenze gravi",
+      "eventGroupId": "evt-75d8974a3e68fe3e",
       "fonti": [
         {
           "titolo": "Dramma a Sapri: operaio cade dal Bobcat e viene travolto da una pioggia di bitume bollente, è in prognosi riservata",
@@ -2311,15 +2434,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 52,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-6dd6ce73f71f025",
+      "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
+      "eventGroupId": "evt-4bdbe1f7e4c53b8b",
       "fonti": []
     },
     {
@@ -2331,15 +2455,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 58,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-53dcbb5215d03fa8",
+      "sintesi": "Colpito da fuoco/esplosione, conseguenze gravi",
+      "eventGroupId": "evt-2053dcf6e3b1d121",
       "fonti": []
     },
     {
@@ -2351,7 +2476,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2359,8 +2485,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-b4d5cd73646a9c5",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-7b64dd650ba289f0",
       "fonti": []
     },
     {
@@ -2372,15 +2498,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-507e06344df5eca9",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-bc7c47592577d56",
       "fonti": []
     },
     {
@@ -2392,15 +2519,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 66,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-1eee316ea22397fa",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-252585ebc8f3cbd8",
       "fonti": []
     },
     {
@@ -2412,15 +2540,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 62,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "conseguenza grave"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-3461ede908a1677d",
+      "sintesi": "Trauma/lesione fisica",
+      "eventGroupId": "evt-3121cc74e88c6c60",
       "fonti": []
     },
     {
@@ -2432,15 +2561,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-7af614e5c8c2f9c1",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-76096be26408269a",
       "fonti": []
     },
     {
@@ -2452,7 +2582,8 @@
       "regione": "Marche",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 90,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2460,8 +2591,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-655c181aa6f43eb5",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-752bcdc443847ad7",
       "fonti": []
     },
     {
@@ -2474,6 +2605,7 @@
       "tipo": "report",
       "esito": "mortale",
       "categoria": "analisi",
+      "imminente": false,
       "workAccidentScore": 71,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2482,7 +2614,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-4c1dcaa856c67275",
+      "eventGroupId": "evt-6b71d2fc792b6aaa",
       "fonti": []
     },
     {
@@ -2494,15 +2626,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-1a4b9695bdc5bc3",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6047f17f34c5fbf9",
       "fonti": []
     },
     {
@@ -2514,7 +2647,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 75,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2522,8 +2656,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-2386cb25471b6b6",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6a9dc48793fe21e8",
       "fonti": []
     },
     {
@@ -2535,15 +2669,16 @@
       "regione": "Marche",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 70,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-2c9a67c77b59d5ef",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-787d13829da34ffc",
       "fonti": []
     },
     {
@@ -2555,15 +2690,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 66,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-714e06bb6d1e944f",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-4f765b545827c794",
       "fonti": []
     },
     {
@@ -2575,15 +2711,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 52,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-6b28bc6ef48acda5",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-10ed04124ff4f98a",
       "fonti": []
     },
     {
@@ -2595,7 +2732,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2603,8 +2741,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-234f6ef5eeaed849",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-3fb1e9b6d77be19b",
       "fonti": []
     },
     {
@@ -2616,15 +2754,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 52,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-1924bf92459d6ee0",
+      "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
+      "eventGroupId": "evt-15f59dc0ee8237d8",
       "fonti": []
     },
     {
@@ -2636,7 +2775,8 @@
       "regione": "Veneto",
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 90,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2644,8 +2784,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-5938ddc7781df9ac",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-5d0117bac11418a4",
       "fonti": [
         {
           "titolo": "Imprenditore muore schiacciato da un macchinario in una torneria a Santa Maria di Zevio",
@@ -2679,15 +2819,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 57,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-2b7daaa81881c272",
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-3619b39b57ef0c2e",
       "fonti": []
     },
     {
@@ -2699,15 +2840,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 56,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-47237ec4ba477c9f",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-730b7ab2805649c9",
       "fonti": []
     },
     {
@@ -2719,7 +2861,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2727,8 +2870,8 @@
         "esito mortale",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-51c8adc35b1647aa",
+      "sintesi": "Caduto dall'alto, vittima deceduta",
+      "eventGroupId": "evt-2dbebd52ecef17d1",
       "fonti": []
     },
     {
@@ -2740,7 +2883,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 77,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2748,8 +2892,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-3021cfa4c00b342",
+      "sintesi": "Caduto dall'alto, conseguenze gravi",
+      "eventGroupId": "evt-4b62bbe597d3df2f",
       "fonti": []
     },
     {
@@ -2761,15 +2905,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 52,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-76eeadabb96c353c",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-1b6bc93d6711a55c",
       "fonti": []
     },
     {
@@ -2781,7 +2926,8 @@
       "regione": "Lombardia",
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 67,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2789,8 +2935,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-10374d3f5e5df43",
+      "sintesi": "Trauma/lesione fisica",
+      "eventGroupId": "evt-3e0bc2246f9cc81d",
       "fonti": []
     },
     {
@@ -2802,7 +2948,8 @@
       "regione": null,
       "tipo": "evento",
       "esito": "grave",
-      "categoria": "analisi",
+      "categoria": "grave",
+      "imminente": false,
       "workAccidentScore": 67,
       "scoreReasons": [
         "contesto lavorativo",
@@ -2810,8 +2957,8 @@
         "conseguenza grave",
         "localizzazione geografica"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-672b6a59b99389c6",
+      "sintesi": "Caduto dall'alto, conseguenze gravi",
+      "eventGroupId": "evt-456c5f6c94e7d2a4",
       "fonti": []
     },
     {
@@ -2823,36 +2970,16 @@
       "regione": null,
       "tipo": "evento",
       "esito": "mortale",
-      "categoria": "analisi",
+      "categoria": "mortale",
+      "imminente": false,
       "workAccidentScore": 85,
       "scoreReasons": [
         "contesto lavorativo",
         "evento/infortunio",
         "esito mortale"
       ],
-      "sintesi": "",
-      "eventGroupId": "evt-4a3cd98df8f8155a",
-      "fonti": []
-    },
-    {
-      "titolo": "Il cordoglio della Filca Cisl per l'operaio travolto e ucciso sull'A14",
-      "fonte": "VeneziaToday",
-      "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPQkR4NVRtLUh1UXFicC16SGdOOGpZQ29EbTdxNmZVRmhqenJDdlR1ZDcxX3c3N3JiT0FEYlhOeTFyWGNtSXA5d2NON3V3NG5JZHcyZmtwdEhEMjMzeWpPUlNFQkM4MWRnQjdHMHlmUEEySlFsZjB2TDU0dG9GWEM2R2lYZmJKTzY5M0hKSUlKdklzTHc?oc=5",
-      "data": "Mon, 28 Sep 2026 07:00:00 GMT",
-      "provincia": null,
-      "regione": null,
-      "tipo": "evento",
-      "esito": "mortale",
-      "categoria": "analisi",
-      "workAccidentScore": 71,
-      "scoreReasons": [
-        "contesto lavorativo",
-        "evento/infortunio",
-        "esito mortale",
-        "localizzazione geografica"
-      ],
-      "sintesi": "",
-      "eventGroupId": "evt-677119199da31bc2",
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-4efbb9ce9d4979ae",
       "fonti": []
     }
   ]
