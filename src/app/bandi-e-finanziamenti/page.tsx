@@ -127,7 +127,7 @@ export default function BandiPrevenzionePage() {
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
               Bandi e Finanziamenti per la Prevenzione
             </h1>
-            <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--color-text-soft)", margin: 0, fontSize: "0.95rem", lineHeight: 1.6 }}>
               Ogni anno lo Stato e gli enti previdenziali mettono a disposizione delle imprese risorse
               significative per investire in salute e sicurezza. Questo raccoglitore tiene traccia dei bandi
               aperti, delle scadenze e degli importi, a partire dalle fonti che erogano davvero i contributi.

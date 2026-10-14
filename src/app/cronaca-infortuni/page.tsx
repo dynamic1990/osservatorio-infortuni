@@ -61,7 +61,7 @@ export default function CronacaInfortuniPage() {
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
               Cronaca di infortuni
             </h1>
-            <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--color-text-soft)", margin: 0, fontSize: "0.95rem", lineHeight: 1.6 }}>
               Gli infortuni gravi e mortali sul lavoro raccontati dalla cronaca italiana, giorno per giorno.
               Una rassegna automatica interroga le testate nazionali e locali, filtra i fatti pertinenti e li
               ordina in una timeline. Ogni voce è classificata in base al contenuto: {"mortale"} quando

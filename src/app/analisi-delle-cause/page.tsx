@@ -97,7 +97,7 @@ export default function CasiMortaliPage() {
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
               Analisi delle cause degli infortuni mortali
             </h1>
-            <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--color-text-soft)", margin: 0, fontSize: "0.95rem", lineHeight: 1.6 }}>
               Ogni caso mortale documentato nell&apos;archivio Infor.MO di INAIL
               diventa qui un dato analizzabile: la dinamica dell&apos;evento, il
               settore e il territorio, il profilo di chi è morto e dell&apos;azienda.
@@ -192,7 +192,7 @@ export default function CasiMortaliPage() {
               La dimensione aziendale
             </div>
             <h3 style={{ margin: 0, fontSize: "1.2rem" }}>Analisi per dimensione aziendale</h3>
-            <p style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", maxWidth: "72ch", margin: "var(--space-2) 0 0" }}>
+            <p style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", margin: "var(--space-2) 0 0" }}>
               Microimprese, piccole, medie e grandi aziende hanno profili di rischio diversi.
               Consulta dinamiche e settori per anno, con la variazione rispetto all&apos;anno precedente.
             </p>

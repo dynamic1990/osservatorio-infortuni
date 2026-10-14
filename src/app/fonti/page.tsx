@@ -45,7 +45,7 @@ export default function FontiPage() {
         <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
           Fonti
         </h1>
-        <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+        <p style={{ color: "var(--color-text-soft)", margin: 0, fontSize: "0.95rem", lineHeight: 1.6 }}>
           Ogni numero pubblicato ha una fonte, una data di estrazione, uno stato e dei limiti dichiarati.
           Qui trovi il registro completo e lo stato di ciascuna fonte.
         </p>

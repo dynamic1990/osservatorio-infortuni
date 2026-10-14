@@ -48,7 +48,7 @@ export default function ProgettoPage() {
         <h1 style={{ margin: "var(--space-2) 0 var(--space-2)", fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "-0.03em" }}>
           Il progetto
         </h1>
-        <p style={{ margin: 0, maxWidth: "72ch", color: "var(--color-text-soft)", fontSize: "1.05rem", lineHeight: 1.6 }}>
+        <p style={{ margin: 0, color: "var(--color-text-soft)", fontSize: "1.05rem", lineHeight: 1.6 }}>
           Un osservatorio indipendente per leggere gli infortuni sul lavoro con numeri verificabili,
           fonti visibili e limiti dichiarati.
         </p>
@@ -62,7 +62,7 @@ export default function ProgettoPage() {
             </span>
             <div>
               <h2 className="card-title" style={{ marginTop: 0 }}>{section.title}</h2>
-              <p style={{ margin: 0, maxWidth: "75ch", color: "var(--color-text-soft)", lineHeight: 1.65 }}>{section.body}</p>
+              <p style={{ margin: 0, color: "var(--color-text-soft)", lineHeight: 1.65 }}>{section.body}</p>
             </div>
           </div>
         </section>

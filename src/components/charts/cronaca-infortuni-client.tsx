@@ -392,7 +392,7 @@ export function CronacaInfortuniClient() {
       {/* 4. Distinzione cronaca vs dati ufficiali */}
       <section className="card" aria-label="Cronaca e dati ufficiali">
         <h2 className="card-title">Cronaca e dati ufficiali: due piani diversi</h2>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-soft)", maxWidth: "78ch", lineHeight: 1.55, margin: 0 }}>
+        <p style={{ fontSize: "0.92rem", color: "var(--color-text-soft)", lineHeight: 1.6, margin: 0 }}>
           Questa pagina raccoglie la <strong>rassegna stampa automatica</strong> degli infortuni gravi e mortali
           sul lavoro: gli articoli dello stesso infortunio vengono <strong>raggruppati in un unico evento</strong>
           (quando più testate raccontano lo stesso fatto, si contano una volta sola).

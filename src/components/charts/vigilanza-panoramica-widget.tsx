@@ -88,7 +88,7 @@ export function VigilanzaPanoramicaWidget() {
             </div>
           ))}
         </div>
-        <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", margin: "var(--space-3) 0 0", maxWidth: "72ch", lineHeight: 1.55 }}>
+        <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", margin: "var(--space-3) 0 0", lineHeight: 1.55 }}>
           La patente a crediti, introdotta dalla riforma del 2024, è obbligatoria dal 1° gennaio 2025 per imprese e
           lavoratori autonomi operanti nei cantieri temporanei o mobili. Ogni infortunio grave o violazione in materia
           di sicurezza comporta una decurtazione dei crediti, con sospensione o revoca al di sotto della soglia minima.

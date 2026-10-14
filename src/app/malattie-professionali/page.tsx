@@ -51,7 +51,7 @@ export default function MalattieProfessionaliPage() {
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
               Osservatorio Malattie Professionali
             </h1>
-            <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--color-text-soft)", margin: 0, fontSize: "0.95rem", lineHeight: 1.6 }}>
               Le malattie professionali raccontano il lato meno visibile della sicurezza sul lavoro:
               patologie che emergono dopo anni di esposizione a rumore, sovraccarico biomeccanico,
               polveri e agenti cancerogeni. Denunce protocollate a confronto tra i primi semestri

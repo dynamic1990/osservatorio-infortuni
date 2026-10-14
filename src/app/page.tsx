@@ -54,7 +54,7 @@ export default function HomePage() {
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
               Osservatorio Infortuni sul Lavoro
             </h1>
-            <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--color-text-soft)", margin: 0, lineHeight: 1.6, fontSize: "0.95rem" }}>
               Piattaforma indipendente di trasparenza e monitoraggio statistico: dati congiunturali
               a parità di periodo, media giornaliera dei morti sul lavoro, tassi di incidenza e
               gravità normalizzati sugli occupati, serie storica, benchmark europeo, mappa del

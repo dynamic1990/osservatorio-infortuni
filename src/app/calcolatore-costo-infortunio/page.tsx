@@ -24,7 +24,7 @@ const KPI_COLLETTIVITA_INAIL_2023 = [
 export default function CalcolatorePage() {
   return <main className="container" style={{ paddingTop: "var(--space-5)", display: "grid", gap: "var(--space-5)" }}>
     <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "var(--space-4)", flexWrap: "wrap" }}>
-      <div style={{ borderLeft: "4px solid var(--color-accent)", paddingLeft: "var(--space-4)", maxWidth: "72ch" }}>
+      <div style={{ borderLeft: "4px solid var(--color-accent)", paddingLeft: "var(--space-4)" }}>
         <p className="eyebrow">Strumento per HSE e direzione</p>
         <h1 style={{ margin: 0 }}>Quanto costa un infortunio all&apos;azienda?</h1>
         <p className="lead" style={{ margin: 0 }}>Una stima trasparente del costo della non sicurezza, costruita sulla metodologia e sui parametri ufficiali INAIL. Seleziona settore e regione per precompilare i valori, oppure inserisci i dati del tuo evento, e confronta tre scenari.</p>

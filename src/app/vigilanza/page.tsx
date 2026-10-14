@@ -53,7 +53,7 @@ export default function VigilanzaPage() {
             <h1 style={{ fontSize: "1.85rem", fontWeight: 800, margin: "0 0 var(--space-1)", letterSpacing: "-0.02em" }}>
               Vigilanza sul Lavoro
             </h1>
-            <p style={{ color: "var(--color-text-soft)", margin: 0, maxWidth: "78ch", fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--color-text-soft)", margin: 0, fontSize: "0.95rem", lineHeight: 1.6 }}>
               Quanti controlli arrivano davvero nelle aziende italiane, quanti lavoratori irregolari emergono e quanto
               si recupera in contributi evasi? La serie storica 2021-2025 dell&apos;attività ispettiva INL (con INPS e INAIL)
               racconta l&apos;azione di contrasto al lavoro sommerso e alle violazioni della sicurezza nei luoghi di lavoro,

@@ -149,7 +149,7 @@ export function VigilanzaViolazioniDettaglioWidget() {
 
       <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
         <div style={{ fontWeight: 700, fontSize: "1.1rem" }}>{exactNumber(totaleAnno)} violazioni SSL</div>
-        <div style={{ fontSize: "0.85rem", color: "var(--color-text-soft)", maxWidth: "70ch" }}>
+        <div style={{ fontSize: "0.85rem", color: "var(--color-text-soft)" }}>
           {vista === "settori"
             ? "Quota massima nel grafico: " + exactNumber(maxViolazioni) + " violazioni."
             : "ATECO arriva al 2024 (ultimo monitoraggio pubblicato per sezione)."}
