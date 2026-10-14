@@ -252,11 +252,12 @@ def classify_tipo(titolo: str, fonte: str = "") -> str:
     if "%" in text or "+8" in text or "+9" in text or "+10" in text:
         return "report"
     # Bilanci con numeri di periodo: "18 morti e oltre 10mila infortuni in un
-    # anno", "15 morti sul lavoro in sette mesi", "un infortunio ogni mezz'ora".
-    # Un numero vicino a morti/infortuni/decessi più un periodo esplicito è
-    # quasi sempre un quadro statistico, non un singolo fatto imminente.
+    # anno", "15 morti sul lavoro in sette mesi", "un infortunio ogni mezz'ora",
+    # "701 morti nel 2026". Un numero vicino a morti/infortuni/decessi più un
+    # periodo esplicito è quasi sempre un quadro statistico, non un singolo
+    # fatto imminente.
     if re.search(r"\d[\d.'\u202f]*\s*(?:morti?|infortuni?|decessi|denunce|vittime)\b", text) and re.search(
-        r"(?:in un anno|in \w+ mesi|nel semestre|nel trimestre|ogni \w+|in 8 mesi|in 7 mesi|in 9 mesi)", text
+        r"(?:in un anno|all'anno|nel \d{4}|in \w+ mesi|in \d+ giorni|nel semestre|nel trimestre|ogni \w+)", text
     ):
         return "report"
     return "evento"
@@ -286,7 +287,7 @@ ANALISI_DEBOLI_MARKERS = (
     "iniziativa", "manifestazione", "basta morti", "basta stragi",
     "processo", "arrest", "indagini", "inchiesta", "sciopero",
     "cgil", "sindacat", "lutto", "cordoglio", "ricordo", "chi era",
-    "funerali", "funerale", "prevenzione",
+    "funerali", "funerale", "prevenzione", "anmil", "proposta",
 )
 
 

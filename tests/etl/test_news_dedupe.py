@@ -262,6 +262,15 @@ class TestClassifyCategoria(unittest.TestCase):
         self.assertEqual(tipo, "report")
         self.assertEqual(etl.classify_categoria(titolo, tipo), "analisi")
 
+    def test_701_morti_nel_2026_anmil_analisi(self):
+        # SoldiOnline 14/10: "701 morti nel 2026, la proposta Anmil che cambia
+        # le regole". È un approfondimento statistico/proposta, non un fatto di
+        # cronaca: numero + periodo (nel 2026) → report, categoria analisi.
+        titolo = "Incidenti sul lavoro: 701 morti nel 2026, la proposta Anmil che cambia le regole"
+        tipo = etl.classify_tipo(titolo, "SoldiOnline")
+        self.assertEqual(tipo, "report")
+        self.assertEqual(etl.classify_categoria(titolo, tipo), "analisi")
+
 
 if __name__ == "__main__":
     unittest.main()
