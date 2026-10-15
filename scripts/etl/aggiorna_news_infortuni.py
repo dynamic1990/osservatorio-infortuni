@@ -695,6 +695,43 @@ def semantic_dinamica(titolo: str) -> set[str]:
 DINAMICHE_RARE = {"fuoco", "elettrico", "annegamento"}
 
 # ---------------------------------------------------------------------------
+# Grandi opere / cantieri unici (ancora di accorpamento)
+# ---------------------------------------------------------------------------
+# Alcuni cantieri identificano un luogo così specifico da essere quasi univoci
+# in una città: la Tav/Alta velocità, la metropolitana, un viadotto, un porto.
+# Due incidenti mortali nello stesso luogo e nello stesso cantiere grande
+# opera sono quasi certamente lo stesso evento, anche quando i titoli usano
+# parole diverse ('muore nel cantiere' vs 'cade un pilone') o citano
+# denominazioni diverse ('Alta velocità' vs 'Tav').
+OPERA_CATEGORIE = (
+    ("alta velocit", "tav"),
+    ("terzo valico", "tav"),
+    ("nodo di firenze", "tav"),
+    ("viadotto", "viadotto"),
+    ("autostrada", "autostrada"),
+    ("metropolitana", "metro"),
+    ("galleria", "galleria"),
+    ("tunnel", "galleria"),
+)
+
+
+def opere_identificative(titolo: str) -> set[str]:
+    """Categorie di grande opera/cantiere unico citate nel titolo.
+
+    Normalizza le denominazioni: 'Alta velocità' e 'Tav' sono la stessa
+    opera, quindi restituiscono entrambe 'tav'. Il marker 'tav' usa il
+    confine di parola per non matchare 'tavolo'.
+    """
+    t = normalize_place(titolo)
+    out = set()
+    for marker, cat in OPERA_CATEGORIE:
+        if marker in t:
+            out.add(cat)
+    if re.search(r"\btav\b", t):
+        out.add("tav")
+    return out
+
+# ---------------------------------------------------------------------------
 # Sintesi breve "cosa è successo" per la card della cronaca
 # ---------------------------------------------------------------------------
 # Regole deterministiche di estrazione: il titolo RSS è l'unica fonte, quindi
@@ -915,6 +952,17 @@ def is_same_event(a: dict, b: dict) -> bool:
     dyn_a = semantic_dinamica(a.get("titolo", ""))
     dyn_b = semantic_dinamica(b.get("titolo", ""))
     if same_place and (dyn_a & dyn_b & DINAMICHE_RARE) and delta_days <= 6:
+        return True
+
+    # Stesso cantiere grande opera (Tav, viadotto, metro, galleria) nello
+    # stesso luogo e nella stessa finestra: l'opera è un luogo quasi univoco,
+    # quindi due incidenti mortali lì nello stesso giorno sono lo stesso
+    # evento anche se i titoli raccontano la dinamica in modo diverso
+    # ("muore nel cantiere dell'Alta Velocità" vs "cade un pilone nel
+    # cantiere della Tav").
+    op_a = opere_identificative(a.get("titolo", ""))
+    op_b = opere_identificative(b.get("titolo", ""))
+    if same_place and (op_a & op_b) and delta_days <= 3:
         return True
 
     # Follow-up sulla stessa provincia con un aggancio (nome, età o dinamica)

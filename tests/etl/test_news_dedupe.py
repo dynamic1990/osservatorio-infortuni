@@ -87,6 +87,34 @@ class TestSameEvent(unittest.TestCase):
         b = item("Ancona, esplosione nel cantiere navale: un operaio morto, gravi ustioni", data="2026-10-10 08:00:00 +0000")
         self.assertTrue(etl.is_same_event(a, b))
 
+    def test_stessa_grande_opera_stesso_luogo(self):
+        # Firenze AV: "muore nel cantiere dell'Alta velocità" vs "cade un
+        # pilone nella stazione Foster della Tav": stessa opera, stesso
+        # capoluogo, stesso giorno -> stesso evento anche con dinamica diversa.
+        a = item("Firenze, operaio muore nel cantiere dell'Alta velocità", data="2026-10-15 15:00:00 +0000")
+        b = item("Firenze, cade un pilone nel cantiere della stazione Foster della Tav: un morto", data="2026-10-15 16:00:00 +0000")
+        self.assertTrue(etl.is_same_event(a, b))
+
+    def test_grande_opera_diversa_resta_distinta(self):
+        # Stesso capoluogo ma cantieri diversi (Tav vs viadotto): non è lo
+        # stesso fatto, non si accorpa.
+        a = item("Firenze, operaio muore nel cantiere dell'Alta velocità", data="2026-10-15 15:00:00 +0000")
+        b = item("Firenze, operaio muore nel cantiere del viadotto A1", data="2026-10-15 16:00:00 +0000")
+        self.assertFalse(etl.is_same_event(a, b))
+
+    def test_opere_identificative(self):
+        self.assertEqual(etl.opere_identificative("Operaio muore nel cantiere dell'Alta Velocità"), {"tav"})
+        self.assertEqual(etl.opere_identificative("Crollo nel cantiere della Tav, un morto"), {"tav"})
+        self.assertEqual(etl.opere_identificative("Incidente nel cantiere del viadotto"), {"viadotto"})
+        self.assertEqual(etl.opere_identificative("Operaio muore in un cantiere a Roma"), set())
+
+    def test_muore_vs_cade_pilone_metropoli(self):
+        # Regressione: senza grande opera condivisa, il solo comune di una
+        # metropoli non basta ad accorpare eventi con dinamica diversa.
+        a = item("Roma, operaio muore in un cantiere", data="2026-10-15 15:00:00 +0000")
+        b = item("Roma, cade un pilone in un cantiere: un morto", data="2026-10-15 16:00:00 +0000")
+        self.assertFalse(etl.is_same_event(a, b))
+
 
 class TestDedupeEventi(unittest.TestCase):
     def test_gruppo_un_solo_capo(self):
