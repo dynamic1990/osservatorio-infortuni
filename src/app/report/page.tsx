@@ -11,6 +11,15 @@ export const metadata: Metadata = {
 
 const REPORT = [
   {
+    href: "/report/lavori-piu-pericolosi-in-italia",
+    name: "Report lavori più pericolosi",
+    title: "Lavori più pericolosi in Italia: settori e cause delle morti sul lavoro",
+    date: "16 ottobre 2026",
+    description:
+      "Agricoltura e costruzioni in testa alle morti sul lavoro nei casi analizzati da Infor.MO (2014-2024): 2.617 casi, la caduta dall'alto come prima causa, i settori e i profili delle vittime, con dati INAIL.",
+    tags: ["Morti sul lavoro", "Infor.MO", "Settori a rischio"],
+  },
+  {
     href: "/report/infortunio-in-itinere",
     name: "Report infortunio in itinere",
     title: "Infortunio in itinere: cos'è, quando è riconosciuto, quanti casi in Italia",
