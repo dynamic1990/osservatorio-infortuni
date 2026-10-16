@@ -11,6 +11,15 @@ export const metadata: Metadata = {
 
 const REPORT = [
   {
+    href: "/report/infortunio-in-itinere",
+    name: "Report infortunio in itinere",
+    title: "Infortunio in itinere: cos'è, quando è riconosciuto, quanti casi in Italia",
+    date: "16 ottobre 2026",
+    description:
+      "106.581 denunce in itinere nel 2025, in crescita costante. La normativa (art. 12 D.Lgs. 38/2000), i requisiti di riconoscimento, la classifica per regione e i dati aggiornati del primo semestre 2026.",
+    tags: ["Infortunio in itinere", "Normativa", "Dati INAIL"],
+  },
+  {
     href: "/report/relazione-annuale-inail-2025",
     name: "Report Relazione annuale INAIL",
     title: "Relazione annuale INAIL 2025: meno morti sul lavoro, boom di malattie professionali",
