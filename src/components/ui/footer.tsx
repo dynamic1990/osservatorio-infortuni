@@ -3,17 +3,27 @@
 import Link from "next/link";
 import { LinkedInIcon } from "./social-icons";
 
-const SEZIONI = [
-  { href: "/", label: "Quadro generale" },
-  { href: "/cronaca-infortuni", label: "Cronaca di infortuni" },
-  { href: "/analisi-delle-cause", label: "Analisi delle cause" },
-  { href: "/malattie-professionali", label: "Malattie professionali" },
-  { href: "/vigilanza", label: "Vigilanza" },
-  { href: "/bandi-e-finanziamenti", label: "Bandi e finanziamenti" },
-  { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio" },
-  { href: "/report", label: "Report" },
-  { href: "/fonti", label: "Fonti e metodo" },
-  { href: "/progetto", label: "Il progetto" },
+const COLONNE: { titolo: string; link: { href: string; label: string }[] }[] = [
+  {
+    titolo: "Esplora",
+    link: [
+      { href: "/", label: "Quadro generale" },
+      { href: "/cronaca-infortuni", label: "Cronaca di infortuni" },
+      { href: "/analisi-delle-cause", label: "Analisi delle cause" },
+      { href: "/malattie-professionali", label: "Malattie professionali" },
+      { href: "/vigilanza", label: "Vigilanza" },
+    ],
+  },
+  {
+    titolo: "Strumenti",
+    link: [
+      { href: "/bandi-e-finanziamenti", label: "Bandi e finanziamenti" },
+      { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio" },
+      { href: "/report", label: "Report" },
+      { href: "/fonti", label: "Fonti e metodo" },
+      { href: "/progetto", label: "Il progetto" },
+    ],
+  },
 ];
 
 export function Footer() {
@@ -23,83 +33,113 @@ export function Footer() {
         background: "var(--color-raised)",
         borderTop: "1px solid var(--color-divider)",
         marginTop: "var(--space-6)",
-        paddingTop: "var(--space-6)",
+        paddingTop: "var(--space-8)",
         paddingBottom: "var(--space-6)",
       }}
     >
-      <div className="container" style={{ display: "grid", gap: "var(--space-3)" }}>
-        <div style={{ fontWeight: 750, fontSize: "1.05rem" }}>
-          Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span> sul Lavoro
-        </div>
-        <nav aria-label="Sezioni del sito">
-          <ul
-            style={{
-              listStyle: "none",
-              margin: 0,
-              padding: 0,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "var(--space-1) var(--space-3)",
-              fontSize: "0.9rem",
-            }}
-          >
-            {SEZIONI.map((s) => (
-              <li key={s.href}>
-                <Link
-                  href={s.href}
-                  style={{
-                    color: "var(--color-link)",
-                    textDecoration: "none",
-                    fontWeight: 550,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {s.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <p
-          style={{
-            fontSize: "0.9rem",
-            lineHeight: 1.6,
-            color: "var(--color-text-muted)",
-            margin: 0,
-            paddingTop: "var(--space-2)",
-          }}
-        >
-          Per domande, segnalazioni o collaborazioni, contattami su:
-        </p>
+      <div className="container">
         <div
           style={{
             display: "grid",
-            gap: "var(--space-2)",
-            fontSize: "0.92rem",
-            color: "var(--color-text-muted)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "var(--space-6)",
           }}
         >
-          <a
-            href="https://www.linkedin.com/in/damiano-salvati"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5em",
-              width: "fit-content",
-              color: "var(--color-link)",
-              textDecoration: "none",
-              fontWeight: 600,
-            }}
-          >
-            <LinkedInIcon size={20} />
-            linkedin.com/in/damiano-salvati
-          </a>
+          {/* Colonna brand */}
+          <div style={{ display: "grid", gap: "var(--space-2)", alignContent: "start" }}>
+            <div style={{ fontWeight: 800, fontSize: "1.05rem", letterSpacing: "-0.01em" }}>
+              Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span> sul Lavoro
+            </div>
+            <p
+              style={{
+                fontSize: "0.85rem",
+                lineHeight: 1.6,
+                color: "var(--color-text-muted)",
+                margin: 0,
+                maxWidth: "26ch",
+              }}
+            >
+              Dati INAIL, ISTAT ed Eurostat. Monitoraggio indipendente degli infortuni sul lavoro in Italia.
+            </p>
+          </div>
+
+          {/* Colonne link */}
+          {COLONNE.map((col) => (
+            <nav key={col.titolo} aria-label={col.titolo} style={{ display: "grid", gap: "var(--space-2)", alignContent: "start" }}>
+              <div
+                style={{
+                  fontSize: "0.72rem",
+                  fontWeight: 750,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "var(--color-text-muted)",
+                }}
+              >
+                {col.titolo}
+              </div>
+              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "var(--space-1)" }}>
+                {col.link.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      style={{
+                        color: "var(--color-text)",
+                        textDecoration: "none",
+                        fontSize: "0.9rem",
+                        fontWeight: 500,
+                        transition: "color 0.15s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-accent)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-text)";
+                      }}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+
+          {/* Colonna contatti */}
+          <div style={{ display: "grid", gap: "var(--space-2)", alignContent: "start" }}>
+            <div
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: 750,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "var(--color-text-muted)",
+              }}
+            >
+              Contatti
+            </div>
+            <a
+              href="https://www.linkedin.com/in/damiano-salvati"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5em",
+                width: "fit-content",
+                color: "var(--color-text)",
+                textDecoration: "none",
+                fontSize: "0.9rem",
+                fontWeight: 600,
+              }}
+            >
+              <LinkedInIcon size={18} />
+              linkedin.com/in/damiano-salvati
+            </a>
+            <p style={{ fontSize: "0.82rem", lineHeight: 1.55, color: "var(--color-text-muted)", margin: 0 }}>
+              Codice rilasciato sotto licenza GNU AGPL-3.0: uso, modifica e riuso liberi, con l&apos;obbligo di condividere le modifiche. I dati provengono dalle fonti pubbliche citate (vedi Fonti) e restano soggetti alle licenze degli enti proprietari.
+            </p>
+          </div>
         </div>
-        <span style={{ fontSize: "0.82rem", lineHeight: 1.55, color: "var(--color-text-muted)", display: "block" }}>
-          Codice rilasciato sotto licenza GNU AGPL-3.0: uso, modifica e riuso liberi, con l&apos;obbligo di condividere le modifiche. I dati provengono dalle fonti pubbliche citate (vedi Fonti) e restano soggetti alle licenze degli enti proprietari.
-        </span>
       </div>
     </footer>
   );
