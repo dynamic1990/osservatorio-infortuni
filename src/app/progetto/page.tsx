@@ -16,9 +16,9 @@ const CONTATORI = [
     sub: "record INAIL elaborati (serie 2021-2025 + congiuntura)",
   },
   {
-    valore: "21",
-    label: "dataset gestiti",
-    sub: "snapshot verificati, rigenerati dalle pipeline ETL",
+    valore: "6",
+    label: "agenti AI al lavoro",
+    sub: "orchestratore + 5 specializzati: product, data, design, comunicazione, supervisione",
   },
   {
     valore: "11",
@@ -85,6 +85,13 @@ export default function ProgettoPage() {
             <div className="metric-sub">{c.sub}</div>
           </div>
         ))}
+      </section>
+
+      <section className="card" style={{ background: "var(--color-surface-2)" }}>
+        <h2 className="card-title" style={{ marginTop: 0 }}>Un team di agenti AI</h2>
+        <p style={{ margin: 0, color: "var(--color-text-soft)", lineHeight: 1.65 }}>
+          Il progetto è costruito con un&apos;infrastruttura basata su OpenClaw e modelli linguistici di grandi dimensioni: un agente orchestratore coordina il lavoro, mentre agenti specializzati presidiano le aree del progetto. Ogni agente ha un ruolo definito: chi architetta le pipeline dei dati, chi vigila sulla qualità analitica, chi disegna l&apos;interfaccia, chi cura la comunicazione, chi supervisiona il lavoro complessivo. È una squadra digitale che lavora in parallelo, con verifiche incrociate: i numeri passano dal controllo di qualità prima di essere pubblicati.
+        </p>
       </section>
 
       {sections.map((section, index) => (
