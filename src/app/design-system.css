@@ -348,3 +348,30 @@ h3 {
     width: 100%;
   }
 }
+
+/* Footer */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.4fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.footer-grid > div,
+.footer-grid > nav {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+}
+
+@media (max-width: 560px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+}

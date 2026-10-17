@@ -26,6 +26,8 @@ const COLONNE: { titolo: string; link: { href: string; label: string }[] }[] = [
   },
 ];
 
+const BLU_LINKEDIN = "#0A66C2";
+
 export function Footer() {
   return (
     <footer
@@ -38,29 +40,12 @@ export function Footer() {
       }}
     >
       <div className="container">
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "var(--space-6)",
-          }}
-        >
+        <div className="footer-grid">
           {/* Colonna brand */}
-          <div style={{ display: "grid", gap: "var(--space-2)", alignContent: "start" }}>
-            <div style={{ fontWeight: 800, fontSize: "1.05rem", letterSpacing: "-0.01em" }}>
+          <div style={{ alignContent: "start" }}>
+            <div style={{ fontWeight: 800, fontSize: "1.05rem", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
               Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span> sul Lavoro
             </div>
-            <p
-              style={{
-                fontSize: "0.85rem",
-                lineHeight: 1.6,
-                color: "var(--color-text-muted)",
-                margin: 0,
-                maxWidth: "26ch",
-              }}
-            >
-              Dati INAIL, ISTAT ed Eurostat. Monitoraggio indipendente degli infortuni sul lavoro in Italia.
-            </p>
           </div>
 
           {/* Colonne link */}
@@ -85,7 +70,7 @@ export function Footer() {
                       style={{
                         color: "var(--color-text)",
                         textDecoration: "none",
-                        fontSize: "0.9rem",
+                        fontSize: "0.92rem",
                         fontWeight: 500,
                         transition: "color 0.15s ease",
                       }}
@@ -126,17 +111,24 @@ export function Footer() {
                 alignItems: "center",
                 gap: "0.5em",
                 width: "fit-content",
-                color: "var(--color-text)",
+                color: BLU_LINKEDIN,
                 textDecoration: "none",
-                fontSize: "0.9rem",
+                fontSize: "0.92rem",
                 fontWeight: 600,
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = "#004182";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = BLU_LINKEDIN;
               }}
             >
               <LinkedInIcon size={18} />
               linkedin.com/in/damiano-salvati
             </a>
-            <p style={{ fontSize: "0.82rem", lineHeight: 1.55, color: "var(--color-text-muted)", margin: 0 }}>
-              Codice rilasciato sotto licenza GNU AGPL-3.0: uso, modifica e riuso liberi, con l&apos;obbligo di condividere le modifiche. I dati provengono dalle fonti pubbliche citate (vedi Fonti) e restano soggetti alle licenze degli enti proprietari.
+            <p style={{ fontSize: "0.8rem", lineHeight: 1.55, color: "var(--color-text-muted)", margin: 0 }}>
+              Codice rilasciato sotto licenza GNU AGPL-3.0. I dati provengono dalle fonti pubbliche citate (vedi Fonti) e restano soggetti alle licenze degli enti proprietari.
             </p>
           </div>
         </div>
