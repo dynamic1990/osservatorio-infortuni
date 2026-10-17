@@ -1,6 +1,20 @@
 "use client";
 
+import Link from "next/link";
 import { LinkedInIcon } from "./social-icons";
+
+const SEZIONI = [
+  { href: "/", label: "Quadro generale" },
+  { href: "/cronaca-infortuni", label: "Cronaca di infortuni" },
+  { href: "/analisi-delle-cause", label: "Analisi delle cause" },
+  { href: "/malattie-professionali", label: "Malattie professionali" },
+  { href: "/vigilanza", label: "Vigilanza" },
+  { href: "/bandi-e-finanziamenti", label: "Bandi e finanziamenti" },
+  { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio" },
+  { href: "/report", label: "Report" },
+  { href: "/fonti", label: "Fonti e metodo" },
+  { href: "/progetto", label: "Il progetto" },
+];
 
 export function Footer() {
   return (
@@ -17,6 +31,35 @@ export function Footer() {
         <div style={{ fontWeight: 750, fontSize: "1.05rem" }}>
           Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span> sul Lavoro
         </div>
+        <nav aria-label="Sezioni del sito">
+          <ul
+            style={{
+              listStyle: "none",
+              margin: 0,
+              padding: 0,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "var(--space-1) var(--space-3)",
+              fontSize: "0.9rem",
+            }}
+          >
+            {SEZIONI.map((s) => (
+              <li key={s.href}>
+                <Link
+                  href={s.href}
+                  style={{
+                    color: "var(--color-link)",
+                    textDecoration: "none",
+                    fontWeight: 550,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {s.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <p
           style={{
             fontSize: "0.9rem",
