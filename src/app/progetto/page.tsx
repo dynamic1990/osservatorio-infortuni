@@ -9,6 +9,29 @@ export const metadata: Metadata = {
   alternates: { canonical: "/progetto" },
 };
 
+const CONTATORI = [
+  {
+    valore: "~2,05 mln",
+    label: "dati trattati",
+    sub: "record elaborati da 21 dataset",
+  },
+  {
+    valore: "302",
+    label: "notizie in cronaca",
+    sub: "rassegna automatica, 4 aggiornamenti al giorno",
+  },
+  {
+    valore: "11",
+    label: "fonti monitorate",
+    sub: "INAIL, INL, Eurostat, Google News",
+  },
+  {
+    valore: "10",
+    label: "job automatici",
+    sub: "aggiornamenti, audit e backup",
+  },
+];
+
 const sections = [
   {
     title: "Cosa trovi all'interno",
@@ -54,6 +77,16 @@ export default function ProgettoPage() {
         </p>
       </header>
 
+      <section aria-label="La portata del progetto" className="grid-kpi">
+        {CONTATORI.map((c) => (
+          <div className="card" key={c.label} style={{ borderTop: "3px solid var(--color-accent)" }}>
+            <div className="metric-value" style={{ color: "var(--color-accent)" }}>{c.valore}</div>
+            <div className="metric-label">{c.label}</div>
+            <div className="metric-sub">{c.sub}</div>
+          </div>
+        ))}
+      </section>
+
       {sections.map((section, index) => (
         <section className="card" key={section.title}>
           <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "var(--space-3)", alignItems: "start" }}>
@@ -84,6 +117,12 @@ export default function ProgettoPage() {
           <LinkedInIcon size={22} />
           Per domande o collaborazioni, scrivimi su LinkedIn <ExternalLink aria-hidden="true" size={16} strokeWidth={1.8} />
         </a>
+        <p style={{ margin: "var(--space-2) 0 0", color: "var(--color-text-soft)", fontSize: "0.95rem", lineHeight: 1.6 }}>
+          Oppure scrivimi direttamente:{" "}
+          <a href="mailto:salvati.damiano@gmail.com" style={{ color: "var(--color-link)", fontWeight: 600 }}>
+            salvati.damiano@gmail.com
+          </a>
+        </p>
       </section>
 
       <section className="card" style={{ background: "var(--color-surface-2)" }}>

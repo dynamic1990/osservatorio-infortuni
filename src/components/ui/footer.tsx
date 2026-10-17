@@ -20,6 +20,11 @@ const COLONNE: { titolo: string; link: { href: string; label: string }[] }[] = [
       { href: "/bandi-e-finanziamenti", label: "Bandi e finanziamenti" },
       { href: "/calcolatore-costo-infortunio", label: "Costo dell'infortunio" },
       { href: "/report", label: "Report" },
+    ],
+  },
+  {
+    titolo: "Trasparenza",
+    link: [
       { href: "/fonti", label: "Fonti e metodo" },
       { href: "/progetto", label: "Il progetto" },
     ],
@@ -44,8 +49,15 @@ export function Footer() {
           {/* Colonna brand */}
           <div style={{ alignContent: "start" }}>
             <div style={{ fontWeight: 800, fontSize: "1.05rem", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
-              Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span> sul Lavoro
+              Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span>
             </div>
+            <img
+              src="/icon.png"
+              alt="Logo Osservatorio Infortuni"
+              width={40}
+              height={40}
+              style={{ marginTop: "var(--space-3)", borderRadius: 8 }}
+            />
           </div>
 
           {/* Colonne link */}
@@ -126,6 +138,28 @@ export function Footer() {
             >
               <LinkedInIcon size={18} />
               linkedin.com/in/damiano-salvati
+            </a>
+            <a
+              href="mailto:salvati.damiano@gmail.com"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5em",
+                width: "fit-content",
+                color: "var(--color-text)",
+                textDecoration: "none",
+                fontSize: "0.92rem",
+                fontWeight: 500,
+                transition: "color 0.15s ease",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-accent)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-text)";
+              }}
+            >
+              salvati.damiano@gmail.com
             </a>
             <p style={{ fontSize: "0.8rem", lineHeight: 1.55, color: "var(--color-text-muted)", margin: 0 }}>
               Codice rilasciato sotto licenza GNU AGPL-3.0. I dati provengono dalle fonti pubbliche citate (vedi Fonti) e restano soggetti alle licenze degli enti proprietari.
