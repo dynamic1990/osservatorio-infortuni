@@ -11,14 +11,14 @@ export const metadata: Metadata = {
 
 const CONTATORI = [
   {
-    valore: "~2,05 mln",
+    valore: "~3,5 mln",
     label: "dati trattati",
-    sub: "record elaborati da 21 dataset",
+    sub: "record INAIL elaborati (serie 2021-2025 + congiuntura)",
   },
   {
-    valore: "302",
-    label: "notizie in cronaca",
-    sub: "rassegna automatica, 4 aggiornamenti al giorno",
+    valore: "21",
+    label: "dataset gestiti",
+    sub: "snapshot verificati, rigenerati dalle pipeline ETL",
   },
   {
     valore: "11",
