@@ -11,6 +11,15 @@ export const metadata: Metadata = {
 
 const REPORT = [
   {
+    href: "/report/vigilanza-sul-lavoro",
+    name: "Report vigilanza sul lavoro",
+    title: "Vigilanza sul lavoro in Italia: ispezioni, lavoro nero e violazioni (2021-2025)",
+    date: "17 ottobre 2026",
+    description:
+      "112.768 ispezioni definite nel 2025 e il 74% delle aziende irregolari: controlli INL, lavoratori in nero, sospensioni, violazioni sicurezza e patente a crediti, con i dati ufficiali.",
+    tags: ["Vigilanza", "Lavoro nero", "Ispezioni INL", "Patente a crediti"],
+  },
+  {
     href: "/report/malattie-professionali-piu-denunciate",
     name: "Report malattie professionali",
     title: "Malattie professionali più denunciate in Italia (dati 2025-2026)",
