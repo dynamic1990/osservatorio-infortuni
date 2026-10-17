@@ -11,6 +11,15 @@ export const metadata: Metadata = {
 
 const REPORT = [
   {
+    href: "/report/malattie-professionali-piu-denunciate",
+    name: "Report malattie professionali",
+    title: "Malattie professionali più denunciate in Italia (dati 2025-2026)",
+    date: "17 ottobre 2026",
+    description:
+      "98.312 denunce nel 2025, record da 26 anni: le patologie più comuni (rachide, spalla, tunnel carpale), i decessi e perché i numeri crescono, con i dati INAIL.",
+    tags: ["Malattie professionali", "Dati INAIL", "Sovraccarico biomeccanico"],
+  },
+  {
     href: "/report/lavori-piu-pericolosi-in-italia",
     name: "Report lavori più pericolosi",
     title: "Lavori più pericolosi in Italia: settori e cause delle morti sul lavoro",
