@@ -68,7 +68,7 @@ export default function VigilanzaPage() {
       </header>
 
       {/* 2. KPI di Sintesi */}
-      <section className="card" aria-label="Sintesi Vigilanza INL">
+      <section className="card" aria-label="Sintesi Vigilanza INL" id="vigilanza-in-numeri">
         <div className="card-header">
           <h2 className="card-title">L&apos;attività di vigilanza in numeri</h2>
           <p className="card-desc">
@@ -80,7 +80,7 @@ export default function VigilanzaPage() {
       </section>
 
       {/* 3. Serie Storica: Controlli e Tasso di Irregolarità / Sospensioni */}
-      <section className="card" aria-label="Serie Storica Vigilanza">
+      <section className="card" aria-label="Serie Storica Vigilanza" id="serie-vigilanza">
         <div className="card-header">
           <h2 className="card-title">Serie Storica quinquennio (2021 – 2025)</h2>
           <p className="card-desc">
@@ -93,7 +93,7 @@ export default function VigilanzaPage() {
       </section>
 
       {/* 4. Violazioni, Lavoro Nero e Lavoratori Irregolari */}
-      <section className="card" aria-label="Violazioni e Lavoro Sommerso">
+      <section className="card" aria-label="Violazioni e Lavoro Sommerso" id="violazioni-sommerso">
         <div className="card-header">
           <h2 className="card-title">Violazioni accertate e lavoro sommerso</h2>
           <p className="card-desc">
@@ -106,7 +106,7 @@ export default function VigilanzaPage() {
       </section>
 
       {/* 4bis. Tipologie di violazioni registrate */}
-      <section className="card" aria-label="Tipologie di Violazioni Registrate">
+      <section className="card" aria-label="Tipologie di Violazioni Registrate" id="tipologie-violazioni">
         <div className="card-header">
           <h2 className="card-title">Le tipologie di violazioni registrate</h2>
           <p className="card-desc">
@@ -119,7 +119,7 @@ export default function VigilanzaPage() {
       </section>
 
       {/* 5. Recuperi, Sommerso e Patente a Crediti */}
-      <section className="card" aria-label="Recuperi e Patente a Crediti">
+      <section className="card" aria-label="Recuperi e Patente a Crediti" id="recuperi-patente">
         <div className="card-header">
           <h2 className="card-title">Recuperi, sommerso e patente a crediti</h2>
           <p className="card-desc">
@@ -131,7 +131,7 @@ export default function VigilanzaPage() {
       </section>
 
       {/* 6. Sospensioni per settore: serie completa e composizione */}
-      <section className="card" aria-label="Sospensioni per Settore">
+      <section className="card" aria-label="Sospensioni per Settore" id="sospensioni-settore">
         <div className="card-header">
           <h2 className="card-title">Sospensioni per settore: la serie completa</h2>
           <p className="card-desc">
@@ -143,7 +143,7 @@ export default function VigilanzaPage() {
       </section>
 
       {/* 7. Casistiche SSL: perché si sospende */}
-      <section className="card" aria-label="Casistiche Sospensioni SSL">
+      <section className="card" aria-label="Casistiche Sospensioni SSL" id="casistiche-sospensioni">
         <div className="card-header">
           <h2 className="card-title">Perché si sospende: le casistiche delle gravi violazioni SSL</h2>
           <p className="card-desc">
@@ -155,7 +155,7 @@ export default function VigilanzaPage() {
       </section>
 
       {/* 8. Violazioni SSL per settore e ATECO */}
-      <section className="card" aria-label="Violazioni SSL per Settore e ATECO">
+      <section className="card" aria-label="Violazioni SSL per Settore e ATECO" id="violazioni-per-settore">
         <div className="card-header">
           <h2 className="card-title">Dove si viola di più la sicurezza</h2>
           <p className="card-desc">

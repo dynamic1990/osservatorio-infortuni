@@ -157,7 +157,7 @@ export default function BandiPrevenzionePage() {
         </div>
       </header>
 
-      <section className="card" aria-label="Elenco bandi attivi" style={{ padding: "var(--space-3)" }}>
+      <section className="card" aria-label="Elenco bandi attivi" id="bandi-in-evidenza" style={{ padding: "var(--space-3)" }}>
         <div className="card-header">
           <h2 className="card-title">Bandi in evidenza</h2>
           <p className="card-desc">

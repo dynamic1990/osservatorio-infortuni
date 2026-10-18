@@ -69,7 +69,7 @@ export default function MalattieProfessionaliPage() {
       </section>
 
       {/* Andamento mensile confronto semestri */}
-      <section className="card" aria-label="Andamento mensile denunce">
+      <section className="card" aria-label="Andamento mensile denunce" id="denunce-mensili">
         <div className="card-header">
           <h2 className="card-title">Denunce mensili: I semestre 2025 vs 2026</h2>
           <p className="card-desc">
@@ -82,7 +82,7 @@ export default function MalattieProfessionaliPage() {
       </section>
 
       {/* Patologie */}
-      <section className="card" aria-label="Patologie denunciate">
+      <section className="card" aria-label="Patologie denunciate" id="patologie-comuni">
         <div className="card-header">
           <h2 className="card-title">Le patologie più denunciate</h2>
           <p className="card-desc">
@@ -96,7 +96,7 @@ export default function MalattieProfessionaliPage() {
       </section>
 
       {/* Mappa regionale */}
-      <section className="card" aria-label="Distribuzione territoriale">
+      <section className="card" aria-label="Distribuzione territoriale" id="distribuzione-territoriale">
         <div className="card-header">
           <h2 className="card-title">Distribuzione territoriale delle denunce</h2>
           <p className="card-desc">
@@ -108,7 +108,7 @@ export default function MalattieProfessionaliPage() {
       </section>
 
       {/* Decessi */}
-      <section className="card" aria-label="Decessi per malattia professionale">
+      <section className="card" aria-label="Decessi per malattia professionale" id="decessi-malattia">
         <div className="card-header">
           <h2 className="card-title">Decessi per malattia professionale riconosciuta</h2>
           <p className="card-desc">
@@ -121,7 +121,7 @@ export default function MalattieProfessionaliPage() {
       </section>
 
       {/* Esiti delle denunce */}
-      <section className="card" aria-label="Esiti delle denunce malattie professionali" style={{ overflow: "hidden" }}>
+      <section className="card" aria-label="Esiti delle denunce malattie professionali" id="riconoscimento-denunce" style={{ overflow: "hidden" }}>
         <div className="card-header">
           <h2 className="card-title">Quante denunce vengono riconosciute?</h2>
           <p className="card-desc">

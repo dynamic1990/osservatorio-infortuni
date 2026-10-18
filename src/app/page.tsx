@@ -91,7 +91,7 @@ export default function HomePage() {
       </section>
 
       {/* 3. Serie Storica 2014-2025 */}
-      <section className="card" aria-label="Serie Storica">
+      <section className="card" aria-label="Serie Storica" id="serie-storica">
         <div className="card-header">
           <h2 className="card-title">Serie Storica (2014 – 2025)</h2>
           <p className="card-desc">
@@ -104,7 +104,7 @@ export default function HomePage() {
       </section>
 
       {/* 3. Trend Storico a Doppia Scala: Volumi Assoluti vs Tasso di Incidenza */}
-      <section className="card" aria-label="Evoluzione e Indice di Incidenza">
+      <section className="card" aria-label="Evoluzione e Indice di Incidenza" id="evoluzione-incidenza">
         <div className="card-header">
           <h2 className="card-title">Evoluzione Temporale e Tasso di Incidenza (2020 – 2025)</h2>
           <p className="card-desc">
@@ -117,7 +117,7 @@ export default function HomePage() {
       </section>
 
       {/* 4. Mappa Territoriale Interattiva: Colore = Tasso di Incidenza */}
-      <section className="card" aria-label="Mappa Territoriale del Rischio">
+      <section className="card" aria-label="Mappa Territoriale del Rischio" id="mappa-regioni">
         <div className="card-header">
           <h2 className="card-title">Mappa Territoriale e Ranking Regionale: Tasso di Incidenza e Gravità</h2>
           <p className="card-desc">
@@ -129,7 +129,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. Macro-aree: Tasso di Incidenza per ripartizione geografica */}
-      <section className="card" aria-label="Macro-aree geografiche">
+      <section className="card" aria-label="Macro-aree geografiche" id="macro-aree">
         <div className="card-header">
           <h2 className="card-title">Macro-aree: il rischio per ripartizione geografica</h2>
           <p className="card-desc">
@@ -142,7 +142,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Comparti Produttivi ATECO: Incidenza e Gravità */}
-      <section className="card" aria-label="Comparti Produttivi ATECO">
+      <section className="card" aria-label="Comparti Produttivi ATECO" id="comparti-ateco">
         <div className="card-header">
           <h2 className="card-title">Comparti Produttivi e Attività Economiche (Classificazione ATECO)</h2>
           <p className="card-desc">
@@ -155,7 +155,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Profilo Demografico: Genere e Fasce d'Età con Selettore Anno */}
-      <section className="card" aria-label="Distribuzione Demografica">
+      <section className="card" aria-label="Distribuzione Demografica" id="distribuzione-demografica">
         <div className="card-header">
           <h2 className="card-title">Distribuzione Demografica: Genere e Fasce d&apos;Età</h2>
           <p className="card-desc">
@@ -167,7 +167,7 @@ export default function HomePage() {
       </section>
 
       {/* 7. Analisi Qualitativa: Gravità del Danno, Durata delle Assenze e Stagionalità */}
-      <section className="card" aria-label="Analisi di Gravità e Durata Assenze">
+      <section className="card" aria-label="Analisi di Gravità e Durata Assenze" id="gravita-inabilita">
         <div className="card-header">
           <h2 className="card-title">Analisi di Gravità del Danno e Durata dell&apos;Inabilità Temporanea</h2>
           <p className="card-desc">
@@ -183,7 +183,7 @@ export default function HomePage() {
       </section>
 
       {/* 7bis. Benchmark Internazionale Eurostat */}
-      <section className="card" aria-label="Benchmark Internazionale">
+      <section className="card" aria-label="Benchmark Internazionale" id="benchmark-europa">
         <div className="card-header">
           <h2 className="card-title">Benchmark Internazionale: il confronto con l&apos;Europa</h2>
           <p className="card-desc">

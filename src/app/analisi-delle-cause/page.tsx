@@ -20,15 +20,18 @@ export const metadata: Metadata = {
 function Sezione({
   titolo,
   occhiello,
+  id,
   children,
 }: {
   titolo: string;
   occhiello?: string;
+  id?: string;
   children: ReactNode;
 }) {
   return (
     <section
       className="card"
+      id={id}
       style={{ padding: "var(--space-5)", display: "grid", gap: "var(--space-4)", minWidth: 0, maxWidth: "100%" }}
     >
       <div className="card-header" style={{ marginBottom: 0 }}>
@@ -159,12 +162,12 @@ export default function CasiMortaliPage() {
       </header>
 
       {/* 1. Copertura dell'archivio sul totale */}
-      <Sezione occhiello="La copertura dell'archivio" titolo="Infortuni mortali: totale denunciato e casi analizzati">
+      <Sezione occhiello="La copertura dell'archivio" titolo="Infortuni mortali: totale denunciato e casi analizzati" id="copertura-archivio">
         <InformoTrendWidget />
       </Sezione>
 
       {/* 3. Approfondimenti: cause, settori, territorio */}
-      <Sezione occhiello="Le cause" titolo="Perché si muore: tipologie di incidente">
+      <Sezione occhiello="Le cause" titolo="Perché si muore: tipologie di incidente" id="tipologie-incidente">
         <InformoVociLista
           titolo="Incidente (causa prevalente)"
           sottotitolo="Classificazione INAIL della dinamica: casi per anno o somma di periodo"
@@ -176,7 +179,7 @@ export default function CasiMortaliPage() {
         />
       </Sezione>
 
-      <Sezione occhiello="I settori" titolo="Dove avvengono i casi mortali">
+      <Sezione occhiello="I settori" titolo="Dove avvengono i casi mortali" id="settori-casi-mortali">
         <InformoVociLista
           titolo="Settore di attività"
           sottotitolo="Classificazione INAIL per attività economica: casi per anno o somma di periodo"
@@ -186,7 +189,7 @@ export default function CasiMortaliPage() {
           multiAnno
           casiAnno={casiAnno}
         />
-        <div style={{ display: "grid", gap: "var(--space-3)", borderTop: "1px solid var(--color-divider)", paddingTop: "var(--space-4)" }}>
+        <div id="dimensione-aziendale" style={{ display: "grid", gap: "var(--space-3)", borderTop: "1px solid var(--color-divider)", paddingTop: "var(--space-4)" }}>
           <div>
             <div style={{ color: "var(--color-accent)", fontSize: "0.78rem", fontWeight: 650, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 4 }}>
               La dimensione aziendale
@@ -201,7 +204,7 @@ export default function CasiMortaliPage() {
         </div>
       </Sezione>
 
-      <Sezione occhiello="Il territorio" titolo="Dove avvengono i casi mortali">
+      <Sezione occhiello="Il territorio" titolo="Dove avvengono i casi mortali" id="territorio-casi-mortali">
         <InformoVociLista
           titolo="Macro-aree"
           sottotitolo="Localizzazione INAIL: Nord-Ovest, Nord-Est, Centro, Sud e Isole (per anno o somma di periodo)"
@@ -213,7 +216,7 @@ export default function CasiMortaliPage() {
         />
       </Sezione>
 
-      <Sezione occhiello="I lavoratori e le aziende" titolo="Profilo di chi muore">
+      <Sezione occhiello="I lavoratori e le aziende" titolo="Profilo di chi muore" id="profilo-vittime">
         <InformoVociLista
           titolo="Popolazioni a rischio"
           sottotitolo="Segnalazioni demografiche INAIL (anziani, stranieri, irregolari, giovani...)"
@@ -255,7 +258,7 @@ export default function CasiMortaliPage() {
       </Sezione>
 
       {/* 4. Esploratore */}
-      <Sezione occhiello="La lettura caso per caso" titolo="Cerca nella dinamica">
+      <Sezione occhiello="La lettura caso per caso" titolo="Cerca nella dinamica" id="cerca-dinamica">
         <InformoEsploratore />
       </Sezione>
     </div>

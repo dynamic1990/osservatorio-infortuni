@@ -158,7 +158,7 @@ export function CronacaInfortuniClient() {
   return (
     <div style={{ display: "grid", gap: "var(--space-6)" }}>
       {/* Timeline con filtri */}
-      <section className="card" aria-label="Timeline della cronaca">
+      <section className="card" aria-label="Timeline della cronaca" id="cronaca-giorno">
         <div className="card-header">
           <h2 className="card-title">La cronaca giorno per giorno</h2>
           <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
@@ -390,7 +390,7 @@ export function CronacaInfortuniClient() {
       </section>
 
       {/* 4. Distinzione cronaca vs dati ufficiali */}
-      <section className="card" aria-label="Cronaca e dati ufficiali">
+      <section className="card" aria-label="Cronaca e dati ufficiali" id="cronaca-dati-ufficiali">
         <h2 className="card-title">Cronaca e dati ufficiali: due piani diversi</h2>
         <p style={{ fontSize: "0.92rem", color: "var(--color-text-soft)", lineHeight: 1.6, margin: 0 }}>
           Questa pagina raccoglie la <strong>rassegna stampa automatica</strong> degli infortuni gravi e mortali

@@ -1,5 +1,5 @@
 // Indice di ricerca globale del sito.
-// Fonti dell'indice: pagine statiche, report, argomenti trasversali,
+// Fonti dell'indice: pagine statiche, report, grafici (sezioni con anchor),
 // bandi (data/bandi-prevenzione.ts) e fonti (lib/sources.ts).
 // Le news della cronaca NON stanno qui: sono 300+ e vengono caricate
 // lazy dal componente di ricerca.
@@ -10,7 +10,7 @@ import { SOURCES } from "@/lib/sources";
 export type SearchEntryType =
   | "pagina"
   | "report"
-  | "argomento"
+  | "grafico"
   | "bando"
   | "fonte";
 
@@ -273,41 +273,314 @@ const REPORT: SearchEntry[] = [
   },
 ];
 
-const ARGOMENTI: SearchEntry[] = [
+// Titoli reali delle sezioni/grafici delle pagine, con anchor per andare
+// direttamente al grafico. Gli id corrispondono alle sezioni delle pagine.
+const GRAFICI: SearchEntry[] = [
   {
-    type: "argomento",
-    title: "Tasso di incidenza e gravità per regione",
-    description: "Mappa del rischio territoriale e ranking regionale degli infortuni sul lavoro.",
-    href: "/",
-    keywords: ["incidenza", "gravità", "regioni", "mappa", "ranking", "rischio territoriale", "occupati"],
+    type: "grafico",
+    title: "Serie Storica (2014 – 2025)",
+    description:
+      "Dodici anni di denunce INAIL e casi mortali confrontati con gli occupati ISTAT/Eurostat, dal picco COVID del 2020 al consolidamento post-pandemia.",
+    href: "/#serie-storica",
+    keywords: ["serie storica", "storico", "andamento", "trend", "dodici anni", "evoluzione", "occupati"],
+    meta: "Quadro generale",
   },
   {
-    type: "argomento",
-    title: "Serie storica degli infortuni (2014-2025)",
-    description: "Andamento delle denunce di infortunio sul lavoro negli ultimi dodici anni.",
-    href: "/",
-    keywords: ["serie storica", "storico", "andamento", "trend", "anni", "evoluzione"],
+    type: "grafico",
+    title: "Evoluzione Temporale e Tasso di Incidenza (2020 – 2025)",
+    description:
+      "L'evoluzione degli infortuni con il tasso di incidenza normalizzato sugli occupati.",
+    href: "/#evoluzione-incidenza",
+    keywords: ["incidenza", "evoluzione", "tasso", "indice", "normalizzato", "occupati"],
+    meta: "Quadro generale",
   },
   {
-    type: "argomento",
-    title: "Benchmark europeo Eurostat",
-    description: "Il confronto internazionale degli infortuni sul lavoro con l'Europa.",
-    href: "/",
-    keywords: ["eurostat", "europa", "benchmark", "internazionale", "confronto", "esaw"],
+    type: "grafico",
+    title: "Mappa Territoriale e Ranking Regionale: Tasso di Incidenza e Gravità",
+    description:
+      "La mappa del rischio per regione con incidenza e gravità normalizzate sugli occupati, per confrontare territori di dimensioni diverse.",
+    href: "/#mappa-regioni",
+    keywords: ["mappa", "regioni", "ranking", "incidenza", "gravità", "territoriale", "rischio", "ranking regionale"],
+    meta: "Quadro generale",
   },
   {
-    type: "argomento",
-    title: "Comparti produttivi e attività economiche ATECO",
-    description: "Il rischio per settore di attività economica secondo la classificazione ATECO.",
-    href: "/",
-    keywords: ["ateco", "comparti", "settori", "attività economiche", "industria", "edilizia", "agricoltura"],
+    type: "grafico",
+    title: "Macro-aree: il rischio per ripartizione geografica",
+    description:
+      "Il confronto per ripartizione geografica: Nord-Ovest, Nord-Est, Centro, Sud e Isole.",
+    href: "/#macro-aree",
+    keywords: ["macroaree", "macro-aree", "nord", "sud", "centro", "isole", "ripartizione geografica"],
+    meta: "Quadro generale",
   },
   {
-    type: "argomento",
-    title: "Distribuzione per genere e fasce d'età",
-    description: "Chi sono i lavoratori coinvolti negli infortuni: sesso, età e durata dell'inabilità.",
-    href: "/",
-    keywords: ["genere", "età", "fasce", "demografia", "uomini", "donne", "inabilità", "giovani", "anziani"],
+    type: "grafico",
+    title: "Comparti Produttivi e Attività Economiche (Classificazione ATECO)",
+    description:
+      "Il rischio per comparto produttivo e attività economica secondo la classificazione ATECO.",
+    href: "/#comparti-ateco",
+    keywords: ["ateco", "comparti", "settori", "attività economiche", "industria", "edilizia", "agricoltura", "manifattura"],
+    meta: "Quadro generale",
+  },
+  {
+    type: "grafico",
+    title: "Distribuzione Demografica: Genere e Fasce d'Età",
+    description:
+      "Chi sono i lavoratori coinvolti negli infortuni: distribuzione per sesso e classi di età.",
+    href: "/#distribuzione-demografica",
+    keywords: ["genere", "età", "fasce", "demografia", "sesso", "uomini", "donne", "giovani", "anziani", "classi"],
+    meta: "Quadro generale",
+  },
+  {
+    type: "grafico",
+    title: "Analisi di Gravità del Danno e Durata dell'Inabilità Temporanea",
+    description:
+      "La gravità media del danno e la durata dell'inabilità temporanea per evento.",
+    href: "/#gravita-inabilita",
+    keywords: ["gravità", "danno", "inabilità", "durata", "giorni", "assenze", "indennizzo"],
+    meta: "Quadro generale",
+  },
+  {
+    type: "grafico",
+    title: "Benchmark Internazionale: il confronto con l'Europa",
+    description:
+      "Il confronto degli infortuni sul lavoro con i paesi europei, dai dati Eurostat ESAW.",
+    href: "/#benchmark-europa",
+    keywords: ["eurostat", "europa", "benchmark", "internazionale", "confronto", "esaw", "paesi"],
+    meta: "Quadro generale",
+  },
+  {
+    type: "grafico",
+    title: "Denunce mensili: I semestre 2025 vs 2026",
+    description:
+      "L'andamento mensile delle denunce di malattie professionali nel confronto tra i primi semestri 2025 e 2026.",
+    href: "/malattie-professionali#denunce-mensili",
+    keywords: ["denunce mensili", "semestre", "mensile", "2025", "2026", "confronto", "andamento"],
+    meta: "Malattie professionali",
+  },
+  {
+    type: "grafico",
+    title: "Le patologie più denunciate",
+    description:
+      "Le malattie professionali più frequenti: rachide, spalla, tunnel carpale e altre patologie muscolo-scheletriche.",
+    href: "/malattie-professionali#patologie-comuni",
+    keywords: ["patologie", "rachide", "spalla", "tunnel carpale", "muscolo-scheletriche", "denunciate", "più frequenti"],
+    meta: "Malattie professionali",
+  },
+  {
+    type: "grafico",
+    title: "Distribuzione territoriale delle denunce",
+    description:
+      "Le denunce di malattie professionali per regione e territorio.",
+    href: "/malattie-professionali#distribuzione-territoriale",
+    keywords: ["territoriale", "regioni", "territorio", "distribuzione", "denunce"],
+    meta: "Malattie professionali",
+  },
+  {
+    type: "grafico",
+    title: "Decessi per malattia professionale riconosciuta",
+    description:
+      "I decessi riconosciuti come conseguenza di malattia professionale.",
+    href: "/malattie-professionali#decessi-malattia",
+    keywords: ["decessi", "morti", "malattia professionale", "riconosciuta", "esiti mortali"],
+    meta: "Malattie professionali",
+  },
+  {
+    type: "grafico",
+    title: "Quante denunce vengono riconosciute?",
+    description:
+      "L'esito delle denunce di malattia professionale: quante vengono riconosciute e quante no.",
+    href: "/malattie-professionali#riconoscimento-denunce",
+    keywords: ["riconoscimento", "esiti", "denunce", "percentuale", "definite", "riconosciute"],
+    meta: "Malattie professionali",
+  },
+  {
+    type: "grafico",
+    title: "L'attività di vigilanza in numeri",
+    description:
+      "La sintesi dell'attività di vigilanza INL: ispezioni, personale e indicatori principali.",
+    href: "/vigilanza#vigilanza-in-numeri",
+    keywords: ["vigilanza", "ispezioni", "numeri", "sintesi", "kpi", "inl"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Serie Storica quinquennio (2021 – 2025)",
+    description:
+      "L'andamento quinquennale dell'attività di vigilanza: ispezioni, violazioni e sanzioni dal 2021 al 2025.",
+    href: "/vigilanza#serie-vigilanza",
+    keywords: ["serie storica", "quinquennio", "vigilanza", "2021", "2025", "andamento"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Violazioni accertate e lavoro sommerso",
+    description:
+      "Le violazioni accertate, i lavoratori irregolari e il lavoro nero emersi dalle ispezioni.",
+    href: "/vigilanza#violazioni-sommerso",
+    keywords: ["violazioni", "lavoro nero", "sommerso", "irregolari", "accertate"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Le tipologie di violazioni registrate",
+    description:
+      "Le diverse tipologie di violazioni della sicurezza sul lavoro registrate dagli ispettori.",
+    href: "/vigilanza#tipologie-violazioni",
+    keywords: ["tipologie", "violazioni", "sicurezza", "registrate", "classificazione"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Recuperi, sommerso e patente a crediti",
+    description:
+      "I recuperi contributivi e premi evasi, il lavoro sommerso e l'andamento della patente a crediti.",
+    href: "/vigilanza#recuperi-patente",
+    keywords: ["recuperi", "contributi", "premi evasi", "sommerso", "patente a crediti", "rilasciate", "revocate"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Sospensioni per settore: la serie completa",
+    description:
+      "Le sospensioni dell'attività imprenditoriale per settore, con il massimo storico del 2024.",
+    href: "/vigilanza#sospensioni-settore",
+    keywords: ["sospensioni", "settore", "serie", "attività imprenditoriale"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Perché si sospende: le casistiche delle gravi violazioni SSL",
+    description:
+      "Le casistiche delle gravi violazioni di salute e sicurezza sul lavoro che portano alla sospensione.",
+    href: "/vigilanza#casistiche-sospensioni",
+    keywords: ["casistiche", "sospensioni", "violazioni", "ssl", "gravi", "salute e sicurezza"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Dove si viola di più la sicurezza",
+    description:
+      "Le violazioni della sicurezza per settore e codice ATECO.",
+    href: "/vigilanza#violazioni-per-settore",
+    keywords: ["violazioni", "sicurezza", "settori", "ateco", "dove"],
+    meta: "Vigilanza",
+  },
+  {
+    type: "grafico",
+    title: "Infortuni mortali: totale denunciato e casi analizzati",
+    description:
+      "La copertura dell'archivio Infor.MO: il totale dei casi mortali denunciati e quelli analizzati con la scheda di dettaglio.",
+    href: "/analisi-delle-cause#copertura-archivio",
+    keywords: ["infortuni mortali", "casi analizzati", "copertura", "archivio", "denunciati", "totale"],
+    meta: "Analisi delle cause",
+  },
+  {
+    type: "grafico",
+    title: "Perché si muore: tipologie di incidente",
+    description:
+      "La classificazione INAIL della dinamica degli incidenti mortali: la caduta dall'alto come prima causa.",
+    href: "/analisi-delle-cause#tipologie-incidente",
+    keywords: ["incidente", "dinamica", "cause", "tipologie", "caduta dall'alto", "perché si muore"],
+    meta: "Analisi delle cause",
+  },
+  {
+    type: "grafico",
+    title: "Dove avvengono i casi mortali",
+    description:
+      "I settori e le attività economiche in cui avvengono i casi mortali, classificazione INAIL.",
+    href: "/analisi-delle-cause#settori-casi-mortali",
+    keywords: ["settori", "attività economica", "casi mortali", "dove avvengono", "classificazione"],
+    meta: "Analisi delle cause · I settori",
+  },
+  {
+    type: "grafico",
+    title: "Dove avvengono i casi mortali: il territorio",
+    description:
+      "La localizzazione dei casi mortali per macro-area: Nord-Ovest, Nord-Est, Centro, Sud e Isole.",
+    href: "/analisi-delle-cause#territorio-casi-mortali",
+    keywords: ["territorio", "macro-aree", "nord-ovest", "nord-est", "isole", "localizzazione", "casi mortali"],
+    meta: "Analisi delle cause · Il territorio",
+  },
+  {
+    type: "grafico",
+    title: "Profilo di chi muore",
+    description:
+      "Le popolazioni a rischio e le mansioni più coinvolte nei casi mortali: anziani, stranieri, irregolari, giovani.",
+    href: "/analisi-delle-cause#profilo-vittime",
+    keywords: ["profilo", "vittime", "popolazioni a rischio", "anziani", "stranieri", "irregolari", "mansioni", "lavoratori"],
+    meta: "Analisi delle cause",
+  },
+  {
+    type: "grafico",
+    title: "Analisi per dimensione aziendale",
+    description:
+      "Microimprese, piccole, medie e grandi aziende hanno profili di rischio diversi: dinamiche e settori per anno.",
+    href: "/analisi-delle-cause#dimensione-aziendale",
+    keywords: ["dimensione aziendale", "microimprese", "piccole", "medie", "grandi", "aziende", "profilo di rischio"],
+    meta: "Analisi delle cause",
+  },
+  {
+    type: "grafico",
+    title: "Cerca nella dinamica",
+    description:
+      "La lettura caso per caso dei casi mortali: cerca nella dinamica dell'evento.",
+    href: "/analisi-delle-cause#cerca-dinamica",
+    keywords: ["cerca", "dinamica", "casi", "esplora", "lettura", "caso per caso"],
+    meta: "Analisi delle cause",
+  },
+  {
+    type: "grafico",
+    title: "Il costo di un infortunio: azienda, Stato e collettività",
+    description:
+      "I KPI ufficiali INAIL del costo di un infortunio sul lavoro per l'azienda, lo Stato e la collettività.",
+    href: "/calcolatore-costo-infortunio#costo-infortunio",
+    keywords: ["costo", "kpi", "azienda", "stato", "collettività", "danni da lavoro"],
+    meta: "Costo dell'infortunio",
+  },
+  {
+    type: "grafico",
+    title: "Come usarlo",
+    description:
+      "Le istruzioni per usare il calcolatore del costo dell'infortunio.",
+    href: "/calcolatore-costo-infortunio#come-usarlo",
+    keywords: ["come usare", "istruzioni", "calcolatore", "guida"],
+    meta: "Costo dell'infortunio",
+  },
+  {
+    type: "grafico",
+    title: "Come leggere il risultato",
+    description:
+      "Come interpretare il risultato del calcolo del costo di un infortunio.",
+    href: "/calcolatore-costo-infortunio#come-leggere",
+    keywords: ["leggere", "risultato", "interpretazione", "spiegazione"],
+    meta: "Costo dell'infortunio",
+  },
+  {
+    type: "grafico",
+    title: "Bandi in evidenza",
+    description:
+      "L'elenco dei bandi e finanziamenti in evidenza per la prevenzione e sicurezza sul lavoro.",
+    href: "/bandi-e-finanziamenti#bandi-in-evidenza",
+    keywords: ["bandi", "evidenza", "elenco", "isi", "finanziamenti", "attivi"],
+    meta: "Bandi e finanziamenti",
+  },
+  {
+    type: "grafico",
+    title: "La cronaca giorno per giorno",
+    description:
+      "La timeline della cronaca degli infortuni gravi e mortali, filtrabile per categoria, regione e periodo.",
+    href: "/cronaca-infortuni#cronaca-giorno",
+    keywords: ["timeline", "cronaca", "giorno", "eventi", "rassegna"],
+    meta: "Cronaca di infortuni",
+  },
+  {
+    type: "grafico",
+    title: "Cronaca e dati ufficiali: due piani diversi",
+    description:
+      "Perché i numeri della cronaca non sostituiscono i dati ufficiali INAIL: la distinzione tra i due piani.",
+    href: "/cronaca-infortuni#cronaca-dati-ufficiali",
+    keywords: ["cronaca", "dati ufficiali", "inail", "differenza", "distinzione", "metodo"],
+    meta: "Cronaca di infortuni",
   },
 ];
 
@@ -340,7 +613,7 @@ function buildFonti(): SearchEntry[] {
 export const SEARCH_INDEX: SearchEntry[] = [
   ...PAGINE,
   ...REPORT,
-  ...ARGOMENTI,
+  ...GRAFICI,
   ...buildBandi(),
   ...buildFonti(),
 ];
@@ -392,7 +665,7 @@ export function scoreEntries(query: string, entries = SEARCH_INDEX): ScoredEntry
 
 const PESO_TIPO: Record<SearchEntryType, number> = {
   pagina: 100,
-  argomento: 90,
+  grafico: 95,
   report: 80,
   bando: 60,
   fonte: 50,

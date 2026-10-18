@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   ArrowDown,
   ArrowUp,
+  BarChart3,
   BookOpen,
   CornerDownLeft,
   Home,
@@ -52,7 +53,7 @@ const APRI_RICERCA = "osservatorio:apri-ricerca";
 const ETICHETTE_TIPO: Record<SearchEntryType, string> = {
   pagina: "Pagina",
   report: "Report",
-  argomento: "Argomento",
+  grafico: "Grafico",
   bando: "Bando",
   fonte: "Fonte",
 };
@@ -60,7 +61,7 @@ const ETICHETTE_TIPO: Record<SearchEntryType, string> = {
 const ICONE_TIPO: Record<SearchEntryType, LucideIcon> = {
   pagina: Home,
   report: Newspaper,
-  argomento: Search,
+  grafico: BarChart3,
   bando: Landmark,
   fonte: BookOpen,
 };

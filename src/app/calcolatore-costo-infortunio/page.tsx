@@ -76,7 +76,7 @@ export default function CalcolatorePage() {
       </InfoModalButton>
     </header>
 
-    <section className="card" aria-label="KPI ufficiali INAIL">
+    <section className="card" aria-label="KPI ufficiali INAIL" id="costo-infortunio">
       <h2 className="card-title">Il costo di un infortunio: azienda, Stato e collettività</h2>
       <p>La ricerca INAIL distingue il costo complessivo dell&apos;evento e le sue componenti. Per sensibilizzare il datore di lavoro è utile partire dal costo medio per evento, poi mostrare quanto l&apos;infortunio pesa sul sistema pubblico e sulla collettività.</p>
       <h3 style={{ fontSize: "1rem", marginBottom: "var(--space-2)" }}>Il riferimento per l&apos;azienda</h3>
@@ -103,7 +103,7 @@ export default function CalcolatorePage() {
       </p>
     </section>
 
-    <section className="card" aria-label="Come usare il calcolatore" style={{ fontSize: "0.9rem", lineHeight: 1.55 }}>
+    <section className="card" aria-label="Come usare il calcolatore" id="come-usarlo" style={{ fontSize: "0.9rem", lineHeight: 1.55 }}>
       <h2 className="card-title">Come usarlo</h2>
       <ol style={{ margin: 0, paddingLeft: "1.2rem", display: "grid", gap: "var(--space-1)" }}>
         <li>Seleziona settore ATECO e regione (opzionali) per precompilare la durata media delle assenze dai dati INAIL, oppure lascia vuoto e inserisci i tuoi valori.</li>
@@ -115,7 +115,7 @@ export default function CalcolatorePage() {
 
     <section className="card" aria-label="Calcolatore del costo dell'infortunio"><CalcolatoreCosto /></section>
 
-    <section className="card" style={{ fontSize: "0.88rem", lineHeight: 1.55 }}>
+    <section className="card" id="come-leggere" style={{ fontSize: "0.88rem", lineHeight: 1.55 }}>
       <h2 className="card-title">Come leggere il risultato</h2>
       <p>Il risultato è una stima orientativa, non una tariffa ufficiale: modifica i valori precompilati per adattarli alla tua azienda. Le componenti per immagine, eventi gravi e sanzioni sono prudenziali e non rappresentano importi dovuti.</p>
     </section>
