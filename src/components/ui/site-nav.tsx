@@ -134,25 +134,23 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
         <button
           type="button"
           aria-label="Cerca nel sito (Ctrl+K)"
+          title="Cerca nel sito (Ctrl+K)"
           onClick={() => window.dispatchEvent(new Event("osservatorio:apri-ricerca"))}
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: 6,
+            justifyContent: "center",
+            width: 38,
             height: 38,
             borderRadius: 10,
             border: "1px solid var(--color-divider)",
             background: "var(--color-surface)",
             cursor: "pointer",
-            padding: "0 10px",
+            padding: 0,
             color: "var(--color-text-muted)",
-            fontSize: "0.8rem",
           }}
         >
-          <Search aria-hidden="true" size={16} strokeWidth={1.8} />
-          <span style={{ border: "1px solid currentColor", borderRadius: 4, padding: "0 4px", fontSize: "0.68rem", opacity: 0.7 }}>
-            Ctrl K
-          </span>
+          <Search aria-hidden="true" size={19} strokeWidth={1.8} />
         </button>
         <button
           aria-expanded={aperto}
