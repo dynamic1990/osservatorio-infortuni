@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CircleDollarSign, Cross, ExternalLink, FileText, Home, Landmark, Menu, Newspaper, UserSearch, Workflow, X } from "lucide-react";
+import { BookOpen, CircleDollarSign, Cross, ExternalLink, FileText, Home, Landmark, Menu, Newspaper, Search, UserSearch, Workflow, X } from "lucide-react";
 import { GitHubIcon } from "./social-icons";
 
 const VOCI = [
@@ -133,7 +133,28 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
         </Link>
         <button
           type="button"
-          aria-label={aperto ? "Chiudi il menu" : "Apri il menu"}
+          aria-label="Cerca nel sito (Ctrl+K)"
+          onClick={() => window.dispatchEvent(new Event("osservatorio:apri-ricerca"))}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            height: 38,
+            borderRadius: 10,
+            border: "1px solid var(--color-divider)",
+            background: "var(--color-surface)",
+            cursor: "pointer",
+            padding: "0 10px",
+            color: "var(--color-text-muted)",
+            fontSize: "0.8rem",
+          }}
+        >
+          <Search aria-hidden="true" size={16} strokeWidth={1.8} />
+          <span style={{ border: "1px solid currentColor", borderRadius: 4, padding: "0 4px", fontSize: "0.68rem", opacity: 0.7 }}>
+            Ctrl K
+          </span>
+        </button>
+        <button
           aria-expanded={aperto}
           onClick={() => setAperto((a) => !a)}
           style={{

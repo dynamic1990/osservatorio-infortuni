@@ -375,3 +375,11 @@ h3 {
     gap: var(--space-5);
   }
 }
+
+/* Ricerca globale: evidenziazione del termine trovato */
+.search-hit {
+  background: var(--color-accent);
+  color: var(--color-raised);
+  padding: 0 1px;
+  border-radius: 2px;
+}

@@ -4,6 +4,7 @@ import "./design-system.css";
 import { SiteNav } from "@/components/ui/site-nav";
 import { Footer } from "@/components/ui/footer";
 import { BackToTop } from "@/components/ui/back-to-top";
+import { GlobalSearch } from "@/components/search/global-search";
 import { Analytics } from "@vercel/analytics/next";
 
 const SITO_URL = "https://www.osservatorioinfortuni.it";
@@ -120,6 +121,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <BackToTop />
+        <GlobalSearch />
         <Analytics />
       </body>
     </html>
