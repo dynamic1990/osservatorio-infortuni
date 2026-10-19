@@ -11,7 +11,8 @@ export type SourceId =
   | "google-news-rss"
   | "istat-eurostat-occupati"
   | "inl-rapporti-vigilanza"
-  | "inail-infor-mo-mortali";
+  | "inail-infor-mo-mortali"
+  | "inail-infor-mo-temi";
 
 export interface SourceInfo {
   id: SourceId;
@@ -38,6 +39,18 @@ export const SOURCES: Record<SourceId, SourceInfo> = {
     frequency: "Aggiornamento continuo",
     status: "active",
     notes: "Per evento (tipoEvento=1). L'archivio documenta una parte dei casi denunciati: non è l'anagrafe ufficiale delle denunce ed esclude i casi senza scheda di analisi. La fonte non distingue tra infortuni in occasione di lavoro e in itinere.",
+  },
+  "inail-infor-mo-temi": {
+    id: "inail-infor-mo-temi",
+    owner: "INAIL – Istituto Nazionale Assicurazione contro gli Infortuni sul Lavoro / elaborazione Osservatorio",
+    area: "Infortuni sul lavoro",
+    landingUrl: "https://www.inail.it/nsol-informo/",
+    apiUrl: "https://www.inail.it/nsol-informo/dettaglio.do",
+    format: "JSON (REST) + analisi testuale su dinamica",
+    coverage: "Analisi tematiche trasversali (es. attività manutentive) sui casi mortali e gravi analizzati con il modello Informo, periodo 2010-2024",
+    frequency: "Aggiornamento continuo",
+    status: "active",
+    notes: "Elaborazione derivata dell'archivio Infor.MO: i temi (manutenzione) sono isolati con parole chiave sulla variabile narrativa della dinamica, seguendo la metodologia delle schede INAIL DIMEILA (Scheda 28 'Attività manutentive'). La selezione è metodologica e i conteggi non coincidono necessariamente con le cifre INAIL.",
   },
   "inail-infortuni-mensile": {
     id: "inail-infortuni-mensile",
