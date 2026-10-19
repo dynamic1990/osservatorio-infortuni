@@ -210,7 +210,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "var(--space-4) var(--space-5)",
+                padding: "var(--space-3) var(--space-4)",
                 borderBottom: "1px solid var(--color-divider)",
               }}
             >
@@ -234,14 +234,16 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 overflowY: "auto",
                 overscrollBehavior: "contain",
                 WebkitOverflowScrolling: "touch",
-                display: "grid",
-                gap: "var(--space-2)",
-                padding: "var(--space-2) var(--space-3)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch",
+                gap: "2px",
+                padding: "var(--space-1) var(--space-3)",
               }}
             >
               {["Esplora", "Strumenti", "Trasparenza"].map((group) => (
                 <div key={group}>
-                  <div style={{ color: "var(--color-text-muted)", fontSize: "0.68rem", fontWeight: 750, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 14px", marginBottom: 2 }}>{group}</div>
+                  <div style={{ color: "var(--color-text-muted)", fontSize: "0.7rem", fontWeight: 750, letterSpacing: "0.1em", textTransform: "uppercase", padding: "6px 12px 3px" }}>{group}</div>
                   {VOCI.filter((v) => v.group === group).map((v) => (
                 <Link
                   key={v.href}
@@ -254,13 +256,13 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                     textDecoration: "none",
                     color: attiva(v.href) ? "var(--color-raised)" : "var(--color-text)",
                     background: attiva(v.href) ? "var(--color-text)" : "transparent",
-                    fontWeight: attiva(v.href) ? 700 : 550,
-                    padding: "7px 14px",
+                    fontWeight: attiva(v.href) ? 700 : 500,
+                    padding: "6px 12px",
                     borderRadius: 8,
-                    fontSize: "0.92rem",
+                    fontSize: "0.95rem",
                   }}
                 >
-                  <v.icon aria-hidden="true" size={17} strokeWidth={1.8} style={{ width: 22, opacity: attiva(v.href) ? 1 : 0.65 }} />
+                  <v.icon aria-hidden="true" size={18} strokeWidth={1.8} style={{ width: 22, opacity: attiva(v.href) ? 1 : 0.65 }} />
                   {v.label}
                 </Link>
                   ))}
@@ -271,9 +273,9 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setAperto(false)}
-                style={{ display: "flex", alignItems: "center", gap: 8, margin: "var(--space-1) 14px 0", padding: "3px 10px", border: "1px solid var(--color-text)", color: "var(--color-text)", textDecoration: "none", fontWeight: 700, fontSize: "0.84rem" }}
+                style={{ display: "flex", alignItems: "center", gap: 8, margin: "auto 12px 0", padding: "2px 10px", border: "1px solid var(--color-text)", color: "var(--color-text)", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem" }}
               >
-                <GitHubIcon size={16} /> Codice sorgente su GitHub <ExternalLink aria-hidden="true" size={14} strokeWidth={1.8} style={{ marginLeft: "auto" }} />
+                <GitHubIcon size={15} /> Codice sorgente su GitHub <ExternalLink aria-hidden="true" size={13} strokeWidth={1.8} style={{ marginLeft: "auto" }} />
               </a>
             </div>
           </nav>
