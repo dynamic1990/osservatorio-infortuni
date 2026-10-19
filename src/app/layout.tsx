@@ -6,6 +6,7 @@ import { Footer } from "@/components/ui/footer";
 import { BackToTop } from "@/components/ui/back-to-top";
 import { GlobalSearch } from "@/components/search/global-search";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const SITO_URL = "https://www.osservatorioinfortuni.it";
 
@@ -123,6 +124,7 @@ export default function RootLayout({
         <BackToTop />
         <GlobalSearch />
         <Analytics />
+        <GoogleAnalytics gaId="G-2YDDN3RN0K" />
       </body>
     </html>
   );
