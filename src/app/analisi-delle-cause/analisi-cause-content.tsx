@@ -447,9 +447,11 @@ export function AnalisiCauseContent() {
         </div>
       </Sezione>
 
-      {/* 4. Esploratore */}
+      {/* 4. Esploratore: la lettura caso per caso ha un filtro locale di
+          provenienza (solo mortali / solo gravi / tutti), indipendente dal
+          perimetro scelto sopra. */}
       <Sezione occhiello="La lettura caso per caso" titolo="Cerca nella dinamica" id="cerca-dinamica">
-        <InformoEsploratore perimetro={perimetro} />
+        <InformoEsploratore />
       </Sezione>
     </div>
   );

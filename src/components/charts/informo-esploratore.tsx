@@ -66,12 +66,29 @@ function intervalloPagine(corrente: number, totale: number): (number | "…")[] 
   return out;
 }
 
+type FiltroTipo = "mortali" | "gravi" | "tutti";
+
+const FILTRI_TIPO: { id: FiltroTipo; label: string }[] = [
+  { id: "mortali", label: "Solo mortali" },
+  { id: "gravi", label: "Solo gravi" },
+  { id: "tutti", label: "Tutti gli infortuni" },
+];
+
 // Esploratore delle dinamiche: ricerca libera (full-text su dinamica e
 // fattori) e filtri per anno, settore, causa. Il catalogo è servito come
 // file statico in /data e caricato su interazione, per non appesantire il
 // bundle. La lista mostra pochi casi per pagina: si sfoglia con la
 // paginazione e si apre un caso alla volta.
+//
+// Il filtro di provenienza (mortali/gravi/tutti) è locale alla sezione e
+// indipendente dal perimetro del resto della pagina: chi legge caso per
+// caso decide se restringere a un archivio o esplorarli insieme.
 export function InformoEsploratore({ perimetro = "mortali" }: { perimetro?: PerimetroInformo }) {
+  const [tipo, setTipo] = useState<FiltroTipo>(
+    perimetro === "gravi" ? "gravi" : perimetro === "entrambi" ? "tutti" : "mortali"
+  );
+  const [catMortali, setCatMortali] = useState<Catalogo | null>(null);
+  const [catGravi, setCatGravi] = useState<Catalogo | null>(null);
   const [catalogo, setCatalogo] = useState<Catalogo | null>(null);
   const [query, setQuery] = useState("");
   const [anno, setAnno] = useState<number | "tutti">(ANNO_DEFAULT);
@@ -81,44 +98,51 @@ export function InformoEsploratore({ perimetro = "mortali" }: { perimetro?: Peri
   const [pagina, setPagina] = useState(0);
   const [aperto, setAperto] = useState<string | null>(null);
 
-  const fileCatalogo =
-    perimetro === "gravi"
-      ? "/data/informo-catalogo-gravi.json"
-      : "/data/informo-catalogo.json";
-
-  // Il catalogo si ricarica quando cambia il perimetro: in modalità
-  // "entrambi" si uniscono i casi dei due archivi.
+  // Carica i cataloghi in base al filtro tipo, tenendoli in cache per non
+  // riscaricarli a ogni cambio: "tutti" unisce i due archivi con l'etichetta
+  // di provenienza su ogni caso.
   useEffect(() => {
     setCatalogo(null);
     setPagina(0);
-    const url =
-      perimetro === "entrambi"
-        ? null
-        : perimetro === "gravi"
-          ? "/data/informo-catalogo-gravi.json"
-          : "/data/informo-catalogo.json";
-    if (!url) {
-      Promise.all([
-        fetch("/data/informo-catalogo.json").then((r) => r.json()),
-        fetch("/data/informo-catalogo-gravi.json").then((r) => r.json()),
-      ])
-        .then(([m, g]) => {
-          setCatalogo({
-            casi: [
-              ...(m.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "mortali" })),
-              ...(g.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "gravi" })),
-            ],
-            meta: { ...m.meta, nota: "Unione dei cataloghi mortali e gravi" },
-          } as Catalogo);
-        })
-        .catch(() => setCatalogo(null));
+    const carica = (archivio: "mortali" | "gravi") =>
+      fetch(archivio === "mortali" ? "/data/informo-catalogo.json" : "/data/informo-catalogo-gravi.json")
+        .then((r) => r.json())
+        .catch(() => null);
+    if (tipo !== "tutti") {
+      if (tipo === "mortali") {
+        if (catMortali) return void setCatalogo(catMortali);
+        carica("mortali").then((d) => {
+          if (d) setCatMortali(d as Catalogo);
+          setCatalogo(d as Catalogo | null);
+        });
+      } else {
+        if (catGravi) return void setCatalogo(catGravi);
+        carica("gravi").then((d) => {
+          if (d) setCatGravi(d as Catalogo);
+          setCatalogo(d as Catalogo | null);
+        });
+      }
       return;
     }
-    fetch(url)
-      .then((r) => r.json())
-      .then((d) => setCatalogo(d as Catalogo))
-      .catch(() => setCatalogo(null));
-  }, [perimetro]);
+    Promise.all([
+      catMortali ? Promise.resolve(catMortali) : carica("mortali"),
+      catGravi ? Promise.resolve(catGravi) : carica("gravi"),
+    ]).then(([m, g]) => {
+      if (m) setCatMortali(m as Catalogo);
+      if (g) setCatGravi(g as Catalogo);
+      if (m && g) {
+        setCatalogo({
+          casi: [
+            ...(m.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "mortali" })),
+            ...(g.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "gravi" })),
+          ],
+          meta: { ...(m.meta ?? {}), nota: "Unione dei cataloghi mortali e gravi" },
+        } as Catalogo);
+      } else {
+        setCatalogo(null);
+      }
+    });
+  }, [tipo]);
 
   // Quando i filtri cambiano, si riparte dalla prima pagina.
   useEffect(() => {
@@ -220,6 +244,26 @@ export function InformoEsploratore({ perimetro = "mortali" }: { perimetro?: Peri
           gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
         }}
       >
+        <select
+          aria-label="Filtra per tipo di infortunio"
+          value={tipo}
+          onChange={(e) => setTipo(e.target.value as FiltroTipo)}
+          style={{
+            padding: "8px 12px",
+            border: "1px solid var(--color-border)",
+            borderRadius: 2,
+            font: "inherit",
+            fontSize: "0.85rem",
+            background: "var(--color-raised)",
+            color: "var(--color-text)",
+          }}
+        >
+          {FILTRI_TIPO.map((f) => (
+            <option key={f.id} value={f.id}>
+              {f.label}
+            </option>
+          ))}
+        </select>
         <input
           type="search"
           value={query}
@@ -601,8 +645,8 @@ export function InformoEsploratore({ perimetro = "mortali" }: { perimetro?: Peri
         non una sentenza. I testi contengono riferimenti a terzi e imprese:
         il loro uso è funzionale alla comprensione dei pattern, mai alla
         identificazione di persone o aziende.{" "}
-        {perimetro === "entrambi" &&
-          "In questa modalità i casi dei due archivi sono uniti: l'etichetta mortali/gravi distingue la provenienza."}
+        {tipo === "tutti" &&
+          "Con \"Tutti gli infortuni\" i casi dei due archivi sono uniti: l'etichetta mortali/gravi distingue la provenienza del singolo caso."}
       </p>
     </div>
   );

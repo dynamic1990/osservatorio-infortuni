@@ -271,7 +271,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setAperto(false)}
-                style={{ display: "flex", alignItems: "center", gap: 10, margin: "var(--space-2) 14px 0", padding: "11px 12px", border: "1px solid var(--color-text)", color: "var(--color-text)", textDecoration: "none", fontWeight: 700, fontSize: "0.88rem" }}
+                style={{ display: "flex", alignItems: "center", gap: 10, margin: "var(--space-2) 14px 0", padding: "5px 12px", border: "1px solid var(--color-text)", color: "var(--color-text)", textDecoration: "none", fontWeight: 700, fontSize: "0.88rem" }}
               >
                 <GitHubIcon size={19} /> Codice sorgente su GitHub <ExternalLink aria-hidden="true" size={16} strokeWidth={1.8} style={{ marginLeft: "auto" }} />
               </a>
