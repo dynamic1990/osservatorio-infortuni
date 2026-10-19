@@ -237,7 +237,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "stretch",
-                gap: "2px",
+                gap: "14px",
                 padding: "var(--space-1) var(--space-3)",
               }}
             >
@@ -256,7 +256,7 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
                     textDecoration: "none",
                     color: attiva(v.href) ? "var(--color-raised)" : "var(--color-text)",
                     background: attiva(v.href) ? "var(--color-text)" : "transparent",
-                    fontWeight: attiva(v.href) ? 700 : 500,
+                    fontWeight: attiva(v.href) ? 800 : 600,
                     padding: "6px 12px",
                     borderRadius: 8,
                     fontSize: "0.95rem",
