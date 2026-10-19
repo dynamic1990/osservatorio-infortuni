@@ -331,6 +331,11 @@ export function AnalisiCauseContent() {
           conteggi di questa pagina vanno quindi letti come casi analizzati,
           non come totali degli infortuni sul lavoro.
         </p>
+        <p className="source-note" style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)" }}>
+          La soglia operativa per l&apos;inclusione dei casi gravi nell&apos;archivio segue
+          i protocolli d&apos;intesa tra ASL e procura (prognosi superiore a 30/40
+          giorni), pur non essendo formalizzata nel manuale Infor.MO.
+        </p>
         <p
           className="source-note"
           style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)" }}
