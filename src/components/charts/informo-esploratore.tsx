@@ -2,11 +2,14 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, RotateCcw } from "lucide-react";
-import { ANNI_INFORMO, ANNO_DEFAULT } from "@/lib/informo-casi";
+import { ANNI_INFORMO, ANNO_DEFAULT, type PerimetroInformo } from "@/lib/informo-casi";
+import { ACCENT } from "@/lib/palette";
+import { INFORM_GRAVI_COLOR } from "@/lib/informo-casi";
 
 interface CatalogoCaso {
   anno: number;
   codice: number;
+  tipo?: string; // "mortali" | "gravi" (solo nel catalogo unione)
   data?: string | null;
   settore?: string | null;
   luogo?: string | null;
@@ -68,7 +71,7 @@ function intervalloPagine(corrente: number, totale: number): (number | "…")[] 
 // file statico in /data e caricato su interazione, per non appesantire il
 // bundle. La lista mostra pochi casi per pagina: si sfoglia con la
 // paginazione e si apre un caso alla volta.
-export function InformoEsploratore() {
+export function InformoEsploratore({ perimetro = "mortali" }: { perimetro?: PerimetroInformo }) {
   const [catalogo, setCatalogo] = useState<Catalogo | null>(null);
   const [query, setQuery] = useState("");
   const [anno, setAnno] = useState<number | "tutti">(ANNO_DEFAULT);
@@ -76,14 +79,46 @@ export function InformoEsploratore() {
   const [causa, setCausa] = useState<string>("tutti");
   const [ordina, setOrdina] = useState<Ordina>("anno-desc");
   const [pagina, setPagina] = useState(0);
-  const [aperto, setAperto] = useState<number | null>(null);
+  const [aperto, setAperto] = useState<string | null>(null);
 
+  const fileCatalogo =
+    perimetro === "gravi"
+      ? "/data/informo-catalogo-gravi.json"
+      : "/data/informo-catalogo.json";
+
+  // Il catalogo si ricarica quando cambia il perimetro: in modalità
+  // "entrambi" si uniscono i casi dei due archivi.
   useEffect(() => {
-    fetch("/data/informo-catalogo.json")
+    setCatalogo(null);
+    setPagina(0);
+    const url =
+      perimetro === "entrambi"
+        ? null
+        : perimetro === "gravi"
+          ? "/data/informo-catalogo-gravi.json"
+          : "/data/informo-catalogo.json";
+    if (!url) {
+      Promise.all([
+        fetch("/data/informo-catalogo.json").then((r) => r.json()),
+        fetch("/data/informo-catalogo-gravi.json").then((r) => r.json()),
+      ])
+        .then(([m, g]) => {
+          setCatalogo({
+            casi: [
+              ...(m.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "mortali" })),
+              ...(g.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "gravi" })),
+            ],
+            meta: { ...m.meta, nota: "Unione dei cataloghi mortali e gravi" },
+          } as Catalogo);
+        })
+        .catch(() => setCatalogo(null));
+      return;
+    }
+    fetch(url)
       .then((r) => r.json())
       .then((d) => setCatalogo(d as Catalogo))
       .catch(() => setCatalogo(null));
-  }, []);
+  }, [perimetro]);
 
   // Quando i filtri cambiano, si riparte dalla prima pagina.
   useEffect(() => {
@@ -327,10 +362,10 @@ export function InformoEsploratore() {
       {/* Lista: pochi casi per pagina */}
       <div style={{ display: "grid", gap: "var(--space-2)" }}>
         {visibili.map((c) => {
-          const apertoId = aperto === c.codice;
+          const apertoId = aperto === `${c.tipo ?? "mortali"}-${c.codice}`;
           return (
             <div
-              key={c.codice}
+              key={`${c.tipo ?? "mortali"}-${c.codice}`}
               style={{
                 border: "1px solid var(--color-divider)",
                 background: "var(--color-raised)",
@@ -341,7 +376,7 @@ export function InformoEsploratore() {
             >
               <button
                 type="button"
-                onClick={() => setAperto(apertoId ? null : c.codice)}
+                onClick={() => setAperto(apertoId ? null : `${c.tipo ?? "mortali"}-${c.codice}`)}
                 aria-expanded={apertoId}
                 style={{
                   width: "100%",
@@ -362,6 +397,24 @@ export function InformoEsploratore() {
                 <span style={{ display: "grid", gap: 2, minWidth: 0, flex: "1 1 70%" }}>
                   <span style={{ fontWeight: 650, fontSize: "0.88rem" }}>
                     Caso {c.codice}
+                    {c.tipo && (
+                      <span
+                        style={{
+                          display: "inline-block",
+                          fontSize: "0.68rem",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.04em",
+                          padding: "1px 6px",
+                          borderRadius: 3,
+                          marginLeft: 8,
+                          color: "var(--color-raised)",
+                          background: c.tipo === "gravi" ? INFORM_GRAVI_COLOR : ACCENT,
+                        }}
+                      >
+                        {c.tipo}
+                      </span>
+                    )}
                     <span style={{ color: "var(--color-text-muted)", fontWeight: 500 }}>
                       {" "}· {c.anno} {c.data ? `· ${c.data}` : ""}
                     </span>
@@ -547,7 +600,9 @@ export function InformoEsploratore() {
         Infor.MO: la narrativa è la ricostruzione della dinamica fatta da INAIL,
         non una sentenza. I testi contengono riferimenti a terzi e imprese:
         il loro uso è funzionale alla comprensione dei pattern, mai alla
-        identificazione di persone o aziende.
+        identificazione di persone o aziende.{" "}
+        {perimetro === "entrambi" &&
+          "In questa modalità i casi dei due archivi sono uniti: l'etichetta mortali/gravi distingue la provenienza."}
       </p>
     </div>
   );

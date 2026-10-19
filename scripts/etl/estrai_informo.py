@@ -23,7 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "src" / "data" / "generated"
 URL = "https://www.inail.it/nsol-informo/filtra.do"
-YEARS = list(range(2014, 2025))
+YEARS = list(range(2010, 2025))
 PAGE_SIZE = 10
 
 
@@ -129,7 +129,7 @@ def output(years: list[int], event_type: str, delay: float) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--anni", nargs="+", type=int, default=YEARS)
-    parser.add_argument("--tipo-evento", choices=("1", "2"), default="1")
+    parser.add_argument("--tipo-evento", choices=("0", "1"), default="1")
     parser.add_argument("--include-gravi", action="store_true", help="genera anche informo-gravi.json")
     parser.add_argument("--delay", type=float, default=1.0, help="secondi tra le richieste (default: 1)")
     args = parser.parse_args()
@@ -138,7 +138,7 @@ def main() -> int:
     name = "informo-mortali.json" if args.tipo_evento == "1" else "informo-gravi.json"
     (OUT_DIR / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if args.include_gravi and args.tipo_evento == "1":
-        gravi = output(args.anni, "2", args.delay)
+        gravi = output(args.anni, "0", args.delay)
         (OUT_DIR / "informo-gravi.json").write_text(json.dumps(gravi, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"file": name, "anni": {str(x["anno"]): x["numeroRecord"] for x in data["anni"]},
                       "totale": sum(x["numeroRecord"] for x in data["anni"])}, ensure_ascii=False))

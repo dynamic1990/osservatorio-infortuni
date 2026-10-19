@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { size: A4; margin: 11mm 12mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: #1c2733;
+    font-size: 9.2px;
+    line-height: 1.42;
+  }
+  .page {
+    display: flex;
+    flex-direction: column;
+    height: 271mm; /* A4 height minus margins */
+    gap: 4.5mm;
+  }
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #12314f 0%, #1f5f8f 100%);
+    color: #fff;
+    border-radius: 3mm;
+    padding: 5mm 6mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 4mm;
+  }
+  .header h1 { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+  .header .sub { font-size: 10px; opacity: 0.92; margin-top: 1.5mm; font-weight: 500; }
+  .header .tag {
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 2mm;
+    padding: 2mm 3mm;
+    font-size: 8.5px;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.35;
+  }
+  .header .tag strong { font-size: 11px; display: block; }
+  /* Section */
+  .sec { border: 1px solid #d9e2ec; border-radius: 2.5mm; padding: 3.5mm 4mm; background: #fbfdff; }
+  .sec-title {
+    font-size: 11px; font-weight: 800; color: #12314f;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 2mm; display: flex; align-items: center; gap: 2mm;
+  }
+  .sec-title .num {
+    background: #12314f; color: #fff; border-radius: 50%;
+    width: 5mm; height: 5mm; font-size: 9px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .cols { display: flex; gap: 3.5mm; }
+  .col { flex: 1; }
+  /* Numbers grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; margin-top: 1.5mm; }
+  .kpi {
+    background: #fff; border: 1px solid #d9e2ec; border-radius: 2mm;
+    padding: 2.5mm 2.5mm; text-align: center;
+  }
+  .kpi .v { font-size: 15px; font-weight: 800; color: #1f5f8f; }
+  .kpi .l { font-size: 7.6px; color: #5a6b7a; margin-top: 0.8mm; line-height: 1.3; }
+  /* Cost highlight */
+  .cost-band {
+    background: #fff7ed; border: 1.5px solid #f0a04b; border-radius: 2.5mm;
+    padding: 3.5mm 4mm; display: flex; gap: 4mm; align-items: center;
+  }
+  .cost-band .big { font-size: 13px; font-weight: 800; color: #b45309; white-space: nowrap; }
+  .cost-band p { color: #6b4a1f; }
+  .cost-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 2.5mm; margin-top: 2.5mm; }
+  .cost-item { background:#fff; border:1px solid #f0c69a; border-radius:2mm; padding:2.5mm; text-align:center; }
+  .cost-item .v { font-size: 12px; font-weight: 800; color:#b45309; }
+  .cost-item .l { font-size:7.4px; color:#6b4a1f; margin-top:0.8mm; line-height:1.3; }
+  /* Bullets */
+  ul { list-style: none; }
+  li { padding-left: 3mm; position: relative; margin-bottom: 1.3mm; }
+  li:before { content: "▸"; position: absolute; left: 0; color: #1f5f8f; font-weight: 700; }
+  b.t { color: #12314f; }
+  .quote {
+    background: #eef5fb; border-left: 3px solid #1f5f8f; border-radius: 0 2mm 2mm 0;
+    padding: 2.5mm 3.5mm; font-weight: 700; color: #12314f; font-size: 10.5px;
+  }
+  .footer {
+    margin-top: auto;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #d9e2ec; padding-top: 2.5mm; font-size: 8.2px; color: #5a6b7a;
+  }
+  .footer b { color: #12314f; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <h1>Osservatorio Infortuni</h1>
+      <div class="sub">Progetto civico open source per rendere leggibili i dati sugli infortuni sul lavoro in Italia</div>
+    </div>
+    <div class="tag"><strong>One-pager</strong>per l'incontro con AIAS<br>15 ottobre 2026</div>
+  </div>
+
+  <div class="sec">
+    <div class="quote">Il problema: la banca dati INAIL è ricchissima ma illeggibile. Dataset enormi, codici al posto dei nomi, nessuna vista sintetica. L'Osservatorio la valorizza con grafici e analisi: dati pubblici, verificati, sempre con fonte e data. Ogni numero è riproducibile.</div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title"><span class="num">1</span>Come è costruito</div>
+    <div class="cols">
+      <div class="col">
+        <ul>
+          <li><b class="t">Dati pubblici</b> da INAIL, INL, Eurostat, ISTAT; acquisiti da endpoint ufficiali con script riproducibili (ETL in Python).</li>
+          <li><b class="t">Snapshot verificati</b>: il sito pubblica file controllati, non interroga le API in tempo reale. Una pagina resta stabile anche se una fonte è giù.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul>
+          <li><b class="t">Audit mensile</b> (15 del mese) sulle fonti ufficiali: confronta l'impronta con la baseline, segnala i cambiamenti, non importa nulla senza verifica.</li>
+          <li><b class="t">Privacy</b>: nessun caso singolo pubblicato, solo aggregazioni. Licenza AGPL-3.0, codice aperto su GitHub.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title"><span class="num">2</span>Cosa mostriamo oggi · numeri verificati al 15/10/2026</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="v">3,05 mln</div><div class="l">denunce 2021-2025 · 20 regioni · 107 province</div></div>
+      <div class="kpi"><div class="v">6.429</div><div class="l">casi mortali nel quinquennio (INAIL)</div></div>
+      <div class="kpi"><div class="v">229</div><div class="l">notizie in Cronaca (141 mortali · 43 gravi · 45 analisi)</div></div>
+      <div class="kpi"><div class="v">+16,7%</div><div class="l">denunce malattie I sem 2026 vs 2025 · 4.853 decessi</div></div>
+    </div>
+    <ul style="margin-top:2mm">
+      <li><b class="t">Sezioni:</b> andamento congiunturale, serie storiche, territorio, comparti ATECO, benchmark europeo Eurostat, analisi delle cause Infor.MO, malattie professionali, vigilanza INL, Cronaca quotidiana.</li>
+      <li><b class="t">Cronaca:</b> rassegna giornaliera da Google News con filtro di pertinenza, deduplica delle testate sullo stesso evento, tre categorie. Non è una statistica: è uno strumento per non dimenticare.</li>
+    </ul>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title"><span class="num">3</span>Strumenti per sensibilizzare imprenditori e aziende</div>
+    <div class="cost-band">
+      <div class="big">La prevenzione è un investimento.</div>
+      <p>L'Osservatorio fornisce strumenti pratici per farlo capire con i numeri, come il <b>calcolatore del costo di un infortunio per l'azienda</b>, costruito sulla ricerca ufficiale INAIL <i>Il costo dei danni da lavoro per l'azienda Italia</i> (Consulenza statistico attuariale, 2026, dati 2023).</p>
+    </div>
+    <div class="cost-strip">
+      <div class="cost-item"><div class="v">≈ 33.000 €</div><div class="l">costo medio per infortunio con prestazione INAIL</div></div>
+      <div class="cost-item"><div class="v">≈ 61.000 €</div><div class="l">costo medio per malattia professionale</div></div>
+      <div class="cost-item"><div class="v">49,2 mld €</div><div class="l">costo sociale 2023 = 2,31% del PIL (12,5 mld assicurativo · 23,3 mld prevenzionale · 13,5 mld conseguente)</div></div>
+    </div>
+    <ul style="margin-top:2mm">
+      <li><b class="t">Come funziona:</b> selezioni settore e regione, precompili i dati o inserisci il tuo evento, e confronti scenari (minimo / probabile / grave). Ogni componente di costo si attiva o disattiva: assenza, sostituzione, fermo operativo, gestione e sanzioni, danno di immagine, eventi gravi.</li>
+      <li><b class="t">Uso per la sensibilizzazione:</b> tradurre un evento in euro rende tangibile il valore della sicurezza. Un costo evitato è un investimento che torna indietro.</li>
+    </ul>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title"><span class="num">4</span>Cosa proponiamo ad AIAS</div>
+    <div class="cols">
+      <div class="col">
+        <ul>
+          <li><b class="t">Dati con fonte:</b> condividere le basi verificate dell'Osservatorio per i programmi AIAS/ENSHPO 2026-2030, con metodologia e limiti dichiarati.</li>
+          <li><b class="t">Co-branding di report:</b> analisi congiunte sui temi del programma, con il marchio di entrambi.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul>
+          <li><b class="t">Advisory sul metodo:</b> il progetto come banco di prova per leggere i dati e comunicarli senza fuorviare.</li>
+          <li><b class="t">In cambio:</b> visibilità, eventuale patrocinio, un ruolo riconosciuto. Il progetto resta pubblico e indipendente.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div><b>Osservatorio Infortuni</b> · osservatorioinfortuni.it · codice AGPL-3.0 su GitHub · autore e curatore: Ing. Damiano Salvati</div>
+    <div>Dati: INAIL · INL · Eurostat · ISTAT · Google News RSS</div>
+  </div>
+
+</div>
+</body>
+</html>

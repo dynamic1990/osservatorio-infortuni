@@ -153,36 +153,41 @@ def fetch_caso(anno: int, codice: int, delay: float) -> dict:
             "fattori": fattori, **base}
 
 
-def load_ckpt() -> dict:
-    ckpt = CACHE_DIR / "informo_dettaglio_ckpt.json"
+def load_ckpt(suffix: str = "") -> dict:
+    ckpt = CACHE_DIR / f"informo_dettaglio_ckpt{suffix}.json"
     if ckpt.exists():
         return json.loads(ckpt.read_text(encoding="utf-8"))
     return {"casi": {}, "fattori_cache": {}}
 
 
-def save_ckpt(state: dict) -> None:
+def save_ckpt(state: dict, suffix: str = "") -> None:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    tmp = CACHE_DIR / "informo_dettaglio_ckpt.json.tmp"
+    tmp = CACHE_DIR / f"informo_dettaglio_ckpt{suffix}.json.tmp"
     tmp.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
-    tmp.replace(CACHE_DIR / "informo_dettaglio_ckpt.json")
+    tmp.replace(CACHE_DIR / f"informo_dettaglio_ckpt{suffix}.json")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--delay", type=float, default=0.15)
     ap.add_argument("--workers", type=int, default=4)
-    ap.add_argument("--input", type=Path, default=OUT_DIR / "informo-mortali.json")
+    ap.add_argument("--tipo", choices=("mortali", "gravi"), default="mortali")
+    ap.add_argument("--input", type=Path, default=None)
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
-    inventario = json.loads(args.input.read_text(encoding="utf-8"))
+    # File e checkpoint separati per tipo: mortali e gravi non condividono nomi.
+    suffix = "_gravi" if args.tipo == "gravi" else ""
+    default_input = OUT_DIR / ("informo-gravi.json" if args.tipo == "gravi" else "informo-mortali.json")
+    inventario_file = args.input or default_input
+    inventario = json.loads(inventario_file.read_text(encoding="utf-8"))
     casi = sorted({(a["anno"], r["codiceInfortunio"])
                    for a in inventario["anni"] for r in a.get("record", [])})
-    print(f"[informo-dettaglio] {len(casi)} casi da processare", flush=True)
+    print(f"[informo-dettaglio] {len(casi)} casi da processare ({args.tipo})", flush=True)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    state = {"casi": {}, "fattori_cache": {}} if args.force else load_ckpt()
+    state = {"casi": {}, "fattori_cache": {}} if args.force else load_ckpt(suffix)
     # Chiave composta (anno, codice): la vecchia chiave per solo codice può
     # riusare record con anno stantio quando un caso cambia anno tra estrazioni.
     vecchi = state.get("casi", {})
@@ -206,14 +211,14 @@ def main() -> None:
                 state["casi"][f"{anno}-{codice}"] = caso
                 done += 1
                 if done % 25 == 0:
-                    save_ckpt(state)
+                    save_ckpt(state, suffix)
                     rate = done / max(time.monotonic() - start, 0.1)
                     print(f"[informo-dettaglio] {done}/{len(da_fare)} a {rate:.1f}/s",
                           flush=True)
     except KeyboardInterrupt:
         print("[informo-dettaglio] interrotto, checkpoint salvato", flush=True)
 
-    save_ckpt(state)
+    save_ckpt(state, suffix)
 
     casi_out = [state["casi"][f"{a}-{c}"] for (a, c) in casi if f"{a}-{c}" in state["casi"]]
     casi_out.sort(key=lambda c: (c["anno"], c["codiceInfortunio"]))
@@ -225,7 +230,7 @@ def main() -> None:
             "endpointDettaglio": DETTAGLIO_URL,
             "endpointJson": DETTAGLI_JSON_URL,
             "endpointFattore": FATTORE_URL,
-            "tipoEvento": "1 (mortali)",
+            "tipoEvento": "1 (mortali)" if args.tipo == "mortali" else "0 (gravi)",
             "periodo": periodo,
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "nota": "Dataset di dettaglio: narrativa dinamica, fattori causali "
@@ -235,7 +240,7 @@ def main() -> None:
         },
         "casi": casi_out,
     }
-    out = OUT_DIR / "informo-mortali-dettaglio.json"
+    out = OUT_DIR / ("informo-gravi-dettaglio.json" if args.tipo == "gravi" else "informo-mortali-dettaglio.json")
     out.write_text(json.dumps(dataset, ensure_ascii=False), encoding="utf-8")
     print(f"[informo-dettaglio] salvato {out} con {len(casi)} casi", flush=True)
 
