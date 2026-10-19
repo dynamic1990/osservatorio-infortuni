@@ -34,7 +34,16 @@ def clean(v: str | None) -> str | None:
 
 
 def main() -> int:
-    d = json.loads(DET.read_text(encoding="utf-8"))
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tipo", choices=("mortali", "gravi"), default="mortali")
+    args = ap.parse_args()
+    gravi = args.tipo == "gravi"
+
+    det_path = ROOT / "src" / "data" / "generated" / ("informo-gravi-dettaglio.json" if gravi else "informo-mortali-dettaglio.json")
+    out_path = ROOT / "public" / "data" / ("informo-catalogo-gravi.json" if gravi else "informo-catalogo.json")
+
+    d = json.loads(det_path.read_text(encoding="utf-8"))
     casi = d["casi"]
     catalogo = []
     for c in casi:
@@ -67,7 +76,8 @@ def main() -> int:
     anni = sorted({v["anno"] for v in catalogo})
     payload = {
         "meta": {
-            "fonte": "INAIL - Infor.MO / InformoWeb (tipoEvento=1, casi mortali)",
+            "fonte": f"INAIL - Infor.MO / InformoWeb (tipoEvento={'0 (casi gravi)' if gravi else '1 (casi mortali)'})",
+            "tipo": "gravi" if gravi else "mortali",
             "periodo": f"{anni[0]}-{anni[-1]}" if anni else "",
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "nota": "Catalogo casi per ricerca e analisi qualitativa: dinamica "
@@ -77,8 +87,8 @@ def main() -> int:
         "casi": catalogo,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
-    print(f"[informo-catalogo] {len(catalogo)} casi scritti in {OUT}")
+    out_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    print(f"[informo-catalogo] {len(catalogo)} casi scritti in {out_path}")
     return 0
 
 

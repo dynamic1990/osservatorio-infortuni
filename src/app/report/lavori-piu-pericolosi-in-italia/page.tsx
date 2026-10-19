@@ -5,7 +5,7 @@ import { InfoModalButton } from "@/components/ui/info-modal";
 export const metadata: Metadata = {
   title: "Lavori più pericolosi in Italia: settori e cause delle morti sul lavoro",
   description:
-    "Costruzioni e agricoltura in testa alle morti sul lavoro nei casi analizzati da Infor.MO (2014-2024): 2.617 casi, le cause più frequenti e i settori a rischio, con dati INAIL.",
+    "Costruzioni e agricoltura in testa alle morti sul lavoro nei casi analizzati da Infor.MO (2010-2024): 3.766 casi, le cause più frequenti e i settori a rischio, con dati INAIL.",
   alternates: { canonical: "/report/lavori-piu-pericolosi-in-italia" },
 };
 
@@ -13,12 +13,12 @@ const faq = [
   {
     question: "Quali sono i lavori più pericolosi in Italia?",
     answer:
-      "Nei casi mortali analizzati dall'archivio Infor.MO (2014-2024) guidano agricoltura (735 casi) e costruzioni (705), davanti a trasporti e magazzinaggio (195). Dal 2021 le costruzioni sono il settore con più casi ogni anno.",
+      "Nei casi mortali analizzati dall'archivio Infor.MO (2010-2024) guidano costruzioni (1.084 casi) e agricoltura (1.043), davanti a trasporti e magazzinaggio (282). Dal 2021 le costruzioni sono il settore con più casi ogni anno.",
   },
   {
     question: "Qual è la causa più frequente di morte sul lavoro?",
     answer:
-      "La caduta dall'alto di persona: 829 casi su 2.667 con dinamica registrata (31,1%). Seguono il ribaltamento di veicoli o mezzi di trasporto (18,0%) e la caduta dall'alto di gravi (13,6%). Le prime tre dinamiche coprono il 62,7% dei casi.",
+      "La caduta dall'alto di persona: 1.217 casi su 3.844 con dinamica registrata (31,7%). Seguono il ribaltamento di veicoli o mezzi di trasporto (17,7%) e la caduta dall'alto di gravi (14,3%). Le prime tre dinamiche coprono il 63,7% dei casi.",
   },
   {
     question: "Quanti morti sul lavoro ci sono stati in Italia?",
@@ -28,7 +28,7 @@ const faq = [
   {
     question: "L'agricoltura o l'edilizia è più pericolosa?",
     answer:
-      "Dipende dal periodo: l'agricoltura ha più casi analizzati fino al 2018, le costruzioni dal 2021 sono in testa ogni anno. Sul totale 2014-2024 sono quasi appaiate: agricoltura 735, costruzioni 705.",
+      "Dipende dal periodo: l'agricoltura ha più casi analizzati fino al 2018, le costruzioni dal 2021 sono in testa ogni anno. Sul totale 2010-2024 sono quasi appaiate: costruzioni 1.084, agricoltura 1.043.",
   },
   {
     question: "Chi muore di più sul lavoro?",
@@ -38,7 +38,7 @@ const faq = [
   {
     question: "Cosa dice Infor.MO? È affidabile?",
     answer:
-      "Infor.MO è il database pubblico INAIL degli infortuni mortali analizzati con un modello di indagine su dinamica, fattori causali e profili. Copre una parte dei decessi denunciati (18,6% nel 2014-2024): è un campione di approfondimento, non il censimento di tutte le morti sul lavoro.",
+      "Infor.MO è il database pubblico INAIL degli infortuni mortali analizzati con un modello di indagine su dinamica, fattori causali e profili. Copre una parte dei decessi denunciati (24,7% nel 2010-2024): è un campione di approfondimento, non il censimento di tutte le morti sul lavoro.",
   },
 ];
 
@@ -61,19 +61,19 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-// Dati verificati: src/data/generated/informo-mortali-analisi.json (Infor.MO INAIL 2014-2024).
-// Quote calcolate sulle voci registrate: 2.381 settori / 2.667 dinamiche / 5.106 fattori.
+// Dati verificati: src/data/generated/informo-mortali-analisi.json (Infor.MO INAIL 2010-2024).
+// Quote calcolate sulle voci registrate: 3.489 settori / 3.844 dinamiche / 7.360 fattori.
 const SETTORI = [
-  { nome: "Agricoltura, caccia e silvicoltura", casi: 735, quota: "30,9%" },
-  { nome: "Costruzioni", casi: 705, quota: "29,6%" },
-  { nome: "Altri comparti", casi: 303, quota: "12,7%" },
-  { nome: "Trasporti, magazzinaggio e comunicazioni", casi: 195, quota: "8,2%" },
-  { nome: "Metallurgia, fabbricazione prodotti in metallo", casi: 155, quota: "6,5%" },
-  { nome: "Commercio all'ingrosso e al dettaglio; riparazioni", casi: 95, quota: "4,0%" },
-  { nome: "Altri servizi pubblici, sociali e personali", casi: 67, quota: "2,8%" },
-  { nome: "Fabbricazione di macchine ed apparecchi meccanici", casi: 46, quota: "1,9%" },
-  { nome: "Prodotti della lavorazione di minerali non metalliferi", casi: 40, quota: "1,7%" },
-  { nome: "Industria del legno e dei prodotti in legno", casi: 40, quota: "1,7%" },
+  { nome: "Costruzioni", casi: 1084, quota: "31,1%" },
+  { nome: "Agricoltura, caccia e silvicoltura", casi: 1043, quota: "29,9%" },
+  { nome: "Altri comparti", casi: 447, quota: "12,8%" },
+  { nome: "Trasporti, magazzinaggio e comunicazioni", casi: 282, quota: "8,1%" },
+  { nome: "Metallurgia, fabbricazione prodotti in metallo", casi: 221, quota: "6,3%" },
+  { nome: "Commercio all'ingrosso e al dettaglio; riparazioni", casi: 122, quota: "3,5%" },
+  { nome: "Altri servizi pubblici, sociali e personali", casi: 102, quota: "2,9%" },
+  { nome: "Fabbricazione di macchine ed apparecchi meccanici", casi: 67, quota: "1,9%" },
+  { nome: "Prodotti della lavorazione di minerali non metalliferi", casi: 60, quota: "1,7%" },
+  { nome: "Industria del legno e dei prodotti in legno", casi: 48, quota: "1,4%" },
 ];
 
 const TREND_COS_AGR = [
@@ -91,24 +91,24 @@ const TREND_COS_AGR = [
 ];
 
 const DINAMICHE = [
-  { nome: "Caduta di persona dall'alto", casi: 829, quota: "31,1%" },
-  { nome: "Ribaltamento di veicolo o mezzo di trasporto", casi: 480, quota: "18,0%" },
-  { nome: "Caduta dall'alto di gravi", casi: 364, quota: "13,6%" },
-  { nome: "Contatto con oggetti o mezzi in movimento", casi: 227, quota: "8,5%" },
-  { nome: "Avviamento intempestivo di veicolo, macchina, attrezzatura", casi: 183, quota: "6,9%" },
-  { nome: "Contatto con organi lavoratori in movimento", casi: 144, quota: "5,4%" },
-  { nome: "Proiezione di solidi", casi: 91, quota: "3,4%" },
-  { nome: "Contatto elettrico diretto", casi: 88, quota: "3,3%" },
-  { nome: "Sviluppo di fiamme", casi: 42, quota: "1,6%" },
+  { nome: "Caduta di persona dall'alto", casi: 1217, quota: "31,7%" },
+  { nome: "Variazione della marcia veicolo/mezzo di trasporto (ribaltamento)", casi: 680, quota: "17,7%" },
+  { nome: "Caduta dall'alto di gravi", casi: 548, quota: "14,3%" },
+  { nome: "Contatto con oggetti/mezzi in movimento (nella sede abituale)", casi: 307, quota: "8,0%" },
+  { nome: "Altri incidenti", casi: 297, quota: "7,7%" },
+  { nome: "Avviamento intempestivo di veicolo, macchina, attrezzatura", casi: 252, quota: "6,6%" },
+  { nome: "Contatto con organi lavoratori in movimento", casi: 211, quota: "5,5%" },
+  { nome: "Contatto elettrico diretto", casi: 143, quota: "3,7%" },
+  { nome: "Proiezione di solidi", casi: 122, quota: "3,2%" },
 ];
 
 const FATTORI = [
-  { nome: "Attività dell'infortunato", fattori: 2339, quota: "45,8%" },
-  { nome: "Utensili, macchine, impianti", fattori: 924, quota: "18,1%" },
-  { nome: "Ambiente", fattori: 747, quota: "14,6%" },
-  { nome: "Attività di terzi", fattori: 505, quota: "9,9%" },
-  { nome: "Dispositivi di protezione individuale e abbigliamento", fattori: 414, quota: "8,1%" },
-  { nome: "Materiali", fattori: 177, quota: "3,5%" },
+  { nome: "Attività dell'infortunato", fattori: 3349, quota: "45,5%" },
+  { nome: "Utensili, macchine, impianti", fattori: 1391, quota: "18,9%" },
+  { nome: "Ambiente", fattori: 1115, quota: "15,1%" },
+  { nome: "Attività di terzi", fattori: 717, quota: "9,7%" },
+  { nome: "Dispositivi di protezione individuale e abbigliamento", fattori: 552, quota: "7,5%" },
+  { nome: "Materiali", fattori: 236, quota: "3,2%" },
 ];
 
 const PROFILO_2024 = {
@@ -150,20 +150,20 @@ export default function ReportLavoriPericolosiPage() {
               <p className="eyebrow" style={{ margin: 0 }}>REPORT · MORTI SUL LAVORO</p>
               <h1 style={{ fontSize: "clamp(2rem, 7vw, 3.5rem)", lineHeight: 1.06, margin: "var(--space-2) 0 var(--space-3)" }}>Lavori più pericolosi in Italia: settori e cause delle morti sul lavoro</h1>
               <p style={{ color: "var(--color-text-muted)", margin: 0, fontSize: "0.86rem" }}>
-                <strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-10-16">16 ottobre 2026</time>. Fonte: INAIL, archivio Infor.MO, casi mortali analizzati 2014-2024.
+                <strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-10-19">19 ottobre 2026</time>. Fonte: INAIL, archivio Infor.MO, casi mortali analizzati 2010-2024.
               </p>
             </div>
             <InfoModalButton>
               <section className="modal-section">
                 <h3 className="modal-section-title">1. Fonti dei dati</h3>
-                <p className="modal-text">Archivio <strong>Infor.MO</strong> di INAIL (InformoWeb), database pubblico degli infortuni sul lavoro analizzati con il modello Infor.MO: dinamica degli eventi, fattori causali, profili di lavoratori e aziende. Periodo 2014-2024, tipoEvento=1 (casi mortali). I dati sono quelli serviti dalle pagine dell&apos;Osservatorio (dataset <code>informo-mortali-analisi.json</code>, generato da pipeline deterministica).</p>
+                <p className="modal-text">Archivio <strong>Infor.MO</strong> di INAIL (InformoWeb), database pubblico degli infortuni sul lavoro analizzati con il modello Infor.MO: dinamica degli eventi, fattori causali, profili di lavoratori e aziende. Periodo 2010-2024, tipoEvento=1 (casi mortali). I dati sono quelli serviti dalle pagine dell&apos;Osservatorio (dataset <code>informo-mortali-analisi.json</code>, generato da pipeline deterministica).</p>
               </section>
               <section className="modal-section">
                 <h3 className="modal-section-title">2. Metodo e perimetro</h3>
                 <ul className="modal-list">
-                  <li><strong>Campione, non censimento:</strong> i 2.617 casi analizzati coprono il 18,6% delle 14.051 denunce con esito mortale INAIL del periodo. Le classi emerse valgono per i casi analizzati, non per tutti i decessi.</li>
-                  <li><strong>Quote calcolate sulle voci registrate:</strong> settori 2.381 voci su 2.617 casi (91%), dinamiche 2.667 voci, fattori 5.106. La differenza (casi senza attribuzione) è dichiarata e non viene nascosta.</li>
-                  <li><strong>Serie annuali:</strong> ogni confronto conserva l&apos;anno di riferimento. I totali di periodo (2014-2024) sono riportati solo con perimetro esplicito e affiancati dalle serie per anno.</li>
+                  <li><strong>Campione, non censimento:</strong> i 3.766 casi analizzati coprono il 24,7% delle 15.268 denunce con esito mortale INAIL del periodo. Le classi emerse valgono per i casi analizzati, non per tutti i decessi.</li>
+                  <li><strong>Quote calcolate sulle voci registrate:</strong> settori 3.489 voci su 3.766 casi (93%), dinamiche 3.844 voci, fattori 7.360. La differenza (casi senza attribuzione) è dichiarata e non viene nascosta.</li>
+                  <li><strong>Serie annuali:</strong> ogni confronto conserva l&apos;anno di riferimento. I totali di periodo (2010-2024) sono riportati solo con perimetro esplicito e affiancati dalle serie per anno.</li>
                   <li><strong>Morti denunciati:</strong> serie INAIL ufficiale delle denunce con esito mortale, usata per il contesto generale.</li>
                 </ul>
               </section>
@@ -178,28 +178,28 @@ export default function ReportLavoriPericolosiPage() {
         <section aria-labelledby="risposta-diretta" style={{ borderLeft: "4px solid var(--color-accent)", padding: "var(--space-4)", background: "var(--color-accent-soft)" }}>
           <h2 id="risposta-diretta" style={{ margin: "0 0 var(--space-2)", fontSize: "1.2rem" }}>Quali sono i lavori più pericolosi in Italia?</h2>
           <p style={{ margin: 0, fontSize: "1.12rem", lineHeight: 1.6 }}>
-            Nei casi mortali analizzati da <strong>Infor.MO 2014-2024</strong> (2.617 casi) i settori in testa sono <strong>agricoltura</strong> (735 casi) e <strong>costruzioni</strong> (705), quasi appaiate sul periodo. Dal <strong>2021</strong>, però, le costruzioni sono il settore con più casi ogni anno. La causa singola più frequente è la <strong>caduta dall&apos;alto</strong>: 829 casi, quasi un caso su tre.
+            Nei casi mortali analizzati da <strong>Infor.MO 2010-2024</strong> (3.766 casi) i settori in testa sono <strong>costruzioni</strong> (1.084 casi) e <strong>agricoltura</strong> (1.043), quasi appaiate sul periodo. Dal <strong>2021</strong>, però, le costruzioni sono il settore con più casi ogni anno. La causa singola più frequente è la <strong>caduta dall&apos;alto</strong>: 1.217 casi, quasi un caso su tre.
           </p>
           <p style={{ margin: "var(--space-4) 0 0", fontSize: "1.05rem", lineHeight: 1.6 }}>
-            <strong>Attenzione al perimetro:</strong> l&apos;archivio Infor.MO approfondisce 2.617 casi sul totale di 14.051 denunce con esito mortale del periodo (<strong>18,6%</strong>). È il campione più ricco disponibile su cause e dinamiche, non il censimento di tutte le morti sul lavoro.
+            <strong>Attenzione al perimetro:</strong> l&apos;archivio Infor.MO approfondisce 3.766 casi sul totale di 15.268 denunce con esito mortale del periodo (<strong>24,7%</strong>). È il campione più ricco disponibile su cause e dinamiche, non il censimento di tutte le morti sul lavoro.
           </p>
         </section>
 
         <section aria-labelledby="in-breve" className="card" style={{ background: "var(--color-surface)" }}>
           <h2 id="in-breve" style={{ margin: "0 0 var(--space-3)" }}>In breve</h2>
           <ul style={{ margin: 0, paddingLeft: "1.25rem", display: "grid", gap: "var(--space-2)", lineHeight: 1.5 }}>
-            <li>2.617 casi mortali analizzati da Infor.MO nel 2014-2024, su 14.051 denunce (18,6%)</li>
-            <li>Agricoltura (735) e costruzioni (705) davanti a tutti; costruzioni in testa dal 2021</li>
-            <li>Caduta dall&apos;alto di persona: 829 casi, 31,1% delle dinamiche registrate</li>
-            <li>Le prime tre dinamiche (caduta di persona, ribaltamento, caduta di gravi) coprono il 62,7%</li>
-            <li>45,8% dei fattori causali riconduce all&apos;attività dell&apos;infortunato; dominano gli errori procedurali estemporanei</li>
+            <li>3.766 casi mortali analizzati da Infor.MO nel 2010-2024, su 15.268 denunce (24,7%)</li>
+            <li>Costruzioni (1.084) e agricoltura (1.043) davanti a tutti; costruzioni in testa dal 2021</li>
+            <li>Caduta dall&apos;alto di persona: 1.217 casi, 31,7% delle dinamiche registrate</li>
+            <li>Le prime tre dinamiche (caduta di persona, ribaltamento, caduta di gravi) coprono il 63,7%</li>
+            <li>45,5% dei fattori causali riconduce all&apos;attività dell&apos;infortunato; dominano gli errori procedurali estemporanei</li>
             <li>Nel 2024: 63% delle vittime aveva oltre 3 anni di esperienza; 21 casi su 249 riguardano lavoratori irregolari</li>
           </ul>
         </section>
 
         <Section title="Che cos'è Infor.MO e perché questi numeri non sono tutti i morti sul lavoro">
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            Infor.MO è l&apos;archivio pubblico di INAIL che raccoglie gli infortuni sul lavoro analizzati in profondità: per ogni caso vengono ricostruiti dinamica, fattori causali, profilo del lavoratore e dell&apos;azienda. Non tutti i decessi denunciati entrano nell&apos;archivio: l&apos;analisi è lunga e il database si popola con il ritardo delle indagini. Nel periodo 2014-2024 i casi analizzati sono 2.617 su 14.051 denunce (18,6%), con una copertura che si aggira intorno ai 200-265 casi l&apos;anno.
+            Infor.MO è l&apos;archivio pubblico di INAIL che raccoglie gli infortuni sul lavoro analizzati in profondità: per ogni caso vengono ricostruiti dinamica, fattori causali, profilo del lavoratore e dell&apos;azienda. Non tutti i decessi denunciati entrano nell&apos;archivio: l&apos;analisi è lunga e il database si popola con il ritardo delle indagini. Nel periodo 2010-2024 i casi analizzati sono 3.766 su 15.268 denunce (24,7%), con una copertura che si aggira intorno ai 190-320 casi l&apos;anno.
           </p>
           <p style={{ margin: 0, lineHeight: 1.7 }}>
             Questo report usa l&apos;archivio perché è la fonte che dice <strong>perché</strong> si muore, non solo quante volte: settori, cause e profili. I totali nazionali INAIL restano il riferimento per il quadro generale.
@@ -208,11 +208,11 @@ export default function ReportLavoriPericolosiPage() {
 
         <Section title="I settori più pericolosi: agricoltura e costruzioni in testa">
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            Sul totale 2014-2024 agricoltura e costruzioni sono quasi appaiate: 735 contro 705 casi, insieme quasi il 61% delle voci con settore registrato. Molto più staccati trasporti (195) e metallurgia (155). L&apos;andamento nel tempo, però, racconta un cambio di passo: l&apos;agricoltura è in testa fino al 2018, poi cala; dal 2021 le costruzioni la superano e non la lasciano più indietro.
+            Sul totale 2010-2024 costruzioni e agricoltura sono quasi appaiate: 1.084 contro 1.043 casi, insieme quasi il 61% delle voci con settore registrato. Molto più staccati trasporti (282) e metallurgia (221). L&apos;andamento nel tempo, però, racconta un cambio di passo: l&apos;agricoltura è in testa fino al 2018, poi cala; dal 2021 le costruzioni la superano e non la lasciano più indietro.
           </p>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.92rem" }}>
-              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Settori per casi mortali analizzati, periodo 2014-2024. Quote calcolate sulle 2.381 voci con settore registrato (91% dei casi); per 236 casi il settore non è attribuito.</caption>
+              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Settori per casi mortali analizzati, periodo 2010-2024. Quote calcolate sulle 3.489 voci con settore registrato (93% dei casi); per 277 casi il settore non è attribuito.</caption>
               <thead>
                 <tr style={{ borderBottom: "2px solid var(--color-divider)", textAlign: "left" }}>
                   <th style={{ padding: "var(--space-2)", color: "var(--color-text-soft)" }}>Settore</th>
@@ -256,11 +256,11 @@ export default function ReportLavoriPericolosiPage() {
 
         <Section title="Le cause: cosa uccide di più">
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            La <strong>caduta dall&apos;alto di persona</strong> è la dinamica più frequente: 829 casi, quasi un terzo delle 2.667 voci registrate. Insieme al <strong>ribaltamento di veicoli o mezzi</strong> (480) e alla <strong>caduta dall&apos;alto di gravi</strong> (364) copre il 62,7% del totale. Sono eventi concentrati nei luoghi di lavoro con lavori in quota o movimentazione di mezzi: cantieri, agricoltura, trasporti.
+            La <strong>caduta dall&apos;alto di persona</strong> è la dinamica più frequente: 1.217 casi, quasi un terzo delle 3.844 voci registrate. Insieme al <strong>ribaltamento di veicoli o mezzi</strong> (680) e alla <strong>caduta dall&apos;alto di gravi</strong> (548) copre il 63,7% del totale. Sono eventi concentrati nei luoghi di lavoro con lavori in quota o movimentazione di mezzi: cantieri, agricoltura, trasporti.
           </p>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.92rem" }}>
-              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Dinamiche più frequenti nei casi mortali analizzati, 2014-2024. Quote sulle 2.667 voci con dinamica registrata.</caption>
+              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Dinamiche più frequenti nei casi mortali analizzati, 2010-2024. Quote sulle 3.844 voci con dinamica registrata.</caption>
               <thead>
                 <tr style={{ borderBottom: "2px solid var(--color-divider)", textAlign: "left" }}>
                   <th style={{ padding: "var(--space-2)", color: "var(--color-text-soft)" }}>Dinamica</th>
@@ -286,11 +286,11 @@ export default function ReportLavoriPericolosiPage() {
 
         <Section title="I fattori causali e i problemi di sicurezza">
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            Nei 5.106 fattori causali registrati, il 45,8% riconduce all&apos;<strong>attività dell&apos;infortunato</strong>: non la fatalità, ma ciò che la persona stava facendo e come. Seguono utensili, macchine e impianti (18,1%) e ambiente (14,6%). Tra i problemi di sicurezza più citati nel 2024 dominano gli <strong>errori procedurali estemporanei</strong> (decisioni prese sul momento, senza procedura seguita) e le <strong>carenze di formazione o addestramento</strong>, più delle mancanze strutturali come barriere o parapetti assenti.
+            Nei 7.360 fattori causali registrati, il 45,5% riconduce all&apos;<strong>attività dell&apos;infortunato</strong>: non la fatalità, ma ciò che la persona stava facendo e come. Seguono utensili, macchine e impianti (18,9%) e ambiente (15,1%). Tra i problemi di sicurezza più citati nel 2024 dominano gli <strong>errori procedurali estemporanei</strong> (decisioni prese sul momento, senza procedura seguita) e le <strong>carenze di formazione o addestramento</strong>, più delle mancanze strutturali come barriere o parapetti assenti.
           </p>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.92rem" }}>
-              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Tipologie di fattori causali, 2014-2024. Totale: 5.106 fattori.</caption>
+              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Tipologie di fattori causali, 2010-2024. Totale: 7.360 fattori.</caption>
               <thead>
                 <tr style={{ borderBottom: "2px solid var(--color-divider)", textAlign: "left" }}>
                   <th style={{ padding: "var(--space-2)", color: "var(--color-text-soft)" }}>Tipologia</th>
@@ -354,7 +354,7 @@ export default function ReportLavoriPericolosiPage() {
           ))}
         </section>
 
-        <p className="source-note">Fonte: INAIL, archivio Infor.MO (InformoWeb), casi mortali analizzati 2014-2024; serie INAIL delle denunce con esito mortale. Ultimo aggiornamento: 16 ottobre 2026. Metodo e limiti nel pulsante &quot;Metodologia, Formule e Fonti&quot; in alto; la pagina <Link href="/fonti">Fonti e metodo</Link> contiene la metodologia completa.</p>
+        <p className="source-note">Fonte: INAIL, archivio Infor.MO (InformoWeb), casi mortali analizzati 2010-2024; serie INAIL delle denunce con esito mortale. Ultimo aggiornamento: 19 ottobre 2026. Metodo e limiti nel pulsante &quot;Metodologia, Formule e Fonti&quot; in alto; la pagina <Link href="/fonti">Fonti e metodo</Link> contiene la metodologia completa.</p>
       </article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </main>

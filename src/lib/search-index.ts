@@ -72,7 +72,7 @@ const PAGINE: SearchEntry[] = [
     type: "pagina",
     title: "Analisi delle cause",
     description:
-      "Analisi dei casi mortali sul lavoro dell'archivio Infor.MO INAIL 2014-2024: dinamica degli eventi, settori e territori a maggior rischio, profilo dei lavoratori e delle aziende coinvolti.",
+      "Analisi dei casi mortali e gravi sul lavoro dell'archivio Infor.MO INAIL 2010-2024: dinamica degli eventi, settori e territori a maggior rischio, profilo dei lavoratori e delle aziende coinvolti. Consulta solo i mortali, solo i gravi o entrambi.",
     href: "/analisi-delle-cause",
     keywords: [
       "cause",
@@ -239,10 +239,10 @@ const REPORT: SearchEntry[] = [
     type: "report",
     title: "Lavori più pericolosi in Italia: settori e cause delle morti sul lavoro",
     description:
-      "Agricoltura e costruzioni in testa alle morti sul lavoro nei casi Infor.MO (2014-2024): 2.617 casi, la caduta dall'alto come prima causa.",
+      "Costruzioni e agricoltura in testa alle morti sul lavoro nei casi Infor.MO (2010-2024): 3.766 casi, la caduta dall'alto come prima causa.",
     href: "/report/lavori-piu-pericolosi-in-italia",
     keywords: ["morti sul lavoro", "infor.mo", "lavori pericolosi", "agricoltura", "costruzioni", "caduta dall'alto"],
-    meta: "Sicurezza e vigilanza · 16 ottobre 2026",
+    meta: "Sicurezza e vigilanza · 19 ottobre 2026",
   },
   {
     type: "report",

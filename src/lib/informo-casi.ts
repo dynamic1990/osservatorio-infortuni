@@ -1,6 +1,7 @@
 // Dati e tipi per la pagina "Casi mortali" (Infor.MO INAIL).
 // La mappa colore -> canale è dichiarata UNA volta per pagina (RULES.md Regola 4).
 import informoMortaliAnalisi from "@/data/generated/informo-mortali-analisi.json";
+import informoGraviAnalisi from "@/data/generated/informo-gravi-analisi.json";
 import { ACCENT, INK, LINK, RISK_SCALE } from "@/lib/palette";
 
 export interface VoceCounter {
@@ -57,12 +58,43 @@ export const INFORM_COLORS = {
 };
 
 export const ANNI_INFORMO = [
-  2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
+  2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
 ] as const;
 export const ANNO_DEFAULT = 2024;
 
+// Selettore del perimetro della pagina: solo mortali, solo gravi, o entrambi.
+// La modalità "entrambi" somma i due archivi per le viste di conteggio e
+// affianca le due serie nel grafico di copertura.
+export type PerimetroInformo = "mortali" | "gravi" | "entrambi";
+
+export const PERIMETRI_INFORMO: { id: PerimetroInformo; label: string; descrizione: string }[] = [
+  {
+    id: "mortali",
+    label: "Solo infortuni mortali",
+    descrizione: "Casi mortali analizzati dall'archivio Infor.MO",
+  },
+  {
+    id: "gravi",
+    label: "Solo infortuni gravi",
+    descrizione: "Casi gravi analizzati dall'archivio Infor.MO",
+  },
+  {
+    id: "entrambi",
+    label: "Mortali e gravi",
+    descrizione: "Somma dei casi analizzati nei due archivi",
+  },
+];
+
+// Colore dei gravi: canale secondario (slate) distinto dal rosso accent dei
+// mortali. Definita una sola volta qui (RULES.md Regola 4).
+export const INFORM_GRAVI_COLOR = "#3d5a80";
+
 export function getInformoAnalisi(): InformoAnalisi {
   return informoMortaliAnalisi as unknown as InformoAnalisi;
+}
+
+export function getInformoGraviAnalisi(): InformoAnalisi {
+  return informoGraviAnalisi as unknown as InformoAnalisi;
 }
 
 export function serieAnno(data: InformoAnalisi, anno: number): SerieInformo | undefined {

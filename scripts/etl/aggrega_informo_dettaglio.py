@@ -92,9 +92,19 @@ def from_filtri(base: dict, dim: str) -> list[dict]:
 
 
 def main() -> int:
-    d = json.loads(DET.read_text(encoding="utf-8"))
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tipo", choices=("mortali", "gravi"), default="mortali")
+    args = ap.parse_args()
+    gravi = args.tipo == "gravi"
+
+    det_path = ROOT / "src" / "data" / "generated" / ("informo-gravi-dettaglio.json" if gravi else "informo-mortali-dettaglio.json")
+    base_path = ROOT / "src" / "data" / "generated" / ("informo-gravi.json" if gravi else "informo-mortali.json")
+    out_path = ROOT / "src" / "data" / "generated" / ("informo-gravi-analisi.json" if gravi else "informo-mortali-analisi.json")
+
+    d = json.loads(det_path.read_text(encoding="utf-8"))
     casi = d["casi"]
-    base = json.loads(BASE.read_text(encoding="utf-8"))
+    base = json.loads(base_path.read_text(encoding="utf-8"))
     totali = {a["anno"]: a["numeroRecord"] for a in base["anni"]}
 
     by_anno: dict[int, list] = defaultdict(list)
@@ -102,9 +112,12 @@ def main() -> int:
         by_anno[c["anno"]].append(c)
 
     # mortali nazionali da denuncia (serie storica INAIL), per il confronto
-    # tra campione Infor.MO e totale dei decessi denunciati
+    # tra campione Infor.MO e totale dei decessi denunciati. Per i gravi non
+    # esiste una serie nazionale INAIL analoga (i denunciati gravi non sono
+    # pubblicati con lo stesso perimetro), quindi il confronto resta sui casi
+    # analizzati dall'archivio.
     mortali_naz = {}
-    if SERIE.exists():
+    if not gravi and SERIE.exists():
         sdec = json.loads(SERIE.read_text(encoding="utf-8"))
         mortali_naz = {s["anno"]: s.get("mortali") for s in sdec.get("serie", [])}
     totale_mortali_naz = sum(v for v in mortali_naz.values() if isinstance(v, int))
@@ -122,8 +135,9 @@ def main() -> int:
             "casiAnalizzati": n,
             "totaleFiltri": tot,
             "copertura": round(n / tot * 100, 1) if tot else None,
-            "mortaliNazionali": mortali_naz.get(anno),
         }
+        if not gravi:
+            voce["mortaliNazionali"] = mortali_naz.get(anno)
         if delta is not None:
             voce["deltaCasi"] = delta
             voce["deltaPerc"] = round(delta / prev * 100, 1) if prev else None
@@ -172,9 +186,10 @@ def main() -> int:
     periodo = f"{anni[0]}-{anni[-1]}" if anni else ""
     dataset = {
         "meta": {
-            "fonte": "INAIL - Infor.MO / InformoWeb (tipoEvento=1, casi mortali)",
+            "fonte": f"INAIL - Infor.MO / InformoWeb (tipoEvento={'0 (casi gravi)' if gravi else '1 (casi mortali)'})",
             "endpointFiltri": "https://www.inail.it/nsol-informo/filtra.do",
             "endpointDettaglio": "https://www.inail.it/nsol-informo/dettaglio.do",
+            "tipo": "gravi" if gravi else "mortali",
             "periodo": periodo,
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "nota": "Conteggi ufficiali (incidenti, settori, territori, "
@@ -200,15 +215,16 @@ def main() -> int:
         },
         "totFattori": n_fattori,
         "casiConFattori": casi_con_fattori,
-        "totaleMortaliNazionali": totale_mortali_naz,
-        "casiPeriodo": len(casi),
-        "quotaPeriodo": round(
-            len(casi) / totale_mortali_naz * 100, 1
-        ) if totale_mortali_naz else None,
     }
+    if not gravi:
+        dataset["totaleMortaliNazionali"] = totale_mortali_naz
+        dataset["casiPeriodo"] = len(casi)
+        dataset["quotaPeriodo"] = round(
+            len(casi) / totale_mortali_naz * 100, 1
+        ) if totale_mortali_naz else None
 
-    OUT.write_text(json.dumps(dataset, ensure_ascii=False), encoding="utf-8")
-    print(f"[informo-analisi] salvato {OUT}")
+    out_path.write_text(json.dumps(dataset, ensure_ascii=False), encoding="utf-8")
+    print(f"[informo-analisi] salvato {out_path}")
     print(f"[informo-analisi] casi {len(casi)}, fattori {n_fattori}, "
           f"casi con fattori {casi_con_fattori}")
     for s in serie:

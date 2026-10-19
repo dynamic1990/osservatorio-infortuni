@@ -10,30 +10,57 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import { getInformoAnalisi } from "@/lib/informo-casi";
+import {
+  getInformoAnalisi,
+  getInformoGraviAnalisi,
+  type PerimetroInformo,
+} from "@/lib/informo-casi";
+import { ACCENT } from "@/lib/palette";
+import { INFORM_GRAVI_COLOR } from "@/lib/informo-casi";
 
-// Trend per anno (2014-2024) degli infortuni mortali: ogni barra mostra il
-// totale dei morti denunciati (serie INAIL) e, dentro, la quota dei casi con
-// scheda di dettaglio nell'archivio Infor.MO. È un grafico a pile: la parte
-// alta (colore testo) è la differenza tra le denunce e i casi analizzati.
-// Un punto per anno, nessun aggregato multi-anno (RULES.md regola 1) e nessun
-// confronto anno su anno: serve a leggere la copertura dell'archivio sul
-// totale degli eventi, non a misurare variazioni tra anni.
-export function InformoTrendWidget() {
-  const data = useMemo(() => getInformoAnalisi(), []);
+// Trend per anno degli infortuni analizzati da Infor.MO. Ogni barra è un
+// anno distinto (RULES.md regola 1: la serie storica non è un aggregato).
+// A seconda del perimetro selezionato la barra compone:
+//   - mortali: casi analizzati (rosso) + quota senza scheda (chiaro), sul
+//     totale delle denunce INAIL dove la serie nazionale esiste;
+//   - gravi: solo i casi analizzati (slate), perché per i gravi non esiste
+//     una serie nazionale INAIL comparabile;
+//   - entrambi: mortali (rosso) e gravi (slate) in pila, più la quota senza
+//     scheda dei mortali dove disponibile.
+export function InformoTrendWidget({ perimetro = "mortali" }: { perimetro?: PerimetroInformo }) {
+  const mortali = useMemo(() => getInformoAnalisi(), []);
+  const gravi = useMemo(() => getInformoGraviAnalisi(), []);
 
   const chartData = useMemo(() => {
-    return data.serie.map((s) => {
-      const totale = s.mortaliNazionali ?? s.casiAnalizzati;
-      const casi = s.casiAnalizzati;
-      return {
-        anno: s.anno,
-        casi,
-        totale,
-        nonCoperti: Math.max(0, totale - casi),
-      };
-    });
-  }, [data]);
+    const serieMortali = new Map(mortali.serie.map((s) => [s.anno, s]));
+    const serieGravi = new Map(gravi.serie.map((s) => [s.anno, s]));
+    const anni = new Set<number>([...serieMortali.keys(), ...serieGravi.keys()]);
+    return Array.from(anni)
+      .sort((a, b) => a - b)
+      .map((anno) => {
+        const m = serieMortali.get(anno);
+        const g = serieGravi.get(anno);
+        const casiMortali = m?.casiAnalizzati ?? 0;
+        const casiGravi = g?.casiAnalizzati ?? 0;
+        const totaleNazionale = m?.mortaliNazionali;
+        const nonCoperti =
+          totaleNazionale !== undefined && totaleNazionale !== null
+            ? Math.max(0, totaleNazionale - casiMortali)
+            : undefined;
+        return {
+          anno,
+          casiMortali,
+          casiGravi,
+          totaleNazionale,
+          nonCoperti,
+        };
+      });
+  }, [mortali, gravi]);
+
+  // Forma del grafico in base al perimetro: seleziona i dati da comporre.
+  const showMortali = perimetro === "mortali" || perimetro === "entrambi";
+  const showGravi = perimetro === "gravi" || perimetro === "entrambi";
+  const showNonCoperti = perimetro === "mortali" || perimetro === "entrambi";
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
@@ -47,7 +74,7 @@ export function InformoTrendWidget() {
         }}
       >
         <div style={{ fontSize: "0.95rem", fontWeight: 700 }}>
-          Infortuni mortali per anno: totale denunciato e casi analizzati
+          Casi analizzati dall&apos;archivio Infor.MO per anno
         </div>
       </div>
 
@@ -61,68 +88,90 @@ export function InformoTrendWidget() {
               content={({ active, payload, label }) => {
                 if (!active || !payload || !payload.length) return null;
                 const p = payload[0].payload;
-                const copertura =
-                  p.totale > 0 ? Math.round((p.casi / p.totale) * 1000) / 10 : 0;
-                const casiPct = p.totale > 0 ? Math.round((p.casi / p.totale) * 1000) / 10 : 0;
-                const nonCopertePct =
-                  p.totale > 0 ? Math.round((p.nonCoperti / p.totale) * 1000) / 10 : 0;
+                const casiMortali = p.casiMortali ?? 0;
+                const casiGravi = p.casiGravi ?? 0;
+                const totNaz = p.totaleNazionale;
+                const nonCoperte = p.nonCoperti;
+                const coperturaMortali =
+                  totNaz && totNaz > 0 ? Math.round((casiMortali / totNaz) * 1000) / 10 : null;
                 return (
                   <div className="custom-chart-tooltip">
                     <div className="tooltip-title">Anno {label}</div>
-                    <div className="tooltip-row">
-                      <span>Morti denunciati:</span>
-                      <strong>{p.totale}</strong>
-                    </div>
-                    <div className="tooltip-row">
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                        <i aria-hidden="true" style={{ width: 8, height: 8, display: "inline-block", background: "#f36458", borderRadius: 2 }} />
-                        Casi analizzati Infor.MO:
-                      </span>
-                      <strong>
-                        {p.casi}{" "}
-                        <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>({casiPct}%)</span>
-                      </strong>
-                    </div>
-                    <div className="tooltip-row">
-                      <span>Non analizzati (senza scheda):</span>
-                      <strong>
-                        {p.nonCoperti}{" "}
-                        <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>({nonCopertePct}%)</span>
-                      </strong>
-                    </div>
-                    <div className="tooltip-row">
-                      <span>Copertura dell&apos;archivio:</span>
-                      <strong>{copertura}%</strong>
-                    </div>
+                    {showMortali && (
+                      <div className="tooltip-row">
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                          <i aria-hidden="true" style={{ width: 8, height: 8, display: "inline-block", background: ACCENT, borderRadius: 2 }} />
+                          Casi mortali analizzati:
+                        </span>
+                        <strong>{casiMortali}</strong>
+                      </div>
+                    )}
+                    {showGravi && (
+                      <div className="tooltip-row">
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                          <i aria-hidden="true" style={{ width: 8, height: 8, display: "inline-block", background: INFORM_GRAVI_COLOR, borderRadius: 2 }} />
+                          Casi gravi analizzati:
+                        </span>
+                        <strong>{casiGravi}</strong>
+                      </div>
+                    )}
+                    {showMortali && totNaz !== undefined && totNaz !== null && (
+                      <div className="tooltip-row">
+                        <span>Morti denunciati (INAIL):</span>
+                        <strong>{totNaz}</strong>
+                      </div>
+                    )}
+                    {showNonCoperti && nonCoperte !== undefined && (
+                      <div className="tooltip-row">
+                        <span>Morti senza scheda di analisi:</span>
+                        <strong>{nonCoperte}</strong>
+                      </div>
+                    )}
+                    {coperturaMortali !== null && showMortali && (
+                      <div className="tooltip-row">
+                        <span>Copertura mortali sul totale denunciato:</span>
+                        <strong>{coperturaMortali}%</strong>
+                      </div>
+                    )}
                   </div>
                 );
               }}
             />
-            {/* casi analizzati: in basso (accento) — in Recharts la prima Bar dichiarata sta alla base della pila */}
-            <Bar
-              dataKey="casi"
-              name="Casi analizzati Infor.MO"
-              stackId="mortali"
-              fill="#f36458"
-              radius={[0, 0, 0, 0]}
-              isAnimationActive={false}
-            />
-            {/* parte senza scheda: sopra (neutro) */}
-            <Bar
-              dataKey="nonCoperti"
-              name="Morti senza analisi Infor.MO"
-              stackId="mortali"
-              fill="#f5f5f5"
-              radius={[3, 3, 0, 0]}
-              isAnimationActive={false}
-            />
+            {showMortali && (
+              <Bar
+                dataKey="casiMortali"
+                name="Casi mortali analizzati Infor.MO"
+                stackId="informo"
+                fill={ACCENT}
+                radius={[0, 0, 0, 0]}
+                isAnimationActive={false}
+              />
+            )}
+            {showGravi && (
+              <Bar
+                dataKey="casiGravi"
+                name="Casi gravi analizzati Infor.MO"
+                stackId="informo"
+                fill={INFORM_GRAVI_COLOR}
+                radius={[0, 0, 0, 0]}
+                isAnimationActive={false}
+              />
+            )}
+            {showNonCoperti && (
+              <Bar
+                dataKey="nonCoperti"
+                name="Morti senza analisi Infor.MO"
+                stackId="informo"
+                fill="#f5f5f5"
+                radius={[3, 3, 0, 0]}
+                isAnimationActive={false}
+              />
+            )}
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Legenda testuale sotto il grafico: ogni voce è un item autonomo
-          (swatch + label in linea), il contenitore va a capo per item interi
-          senza spezzare swatch e testo su righe diverse */}
+      {/* Legenda testuale sotto il grafico */}
       <div
         style={{
           display: "flex",
@@ -134,57 +183,103 @@ export function InformoTrendWidget() {
           paddingTop: "var(--space-1)",
         }}
       >
-        <span
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "var(--space-2)",
-            minWidth: 0,
-          }}
-        >
+        {showMortali && (
           <span
             style={{
-              width: 12,
-              height: 12,
-              display: "inline-block",
-              background: "var(--color-accent)",
-              borderRadius: 2,
-              flexShrink: 0,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              minWidth: 0,
             }}
-          />
-          Casi analizzati nell&apos;archivio Infor.MO
-        </span>
-        <span
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "var(--space-2)",
-            minWidth: 0,
-          }}
-        >
+          >
+            <span
+              style={{
+                width: 12,
+                height: 12,
+                display: "inline-block",
+                background: ACCENT,
+                borderRadius: 2,
+                flexShrink: 0,
+              }}
+            />
+            Casi mortali analizzati nell&apos;archivio Infor.MO
+          </span>
+        )}
+        {showGravi && (
           <span
             style={{
-              width: 12,
-              height: 12,
-              display: "inline-block",
-              background: "var(--color-surface)",
-              border: "1px solid var(--color-divider)",
-              borderRadius: 2,
-              flexShrink: 0,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              minWidth: 0,
             }}
-          />
-          Morti denunciati senza scheda di analisi
-        </span>
+          >
+            <span
+              style={{
+                width: 12,
+                height: 12,
+                display: "inline-block",
+                background: INFORM_GRAVI_COLOR,
+                borderRadius: 2,
+                flexShrink: 0,
+              }}
+            />
+            Casi gravi analizzati nell&apos;archivio Infor.MO
+          </span>
+        )}
+            {showNonCoperti && (
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "var(--space-2)",
+                  minWidth: 0,
+                }}
+              >
+                <span
+                  style={{
+                    width: 12,
+                    height: 12,
+                    display: "inline-block",
+                    background: "var(--color-surface)",
+                    border: "1px solid var(--color-divider)",
+                    borderRadius: 2,
+                    flexShrink: 0,
+                  }}
+                />
+                Morti denunciati senza scheda di analisi
+              </span>
+            )}
       </div>
 
       <p className="source-note">
-        Ogni barra è un anno distinto: l&apos;altezza totale è il numero di infortuni
-        mortali denunciati da INAIL (serie da denunce), la parte rossa in basso sono i
-        casi con scheda di dettaglio nell&apos;archivio Infor.MO e la parte chiara la
-        differenza, cioè i decessi denunciati senza analisi Infor.MO. La pagina
-        non presenta confronti anno su anno perché l&apos;archivio documenta una
-        parte dei casi: una variazione tra anni rifletterebbe la copertura
-        dell&apos;archivio, non l&apos;andamento reale degli eventi.
+        Ogni barra è un anno distinto (serie storica, non aggregato).{" "}
+        {perimetro === "gravi" && (
+          <>
+            Per gli infortuni gravi INAIL non pubblica una serie nazionale dei
+            denunciati con lo stesso perimetro dell&apos;archivio, quindi il grafico
+            mostra i casi analizzati senza confronto con un totale nazionale.
+          </>
+        )}
+        {perimetro === "mortali" && (
+          <>
+            L&apos;altezza della barra è il totale dei morti denunciati da INAIL
+            (serie da denunce, disponibile dal 2014), la parte rossa in basso i
+            casi con scheda di dettaglio nell&apos;archivio Infor.MO e la parte
+            chiara i decessi denunciati senza analisi. Gli anni 2010-2013 non
+            hanno il totale nazionale, quindi la barra mostra solo i casi
+            analizzati.
+          </>
+        )}
+        {perimetro === "entrambi" && (
+          <>
+            La pila compone i casi mortali (rosso) e i casi gravi (blu ardesia)
+            analizzati dall&apos;archivio Infor.MO. Dove la serie nazionale dei
+            decessi esiste (dal 2014), la parte chiara mostra i morti
+            denunciati senza scheda di analisi; per i gravi non esiste un
+            totale nazionale comparabile.
+          </>
+        )}
       </p>
     </div>
   );
