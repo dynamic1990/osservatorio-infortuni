@@ -131,47 +131,49 @@ export function SiteNav({ variant = "top" }: { variant?: "top" | "bottom" }) {
             Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span>
           </span>
         </Link>
-        <button
-          type="button"
-          aria-label="Cerca nel sito (Ctrl+K)"
-          title="Cerca nel sito (Ctrl+K)"
-          onClick={() => window.dispatchEvent(new Event("osservatorio:apri-ricerca"))}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 38,
-            height: 38,
-            borderRadius: 10,
-            border: "1px solid var(--color-divider)",
-            background: "var(--color-surface)",
-            cursor: "pointer",
-            padding: 0,
-            color: "var(--color-text-muted)",
-          }}
-        >
-          <Search aria-hidden="true" size={19} strokeWidth={1.8} />
-        </button>
-        <button
-          aria-expanded={aperto}
-          onClick={() => setAperto((a) => !a)}
-          style={{
-            display: "inline-flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 4,
-            width: 38,
-            height: 38,
-            borderRadius: 10,
-            border: "1px solid var(--color-divider)",
-            background: "var(--color-surface)",
-            cursor: "pointer",
-            padding: 0,
-          }}
-        >
-          <Menu aria-hidden="true" size={20} strokeWidth={1.8} />
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+          <button
+            type="button"
+            aria-label="Cerca nel sito (Ctrl+K)"
+            title="Cerca nel sito (Ctrl+K)"
+            onClick={() => window.dispatchEvent(new Event("osservatorio:apri-ricerca"))}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 38,
+              height: 38,
+              borderRadius: 10,
+              border: "1px solid var(--color-divider)",
+              background: "var(--color-surface)",
+              cursor: "pointer",
+              padding: 0,
+              color: "var(--color-text-muted)",
+            }}
+          >
+            <Search aria-hidden="true" size={19} strokeWidth={1.8} />
+          </button>
+          <button
+            aria-expanded={aperto}
+            onClick={() => setAperto((a) => !a)}
+            style={{
+              display: "inline-flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 4,
+              width: 38,
+              height: 38,
+              borderRadius: 10,
+              border: "1px solid var(--color-divider)",
+              background: "var(--color-surface)",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <Menu aria-hidden="true" size={20} strokeWidth={1.8} />
+          </button>
+        </div>
       </div>
 
       {aperto && (

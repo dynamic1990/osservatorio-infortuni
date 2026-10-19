@@ -48,16 +48,12 @@ export function Footer() {
         <div className="footer-grid">
           {/* Colonna brand */}
           <div style={{ alignContent: "start" }}>
-            <div style={{ fontWeight: 800, fontSize: "1.05rem", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
-              Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", fontWeight: 800, fontSize: "1.05rem", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
+              <img src="/icon.png" alt="Logo Osservatorio Infortuni" width={40} height={40} style={{ borderRadius: 8, display: "block", flex: "0 0 auto" }} />
+              <span>
+                Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span>
+              </span>
             </div>
-            <img
-              src="/icon.png"
-              alt="Logo Osservatorio Infortuni"
-              width={40}
-              height={40}
-              style={{ marginTop: "var(--space-3)", borderRadius: 8 }}
-            />
           </div>
 
           {/* Colonne link */}
@@ -161,11 +157,11 @@ export function Footer() {
             >
               salvati.damiano@gmail.com
             </a>
-            <p style={{ fontSize: "0.8rem", lineHeight: 1.55, color: "var(--color-text-muted)", margin: 0 }}>
-              Codice rilasciato sotto licenza GNU AGPL-3.0. I dati provengono dalle fonti pubbliche citate (vedi Fonti) e restano soggetti alle licenze degli enti proprietari.
-            </p>
           </div>
         </div>
+        <p style={{ fontSize: "0.8rem", lineHeight: 1.55, color: "var(--color-text-muted)", margin: "var(--space-6) 0 0", padding: "var(--space-4) 0 0", borderTop: "1px solid var(--color-divider)", width: "100%" }}>
+          Codice rilasciato sotto licenza GNU AGPL-3.0. I dati provengono dalle fonti pubbliche citate (vedi Fonti) e restano soggetti alle licenze degli enti proprietari.
+        </p>
       </div>
     </footer>
   );
