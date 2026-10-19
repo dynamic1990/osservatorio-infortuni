@@ -146,7 +146,7 @@ export function Footer() {
                 color: "var(--color-text)",
                 textDecoration: "none",
                 fontSize: "0.92rem",
-                fontWeight: 800,
+                fontWeight: 400,
                 transition: "color 0.15s ease",
               }}
               onMouseEnter={(e) => {
