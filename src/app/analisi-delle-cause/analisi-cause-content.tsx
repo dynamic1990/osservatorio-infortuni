@@ -181,7 +181,6 @@ export function AnalisiCauseContent() {
   // Due toggle indipendenti: mortali e gravi, selezionabili insieme o da soli.
   const [perimetroQuery, setPerimetroQuery] = useState<PerimetroQuery>({ mortali: true, gravi: false });
   const perimetro = perimetroDaQuery(perimetroQuery);
-  const includeGravi = perimetroQuery.gravi;
 
   const analisi = useMemo<InformoAnalisi>(() => {
     const mortali = getInformoAnalisi();
@@ -236,6 +235,12 @@ export function AnalisiCauseContent() {
             </h1>
             <p style={{ color: "var(--color-text-soft)", margin: 0, fontSize: "0.95rem", lineHeight: 1.6 }}>
               {DESCRIZIONI[perimetro]}
+            </p>
+            <p style={{ color: "var(--color-text-soft)", margin: "var(--space-2) 0 0", fontSize: "0.88rem", lineHeight: 1.6 }}>
+              L&apos;archivio Infor.MO non copre tutti gli infortuni mortali e gravi denunciati
+              all&apos;INAIL: raccoglie solo i casi indagati e analizzati dai Servizi di
+              prevenzione delle ASL. I conteggi di questa pagina vanno quindi letti come
+              casi analizzati, non come totali degli infortuni sul lavoro.
             </p>
           </div>
         </div>
@@ -317,36 +322,6 @@ export function AnalisiCauseContent() {
           </InfoModalButton>
         </div>
       </header>
-
-      {/* 1. Perimetro dell'archivio: descrizione, non grafico.
-          Il vecchio grafico di copertura (analizzati vs totali nazionali)
-          valeva per i soli mortali; con l'aggiunta dei gravi, per cui INAIL
-          non pubblica un totale nazionale comparabile, il confronto visivo
-          non è più possibile. Al suo posto una nota metodologica. */}
-      <Sezione occhiello="Il perimetro dell'archivio" titolo="Cosa contiene questa pagina" id="perimetro-archivio">
-        <p className="source-note" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
-          L&apos;archivio Infor.MO non copre tutti gli infortuni mortali e gravi
-          denunciati all&apos;INAIL: raccoglie solo i casi indagati e analizzati dai
-          Servizi di prevenzione delle ASL con la metodologia Infor.MO. I
-          conteggi di questa pagina vanno quindi letti come casi analizzati,
-          non come totali degli infortuni sul lavoro.
-        </p>
-        <p className="source-note" style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)" }}>
-          La soglia operativa per l&apos;inclusione dei casi gravi nell&apos;archivio segue
-          i protocolli d&apos;intesa tra ASL e procura (prognosi superiore a 30/40
-          giorni), pur non essendo formalizzata nel manuale Infor.MO.
-        </p>
-        <p
-          className="source-note"
-          style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)" }}
-        >
-          {includeGravi
-            ? `Perimetro selezionato: ${labelPerimetro.toLowerCase()}. `
-            : `Perimetro selezionato: ${labelPerimetro.toLowerCase()}. `}
-          I confronti tra anni e tra archivi vanno letti alla luce della
-          copertura variabile dell&apos;archivio nel tempo.
-        </p>
-      </Sezione>
 
       {/* 3. Approfondimenti: cause, settori, territorio */}
       <Sezione occhiello="Le cause" titolo={`Perché si verificano: tipologie di incidente (${labelPerimetro.toLowerCase()})`} id="tipologie-incidente">
