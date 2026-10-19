@@ -324,9 +324,9 @@ export function AnalisiCauseContent() {
       </header>
 
       {/* 3. Approfondimenti: cause, settori, territorio */}
-      <Sezione occhiello="Le cause" titolo={`Perché si verificano: tipologie di incidente (${labelPerimetro.toLowerCase()})`} id="tipologie-incidente">
+      <Sezione occhiello="Le cause" titolo={`Perché si verificano: modalità di accadimento (${labelPerimetro.toLowerCase()})`} id="tipologie-incidente">
         <InformoVociLista
-          titolo="Incidente (causa prevalente)"
+          titolo="Incidente (modalità di accadimento)"
           sottotitolo={SOTTO_TITOLI.incidenti[perimetro]}
           serie={analisi.incidenti}
           limite={8}
@@ -422,7 +422,36 @@ export function AnalisiCauseContent() {
         </div>
       </Sezione>
 
-      {/* 4. Esploratore: la lettura caso per caso ha un filtro locale di
+      {/* 4. Fattori causali e problemi di sicurezza: classificazione INAIL dei
+          motivi, distinta per perimetro (mortali/gravi/entrambi). Le serie
+          sommano i fattori dei casi: un caso può avere più fattori. */}
+      <Sezione occhiello="I fattori" titolo="I fattori causali" id="fattori-causali">
+        <InformoVociLista
+          titolo="Tipologie di fattori"
+          sottotitolo={"Classificazione INAIL del fattore: attività dell&apos;infortunato, attività di terzi, utensili/macchine/impianti, ambiente, DPI, materiali (per anno o somma di periodo)"}
+          serie={analisi.fattori.perTipo}
+          limite={8}
+          colore={INFORM_COLORS.corrente}
+          multiAnno
+          casiAnno={casiAnno}
+          unita="fattori"
+        />
+      </Sezione>
+
+      <Sezione occhiello="I problemi" titolo={"I problemi di sicurezza più frequenti"} id="problemi-sicurezza">
+        <InformoVociLista
+          titolo="Problema di sicurezza"
+          sottotitolo={"Classificazione INAIL del problema di sicurezza associato ai fattori (es. Azione estemporanea, Formazione/Informazione/Addestramento, Protezioni). Un caso può avere più fattori, ognuno con il proprio problema."}
+          serie={analisi.fattori.perProblemaSicurezza}
+          limite={10}
+          colore={INFORM_COLORS.secondario}
+          multiAnno
+          casiAnno={casiAnno}
+          unita="problemi"
+        />
+      </Sezione>
+
+      {/* 5. Esploratore: la lettura caso per caso ha un filtro locale di
           provenienza (solo mortali / solo gravi / tutti), indipendente dal
           perimetro scelto sopra. */}
       <Sezione occhiello="La lettura caso per caso" titolo="Cerca nella dinamica" id="cerca-dinamica">

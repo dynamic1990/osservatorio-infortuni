@@ -4,14 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CircleDollarSign, Cross, ExternalLink, FileText, Home, Landmark, Layers, Menu, Newspaper, Search, UserSearch, Workflow, X } from "lucide-react";
+import { BookOpen, CircleDollarSign, Cross, ExternalLink, FileText, Home, Landmark, Menu, Newspaper, Search, UserSearch, Workflow, X } from "lucide-react";
 import { GitHubIcon } from "./social-icons";
 
 const VOCI = [
   { href: "/", label: "Quadro generale", icon: Home, group: "Esplora" },
   { href: "/cronaca-infortuni", label: "Cronaca di infortuni", icon: Newspaper, group: "Esplora" },
   { href: "/analisi-delle-cause", label: "Analisi delle cause", icon: Workflow, group: "Esplora" },
-  { href: "/analisi-tematiche", label: "Analisi tematiche", icon: Layers, group: "Esplora" },
   { href: "/malattie-professionali", label: "Malattie professionali", icon: Cross, group: "Esplora" },
   { href: "/vigilanza", label: "Vigilanza", icon: UserSearch, group: "Esplora" },
   { href: "/bandi-e-finanziamenti", label: "Bandi e finanziamenti", icon: Landmark, group: "Esplora" },

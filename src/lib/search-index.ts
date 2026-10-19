@@ -88,25 +88,6 @@ const PAGINE: SearchEntry[] = [
   },
   {
     type: "pagina",
-    title: "Analisi tematiche",
-    description:
-      "Analisi trasversali degli infortuni mortali e gravi dell'archivio Infor.MO INAIL 2010-2024: attività manutentive e altri temi che attraversano i settori, isolate con parole chiave sulla dinamica come nelle schede INAIL DIMEILA.",
-    href: "/analisi-tematiche",
-    keywords: [
-      "analisi tematiche",
-      "manutenzione",
-      "trasversali",
-      "temi",
-      "schede inail",
-      "dimeila",
-      "riparazione",
-      "pulizia",
-      "sblocco",
-      "dinamica",
-    ],
-  },
-  {
-    type: "pagina",
     title: "Malattie professionali",
     description:
       "Le malattie professionali denunciate in Italia: denunce mensili, patologie più comuni (rachide, spalla, tunnel carpale), distribuzione territoriale, decessi e tasso di riconoscimento.",
