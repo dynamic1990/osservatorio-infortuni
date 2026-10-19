@@ -2,21 +2,20 @@
 
 import type { CSSProperties } from "react";
 import { ACCENT } from "@/lib/palette";
-import { INFORM_GRAVI_COLOR, type PerimetroInformo } from "@/lib/informo-casi";
+import { INFORM_GRAVI_COLOR, type PerimetroQuery } from "@/lib/informo-casi";
 
 interface Props {
-  value: PerimetroInformo;
-  onChange: (next: PerimetroInformo) => void;
+  value: PerimetroQuery;
+  onChange: (next: PerimetroQuery) => void;
 }
 
 // Colore del pulsante attivo = colore della serie che controlla (RULES.md Regola 4).
-// "Solo infortuni mortali" usa l'accento rosso semantico, "Solo infortuni gravi"
-// il canale secondario slate; "Mortali e gravi" li affianca (entrambe le serie).
-const PERIMETRO_COLORS: Record<PerimetroInformo, string> = {
+// I due toggle sono indipendenti: selezionabili insieme (entrambi gli archivi)
+// o singolarmente. Mai nessuno dei due acceso.
+const PERIMETRO_COLORS = {
   mortali: ACCENT,
   gravi: INFORM_GRAVI_COLOR,
-  entrambi: "#1a1a1a",
-};
+} as const;
 
 export function InformoPerimetro({ value, onChange }: Props) {
   const base: CSSProperties = {
@@ -37,26 +36,37 @@ export function InformoPerimetro({ value, onChange }: Props) {
     borderColor: attivo ? colore : "var(--color-text)",
   });
 
+  // Allo spegnimento dell'unico toggle acceso, riattiva l'altro: il perimetro
+  // deve sempre contenere almeno un archivio.
+  const toggle = (chiave: "mortali" | "gravi", attivo: boolean) => {
+    const next = { ...value, [chiave]: attivo };
+    if (!next.mortali && !next.gravi) {
+      const altro = chiave === "mortali" ? "gravi" : "mortali";
+      next[altro] = true;
+    }
+    onChange(next);
+  };
+
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-      {(
-        [
-          { id: "mortali", label: "Solo infortuni mortali" },
-          { id: "gravi", label: "Solo infortuni gravi" },
-          { id: "entrambi", label: "Mortali e gravi" },
-        ] as { id: PerimetroInformo; label: string }[]
-      ).map((op) => (
-        <button
-          key={op.id}
-          type="button"
-          onClick={() => onChange(op.id)}
-          style={stile(value === op.id, PERIMETRO_COLORS[op.id])}
-          aria-pressed={value === op.id}
-        >
-          {value === op.id ? "✓ " : ""}
-          {op.label}
-        </button>
-      ))}
+      <button
+        type="button"
+        onClick={() => toggle("mortali", !value.mortali)}
+        style={stile(value.mortali, PERIMETRO_COLORS.mortali)}
+        aria-pressed={value.mortali}
+      >
+        {value.mortali ? "✓ " : ""}
+        Infortuni mortali
+      </button>
+      <button
+        type="button"
+        onClick={() => toggle("gravi", !value.gravi)}
+        style={stile(value.gravi, PERIMETRO_COLORS.gravi)}
+        aria-pressed={value.gravi}
+      >
+        {value.gravi ? "✓ " : ""}
+        Infortuni gravi
+      </button>
     </div>
   );
 }

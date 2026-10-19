@@ -77,19 +77,75 @@ function Delta({ prev, curr }: { prev?: number; curr?: number }) {
   );
 }
 
-export function FiltroDimensioneAziendale() {
+type PerimetroDim = { mortali: boolean; gravi: boolean };
+
+interface Props {
+  perimetro?: PerimetroDim;
+}
+
+// Dataset per perimetro: mortali e gravi hanno un file cluster dedicato.
+// Con entrambi attivi carichiamo i due e sommiamo i conteggi per cluster-anno-vista.
+const FILE_DATASET = {
+  mortali: "/data/informo-cluster-dimensionali.json",
+  gravi: "/data/informo-cluster-dimensionali-gravi.json",
+} as const;
+
+export function FiltroDimensioneAziendale({ perimetro = { mortali: true, gravi: false } }: Props) {
   const [dati, setDati] = useState<ClusterDataset | null>(null);
   const [anno, setAnno] = useState(2024);
   const [vista, setVista] = useState<Vista>("incidenti");
   const [indice, setIndice] = useState(0);
   const refCarosello = useRef<HTMLDivElement | null>(null);
 
+  // Ricarica al cambio del perimetro, mantenendo la selezione anno/vista.
   useEffect(() => {
-    fetch("/data/informo-cluster-dimensionali.json")
-      .then((r) => r.json())
-      .then((d) => setDati(d as ClusterDataset))
+    const urls: string[] = [];
+    if (perimetro.mortali) urls.push(FILE_DATASET.mortali);
+    if (perimetro.gravi) urls.push(FILE_DATASET.gravi);
+    if (urls.length === 0) {
+      setDati(null);
+      return;
+    }
+    Promise.all(urls.map((u) => fetch(u).then((r) => r.json())))
+      .then((ds) => {
+        if (ds.length === 1) {
+          setDati(ds[0] as ClusterDataset);
+          return;
+        }
+        // Somma dei due archivi: stesso cluster/anno/vista, conteggi additivi.
+        const [a, b] = ds as [ClusterDataset, ClusterDataset];
+        const somma = (va: VoceQuota[], vb: VoceQuota[]): VoceQuota[] => {
+          const m = new Map<string, number>();
+          for (const v of [...va, ...vb]) m.set(v.nome, (m.get(v.nome) ?? 0) + v.count);
+          const tot = Array.from(m.values()).reduce((x, y) => x + y, 0);
+          return Array.from(m.entries())
+            .map(([nome, count]) => ({ nome, count, quota: tot ? Math.round((count / tot) * 1000) / 10 : 0 }))
+            .sort((x, y) => y.count - x.count);
+        };
+        const cluster: ClusterDim[] = a.cluster.map((cA) => {
+          const cB = b.cluster.find((c) => c.id === cA.id);
+          if (!cB) return cA;
+          const perAnno = cA.perAnno.map((pA) => {
+            const pB = cB.perAnno.find((p) => p.anno === pA.anno);
+            if (!pB) return pA;
+            return {
+              anno: pA.anno,
+              casi: pA.casi + pB.casi,
+              viste: {
+                incidenti: somma(pA.viste.incidenti, pB.viste.incidenti),
+                settori: somma(pA.viste.settori, pB.viste.settori),
+                territori: somma(pA.viste.territori, pB.viste.territori),
+                fattoriTipo: somma(pA.viste.fattoriTipo, pB.viste.fattoriTipo),
+                problemiSicurezza: somma(pA.viste.problemiSicurezza, pB.viste.problemiSicurezza),
+              },
+            };
+          });
+          return { ...cA, casi: cA.casi + cB.casi, perAnno };
+        });
+        setDati({ meta: undefined, cluster } as ClusterDataset);
+      })
       .catch(() => setDati(null));
-  }, []);
+  }, [perimetro.mortali, perimetro.gravi]);
 
   const clusterOrdinati = useMemo(() => {
     const mappa = new Map((dati?.cluster ?? []).map((c) => [c.id, c]));
@@ -181,6 +237,11 @@ export function FiltroDimensioneAziendale() {
 
       {/* Nota di copertura */}
       <p className="source-note" style={{ margin: 0 }}>
+        {perimetro.gravi && perimetro.mortali
+          ? "Archivio: mortali + gravi (somma dei due archivi). "
+          : perimetro.gravi
+            ? "Archivio: infortuni gravi. "
+            : "Archivio: infortuni mortali. "}
         Classi dimensionali (raccomandazione UE 2003/361): micro 0-9, piccole 10-49, medie 50-249,
         grandi 250+ addetti. Le quote sono sul totale del cluster e dell&apos;anno. Delta = variazione
         % dei casi rispetto all&apos;anno precedente. Casi nel periodo:{" "}

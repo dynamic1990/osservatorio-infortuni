@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
 """Genera l'analisi per dimensione aziendale per la pagina Analisi delle cause.
 
-Ingresso: src/data/generated/informo-mortali-dettaglio.json
+Ingresso: src/data/generated/informo-{mortali|gravi}-dettaglio.json
 Uscita:   public/data/informo-cluster-dimensionali.json
+          public/data/informo-cluster-dimensionali-gravi.json
 
-Raggruppa i casi mortali Infor.MO per classe dimensionale dell'azienda
-(raccomandazione UE 2003/361): microimprese (0-9 addetti), piccole (10-49),
-medie (50-249), grandi (250+), più la classe "Non dichiarata" per i casi senza
-dato. Per ogni cluster e per ogni anno produce le viste principali della
-pagina (dinamiche/incidenti, settori, territorio, tipologie di fattore causale,
-problemi di sicurezza), precalcolate e leggere, con quote riferite al totale
-del cluster-anno (niente aggregati multi-anno, RULES.md regola 1).
+Raggruppa i casi Infor.MO (mortali o gravi, a seconda dell'argomento) per
+classe dimensionale dell'azienda (raccomandazione UE 2003/361): microimprese
+(0-9 addetti), piccole (10-49), medie (50-249), grandi (250+), più la classe
+"Non dichiarata" per i casi senza dato. Per ogni cluster e per ogni anno
+produce le viste principali della pagina (dinamiche/incidenti, settori,
+territorio, tipologie di fattore causale, problemi di sicurezza),
+precalcolate e leggere, con quote riferite al totale del cluster-anno
+(niente aggregati multi-anno, RULES.md regola 1).
+
+Uso:  python3 genera_cluster_dimensionali.py [mortali|gravi]
+      (default: mortali; 'gravi' scrive il file -gravi.json)
 
 Il confronto di benchmark con la scheda INAIL 2026 "Infortuni mortali nelle
-microimprese" (Collana Infor.MO, Scheda 27) è citato nel meta del dataset.
+microimprese" (Collana Infor.MO, Scheda 27) è citato nel meta del dataset
+mortali; per i gravi il riferimento è la scheda equivalente se disponibile.
 """
 from __future__ import annotations
 
@@ -25,8 +31,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DET = ROOT / "src" / "data" / "generated" / "informo-mortali-dettaglio.json"
-OUT = ROOT / "public" / "data" / "informo-cluster-dimensionali.json"
+TIPO = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] in ("mortali", "gravi") else "mortali"
+DET = ROOT / "src" / "data" / "generated" / f"informo-{TIPO}-dettaglio.json"
+OUT = ROOT / "public" / "data" / ("informo-cluster-dimensionali.json" if TIPO == "mortali" else "informo-cluster-dimensionali-gravi.json")
 
 TOP = 8  # voci per vista per cluster-anno
 
@@ -128,7 +135,7 @@ def main() -> int:
 
     payload = {
         "meta": {
-            "fonte": "INAIL - Infor.MO / InformoWeb (tipoEvento=1, casi mortali)",
+            "fonte": f"INAIL - Infor.MO / InformoWeb (tipoEvento={'1' if TIPO == 'mortali' else '0'}, casi {'mortali' if TIPO == 'mortali' else 'gravi'})",
             "periodo": f"{ANNI[0]}-{ANNI[-1]}",
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "cluster": [
@@ -136,12 +143,12 @@ def main() -> int:
                 for c in CLUSTER
             ],
             "nota": "Classi dimensionali secondo la raccomandazione UE 2003/361 "
-                    "(micro 0-9, piccole 10-49, medie 50-249, grandi 250+ addetti), "
-                    "calcolate dal campo addetti del singolo caso. I casi senza dato "
-                    "sono in 'Non dichiarata'. Le quote sono riferite al totale del "
-                    "cluster e dell'anno, senza aggregati multi-anno. Benchmark di "
-                    "riferimento: scheda INAIL 2026 'Infortuni mortali nelle "
-                    "microimprese' (Collana Infor.MO, Scheda 27).",
+                    f"(micro 0-9, piccole 10-49, medie 50-249, grandi 250+ addetti), "
+                    f"calcolate dal campo addetti del singolo caso. I casi senza dato "
+                    f"sono in 'Non dichiarata'. Le quote sono riferite al totale del "
+                    f"cluster e dell'anno, senza aggregati multi-anno. Benchmark di "
+                    f"riferimento: scheda INAIL 2026 'Infortuni {'mortali' if TIPO == 'mortali' else 'gravi'} nelle "
+                    f"microimprese' (Collana Infor.MO, Scheda 27).",
             "criteri": {
                 "casiTotali": len(casi),
                 "perCluster": {cid: len(by_cluster[cid]) for cid, _, _ in CLUSTER},
@@ -152,7 +159,7 @@ def main() -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
     kb = OUT.stat().st_size / 1024
-    print(f"[informo-cluster-dimensionali] {len(cluster_out)} cluster, {kb:.1f} KB -> {OUT}")
+    print(f"[informo-cluster-dimensionali] {TIPO}: {len(cluster_out)} cluster, {kb:.1f} KB -> {OUT}")
     return 0
 
 

@@ -62,10 +62,16 @@ export const ANNI_INFORMO = [
 ] as const;
 export const ANNO_DEFAULT = 2024;
 
-// Selettore del perimetro della pagina: solo mortali, solo gravi, o entrambi.
-// La modalità "entrambi" somma i due archivi per le viste di conteggio e
-// affianca le due serie nel grafico di copertura.
+// Selettore del perimetro della pagina: due toggle indipendenti, mortali e
+// gravi, selezionabili singolarmente o insieme. Quando entrambi sono attivi
+// le viste di conteggio sommano i due archivi; mai uno stato senza selezione
+// (al toggle che rimane acceso tra i due viene imposto l'altro).
 export type PerimetroInformo = "mortali" | "gravi" | "entrambi";
+
+export interface PerimetroQuery {
+  mortali: boolean;
+  gravi: boolean;
+}
 
 export const PERIMETRI_INFORMO: { id: PerimetroInformo; label: string; descrizione: string }[] = [
   {
@@ -84,6 +90,12 @@ export const PERIMETRI_INFORMO: { id: PerimetroInformo; label: string; descrizio
     descrizione: "Somma dei casi analizzati nei due archivi",
   },
 ];
+
+// Da coppia di toggle allo stato aggregato per le viste di conteggio.
+export function perimetroDaQuery(q: PerimetroQuery): PerimetroInformo {
+  if (q.mortali && q.gravi) return "entrambi";
+  return q.mortali ? "mortali" : "gravi";
+}
 
 // Colore dei gravi: canale secondario (slate) distinto dal rosso accent dei
 // mortali. Definita una sola volta qui (RULES.md Regola 4).

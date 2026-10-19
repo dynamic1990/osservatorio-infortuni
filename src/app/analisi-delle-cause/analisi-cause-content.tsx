@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
-import { InformoTrendWidget } from "@/components/charts/informo-trend-widget";
 import { InformoVociLista } from "@/components/charts/informo-voci-lista";
 import { InformoEsploratore } from "@/components/charts/informo-esploratore";
 import { FiltroDimensioneAziendale } from "@/components/charts/filtro-dimensione-aziendale";
@@ -12,7 +11,9 @@ import {
   getInformoGraviAnalisi,
   INFORM_COLORS,
   PERIMETRI_INFORMO,
+  perimetroDaQuery,
   type PerimetroInformo,
+  type PerimetroQuery,
   type AnnoVoci,
   type InformoAnalisi,
 } from "@/lib/informo-casi";
@@ -177,7 +178,10 @@ const SOTTO_TITOLI = {
 } as const;
 
 export function AnalisiCauseContent() {
-  const [perimetro, setPerimetro] = useState<PerimetroInformo>("mortali");
+  // Due toggle indipendenti: mortali e gravi, selezionabili insieme o da soli.
+  const [perimetroQuery, setPerimetroQuery] = useState<PerimetroQuery>({ mortali: true, gravi: false });
+  const perimetro = perimetroDaQuery(perimetroQuery);
+  const includeGravi = perimetroQuery.gravi;
 
   const analisi = useMemo<InformoAnalisi>(() => {
     const mortali = getInformoAnalisi();
@@ -195,7 +199,6 @@ export function AnalisiCauseContent() {
 
   const labelPerimetro =
     PERIMETRI_INFORMO.find((p) => p.id === perimetro)?.label ?? "Mortali e gravi";
-  const includeGravi = perimetro === "gravi" || perimetro === "entrambi";
 
   return (
     <div className="container" style={{ display: "grid", gap: "var(--space-6)", paddingTop: "var(--space-2)" }}>
@@ -261,7 +264,7 @@ export function AnalisiCauseContent() {
             >
               Perimetro dei casi
             </div>
-            <InformoPerimetro value={perimetro} onChange={setPerimetro} />
+            <InformoPerimetro value={perimetroQuery} onChange={setPerimetroQuery} />
           </div>
           <InfoModalButton>
             <section className="modal-section">
@@ -315,9 +318,29 @@ export function AnalisiCauseContent() {
         </div>
       </header>
 
-      {/* 1. Copertura dell'archivio */}
-      <Sezione occhiello="La copertura dell'archivio" titolo="Casi analizzati dall'archivio Infor.MO" id="copertura-archivio">
-        <InformoTrendWidget perimetro={perimetro} />
+      {/* 1. Perimetro dell'archivio: descrizione, non grafico.
+          Il vecchio grafico di copertura (analizzati vs totali nazionali)
+          valeva per i soli mortali; con l'aggiunta dei gravi, per cui INAIL
+          non pubblica un totale nazionale comparabile, il confronto visivo
+          non è più possibile. Al suo posto una nota metodologica. */}
+      <Sezione occhiello="Il perimetro dell'archivio" titolo="Cosa contiene questa pagina" id="perimetro-archivio">
+        <p className="source-note" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
+          L&apos;archivio Infor.MO non copre tutti gli infortuni mortali e gravi
+          denunciati all&apos;INAIL: raccoglie solo i casi indagati e analizzati dai
+          Servizi di prevenzione delle ASL con la metodologia Infor.MO. I
+          conteggi di questa pagina vanno quindi letti come casi analizzati,
+          non come totali degli infortuni sul lavoro.
+        </p>
+        <p
+          className="source-note"
+          style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)" }}
+        >
+          {includeGravi
+            ? `Perimetro selezionato: ${labelPerimetro.toLowerCase()}. `
+            : `Perimetro selezionato: ${labelPerimetro.toLowerCase()}. `}
+          I confronti tra anni e tra archivi vanno letti alla luce della
+          copertura variabile dell&apos;archivio nel tempo.
+        </p>
       </Sezione>
 
       {/* 3. Approfondimenti: cause, settori, territorio */}
@@ -343,48 +366,27 @@ export function AnalisiCauseContent() {
           multiAnno
           casiAnno={casiAnno}
         />
-        {!includeGravi && (
-          <div id="dimensione-aziendale" style={{ display: "grid", gap: "var(--space-3)", borderTop: "1px solid var(--color-divider)", paddingTop: "var(--space-4)" }}>
-            <div>
-              <div style={{ color: "var(--color-accent)", fontSize: "0.78rem", fontWeight: 650, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 4 }}>
-                La dimensione aziendale
-              </div>
-              <h3 style={{ margin: 0, fontSize: "1.2rem" }}>Analisi per dimensione aziendale</h3>
-              <p style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", margin: "var(--space-2) 0 0" }}>
-                Microimprese, piccole, medie e grandi aziende hanno profili di rischio diversi.
-                Consulta dinamiche e settori per anno, con la variazione rispetto all&apos;anno precedente.
-              </p>
-            </div>
-            <FiltroDimensioneAziendale />
-          </div>
-        )}
-        {includeGravi && (
-          <div
-            id="dimensione-aziendale"
-            style={{
-              display: "grid",
-              gap: "var(--space-2)",
-              borderTop: "1px solid var(--color-divider)",
-              paddingTop: "var(--space-4)",
-              fontSize: "0.88rem",
-              lineHeight: 1.6,
-              color: "var(--color-text-soft)",
-            }}
-          >
+        <div
+          id="dimensione-aziendale"
+          style={{
+            display: "grid",
+            gap: "var(--space-3)",
+            borderTop: "1px solid var(--color-divider)",
+            paddingTop: "var(--space-4)",
+          }}
+        >
+          <div>
             <div style={{ color: "var(--color-accent)", fontSize: "0.78rem", fontWeight: 650, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 4 }}>
               La dimensione aziendale
             </div>
-            <h3 style={{ margin: 0, fontSize: "1.2rem", color: "var(--color-text)" }}>
-              Analisi per dimensione aziendale
-            </h3>
-            <p>
-              L&apos;analisi per dimensione aziendale (micro, piccole, medie, grandi) è
-              disponibile per i casi mortali: il dataset precalcolato copre solo
-              l&apos;archivio dei casi con esito mortale. Passa a &ldquo;solo infortuni
-              mortali&rdquo; per consultarla.
+            <h3 style={{ margin: 0, fontSize: "1.2rem" }}>Analisi per dimensione aziendale</h3>
+            <p style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--color-text-soft)", margin: "var(--space-2) 0 0" }}>
+              Microimprese, piccole, medie e grandi aziende hanno profili di rischio diversi.
+              Consulta dinamiche e settori per anno, con la variazione rispetto all&apos;anno precedente.
             </p>
           </div>
-        )}
+          <FiltroDimensioneAziendale perimetro={perimetroQuery} />
+        </div>
       </Sezione>
 
       <Sezione occhiello="Il territorio" titolo="Dove avvengono i casi" id="territorio-casi">
