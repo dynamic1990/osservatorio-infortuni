@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Mail } from "lucide-react";
 import { LinkedInIcon } from "./social-icons";
 
 const COLONNE: { titolo: string; link: { href: string; label: string }[] }[] = [
@@ -133,7 +134,7 @@ export function Footer() {
               }}
             >
               <LinkedInIcon size={18} />
-              linkedin.com/in/damiano-salvati
+              Damiano Salvati
             </a>
             <a
               href="mailto:salvati.damiano@gmail.com"
@@ -145,7 +146,7 @@ export function Footer() {
                 color: "var(--color-text)",
                 textDecoration: "none",
                 fontSize: "0.92rem",
-                fontWeight: 500,
+                fontWeight: 800,
                 transition: "color 0.15s ease",
               }}
               onMouseEnter={(e) => {
@@ -155,6 +156,7 @@ export function Footer() {
                 (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-text)";
               }}
             >
+              <Mail aria-hidden="true" size={18} strokeWidth={2} style={{ flex: "0 0 auto" }} />
               salvati.damiano@gmail.com
             </a>
           </div>
