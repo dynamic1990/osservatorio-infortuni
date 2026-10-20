@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { regioneName } from "@/lib/labels";
 import { INAIL_CARENZA_GIORNI, INAIL_ALIQUOTA_FINO_90, INAIL_ALIQUOTA_DAL_91, QUOTA_AZIENDA_FINO_90, QUOTA_AZIENDA_DAL_91, GIORNO_SOGLIA_ALIQUOTA, SANZIONI_81_08, OSCILLAZIONE_PREMIO, tassoPerMillePerAteco } from "@/lib/costo-infortunio";
@@ -129,9 +129,28 @@ export function CalcolatoreCosto() {
 
   const [settoreKey, setSettoreKey] = useState("");
   const [regioneKey, setRegioneKey] = useState("");
-  const [infortunati, setInfortunati] = useState(1);
-  const [giorni, setGiorni] = useState(30);
-  const [ralMensile, setRalMensile] = useState(2200); // RAL mensile lorda, più intuitiva del costo giornaliero
+  const settore = annoData.atecoMacro?.find((s) => s.key === settoreKey) ?? null;
+  const regione = annoData.regioni?.find((r) => r.regione === regioneKey) ?? null;
+
+  // Lavoratori infortunati: ogni lavoratore ha i propri giorni di assenza e RAL.
+  // La precompilazione dei giorni usa la durata media INAIL del settore/regione.
+  type Lavoratore = { id: number; giorni: number; ralMensile: number };
+  const durataSuggerita = settore?.durataMedia ?? regione?.durataMedia ?? annoData.durataMedia ?? 36;
+  const durataDefault = settore || regione ? Math.round(durataSuggerita) : 30;
+  const [lavoratori, setLavoratori] = useState<Lavoratore[]>([{ id: 1, giorni: durataDefault, ralMensile: 2200 }]);
+  const [nextId, setNextId] = useState(2);
+  // Quando cambia settore/regione, aggiorna i giorni dei lavoratori rimasti sul
+  // valore di default (30): chi ha inserito un valore specifico lo conserva.
+  useEffect(() => {
+    setLavoratori((prev) => prev.map((l) => (l.giorni === 30 ? { ...l, giorni: durataDefault } : l)));
+  }, [durataDefault]);
+  const aggiornaLavoratore = (id: number, patch: Partial<Lavoratore>) =>
+    setLavoratori((prev) => prev.map((l) => (l.id === id ? { ...l, ...patch } : l)));
+  const aggiungiLavoratore = () => {
+    setLavoratori((prev) => [...prev, { id: nextId, giorni: durataDefault, ralMensile: 2200 }]);
+    setNextId((n) => n + 1);
+  };
+  const rimuoviLavoratore = (id: number) => setLavoratori((prev) => (prev.length > 1 ? prev.filter((l) => l.id !== id) : prev));
   const [integraCcnl, setIntegraCcnl] = useState(true); // integrazione al 100% da CCNL (caso standard)
   const [sostituto, setSostituto] = useState<"no" | "interno" | "esterno">("no");
   const [costoSostituto, setCostoSostituto] = useState(160);
@@ -139,7 +158,13 @@ export function CalcolatoreCosto() {
   const [valoreOra, setValoreOra] = useState(0);
   const [costiExtra, setCostiExtra] = useState(0);
   const [sanzioni, setSanzioni] = useState(0);
-  const [sanzioniPreset, setSanzioniPreset] = useState<Record<string, boolean>>({ dvr: false, nominaRspp: false, formazione: false, sorveglianzaSanitaria: false, dpi: false, denunciaInfortunio: false, segnaletica: false });
+  // Sanzioni D.Lgs. 81/08 con livello selezionabile: min | media | max | null.
+  type LivelloSanzione = "min" | "media" | "max" | null;
+  const [sanzioniPreset, setSanzioniPreset] = useState<Record<string, LivelloSanzione>>({
+    dvr: null, nominaRspp: null, formazione: null, sorveglianzaSanitaria: null, dpi: null, denunciaInfortunio: null, segnaletica: null,
+  });
+  const impostaSanzione = (k: string, livello: LivelloSanzione) =>
+    setSanzioniPreset((prev) => ({ ...prev, [k]: prev[k] === livello ? null : livello }));
   const [fatturato, setFatturato] = useState(1_000_000);
   const [numDipendenti, setNumDipendenti] = useState(10); // per la stima del premio INAIL
   const [esposizione, setEsposizione] = useState<Esposizione>("media");
@@ -158,21 +183,22 @@ export function CalcolatoreCosto() {
   });
   const toggleComponente = (c: Componente) => setAttive((prev) => ({ ...prev, [c]: !prev[c] }));
 
-  const settore = annoData.atecoMacro?.find((s) => s.key === settoreKey) ?? null;
-  const regione = annoData.regioni?.find((r) => r.regione === regioneKey) ?? null;
-
   // Precompilazione dal dataset INAIL: durata media delle assenze per settore e regione.
-  const durataSuggerita = settore?.durataMedia ?? regione?.durataMedia ?? annoData.durataMedia ?? 36;
   const casiSettore = settore?.casi ?? regione?.totale ?? annoData.totale ?? 0;
   const incidenzaSettore = settore?.indiceIncidenza ?? 0;
-  const effGiorni = settore || regione ? (giorni === 30 ? Math.round(durataSuggerita) : giorni) : giorni;
 
-  // Retribuzione media giornaliera stimata dalla RAL mensile (21 giorni lavorativi/mese).
-  const retribuzioneGiornaliera = ralMensile / GIORNI_LAVORATIVI_MESE;
+  // Retribuzione media giornaliera stimata dalla RAL mensile media (21 giorni lavorativi/mese).
+  const ralMedia = lavoratori.reduce((a, l) => a + l.ralMensile, 0) / Math.max(1, lavoratori.length);
+  const retribuzioneGiornalieraMedia = ralMedia / GIORNI_LAVORATIVI_MESE;
 
-  // Sanzioni precompilate: somma degli importi medi delle violazioni selezionate.
+  // Sanzioni precompilate: somma degli importi per livello selezionato (min|media|max).
   const sanzioniPresetTotale = useMemo(() => {
-    return Object.entries(sanzioniPreset).reduce((acc, [k, on]) => on ? acc + (SANZIONI_81_08[k as keyof typeof SANZIONI_81_08].min + SANZIONI_81_08[k as keyof typeof SANZIONI_81_08].max) / 2 : acc, 0);
+    return Object.entries(sanzioniPreset).reduce((acc, [k, livello]) => {
+      if (!livello) return acc;
+      const s = SANZIONI_81_08[k as keyof typeof SANZIONI_81_08];
+      const valore = livello === "min" ? s.min : livello === "max" ? s.max : (s.min + s.max) / 2;
+      return acc + valore;
+    }, 0);
   }, [sanzioniPreset]);
 
   // Se l'utente ha selezionato un evento grave/mortale e non ha indicato una gravità
@@ -185,7 +211,7 @@ export function CalcolatoreCosto() {
   // Base premio annuale = retribuzioni imponibili × tasso per mille. Usiamo come
   // proxy della massa salariale: numDipendenti × RAL mensile × 13 (mensilità).
   const tassoPerMille = tassoPerMillePerAteco(settoreKey);
-  const massaSalariale = numDipendenti * ralMensile * 13;
+  const massaSalariale = numDipendenti * ralMedia * 13;
   const premioBaseAnnuale = massaSalariale * (tassoPerMille / 1000);
   const premioAumentoMin = premioBaseAnnuale * OSCILLAZIONE_PREMIO.aumentoMin;
   const premioAumentoMax = premioBaseAnnuale * OSCILLAZIONE_PREMIO.aumentoMax;
@@ -193,10 +219,17 @@ export function CalcolatoreCosto() {
   const premioAumentoTriennioMax = premioAumentoMax * OSCILLAZIONE_PREMIO.anni;
 
   const result = useMemo(() => {
-    const inail = costoAssenzaInail(retribuzioneGiornaliera, effGiorni, integraCcnl);
-    const assenza = (attive.assenza ? 1 : 0) * infortunati * inail.costoDatoreIntegra;
-    const assenzaSenzaIntegrazione = (attive.assenza ? 1 : 0) * infortunati * inail.costoDatore;
-    const sostituzione = (attive.sostituzione ? 1 : 0) * (sostituto === "no" ? 0 : infortunati * effGiorni * costoSostituto * (sostituto === "esterno" ? 1.2 : 1));
+    // Per ogni lavoratore calcola il costo assenza con le regole INAIL, poi somma.
+    const perLavoratore = lavoratori.map((l) => {
+      const retrG = l.ralMensile / GIORNI_LAVORATIVI_MESE;
+      return { ...costoAssenzaInail(retrG, l.giorni, integraCcnl), giorni: l.giorni, ralMensile: l.ralMensile };
+    });
+    const nLavoratori = lavoratori.length;
+    const giorniTotali = lavoratori.reduce((a, l) => a + l.giorni, 0);
+    const assenza = (attive.assenza ? 1 : 0) * perLavoratore.reduce((a, p) => a + p.costoDatoreIntegra, 0);
+    const assenzaSenzaIntegrazione = (attive.assenza ? 1 : 0) * perLavoratore.reduce((a, p) => a + p.costoDatore, 0);
+    const indennitaInailTotale = perLavoratore.reduce((a, p) => a + p.indennitaInail, 0);
+    const sostituzione = (attive.sostituzione ? 1 : 0) * (sostituto === "no" ? 0 : nLavoratori * (giorniTotali / Math.max(1, nLavoratori)) * costoSostituto * (sostituto === "esterno" ? 1.2 : 1));
     const fermo = (attive.fermo ? 1 : 0) * oreFermo * valoreOra;
     const amministrativi = (attive.gestione ? 1 : 0) * (costiExtra + sanzioni + sanzioniPresetTotale);
 
@@ -221,9 +254,9 @@ export function CalcolatoreCosto() {
       repMin, repMax, repMedio,
       evMin, evMax, evMedio,
       minimo, probabile, grave,
-      inail,
+      inail: perLavoratore, nLavoratori, giorniTotali, indennitaInailTotale,
     };
-  }, [infortunati, effGiorni, retribuzioneGiornaliera, integraCcnl, sostituto, costoSostituto, oreFermo, valoreOra, costiExtra, sanzioni, sanzioniPresetTotale, fatturato, esposizione, mercato, gravitaEffettiva, eventoGrave, attive]);
+  }, [lavoratori, integraCcnl, sostituto, costoSostituto, oreFermo, valoreOra, costiExtra, sanzioni, sanzioniPresetTotale, fatturato, esposizione, mercato, gravitaEffettiva, eventoGrave, attive]);
 
   const mostraReputazione = gravitaEffettiva !== "nessuno" && attive.reputazione;
   const mostraGravi = eventoGrave !== "nessuno" && attive.gravi;
@@ -260,21 +293,33 @@ export function CalcolatoreCosto() {
       </p>
     </fieldset>
 
-    {/* Componenti operative */}
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "var(--space-3)" }}>
-      <Input label="Numero di infortunati" value={infortunati} onChange={setInfortunati} suffix="persone" />
-      <Input label="Giorni di assenza per persona" value={effGiorni} onChange={setGiorni} suffix="giorni" />
-    </div>
+    {/* Lavoratori infortunati: scheda per ciascuno, con + per aggiungerne */}
+    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
+      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Lavoratori infortunati ({lavoratori.length})</legend>
+      <div style={{ display: "grid", gap: "var(--space-3)", marginBottom: "var(--space-3)" }}>
+        {lavoratori.map((l, idx) => (
+          <div key={l.id} style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", background: "var(--color-surface)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-2)", gap: 8 }}>
+              <span style={{ fontWeight: 750, fontSize: "0.88rem" }}>Lavoratore {idx + 1}</span>
+              {lavoratori.length > 1 && <button type="button" onClick={() => rimuoviLavoratore(l.id)} style={{ background: "transparent", border: "1px solid var(--color-divider)", padding: "4px 10px", fontSize: "0.78rem", cursor: "pointer" }}>Rimuovi</button>}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "var(--space-3)" }}>
+              <Input label="Giorni di assenza" value={l.giorni} onChange={(v) => aggiornaLavoratore(l.id, { giorni: v })} suffix="giorni" />
+              <Input label="RAL mensile lorda" value={l.ralMensile} onChange={(v) => aggiornaLavoratore(l.id, { ralMensile: v })} suffix="€/mese" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <button type="button" onClick={aggiungiLavoratore} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--color-raised)", border: "1px solid var(--color-accent)", padding: "8px 14px", fontSize: "0.85rem", fontWeight: 650, cursor: "pointer" }}>+ Aggiungi un altro lavoratore</button>
+      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>Ogni lavoratore può avere giorni di assenza e RAL diversi: la componente assenza è calcolata con le regole INAIL per ciascuno e poi sommata.</p>
+    </fieldset>
     <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
       <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Retribuzione e regole INAIL</legend>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "var(--space-3)", marginBottom: "var(--space-2)" }}>
-        <Input label="RAL mensile lorda del lavoratore" value={ralMensile} onChange={setRalMensile} suffix="€/mese" />
-      </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "var(--space-2)" }}>
         {([['true', 'CCNL integra al 100% (caso tipico)'], ['false', 'Nessuna integrazione']] as const).map(([v, label]) => <button key={v} type="button" className={`btn-pill ${integraCcnl === (v === 'true') ? "active" : ""}`} onClick={() => setIntegraCcnl(v === 'true')}>{label}</button>)}
       </div>
       <p className="source-note" style={{ margin: 0 }}>
-        Regole INAIL (inabilità temporanea assoluta): il giorno dell&apos;infortunio è pagato interamente dall&apos;azienda; i successivi 3 giorni (carenza) al 60% a carico del datore; dal 4° al 90° giorno l&apos;INAIL indennizza il 60% della retribuzione, dal 91° il 75%. Con integrazione CCNL al 100% l&apos;azienda copre il differenziale (40% fino al 90° giorno, 25% dopo). Per {effGiorni} giorni su {Math.round(retribuzioneGiornaliera)} €/giorno: indennità INAIL ≈ <strong>{euro.format(Math.round(result?.inail?.indennitaInail ?? 0))}</strong>, costo azienda ≈ <strong>{euro.format(Math.round(result?.inail?.costoDatoreIntegra ?? 0))}</strong> per infortunato.
+        Regole INAIL (inabilità temporanea assoluta): il giorno dell&apos;infortunio è pagato interamente dall&apos;azienda; i successivi 3 giorni (carenza) al 60% a carico del datore; dal 4° al 90° giorno l&apos;INAIL indennizza il 60% della retribuzione, dal 91° il 75%. Con integrazione CCNL al 100% l&apos;azienda copre il differenziale (40% fino al 90° giorno, 25% dopo). Per {result.giorniTotali} giorni complessivi: indennità INAIL ≈ <strong>{euro.format(Math.round(result.indennitaInailTotale))}</strong>, costo azienda ≈ <strong>{euro.format(Math.round(result.assenza))}</strong>.
       </p>
     </fieldset>
     <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
@@ -291,18 +336,26 @@ export function CalcolatoreCosto() {
       <Input label="Sanzioni e provvedimenti inseriti" value={sanzioni} onChange={setSanzioni} suffix="€" />
     </div>
 
-    {/* Sanzioni precompilate D.Lgs. 81/08 */}
+    {/* Sanzioni precompilate D.Lgs. 81/08 con livello min/media/max */}
     <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Sanzioni D.Lgs. 81/08 (seleziona le violazioni rilevate)</legend>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-        {Object.entries(SANZIONI_81_08).map(([k, v]) => (
-          <button key={k} type="button" className={`btn-pill ${sanzioniPreset[k] ? "active" : ""}`} aria-pressed={sanzioniPreset[k]} onClick={() => setSanzioniPreset((prev) => ({ ...prev, [k]: !prev[k] }))}>
-            {v.label} <span style={{ opacity: 0.65 }}>({euro.format(v.min)}–{euro.format(v.max)})</span>
-          </button>
-        ))}
+      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Sanzioni D.Lgs. 81/08 (violazioni più frequenti in caso di infortunio)</legend>
+      <div style={{ display: "grid", gap: "var(--space-2)", marginBottom: "var(--space-2)" }}>
+        {Object.entries(SANZIONI_81_08).map(([k, v]) => {
+          const livello = sanzioniPreset[k];
+          return (
+            <div key={k} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8, alignItems: "center", border: "1px solid var(--color-divider)", padding: "8px 10px", background: "var(--color-surface)" }}>
+              <span style={{ fontSize: "0.85rem", fontWeight: 600 }}>{v.label}</span>
+              <div style={{ display: "flex", gap: 6 }}>
+                {([['min', `Min ${euro.format(v.min)}`], ['media', `Media ${euro.format(Math.round((v.min + v.max) / 2))}`], ['max', `Max ${euro.format(v.max)}`]] as const).map(([lv, lvLabel]) => (
+                  <button key={lv} type="button" className={`btn-pill ${livello === lv ? "active" : ""}`} aria-pressed={livello === lv} onClick={() => impostaSanzione(k, lv)} style={{ fontSize: "0.75rem", padding: "4px 10px" }}>{lvLabel}</button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
-      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>
-        Importi medi indicativi da D.Lgs. 81/08 (art. 55 ss., rivalutati L. 145/2018): aggiunti alla voce "Gestione e sanzioni" (≈ {euro.format(sanzioniPresetTotale)}). Ogni caso va verificato con la norma vigente.
+      <p className="source-note" style={{ margin: 0 }}>
+        Importi da D.Lgs. 81/08 (art. 55 ss., rivalutati L. 145/2018): seleziona il livello per ogni violazione (min, media o max). Totale aggiunto alla voce "Gestione e sanzioni": <strong>{euro.format(sanzioniPresetTotale)}</strong>. Ogni caso va verificato con la norma vigente.
       </p>
     </fieldset>
 
@@ -378,11 +431,11 @@ export function CalcolatoreCosto() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--space-3)", marginTop: "var(--space-3)" }}>
         {([
           ["Costo totale stimato", euro.format(result.probabile)],
-          ["Costo medio per infortunio", euro.format(infortunati > 0 ? result.probabile / infortunati : 0)],
-          ["Costo per giorno di assenza", euro.format(infortunati * effGiorni > 0 ? result.assenza / (infortunati * effGiorni) : 0)],
+          ["Costo medio per infortunio", euro.format(result.nLavoratori > 0 ? result.probabile / result.nLavoratori : 0)],
+          ["Costo per giorno di assenza", euro.format(result.giorniTotali > 0 ? result.assenza / result.giorniTotali : 0)],
           ["Incidenza sul fatturato", `${fatturato > 0 ? `${((result.probabile / fatturato) * 100).toFixed(2)}%` : "n.d."}`],
-          ["Vs media nazionale INAIL", `${infortunati > 0 ? `${result.probabile / infortunati >= MEDIA_INAIL_INFORTUNIO ? "+" : ""}${Math.round((result.probabile / infortunati) / MEDIA_INAIL_INFORTUNIO * 100 - 100)}%` : "n.d."}`],
-          ["Indennità INAIL (assenza)", euro.format(Math.round(result.inail.indennitaInail * infortunati))],
+          ["Vs media nazionale INAIL", `${result.nLavoratori > 0 ? `${result.probabile / result.nLavoratori >= MEDIA_INAIL_INFORTUNIO ? "+" : ""}${Math.round((result.probabile / result.nLavoratori) / MEDIA_INAIL_INFORTUNIO * 100 - 100)}%` : "n.d."}`],
+          ["Indennità INAIL (assenza)", euro.format(Math.round(result.indennitaInailTotale))],
           ["Costo assenza a carico azienda", euro.format(Math.round(result.assenza))],
         ] as const).map(([label, value]) => <div key={label} style={{ padding: "var(--space-2) var(--space-3)", background: "var(--color-surface)", border: "1px solid var(--color-divider)" }}><div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--color-text-soft)" }}>{label}</div><strong style={{ display: "block", fontSize: "1.05rem", marginTop: 3 }}>{value}</strong></div>)}
       </div>

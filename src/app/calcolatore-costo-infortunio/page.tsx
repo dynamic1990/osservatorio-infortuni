@@ -107,7 +107,8 @@ export default function CalcolatorePage() {
       <h2 className="card-title">Come usarlo</h2>
       <ol style={{ margin: 0, paddingLeft: "1.2rem", display: "grid", gap: "var(--space-1)" }}>
         <li>Seleziona settore ATECO e regione (opzionali) per precompilare la durata media delle assenze dai dati INAIL, oppure lascia vuoto e inserisci i tuoi valori.</li>
-        <li>Inserisci la RAL mensile lorda del lavoratore: la retribuzione giornaliera è stimata su 21 giorni lavorativi, e il calcolo dell&apos;assenza segue le regole INAIL (giorno evento + 3 giorni di carenza a carico azienda, poi indennità INAIL 60%/75% con eventuale integrazione CCNL).</li>
+        <li>Aggiungi i lavoratori infortunati con <strong>+ Aggiungi un altro lavoratore</strong>: per ciascuno inserisci giorni di assenza e RAL mensile lorda. Il calcolo dell&apos;assenza segue le regole INAIL (giorno evento + 3 giorni di carenza a carico azienda, poi indennità INAIL 60%/75% con eventuale integrazione CCNL).</li>
+        <li>Per le sanzioni, seleziona le violazioni più frequenti (D.Lgs. 81/08) e scegli per ciascuna il livello minimo, medio o massimo.</li>
         <li>Per un evento grave/mortale, indica il numero di dipendenti: stimiamo anche l&apos;aumento del premio INAIL per l&apos;oscillazione del tasso (fino a +30% per il triennio).</li>
         <li>Attiva solo le componenti di costo che riguardano il tuo caso: la stima si adatta.</li>
         <li>Leggi i tre scenari (minimo, probabile, grave) e confronta il costo medio per infortunio con i parametri ufficiali INAIL.</li>
