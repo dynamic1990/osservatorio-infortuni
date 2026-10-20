@@ -3,6 +3,13 @@
 import { useMemo, useState } from "react";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { regioneName } from "@/lib/labels";
+import { INAIL_CARENZA_GIORNI, INAIL_ALIQUOTA_FINO_90, INAIL_ALIQUOTA_DAL_91, QUOTA_AZIENDA_FINO_90, QUOTA_AZIENDA_DAL_91, GIORNO_SOGLIA_ALIQUOTA, SANZIONI_81_08, OSCILLAZIONE_PREMIO, tassoPerMillePerAteco } from "@/lib/costo-infortunio";
+
+// Conversione RAL mensile -> retribuzione media giornaliera. Convenzione standard:
+// 21 giornate lavorative equivalenti al mese (retribuzione mensilizzata / 26
+// sarebbe il lordo giornaliero contrattuale; per il costo aziendale si usa la
+// media di 21 giorni lavorativi/mese). Valore orientativo, modificabile dall'utente.
+const GIORNI_LAVORATIVI_MESE = 21;
 
 const euro = new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 const number = new Intl.NumberFormat("it-IT", { maximumFractionDigits: 0 });
@@ -61,6 +68,31 @@ const MEDIA_INAIL_INFORTUNIO = 33_000; // costo medio per infortunio, benchmark 
 // Parametri ufficiali INAIL 2023 (pubblicazione "Il costo dei danni da lavoro per l'azienda Italia",
 // Consulenza statistico attuariale, 2026): usati come riferimento, non come tariffa del singolo evento.
 
+// Funzione per il costo dell'assenza con le regole INAIL: il datore paga l'intera
+// retribuzione il giorno dell'infortunio, il 60% nei 3 giorni di carenza, poi copre
+// solo il differenziale di integrazione al 100% (40% fino al 90° giorno, 25% dopo)
+// se il CCNL prevede l'integrazione. Se il CCNL non integra, il datore non paga
+// nulla dopo il 3° giorno (l'indennità INAIL sostituisce la retribuzione).
+function costoAssenzaInail(retribuzioneGiornaliera: number, giorni: number, integraCcnl: boolean): { costoDatore: number; costoDatoreIntegra: number; indennitaInail: number; giorniCarenza: number; giorniInail: number } {
+  const giornoEvento = retribuzioneGiornaliera; // giorno infortunio: intera a carico datore
+  const carenza = Math.min(giorni, INAIL_CARENZA_GIORNI); // max 3 giorni al 60% datore
+  const giorniDopoCarenza = Math.max(0, giorni - INAIL_CARENZA_GIORNI);
+  const giorniFino90 = Math.min(giorniDopoCarenza, Math.max(0, GIORNO_SOGLIA_ALIQUOTA - INAIL_CARENZA_GIORNI)); // dal 4° al 90°
+  const giorniOltre90 = Math.max(0, giorniDopoCarenza - giorniFino90);
+
+  // Indennità INAIL: 60% fino al 90°, 75% dal 91°.
+  const indennitaInail = retribuzioneGiornaliera * (giorniFino90 * INAIL_ALIQUOTA_FINO_90 + giorniOltre90 * INAIL_ALIQUOTA_DAL_91);
+
+  // Costo datore nel caso base: giorno evento + carenza al 60%.
+  const costoBase = giornoEvento + carenza * 0.6 * retribuzioneGiornaliera;
+
+  // Se il CCNL integra al 100%, il datore paga anche il differenziale sui giorni coperti INAIL.
+  const differenziale = retribuzioneGiornaliera * (giorniFino90 * QUOTA_AZIENDA_FINO_90 + giorniOltre90 * QUOTA_AZIENDA_DAL_91);
+  const costoDatoreIntegra = costoBase + (integraCcnl ? differenziale : 0);
+
+  return { costoDatore: costoBase, costoDatoreIntegra, indennitaInail, giorniCarenza: carenza, giorniInail: giorniDopoCarenza };
+}
+
 // Ordini di grandezza per eventi gravi/mortali. Sono stime indicativi costruite su
 // fonti pubbliche (tabelle di risarcimento per macrolesioni, pratiche correnti sui
 // costi di difesa) e NON rappresentano importi dovuti. Ogni caso concreto va valutato
@@ -99,18 +131,23 @@ export function CalcolatoreCosto() {
   const [regioneKey, setRegioneKey] = useState("");
   const [infortunati, setInfortunati] = useState(1);
   const [giorni, setGiorni] = useState(30);
-  const [costoGiorno, setCostoGiorno] = useState(180);
-  const [quotaAzienda, setQuotaAzienda] = useState(40);
+  const [ralMensile, setRalMensile] = useState(2200); // RAL mensile lorda, più intuitiva del costo giornaliero
+  const [integraCcnl, setIntegraCcnl] = useState(true); // integrazione al 100% da CCNL (caso standard)
   const [sostituto, setSostituto] = useState<"no" | "interno" | "esterno">("no");
   const [costoSostituto, setCostoSostituto] = useState(160);
   const [oreFermo, setOreFermo] = useState(0);
   const [valoreOra, setValoreOra] = useState(0);
   const [costiExtra, setCostiExtra] = useState(0);
   const [sanzioni, setSanzioni] = useState(0);
+  const [sanzioniPreset, setSanzioniPreset] = useState<Record<string, boolean>>({ dvr: false, nominaRspp: false, formazione: false, sorveglianzaSanitaria: false, dpi: false, denunciaInfortunio: false, segnaletica: false });
   const [fatturato, setFatturato] = useState(1_000_000);
+  const [numDipendenti, setNumDipendenti] = useState(10); // per la stima del premio INAIL
   const [esposizione, setEsposizione] = useState<Esposizione>("media");
   const [mercato, setMercato] = useState<Mercato>("b2b");
   const [gravitaEvento, setGravitaEvento] = useState<Gravita | "nessuno">("nessuno");
+  // Gravità collegata: se l'utente seleziona un evento grave/mortale, il danno di
+  // immagine usa la stessa gravità; restano comunque due componenti indipendenti
+  // (si può avere danno d'immagine senza evento grave e viceversa).
   const [eventoGrave, setEventoGrave] = useState<"nessuno" | "grave" | "mortale">("nessuno");
 
   // Componenti di costo attivabili: la stima si adatta al caso concreto (metodologia INAIL:
@@ -130,16 +167,43 @@ export function CalcolatoreCosto() {
   const incidenzaSettore = settore?.indiceIncidenza ?? 0;
   const effGiorni = settore || regione ? (giorni === 30 ? Math.round(durataSuggerita) : giorni) : giorni;
 
+  // Retribuzione media giornaliera stimata dalla RAL mensile (21 giorni lavorativi/mese).
+  const retribuzioneGiornaliera = ralMensile / GIORNI_LAVORATIVI_MESE;
+
+  // Sanzioni precompilate: somma degli importi medi delle violazioni selezionate.
+  const sanzioniPresetTotale = useMemo(() => {
+    return Object.entries(sanzioniPreset).reduce((acc, [k, on]) => on ? acc + (SANZIONI_81_08[k as keyof typeof SANZIONI_81_08].min + SANZIONI_81_08[k as keyof typeof SANZIONI_81_08].max) / 2 : acc, 0);
+  }, [sanzioniPreset]);
+
+  // Se l'utente ha selezionato un evento grave/mortale e non ha indicato una gravità
+  // reputazionale, allinea automaticamente la gravità del danno di immagine.
+  const gravitaEffettiva = gravitaEvento === "nessuno" && eventoGrave !== "nessuno" ? (eventoGrave === "mortale" ? "mortale" : "grave") : gravitaEvento;
+
+  // Stima dell'effetto sul premio INAIL: il tasso medio di tariffa (per mille delle
+  // retribuzioni imponibili) sale fino a +30% al rinnovo triennale dopo un evento
+  // grave/mortale (oscillazione per andamento infortunistico, art. 20 DM 12/12/2000).
+  // Base premio annuale = retribuzioni imponibili × tasso per mille. Usiamo come
+  // proxy della massa salariale: numDipendenti × RAL mensile × 13 (mensilità).
+  const tassoPerMille = tassoPerMillePerAteco(settoreKey);
+  const massaSalariale = numDipendenti * ralMensile * 13;
+  const premioBaseAnnuale = massaSalariale * (tassoPerMille / 1000);
+  const premioAumentoMin = premioBaseAnnuale * OSCILLAZIONE_PREMIO.aumentoMin;
+  const premioAumentoMax = premioBaseAnnuale * OSCILLAZIONE_PREMIO.aumentoMax;
+  const premioAumentoTriennioMin = premioAumentoMin * OSCILLAZIONE_PREMIO.anni;
+  const premioAumentoTriennioMax = premioAumentoMax * OSCILLAZIONE_PREMIO.anni;
+
   const result = useMemo(() => {
-    const assenza = (attive.assenza ? 1 : 0) * infortunati * effGiorni * costoGiorno * (quotaAzienda / 100);
+    const inail = costoAssenzaInail(retribuzioneGiornaliera, effGiorni, integraCcnl);
+    const assenza = (attive.assenza ? 1 : 0) * infortunati * inail.costoDatoreIntegra;
+    const assenzaSenzaIntegrazione = (attive.assenza ? 1 : 0) * infortunati * inail.costoDatore;
     const sostituzione = (attive.sostituzione ? 1 : 0) * (sostituto === "no" ? 0 : infortunati * effGiorni * costoSostituto * (sostituto === "esterno" ? 1.2 : 1));
     const fermo = (attive.fermo ? 1 : 0) * oreFermo * valoreOra;
-    const amministrativi = (attive.gestione ? 1 : 0) * (costiExtra + sanzioni);
+    const amministrativi = (attive.gestione ? 1 : 0) * (costiExtra + sanzioni + sanzioniPresetTotale);
 
     // Danno reputazionale: quota del fatturato secondo le bande. Centrali per lo scenario probabile.
-    const rep = gravitaEvento === "nessuno" || !attive.reputazione ? null : REPUTAZIONE_BANDE;
-    const repMin = rep ? fatturato * rep.esposizione[esposizione].min * rep.mercato[mercato].min * (gravitaEvento !== "nessuno" ? rep.gravita[gravitaEvento].min : 0) : 0;
-    const repMax = rep ? fatturato * rep.esposizione[esposizione].max * rep.mercato[mercato].max * (gravitaEvento !== "nessuno" ? rep.gravita[gravitaEvento].max : 0) : 0;
+    const rep = gravitaEffettiva === "nessuno" || !attive.reputazione ? null : REPUTAZIONE_BANDE;
+    const repMin = rep ? fatturato * rep.esposizione[esposizione].min * rep.mercato[mercato].min * (gravitaEffettiva !== "nessuno" ? rep.gravita[gravitaEffettiva].min : 0) : 0;
+    const repMax = rep ? fatturato * rep.esposizione[esposizione].max * rep.mercato[mercato].max * (gravitaEffettiva !== "nessuno" ? rep.gravita[gravitaEffettiva].max : 0) : 0;
     const repMedio = (repMin + repMax) / 2;
 
     // Evento grave/mortale: risarcimento + sanzioni + legali come intervallo.
@@ -153,14 +217,15 @@ export function CalcolatoreCosto() {
     const grave = assenza * 1.25 + sostituzione * 1.3 + fermo * 1.5 + amministrativi * 1.5 + repMax + evMax;
 
     return {
-      assenza, sostituzione, fermo, amministrativi,
+      assenza, assenzaSenzaIntegrazione, sostituzione, fermo, amministrativi,
       repMin, repMax, repMedio,
       evMin, evMax, evMedio,
       minimo, probabile, grave,
+      inail,
     };
-  }, [infortunati, effGiorni, costoGiorno, quotaAzienda, sostituto, costoSostituto, oreFermo, valoreOra, costiExtra, sanzioni, fatturato, esposizione, mercato, gravitaEvento, eventoGrave, attive]);
+  }, [infortunati, effGiorni, retribuzioneGiornaliera, integraCcnl, sostituto, costoSostituto, oreFermo, valoreOra, costiExtra, sanzioni, sanzioniPresetTotale, fatturato, esposizione, mercato, gravitaEffettiva, eventoGrave, attive]);
 
-  const mostraReputazione = gravitaEvento !== "nessuno" && attive.reputazione;
+  const mostraReputazione = gravitaEffettiva !== "nessuno" && attive.reputazione;
   const mostraGravi = eventoGrave !== "nessuno" && attive.gravi;
 
   return <div style={{ display: "grid", gap: "var(--space-5)" }}>
@@ -199,9 +264,19 @@ export function CalcolatoreCosto() {
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "var(--space-3)" }}>
       <Input label="Numero di infortunati" value={infortunati} onChange={setInfortunati} suffix="persone" />
       <Input label="Giorni di assenza per persona" value={effGiorni} onChange={setGiorni} suffix="giorni" />
-      <Input label="Costo aziendale giornaliero" value={costoGiorno} onChange={setCostoGiorno} suffix="€/giorno" />
-      <Input label="Quota stimata a carico azienda" value={quotaAzienda} onChange={setQuotaAzienda} suffix="%" min={0} step={5} />
     </div>
+    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
+      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Retribuzione e regole INAIL</legend>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "var(--space-3)", marginBottom: "var(--space-2)" }}>
+        <Input label="RAL mensile lorda del lavoratore" value={ralMensile} onChange={setRalMensile} suffix="€/mese" />
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "var(--space-2)" }}>
+        {([['true', 'CCNL integra al 100% (caso tipico)'], ['false', 'Nessuna integrazione']] as const).map(([v, label]) => <button key={v} type="button" className={`btn-pill ${integraCcnl === (v === 'true') ? "active" : ""}`} onClick={() => setIntegraCcnl(v === 'true')}>{label}</button>)}
+      </div>
+      <p className="source-note" style={{ margin: 0 }}>
+        Regole INAIL (inabilità temporanea assoluta): il giorno dell&apos;infortunio è pagato interamente dall&apos;azienda; i successivi 3 giorni (carenza) al 60% a carico del datore; dal 4° al 90° giorno l&apos;INAIL indennizza il 60% della retribuzione, dal 91° il 75%. Con integrazione CCNL al 100% l&apos;azienda copre il differenziale (40% fino al 90° giorno, 25% dopo). Per {effGiorni} giorni su {Math.round(retribuzioneGiornaliera)} €/giorno: indennità INAIL ≈ <strong>{euro.format(Math.round(result?.inail?.indennitaInail ?? 0))}</strong>, costo azienda ≈ <strong>{euro.format(Math.round(result?.inail?.costoDatoreIntegra ?? 0))}</strong> per infortunato.
+      </p>
+    </fieldset>
     <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
       <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Sostituzione del lavoratore</legend>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "var(--space-3)" }}>
@@ -216,6 +291,21 @@ export function CalcolatoreCosto() {
       <Input label="Sanzioni e provvedimenti inseriti" value={sanzioni} onChange={setSanzioni} suffix="€" />
     </div>
 
+    {/* Sanzioni precompilate D.Lgs. 81/08 */}
+    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
+      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Sanzioni D.Lgs. 81/08 (seleziona le violazioni rilevate)</legend>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+        {Object.entries(SANZIONI_81_08).map(([k, v]) => (
+          <button key={k} type="button" className={`btn-pill ${sanzioniPreset[k] ? "active" : ""}`} aria-pressed={sanzioniPreset[k]} onClick={() => setSanzioniPreset((prev) => ({ ...prev, [k]: !prev[k] }))}>
+            {v.label} <span style={{ opacity: 0.65 }}>({euro.format(v.min)}–{euro.format(v.max)})</span>
+          </button>
+        ))}
+      </div>
+      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>
+        Importi medi indicativi da D.Lgs. 81/08 (art. 55 ss., rivalutati L. 145/2018): aggiunti alla voce "Gestione e sanzioni" (≈ {euro.format(sanzioniPresetTotale)}). Ogni caso va verificato con la norma vigente.
+      </p>
+    </fieldset>
+
     {/* Danno reputazionale */}
     <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
       <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Danno di immagine (metodo a bande)</legend>
@@ -228,6 +318,7 @@ export function CalcolatoreCosto() {
         <Select label="Mercato" value={mercato} onChange={(v) => setMercato(v as Mercato)} options={Object.entries(REPUTAZIONE_BANDE.mercato).map(([k, v]) => ({ value: k, label: v.label }))} />
         <Input label="Fatturato annuo" value={fatturato} onChange={setFatturato} suffix="€" />
       </div>
+      {eventoGrave !== "nessuno" && gravitaEvento === "nessuno" && <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>Hai selezionato un evento grave/mortale: il danno di immagine usa automaticamente la stessa gravità. Puoi modificarla qui sotto.</p>}
       {mostraReputazione && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>
         Il danno di immagine è stimato come quota del fatturato: intervallo <strong>{euro.format(result.repMin)} – {euro.format(result.repMax)}</strong>. Metodo semplificato dell&apos;Osservatorio: la correlazione tra infortuni gravi e perdita di commesse o esclusione da gare è documentata (report di settore sulla non sicurezza), ma non esiste una tariffa univoca: usa il range come ordine di grandezza, non come valore finale.
       </p>}
@@ -251,6 +342,35 @@ export function CalcolatoreCosto() {
       </>}
     </fieldset>
 
+    {/* Effetto sul premio INAIL: visibile quando c'è un evento grave/mortale */}
+    {mostraGravi && (
+      <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
+        <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Effetto sul premio INAIL (costo ricorrente)</legend>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-3)", marginBottom: "var(--space-2)" }}>
+          <Input label="Numero di dipendenti" value={numDipendenti} onChange={setNumDipendenti} suffix="addetti" />
+          <div style={{ display: "grid", alignContent: "start", gap: 5, fontSize: "0.82rem" }}>
+            <span style={{ fontWeight: 650 }}>Tasso medio stimato</span>
+            <span style={{ padding: "10px 11px", border: "1px solid var(--color-divider)", background: "var(--color-raised)" }}><strong>{tassoPerMille}‰</strong> delle retribuzioni imponibili</span>
+          </div>
+        </div>
+        <p style={{ margin: "0 0 var(--space-2)", fontSize: "0.88rem" }}>
+          Dopo un evento grave/mortale, l&apos;oscillazione per andamento infortunistico (art. 20 DM 12/12/2000) può far salire il tasso medio fino a <strong>+30%</strong> al rinnovo triennale. Sul tuo premio annuo attuale (≈ {euro.format(premioBaseAnnuale)} con {tassoPerMille}‰ su {euro.format(massaSalariale)} di retribuzioni imponibili) significa <strong>{euro.format(premioAumentoMin)} – {euro.format(premioAumentoMax)} in più all&apos;anno</strong>, per tre anni: <strong>{euro.format(premioAumentoTriennioMin)} – {euro.format(premioAumentoTriennioMax)} totali</strong>.
+        </p>
+        <p className="source-note" style={{ margin: 0 }}>Stima indicativa: il tasso medio esatto dipende dalla voce tariffaria PAT della singola azienda (consultazione tassi INAIL). L&apos;oscillazione effettiva dipende dall&apos;indice di sinistrosità (ISAR): qui usiamo +10/+30% come ordine di grandezza prudenziale per evento grave/mortale. La massa salariale è stimata come dipendenti × RAL mensile × 13.</p>
+      </fieldset>
+    )}
+
+    {/* Contesto dimensionale: quanto pesa l'evento per una micro/piccola impresa */}
+    {fatturato > 0 && (
+      <fieldset style={{ border: "1px solid var(--color-accent)", padding: "var(--space-3)", margin: 0 }}>
+        <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Contesto dimensionale: quanto pesa per la tua impresa</legend>
+        <p style={{ margin: "0 0 var(--space-2)", fontSize: "0.88rem" }}>
+          In Italia il 76,5% delle imprese ha fino a 5 occupati e il 92,3% fino a 15 (ISTAT/Sistan): sono le micro e piccole imprese dove ogni assenza pesa doppio. Nel tuo caso, lo scenario probabile vale <strong>{((result.probabile / fatturato) * 100).toFixed(1)}% del fatturato annuo</strong> ({euro.format(result.probabile)} su {euro.format(fatturato)}): per una micro-impresa significa mesi di margine assorbiti da un singolo evento.
+        </p>
+        <p className="source-note" style={{ margin: 0 }}>Confronto dimensionale indicativo: il fatturato è un input tuo; la distribuzione per classe di addetti è ISTAT/Sistan (struttura produttiva). Non è un dato INAIL.</p>
+      </fieldset>
+    )}
+
     <div style={{ borderTop: "2px solid var(--color-accent)", paddingTop: "var(--space-4)" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "var(--space-3)" }}>
         {([["minimo", "Scenario minimo", result.minimo], ["probabile", "Scenario probabile", result.probabile], ["grave", "Scenario grave", result.grave]] as const).map(([key, label, value]) => <div key={key} style={{ padding: "var(--space-3)", background: key === "probabile" ? "var(--color-text)" : "var(--color-surface)", color: key === "probabile" ? "var(--color-raised)" : "var(--color-text)", border: "1px solid var(--color-divider)" }}><div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.04em", opacity: 0.75 }}>{label}</div><strong style={{ display: "block", fontSize: "1.45rem", marginTop: 5 }}>{euro.format(value)}</strong></div>)}
@@ -262,6 +382,8 @@ export function CalcolatoreCosto() {
           ["Costo per giorno di assenza", euro.format(infortunati * effGiorni > 0 ? result.assenza / (infortunati * effGiorni) : 0)],
           ["Incidenza sul fatturato", `${fatturato > 0 ? `${((result.probabile / fatturato) * 100).toFixed(2)}%` : "n.d."}`],
           ["Vs media nazionale INAIL", `${infortunati > 0 ? `${result.probabile / infortunati >= MEDIA_INAIL_INFORTUNIO ? "+" : ""}${Math.round((result.probabile / infortunati) / MEDIA_INAIL_INFORTUNIO * 100 - 100)}%` : "n.d."}`],
+          ["Indennità INAIL (assenza)", euro.format(Math.round(result.inail.indennitaInail * infortunati))],
+          ["Costo assenza a carico azienda", euro.format(Math.round(result.assenza))],
         ] as const).map(([label, value]) => <div key={label} style={{ padding: "var(--space-2) var(--space-3)", background: "var(--color-surface)", border: "1px solid var(--color-divider)" }}><div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--color-text-soft)" }}>{label}</div><strong style={{ display: "block", fontSize: "1.05rem", marginTop: 3 }}>{value}</strong></div>)}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "8px", marginTop: "var(--space-3)", fontSize: "0.82rem" }}>
