@@ -23,6 +23,31 @@ export const QUOTA_AZIENDA_DAL_91 = 1 - INAIL_ALIQUOTA_DAL_91; // 0.25
 // Soglia giorni dopo la quale cambia l'aliquota INAIL.
 export const GIORNO_SOGLIA_ALIQUOTA = 90;
 
+// Funzione per il costo dell'assenza con le regole INAIL: il datore paga l'intera
+// retribuzione il giorno dell'infortunio, il 60% nei 3 giorni di carenza, poi copre
+// solo il differenziale di integrazione al 100% (40% fino al 90° giorno, 25% dopo)
+// se il CCNL prevede l'integrazione. Se il CCNL non integra, il datore non paga
+// nulla dopo il 3° giorno (l'indennità INAIL sostituisce la retribuzione).
+export function costoAssenzaInail(retribuzioneGiornaliera: number, giorni: number, integraCcnl: boolean): { costoDatore: number; costoDatoreIntegra: number; indennitaInail: number; giorniCarenza: number; giorniInail: number } {
+  const giornoEvento = retribuzioneGiornaliera; // giorno infortunio: intera a carico datore
+  const carenza = Math.min(giorni, INAIL_CARENZA_GIORNI); // max 3 giorni al 60% datore
+  const giorniDopoCarenza = Math.max(0, giorni - INAIL_CARENZA_GIORNI);
+  const giorniFino90 = Math.min(giorniDopoCarenza, Math.max(0, GIORNO_SOGLIA_ALIQUOTA - INAIL_CARENZA_GIORNI)); // dal 4° al 90°
+  const giorniOltre90 = Math.max(0, giorniDopoCarenza - giorniFino90);
+
+  // Indennità INAIL: 60% fino al 90°, 75% dal 91°.
+  const indennitaInail = retribuzioneGiornaliera * (giorniFino90 * INAIL_ALIQUOTA_FINO_90 + giorniOltre90 * INAIL_ALIQUOTA_DAL_91);
+
+  // Costo datore nel caso base: giorno evento + carenza al 60%.
+  const costoBase = giornoEvento + carenza * 0.6 * retribuzioneGiornaliera;
+
+  // Se il CCNL integra al 100%, il datore paga anche il differenziale sui giorni coperti INAIL.
+  const differenziale = retribuzioneGiornaliera * (giorniFino90 * QUOTA_AZIENDA_FINO_90 + giorniOltre90 * QUOTA_AZIENDA_DAL_91);
+  const costoDatoreIntegra = costoBase + (integraCcnl ? differenziale : 0);
+
+  return { costoDatore: costoBase, costoDatoreIntegra, indennitaInail, giorniCarenza: carenza, giorniInail: giorniDopoCarenza };
+}
+
 // Sanzioni amministrative principali del D.Lgs. 81/08 (importi base, art. 55 ss.,
 // già rivalutati con la maggiorazione del 10% prevista dalla L. 145/2018 dove
 // applicabile). Importi indicativi da usare come riferimento: ogni caso concreto

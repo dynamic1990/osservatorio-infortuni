@@ -383,3 +383,187 @@ h3 {
   padding: 0 1px;
   border-radius: 2px;
 }
+
+/* Calcolatore costo infortunio: sezioni a passi coerenti con il design system */
+.calc-step {
+  background: var(--color-raised);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4);
+  margin: 0;
+}
+
+.calc-step-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+  padding-bottom: var(--space-2);
+}
+
+.calc-step-num {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+.calc-step-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.calc-step-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-soft);
+  margin: 0;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--space-3);
+}
+
+.calc-lavoratore {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: var(--space-3);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.calc-lavoratore-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.calc-lavoratore-name {
+  font-weight: 750;
+  font-size: 0.88rem;
+  color: var(--color-text);
+}
+
+.calc-remove {
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  color: var(--color-text-soft);
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.calc-remove:hover {
+  color: var(--color-text);
+  border-color: var(--color-text);
+}
+
+.calc-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-raised);
+  border: 1px solid var(--color-accent);
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 650;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.calc-add:hover {
+  background: var(--color-accent);
+  color: var(--color-raised);
+}
+
+.calc-sanzione {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 8px 10px;
+}
+
+.calc-sanzione-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.calc-sanzione-livelli {
+  display: flex;
+  gap: 6px;
+}
+
+.calc-badge-tasso {
+  padding: 10px 11px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 0.88rem;
+}
+
+.calc-result-card {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.calc-result-card.probabile {
+  background: var(--color-text);
+  color: var(--color-raised);
+  border-color: var(--color-text);
+}
+
+.calc-result-card.probabile .calc-result-value,
+.calc-result-card.probabile .calc-result-label {
+  color: var(--color-raised);
+}
+
+.calc-result-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.calc-result-value {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 750;
+  margin-top: 5px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-kpi {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.calc-kpi-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-soft);
+}
+
+.calc-kpi-value {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 3px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { regioneName } from "@/lib/labels";
-import { INAIL_CARENZA_GIORNI, INAIL_ALIQUOTA_FINO_90, INAIL_ALIQUOTA_DAL_91, QUOTA_AZIENDA_FINO_90, QUOTA_AZIENDA_DAL_91, GIORNO_SOGLIA_ALIQUOTA, SANZIONI_81_08, OSCILLAZIONE_PREMIO, tassoPerMillePerAteco } from "@/lib/costo-infortunio";
+import { SANZIONI_81_08, OSCILLAZIONE_PREMIO, tassoPerMillePerAteco, costoAssenzaInail } from "@/lib/costo-infortunio";
 
 // Conversione RAL mensile -> retribuzione media giornaliera. Convenzione standard:
 // 21 giornate lavorative equivalenti al mese (retribuzione mensilizzata / 26
@@ -73,25 +74,7 @@ const MEDIA_INAIL_INFORTUNIO = 33_000; // costo medio per infortunio, benchmark 
 // solo il differenziale di integrazione al 100% (40% fino al 90° giorno, 25% dopo)
 // se il CCNL prevede l'integrazione. Se il CCNL non integra, il datore non paga
 // nulla dopo il 3° giorno (l'indennità INAIL sostituisce la retribuzione).
-function costoAssenzaInail(retribuzioneGiornaliera: number, giorni: number, integraCcnl: boolean): { costoDatore: number; costoDatoreIntegra: number; indennitaInail: number; giorniCarenza: number; giorniInail: number } {
-  const giornoEvento = retribuzioneGiornaliera; // giorno infortunio: intera a carico datore
-  const carenza = Math.min(giorni, INAIL_CARENZA_GIORNI); // max 3 giorni al 60% datore
-  const giorniDopoCarenza = Math.max(0, giorni - INAIL_CARENZA_GIORNI);
-  const giorniFino90 = Math.min(giorniDopoCarenza, Math.max(0, GIORNO_SOGLIA_ALIQUOTA - INAIL_CARENZA_GIORNI)); // dal 4° al 90°
-  const giorniOltre90 = Math.max(0, giorniDopoCarenza - giorniFino90);
-
-  // Indennità INAIL: 60% fino al 90°, 75% dal 91°.
-  const indennitaInail = retribuzioneGiornaliera * (giorniFino90 * INAIL_ALIQUOTA_FINO_90 + giorniOltre90 * INAIL_ALIQUOTA_DAL_91);
-
-  // Costo datore nel caso base: giorno evento + carenza al 60%.
-  const costoBase = giornoEvento + carenza * 0.6 * retribuzioneGiornaliera;
-
-  // Se il CCNL integra al 100%, il datore paga anche il differenziale sui giorni coperti INAIL.
-  const differenziale = retribuzioneGiornaliera * (giorniFino90 * QUOTA_AZIENDA_FINO_90 + giorniOltre90 * QUOTA_AZIENDA_DAL_91);
-  const costoDatoreIntegra = costoBase + (integraCcnl ? differenziale : 0);
-
-  return { costoDatore: costoBase, costoDatoreIntegra, indennitaInail, giorniCarenza: carenza, giorniInail: giorniDopoCarenza };
-}
+// (Definizione locale rimossa: ora in @/lib/costo-infortunio, esportata per i test.)
 
 // Ordini di grandezza per eventi gravi/mortali. Sono stime indicativi costruite su
 // fonti pubbliche (tabelle di risarcimento per macrolesioni, pratiche correnti sui
@@ -111,6 +94,20 @@ const EVENTI_GRAVI = {
     legali: { min: 10_000, max: 120_000 },
   },
 } as const;
+
+// Intestazione di sezione uniforme (stile card del design system).
+function Step({ num, title, desc, children }: { num: string; title: string; desc?: string; children: ReactNode }) {
+  return (
+    <section className="calc-step">
+      <div className="calc-step-header">
+        <span className="calc-step-num">{num}</span>
+        <h3 className="calc-step-title">{title}</h3>
+      </div>
+      {desc && <p className="calc-step-desc" style={{ marginBottom: "var(--space-3)" }}>{desc}</p>}
+      {children}
+    </section>
+  );
+}
 
 export function CalcolatoreCosto() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
@@ -139,11 +136,12 @@ export function CalcolatoreCosto() {
   const durataDefault = settore || regione ? Math.round(durataSuggerita) : 30;
   const [lavoratori, setLavoratori] = useState<Lavoratore[]>([{ id: 1, giorni: durataDefault, ralMensile: 2200 }]);
   const [nextId, setNextId] = useState(2);
-  // Quando cambia settore/regione, aggiorna i giorni dei lavoratori rimasti sul
-  // valore di default (30): chi ha inserito un valore specifico lo conserva.
-  useEffect(() => {
+  // Aggiorna i giorni dei lavoratori rimasti sul default (30) quando cambia
+  // settore/regione: chi ha inserito un valore specifico lo conserva.
+  const applicaDurataDefault = () =>
     setLavoratori((prev) => prev.map((l) => (l.giorni === 30 ? { ...l, giorni: durataDefault } : l)));
-  }, [durataDefault]);
+  const cambiaSettore = (v: string) => { setSettoreKey(v); applicaDurataDefault(); };
+  const cambiaRegione = (v: string) => { setRegioneKey(v); applicaDurataDefault(); };
   const aggiornaLavoratore = (id: number, patch: Partial<Lavoratore>) =>
     setLavoratori((prev) => prev.map((l) => (l.id === id ? { ...l, ...patch } : l)));
   const aggiungiLavoratore = () => {
@@ -189,7 +187,6 @@ export function CalcolatoreCosto() {
 
   // Retribuzione media giornaliera stimata dalla RAL mensile media (21 giorni lavorativi/mese).
   const ralMedia = lavoratori.reduce((a, l) => a + l.ralMensile, 0) / Math.max(1, lavoratori.length);
-  const retribuzioneGiornalieraMedia = ralMedia / GIORNI_LAVORATIVI_MESE;
 
   // Sanzioni precompilate: somma degli importi per livello selezionato (min|media|max).
   const sanzioniPresetTotale = useMemo(() => {
@@ -261,21 +258,19 @@ export function CalcolatoreCosto() {
   const mostraReputazione = gravitaEffettiva !== "nessuno" && attive.reputazione;
   const mostraGravi = eventoGrave !== "nessuno" && attive.gravi;
 
-  return <div style={{ display: "grid", gap: "var(--space-5)" }}>
+  return <div style={{ display: "grid", gap: "var(--space-4)" }}>
     {/* Profilo aziendale: precompilazione dal dataset INAIL */}
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Profilo aziendale (precompila le stime dai dati INAIL {anno})</legend>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "var(--space-3)" }}>
-        <Select label="Settore ATECO" value={settoreKey} onChange={setSettoreKey} options={settoriOptions} />
-        <Select label="Regione (opzionale)" value={regioneKey} onChange={setRegioneKey} options={regioniOptions} />
+    <Step num="01" title="Profilo aziendale" desc={`Precompila le stime dai dati INAIL ${anno}: seleziona settore e regione per la durata media delle assenze.`}>
+      <div className="calc-grid">
+        <Select label="Settore ATECO" value={settoreKey} onChange={cambiaSettore} options={settoriOptions} />
+        <Select label="Regione (opzionale)" value={regioneKey} onChange={cambiaRegione} options={regioniOptions} />
       </div>
       {settore && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>Settore <strong>{settore.nome}</strong>: {number.format(casiSettore)} infortuni denunciati nel {anno}, durata media assenza <strong>{number.format(Math.round(settore.durataMedia ?? 0))} giorni</strong>, incidenza {incidenzaSettore ? `${number.format(incidenzaSettore)} per 1.000 occupati` : "non disponibile"}. I giorni di assenza sotto sono stati precompilati con la media del settore: puoi modificarli.</p>}
       {!settore && regione && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>Regione {regioneName(regioneKey)}: durata media assenza {number.format(Math.round(regione.durataMedia ?? 0))} giorni nel {anno}. Usata come riferimento per i giorni precompilati.</p>}
-    </fieldset>
+    </Step>
 
     {/* Componenti attivabili */}
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Componenti di costo (attiva solo quelle del tuo caso)</legend>
+    <Step num="02" title="Componenti di costo" desc="Attiva solo quelle del tuo caso: la stima si adatta. Ogni componente può essere disattivata.">
       <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
         {([
           ["assenza", "Assenza"],
@@ -288,64 +283,58 @@ export function CalcolatoreCosto() {
           <button key={k} type="button" className={`btn-pill ${attive[k] ? "active" : ""}`} onClick={() => toggleComponente(k)} aria-pressed={attive[k]}>{label}</button>
         ))}
       </div>
-      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>
-        Disattiva le componenti che non si applicano al tuo evento per una stima più plausibile. Le stime dei tre scenari si aggiornano di conseguenza.
-      </p>
-    </fieldset>
+    </Step>
 
     {/* Lavoratori infortunati: scheda per ciascuno, con + per aggiungerne */}
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Lavoratori infortunati ({lavoratori.length})</legend>
+    <Step num="03" title={`Lavoratori infortunati (${lavoratori.length})`} desc="Ogni lavoratore ha giorni di assenza e RAL propri: l'assenza è calcolata con le regole INAIL per ciascuno e poi sommata.">
       <div style={{ display: "grid", gap: "var(--space-3)", marginBottom: "var(--space-3)" }}>
         {lavoratori.map((l, idx) => (
-          <div key={l.id} style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", background: "var(--color-surface)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-2)", gap: 8 }}>
-              <span style={{ fontWeight: 750, fontSize: "0.88rem" }}>Lavoratore {idx + 1}</span>
-              {lavoratori.length > 1 && <button type="button" onClick={() => rimuoviLavoratore(l.id)} style={{ background: "transparent", border: "1px solid var(--color-divider)", padding: "4px 10px", fontSize: "0.78rem", cursor: "pointer" }}>Rimuovi</button>}
+          <div key={l.id} className="calc-lavoratore">
+            <div className="calc-lavoratore-head">
+              <span className="calc-lavoratore-name">Lavoratore {idx + 1}</span>
+              {lavoratori.length > 1 && <button type="button" className="calc-remove" onClick={() => rimuoviLavoratore(l.id)}>Rimuovi</button>}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "var(--space-3)" }}>
+            <div className="calc-grid">
               <Input label="Giorni di assenza" value={l.giorni} onChange={(v) => aggiornaLavoratore(l.id, { giorni: v })} suffix="giorni" />
               <Input label="RAL mensile lorda" value={l.ralMensile} onChange={(v) => aggiornaLavoratore(l.id, { ralMensile: v })} suffix="€/mese" />
             </div>
           </div>
         ))}
       </div>
-      <button type="button" onClick={aggiungiLavoratore} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--color-raised)", border: "1px solid var(--color-accent)", padding: "8px 14px", fontSize: "0.85rem", fontWeight: 650, cursor: "pointer" }}>+ Aggiungi un altro lavoratore</button>
-      <p className="source-note" style={{ marginTop: "var(--space-2)", marginBottom: 0 }}>Ogni lavoratore può avere giorni di assenza e RAL diversi: la componente assenza è calcolata con le regole INAIL per ciascuno e poi sommata.</p>
-    </fieldset>
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Retribuzione e regole INAIL</legend>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "var(--space-2)" }}>
+      <button type="button" className="calc-add" onClick={aggiungiLavoratore}>+ Aggiungi un altro lavoratore</button>
+    </Step>
+
+    <Step num="04" title="Retribuzione e regole INAIL" desc="Regole INAIL per l'inabilità temporanea assoluta: giorno evento intero a carico azienda, 3 giorni di carenza al 60%, poi indennità INAIL 60% (dal 4° al 90°) e 75% (dal 91°).">
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "var(--space-3)" }}>
         {([['true', 'CCNL integra al 100% (caso tipico)'], ['false', 'Nessuna integrazione']] as const).map(([v, label]) => <button key={v} type="button" className={`btn-pill ${integraCcnl === (v === 'true') ? "active" : ""}`} onClick={() => setIntegraCcnl(v === 'true')}>{label}</button>)}
       </div>
       <p className="source-note" style={{ margin: 0 }}>
-        Regole INAIL (inabilità temporanea assoluta): il giorno dell&apos;infortunio è pagato interamente dall&apos;azienda; i successivi 3 giorni (carenza) al 60% a carico del datore; dal 4° al 90° giorno l&apos;INAIL indennizza il 60% della retribuzione, dal 91° il 75%. Con integrazione CCNL al 100% l&apos;azienda copre il differenziale (40% fino al 90° giorno, 25% dopo). Per {result.giorniTotali} giorni complessivi: indennità INAIL ≈ <strong>{euro.format(Math.round(result.indennitaInailTotale))}</strong>, costo azienda ≈ <strong>{euro.format(Math.round(result.assenza))}</strong>.
+        Con integrazione CCNL al 100% l&apos;azienda copre il differenziale (40% fino al 90° giorno, 25% dopo). Per {result.giorniTotali} giorni complessivi: indennità INAIL ≈ <strong>{euro.format(Math.round(result.indennitaInailTotale))}</strong>, costo azienda ≈ <strong>{euro.format(Math.round(result.assenza))}</strong>.
       </p>
-    </fieldset>
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Sostituzione del lavoratore</legend>
+    </Step>
+
+    <Step num="05" title="Sostituzione e fermo operativo" desc="Costi organizzativi: sostituto del lavoratore e interruzione dell'attività.">
       <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "var(--space-3)" }}>
         {([['no', 'Nessun sostituto'], ['interno', 'Sostituto interno'], ['esterno', 'Sostituto esterno']] as const).map(([v, label]) => <button key={v} type="button" className={`btn-pill ${sostituto === v ? "active" : ""}`} onClick={() => setSostituto(v)}>{label}</button>)}
       </div>
-      {sostituto !== "no" && <Input label="Costo giornaliero del sostituto" value={costoSostituto} onChange={setCostoSostituto} suffix="€/giorno" />}
-    </fieldset>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "var(--space-3)" }}>
-      <Input label="Interruzione dell'attività" value={oreFermo} onChange={setOreFermo} suffix="ore" />
-      <Input label="Valore operativo medio" value={valoreOra} onChange={setValoreOra} suffix="€/ora" />
-      <Input label="Costi extra di gestione" value={costiExtra} onChange={setCostiExtra} suffix="€" />
-      <Input label="Sanzioni e provvedimenti inseriti" value={sanzioni} onChange={setSanzioni} suffix="€" />
-    </div>
+      {sostituto !== "no" && <div className="calc-grid" style={{ marginBottom: "var(--space-3)" }}><Input label="Costo giornaliero del sostituto" value={costoSostituto} onChange={setCostoSostituto} suffix="€/giorno" /></div>}
+      <div className="calc-grid">
+        <Input label="Interruzione dell'attività" value={oreFermo} onChange={setOreFermo} suffix="ore" />
+        <Input label="Valore operativo medio" value={valoreOra} onChange={setValoreOra} suffix="€/ora" />
+        <Input label="Costi extra di gestione" value={costiExtra} onChange={setCostiExtra} suffix="€" />
+        <Input label="Sanzioni e provvedimenti inseriti" value={sanzioni} onChange={setSanzioni} suffix="€" />
+      </div>
+    </Step>
 
     {/* Sanzioni precompilate D.Lgs. 81/08 con livello min/media/max */}
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Sanzioni D.Lgs. 81/08 (violazioni più frequenti in caso di infortunio)</legend>
+    <Step num="06" title="Sanzioni D.Lgs. 81/08" desc="Violazioni più frequenti imputate alle aziende in caso di infortunio: seleziona il livello minimo, medio o massimo per ciascuna.">
       <div style={{ display: "grid", gap: "var(--space-2)", marginBottom: "var(--space-2)" }}>
         {Object.entries(SANZIONI_81_08).map(([k, v]) => {
           const livello = sanzioniPreset[k];
           return (
-            <div key={k} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8, alignItems: "center", border: "1px solid var(--color-divider)", padding: "8px 10px", background: "var(--color-surface)" }}>
-              <span style={{ fontSize: "0.85rem", fontWeight: 600 }}>{v.label}</span>
-              <div style={{ display: "flex", gap: 6 }}>
+            <div key={k} className="calc-sanzione">
+              <span className="calc-sanzione-label">{v.label}</span>
+              <div className="calc-sanzione-livelli">
                 {([['min', `Min ${euro.format(v.min)}`], ['media', `Media ${euro.format(Math.round((v.min + v.max) / 2))}`], ['max', `Max ${euro.format(v.max)}`]] as const).map(([lv, lvLabel]) => (
                   <button key={lv} type="button" className={`btn-pill ${livello === lv ? "active" : ""}`} aria-pressed={livello === lv} onClick={() => impostaSanzione(k, lv)} style={{ fontSize: "0.75rem", padding: "4px 10px" }}>{lvLabel}</button>
                 ))}
@@ -355,14 +344,13 @@ export function CalcolatoreCosto() {
         })}
       </div>
       <p className="source-note" style={{ margin: 0 }}>
-        Importi da D.Lgs. 81/08 (art. 55 ss., rivalutati L. 145/2018): seleziona il livello per ogni violazione (min, media o max). Totale aggiunto alla voce "Gestione e sanzioni": <strong>{euro.format(sanzioniPresetTotale)}</strong>. Ogni caso va verificato con la norma vigente.
+        Importi da D.Lgs. 81/08 (art. 55 ss., rivalutati L. 145/2018). Totale aggiunto alla voce &ldquo;Gestione e sanzioni&rdquo;: <strong>{euro.format(sanzioniPresetTotale)}</strong>. Ogni caso va verificato con la norma vigente.
       </p>
-    </fieldset>
+    </Step>
 
     {/* Danno reputazionale */}
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Danno di immagine (metodo a bande)</legend>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-3)" }}>
+    <Step num="07" title="Danno di immagine" desc="Metodo a bande: quota del fatturato secondo gravità, esposizione mediatica e mercato. Ordini di grandezza prudenziali.">
+      <div className="calc-grid">
         <Select label="Gravità dell'evento" value={gravitaEvento} onChange={(v) => setGravitaEvento(v as Gravita | "nessuno")} options={[
           { value: "nessuno", label: "Non stimare il danno di immagine" },
           ...Object.entries(REPUTAZIONE_BANDE.gravita).map(([k, v]) => ({ value: k, label: v.label })),
@@ -375,16 +363,15 @@ export function CalcolatoreCosto() {
       {mostraReputazione && <p className="source-note" style={{ marginTop: "var(--space-2)" }}>
         Il danno di immagine è stimato come quota del fatturato: intervallo <strong>{euro.format(result.repMin)} – {euro.format(result.repMax)}</strong>. Metodo semplificato dell&apos;Osservatorio: la correlazione tra infortuni gravi e perdita di commesse o esclusione da gare è documentata (report di settore sulla non sicurezza), ma non esiste una tariffa univoca: usa il range come ordine di grandezza, non come valore finale.
       </p>}
-    </fieldset>
+    </Step>
 
     {/* Eventi gravi e mortali */}
-    <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-      <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Eventi gravi e mortali (stime prudenziali)</legend>
+    <Step num="08" title="Eventi gravi e mortali" desc="Stime prudenziali per risarcimento, sanzioni e difesa legale. Intervalli indicativi, non importi dovuti.">
       <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "var(--space-3)" }}>
         {([['nessuno', 'Nessun evento grave'], ['grave', 'Infortunio grave'], ['mortale', 'Infortunio mortale']] as const).map(([v, label]) => <button key={v} type="button" className={`btn-pill ${eventoGrave === v ? "active" : ""}`} onClick={() => setEventoGrave(v)}>{label}</button>)}
       </div>
       {mostraGravi && <>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "var(--space-3)", fontSize: "0.84rem" }}>
+        <div className="calc-grid" style={{ fontSize: "0.84rem" }}>
           <span>Risarcimento stimato: <strong>{euro.format(EVENTI_GRAVI[eventoGrave].risarcimento.min)} – {euro.format(EVENTI_GRAVI[eventoGrave].risarcimento.max)}</strong></span>
           <span>Sanzioni (81/08): <strong>{euro.format(EVENTI_GRAVI[eventoGrave].sanzioni.min)} – {euro.format(EVENTI_GRAVI[eventoGrave].sanzioni.max)}</strong></span>
           <span>Difesa legale e CTU: <strong>{euro.format(EVENTI_GRAVI[eventoGrave].legali.min)} – {euro.format(EVENTI_GRAVI[eventoGrave].legali.max)}</strong></span>
@@ -393,40 +380,38 @@ export function CalcolatoreCosto() {
           Intervalli indicativi, non importi dovuti. Coprono risarcimento (tabelle per macrolesioni), sanzioni amministrative del D.Lgs. 81/08 e costi di difesa. Un caso di omicidio colposo coinvolge anche la responsabilità amministrativa dell&apos;ente (D.Lgs. 231/2001), con sanzioni in quote che possono superare di molto questi ordini di grandezza: ogni caso va valutato con un legale.
         </p>
       </>}
-    </fieldset>
+    </Step>
 
     {/* Effetto sul premio INAIL: visibile quando c'è un evento grave/mortale */}
     {mostraGravi && (
-      <fieldset style={{ border: "1px solid var(--color-divider)", padding: "var(--space-3)", margin: 0 }}>
-        <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Effetto sul premio INAIL (costo ricorrente)</legend>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-3)", marginBottom: "var(--space-2)" }}>
+      <Step num="09" title="Effetto sul premio INAIL" desc="Costo ricorrente: dopo un evento grave/mortale l'oscillazione per andamento infortunistico (art. 20 DM 12/12/2000) può far salire il tasso fino a +30% al rinnovo triennale.">
+        <div className="calc-grid" style={{ marginBottom: "var(--space-2)" }}>
           <Input label="Numero di dipendenti" value={numDipendenti} onChange={setNumDipendenti} suffix="addetti" />
           <div style={{ display: "grid", alignContent: "start", gap: 5, fontSize: "0.82rem" }}>
             <span style={{ fontWeight: 650 }}>Tasso medio stimato</span>
-            <span style={{ padding: "10px 11px", border: "1px solid var(--color-divider)", background: "var(--color-raised)" }}><strong>{tassoPerMille}‰</strong> delle retribuzioni imponibili</span>
+            <span className="calc-badge-tasso"><strong>{tassoPerMille}‰</strong> delle retribuzioni imponibili</span>
           </div>
         </div>
         <p style={{ margin: "0 0 var(--space-2)", fontSize: "0.88rem" }}>
-          Dopo un evento grave/mortale, l&apos;oscillazione per andamento infortunistico (art. 20 DM 12/12/2000) può far salire il tasso medio fino a <strong>+30%</strong> al rinnovo triennale. Sul tuo premio annuo attuale (≈ {euro.format(premioBaseAnnuale)} con {tassoPerMille}‰ su {euro.format(massaSalariale)} di retribuzioni imponibili) significa <strong>{euro.format(premioAumentoMin)} – {euro.format(premioAumentoMax)} in più all&apos;anno</strong>, per tre anni: <strong>{euro.format(premioAumentoTriennioMin)} – {euro.format(premioAumentoTriennioMax)} totali</strong>.
+          Sul tuo premio annuo attuale (≈ {euro.format(premioBaseAnnuale)} con {tassoPerMille}‰ su {euro.format(massaSalariale)} di retribuzioni imponibili) significa <strong>{euro.format(premioAumentoMin)} – {euro.format(premioAumentoMax)} in più all&apos;anno</strong>, per tre anni: <strong>{euro.format(premioAumentoTriennioMin)} – {euro.format(premioAumentoTriennioMax)} totali</strong>.
         </p>
         <p className="source-note" style={{ margin: 0 }}>Stima indicativa: il tasso medio esatto dipende dalla voce tariffaria PAT della singola azienda (consultazione tassi INAIL). L&apos;oscillazione effettiva dipende dall&apos;indice di sinistrosità (ISAR): qui usiamo +10/+30% come ordine di grandezza prudenziale per evento grave/mortale. La massa salariale è stimata come dipendenti × RAL mensile × 13.</p>
-      </fieldset>
+      </Step>
     )}
 
     {/* Contesto dimensionale: quanto pesa l'evento per una micro/piccola impresa */}
     {fatturato > 0 && (
-      <fieldset style={{ border: "1px solid var(--color-accent)", padding: "var(--space-3)", margin: 0 }}>
-        <legend style={{ padding: "0 6px", fontWeight: 750, fontSize: "0.9rem" }}>Contesto dimensionale: quanto pesa per la tua impresa</legend>
+      <Step num="10" title="Contesto dimensionale" desc="Quanto pesa l'evento per una micro o piccola impresa (ISTAT/Sistan 2024).">
         <p style={{ margin: "0 0 var(--space-2)", fontSize: "0.88rem" }}>
           In Italia il 76,5% delle imprese ha fino a 5 occupati e il 92,3% fino a 15 (ISTAT/Sistan): sono le micro e piccole imprese dove ogni assenza pesa doppio. Nel tuo caso, lo scenario probabile vale <strong>{((result.probabile / fatturato) * 100).toFixed(1)}% del fatturato annuo</strong> ({euro.format(result.probabile)} su {euro.format(fatturato)}): per una micro-impresa significa mesi di margine assorbiti da un singolo evento.
         </p>
         <p className="source-note" style={{ margin: 0 }}>Confronto dimensionale indicativo: il fatturato è un input tuo; la distribuzione per classe di addetti è ISTAT/Sistan (struttura produttiva). Non è un dato INAIL.</p>
-      </fieldset>
+      </Step>
     )}
 
     <div style={{ borderTop: "2px solid var(--color-accent)", paddingTop: "var(--space-4)" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "var(--space-3)" }}>
-        {([["minimo", "Scenario minimo", result.minimo], ["probabile", "Scenario probabile", result.probabile], ["grave", "Scenario grave", result.grave]] as const).map(([key, label, value]) => <div key={key} style={{ padding: "var(--space-3)", background: key === "probabile" ? "var(--color-text)" : "var(--color-surface)", color: key === "probabile" ? "var(--color-raised)" : "var(--color-text)", border: "1px solid var(--color-divider)" }}><div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.04em", opacity: 0.75 }}>{label}</div><strong style={{ display: "block", fontSize: "1.45rem", marginTop: 5 }}>{euro.format(value)}</strong></div>)}
+        {([["minimo", "Scenario minimo", result.minimo], ["probabile", "Scenario probabile", result.probabile], ["grave", "Scenario grave", result.grave]] as const).map(([key, label, value]) => <div key={key} className={`calc-result-card ${key === "probabile" ? "probabile" : ""}`}><div className="calc-result-label">{label}</div><strong className="calc-result-value">{euro.format(value)}</strong></div>)}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--space-3)", marginTop: "var(--space-3)" }}>
         {([
@@ -437,7 +422,7 @@ export function CalcolatoreCosto() {
           ["Vs media nazionale INAIL", `${result.nLavoratori > 0 ? `${result.probabile / result.nLavoratori >= MEDIA_INAIL_INFORTUNIO ? "+" : ""}${Math.round((result.probabile / result.nLavoratori) / MEDIA_INAIL_INFORTUNIO * 100 - 100)}%` : "n.d."}`],
           ["Indennità INAIL (assenza)", euro.format(Math.round(result.indennitaInailTotale))],
           ["Costo assenza a carico azienda", euro.format(Math.round(result.assenza))],
-        ] as const).map(([label, value]) => <div key={label} style={{ padding: "var(--space-2) var(--space-3)", background: "var(--color-surface)", border: "1px solid var(--color-divider)" }}><div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--color-text-soft)" }}>{label}</div><strong style={{ display: "block", fontSize: "1.05rem", marginTop: 3 }}>{value}</strong></div>)}
+        ] as const).map(([label, value]) => <div key={label} className="calc-kpi"><div className="calc-kpi-label">{label}</div><strong className="calc-kpi-value">{value}</strong></div>)}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "8px", marginTop: "var(--space-3)", fontSize: "0.82rem" }}>
         <span>Assenza: <strong>{euro.format(result.assenza)}</strong></span><span>Sostituzione: <strong>{euro.format(result.sostituzione)}</strong></span><span>Fermo: <strong>{euro.format(result.fermo)}</strong></span><span>Gestione e sanzioni: <strong>{euro.format(result.amministrativi)}</strong></span>
