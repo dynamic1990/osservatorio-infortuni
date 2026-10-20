@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { InformoVociLista } from "@/components/charts/informo-voci-lista";
 import { InformoEsploratore } from "@/components/charts/informo-esploratore";
 import { FiltroDimensioneAziendale } from "@/components/charts/filtro-dimensione-aziendale";
+import { FiltroSettoreAteco, type AtecoDataset } from "@/components/charts/filtro-settore-ateco";
 import { InformoPerimetro } from "@/components/charts/informo-perimetro";
 import { InfoModalButton } from "@/components/ui/info-modal";
 import {
@@ -17,6 +18,42 @@ import {
   type AnnoVoci,
   type InformoAnalisi,
 } from "@/lib/informo-casi";
+
+// Dataset Ateco (per sezione attività economica): un sottoinsieme dei casi
+// con le viste principali ricalcolate (serie, incidenti, settori, territorio,
+// profilo, fattori). Il filtro per sezione agisce a monte dei toggle
+// mortali/gravi: quando una sezione è selezionata, tutte le viste a valle
+// mostrano i casi di quella sezione.
+const FILE_ATECO = {
+  mortali: "/data/informo-ateco-analisi.json",
+  gravi: "/data/informo-ateco-analisi-gravi.json",
+} as const;
+
+// Trasforma la vista di un dataset Ateco nel formato AnnoVoci[].
+function vistaAteco(
+  dati: AtecoDataset | null,
+  sezione: string,
+  campo: "incidenti" | "settori" | "territori" | "fattoriTipo" | "problemiSicurezza"
+): AnnoVoci[] {
+  if (!dati) return [];
+  const sez = dati.sezioni.find((s) => s.sezione === sezione);
+  if (!sez) return [];
+  return sez.perAnno.map((p) => ({
+    anno: p.anno,
+    voci: p.viste[campo].map((v) => ({ nome: v.nome, count: v.count })),
+  }));
+}
+
+// Serie per anno dal dataset Ateco (casi per anno della sezione).
+function serieAteco(
+  dati: AtecoDataset | null,
+  sezione: string
+): { anno: number; casiAnalizzati: number; totaleFiltri?: number }[] {
+  if (!dati) return [];
+  const sez = dati.sezioni.find((s) => s.sezione === sezione);
+  if (!sez) return [];
+  return sez.perAnno.map((p) => ({ anno: p.anno, casiAnalizzati: p.casi }));
+}
 
 // Unisce due serie "anno -> voci" sommando i conteggi per nome (per la
 // modalità "entrambi": mortali + gravi).
@@ -97,6 +134,8 @@ function unisciSerieInformo(
     },
   };
 }
+
+const sum = (arr: number[]) => arr.reduce((a, b) => a + b, 0);
 
 // Sezione con intestazione e contenuto, per uniformità con le altre pagine.
 function Sezione({
@@ -182,6 +221,65 @@ export function AnalisiCauseContent() {
   const [perimetroQuery, setPerimetroQuery] = useState<PerimetroQuery>({ mortali: true, gravi: false });
   const perimetro = perimetroDaQuery(perimetroQuery);
 
+  // Filtro per attività economica (settore): vuoto = tutte le attività.
+  // Quando selezionato, le viste a valle mostrano solo i casi di quella
+  // sezione Ateco (leggenda nel header). La lettura caso per caso non è
+  // toccata: ha filtri propri.
+  const [sezioneAteco, setSezioneAteco] = useState<string>("");
+  const [datiAteco, setDatiAteco] = useState<{
+    mortali: AtecoDataset | null;
+    gravi: AtecoDataset | null;
+  }>({ mortali: null, gravi: null });
+
+  // Carica i dataset Ateco al mount (una sola volta, sono file statici).
+  useEffect(() => {
+    if (datiAteco.mortali || datiAteco.gravi) return;
+    const load = async () => {
+      const [m, g] = await Promise.all([
+        fetch(FILE_ATECO.mortali).then((r) => r.json()),
+        fetch(FILE_ATECO.gravi).then((r) => r.json()),
+      ]);
+      setDatiAteco({ mortali: m as AtecoDataset, gravi: g as AtecoDataset });
+    };
+    void load();
+  }, [datiAteco.mortali, datiAteco.gravi]);
+
+  // Dataset Ateco attivo secondo il perimetro (mortali/gravi/entrambi):
+  // quando sono attivi entrambi, le viste si sommano sezione per sezione.
+  const datasetAtecoAttivo = useMemo<AtecoDataset | null>(() => {
+    const { mortali: m, gravi: g } = datiAteco;
+    if (!m && !g) return null;
+    if (perimetro === "mortali") return m;
+    if (perimetro === "gravi") return g;
+    if (!m || !g) return m ?? g;
+    // entrambi: fondi le sezioni (stessa struttura, voci sommate).
+    const sezioni = m.sezioni.map((sm) => {
+      const sg = g.sezioni.find((s) => s.sezione === sm.sezione);
+      if (!sg) return sm;
+      const perAnno = sm.perAnno.map((pm) => {
+        const pg = sg.perAnno.find((p) => p.anno === pm.anno);
+        if (!pg) return pm;
+        const somma = (vs: { nome: string; count: number; quota: number }[]) => {
+          const mappa = new Map<string, number>();
+          for (const v of vs) mappa.set(v.nome, (mappa.get(v.nome) ?? 0) + v.count);
+          return Array.from(mappa.entries()).map(([nome, count]) => ({ nome, count, quota: 0 }));
+        };
+        const viste = {
+          incidenti: somma([...pm.viste.incidenti, ...pg.viste.incidenti]),
+          settori: somma([...pm.viste.settori, ...pg.viste.settori]),
+          territori: somma([...pm.viste.territori, ...pg.viste.territori]),
+          fattoriTipo: somma([...pm.viste.fattoriTipo, ...pg.viste.fattoriTipo]),
+          problemiSicurezza: somma([...pm.viste.problemiSicurezza, ...pg.viste.problemiSicurezza]),
+        };
+        return { anno: pm.anno, casi: pm.casi + pg.casi, viste };
+      });
+      const casi = sm.casi + sg.casi;
+      return { sezione: sm.sezione, casi, perAnno };
+    });
+    return { meta: m.meta, sezioni } as AtecoDataset;
+  }, [datiAteco, perimetro]);
+
+  // Dataset base (perimetro senza filtro settore): invariato.
   const analisi = useMemo<InformoAnalisi>(() => {
     const mortali = getInformoAnalisi();
     if (perimetro === "gravi") return getInformoGraviAnalisi();
@@ -192,9 +290,37 @@ export function AnalisiCauseContent() {
     } as InformoAnalisi;
   }, [perimetro]);
 
+  // Dataset effettivo mostrato: se una sezione Ateco è selezionata e i dati
+  // sono carichi, usa il sottoinsieme della sezione (filtro a monte).
+  const analisiEffettiva = useMemo<InformoAnalisi>(() => {
+    if (!sezioneAteco || !datasetAtecoAttivo) return analisi;
+    const dati = datasetAtecoAttivo;
+    const serie = serieAteco(dati, sezioneAteco);
+    return {
+      serie: serie.map((s) => ({ ...s, totaleFiltri: undefined })),
+      incidenti: vistaAteco(dati, sezioneAteco, "incidenti"),
+      settori: vistaAteco(dati, sezioneAteco, "settori"),
+      territori: vistaAteco(dati, sezioneAteco, "territori"),
+      popolazioni: [],
+      mansioni: [],
+      profili: {},
+      fattori: {
+        perTipo: vistaAteco(dati, sezioneAteco, "fattoriTipo"),
+        perRuolo: [],
+        perModulazione: [],
+        perProblemaSicurezza: vistaAteco(dati, sezioneAteco, "problemiSicurezza"),
+        perStandard: [],
+        perValutazione: [],
+      },
+      totFattori: 0,
+      casiConFattori: 0,
+      casiPeriodo: sum(serie.map((s) => s.casiAnalizzati)),
+    } as InformoAnalisi;
+  }, [sezioneAteco, datasetAtecoAttivo, analisi]);
+
   // Casi reali per anno (dalla serie dell'archivio): servono all'etichetta
   // del totale di periodo, distinta dalle voci classificate.
-  const casiAnno = analisi.serie.map((s) => ({ anno: s.anno, casi: s.casiAnalizzati }));
+  const casiAnno = analisiEffettiva.serie.map((s) => ({ anno: s.anno, casi: s.casiAnalizzati }));
 
   const labelPerimetro =
     PERIMETRI_INFORMO.find((p) => p.id === perimetro)?.label ?? "Mortali e gravi";
@@ -267,6 +393,20 @@ export function AnalisiCauseContent() {
                 color: "var(--color-text-muted)",
               }}
             >
+              Attività economica
+            </div>
+            <FiltroSettoreAteco value={sezioneAteco} onChange={setSezioneAteco} perimetro={perimetroQuery} />
+          </div>
+          <div style={{ display: "grid", gap: 2 }}>
+            <div
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                color: "var(--color-text-muted)",
+              }}
+            >
               Perimetro dei casi
             </div>
             <InformoPerimetro value={perimetroQuery} onChange={setPerimetroQuery} />
@@ -328,7 +468,7 @@ export function AnalisiCauseContent() {
         <InformoVociLista
           titolo="Incidente (modalità di accadimento)"
           sottotitolo={SOTTO_TITOLI.incidenti[perimetro]}
-          serie={analisi.incidenti}
+          serie={analisiEffettiva.incidenti}
           limite={8}
           colore={INFORM_COLORS.corrente}
           multiAnno
@@ -340,7 +480,7 @@ export function AnalisiCauseContent() {
         <InformoVociLista
           titolo="Settore di attività"
           sottotitolo={SOTTO_TITOLI.settori[perimetro]}
-          serie={analisi.settori}
+          serie={analisiEffettiva.settori}
           limite={8}
           colore={INFORM_COLORS.secondario}
           multiAnno
@@ -373,7 +513,7 @@ export function AnalisiCauseContent() {
         <InformoVociLista
           titolo="Macro-aree"
           sottotitolo={SOTTO_TITOLI.territori[perimetro]}
-          serie={analisi.territori}
+          serie={analisiEffettiva.territori}
           limite={4}
           colore={INFORM_COLORS.corrente}
           multiAnno
@@ -385,7 +525,7 @@ export function AnalisiCauseContent() {
         <InformoVociLista
           titolo="Popolazioni a rischio"
           sottotitolo={SOTTO_TITOLI.popolazioni[perimetro]}
-          serie={analisi.popolazioni}
+          serie={analisiEffettiva.popolazioni}
           limite={8}
           colore={INFORM_COLORS.secondario}
           multiAnno
@@ -394,7 +534,7 @@ export function AnalisiCauseContent() {
         <InformoVociLista
           titolo="Mansioni coinvolte"
           sottotitolo={SOTTO_TITOLI.mansioni[perimetro]}
-          serie={analisi.mansioni}
+          serie={analisiEffettiva.mansioni}
           limite={8}
           colore={INFORM_COLORS.corrente}
           multiAnno
@@ -409,15 +549,15 @@ export function AnalisiCauseContent() {
         >
           <div style={{ fontSize: "0.85rem", lineHeight: 1.5 }}>
             <strong style={{ display: "block", marginBottom: 4 }}>Sesso</strong>
-            <InformoCondensed serie={analisi.profili.sesso} labelAnno={casiAnno[casiAnno.length - 1]?.anno ?? 2024} />
+            <InformoCondensed serie={analisiEffettiva.profili.sesso} labelAnno={casiAnno[casiAnno.length - 1]?.anno ?? 2024} />
           </div>
           <div style={{ fontSize: "0.85rem", lineHeight: 1.5 }}>
             <strong style={{ display: "block", marginBottom: 4 }}>Rapporto di lavoro</strong>
-            <InformoCondensed serie={analisi.profili.rapportoLavoro} limite={4} labelAnno={casiAnno[casiAnno.length - 1]?.anno ?? 2024} />
+            <InformoCondensed serie={analisiEffettiva.profili.rapportoLavoro} limite={4} labelAnno={casiAnno[casiAnno.length - 1]?.anno ?? 2024} />
           </div>
           <div style={{ fontSize: "0.85rem", lineHeight: 1.5 }}>
             <strong style={{ display: "block", marginBottom: 4 }}>Sede della lesione</strong>
-            <InformoCondensed serie={analisi.profili.sedeLesione} limite={4} labelAnno={casiAnno[casiAnno.length - 1]?.anno ?? 2024} />
+            <InformoCondensed serie={analisiEffettiva.profili.sedeLesione} limite={4} labelAnno={casiAnno[casiAnno.length - 1]?.anno ?? 2024} />
           </div>
         </div>
       </Sezione>
@@ -429,7 +569,7 @@ export function AnalisiCauseContent() {
         <InformoVociLista
           titolo="Tipologie di fattori"
           sottotitolo={"Classificazione INAIL del fattore: attività dell&apos;infortunato, attività di terzi, utensili/macchine/impianti, ambiente, DPI, materiali (per anno o somma di periodo)"}
-          serie={analisi.fattori.perTipo}
+          serie={analisiEffettiva.fattori.perTipo}
           limite={8}
           colore={INFORM_COLORS.corrente}
           multiAnno
@@ -442,7 +582,7 @@ export function AnalisiCauseContent() {
         <InformoVociLista
           titolo="Problema di sicurezza"
           sottotitolo={"Classificazione INAIL del problema di sicurezza associato ai fattori (es. Azione estemporanea, Formazione/Informazione/Addestramento, Protezioni). Un caso può avere più fattori, ognuno con il proprio problema."}
-          serie={analisi.fattori.perProblemaSicurezza}
+          serie={analisiEffettiva.fattori.perProblemaSicurezza}
           limite={10}
           colore={INFORM_COLORS.secondario}
           multiAnno
