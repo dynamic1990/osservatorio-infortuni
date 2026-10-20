@@ -34,6 +34,18 @@ interface ClusterDataset {
   cluster: ClusterDim[];
 }
 
+// Dataset per sezione Ateco: { sezione: "F", casi: N, cluster: ClusterDim[] }
+interface ClusterAtecoSezione {
+  sezione: string;
+  casi: number;
+  cluster: ClusterDim[];
+}
+
+interface ClusterAtecoDataset {
+  meta?: { nota?: string; criteri?: Record<string, unknown> };
+  sezioni: ClusterAtecoSezione[];
+}
+
 // Viste mostrate: solo dinamiche e settori
 type Vista = "incidenti" | "settori";
 const VISTE: { id: Vista; label: string }[] = [
@@ -81,6 +93,7 @@ type PerimetroDim = { mortali: boolean; gravi: boolean };
 
 interface Props {
   perimetro?: PerimetroDim;
+  settore?: string; // codice sezione Ateco ("" = nazionale)
 }
 
 // Dataset per perimetro: mortali e gravi hanno un file cluster dedicato.
@@ -90,30 +103,47 @@ const FILE_DATASET = {
   gravi: "/data/informo-cluster-dimensionali-gravi.json",
 } as const;
 
-export function FiltroDimensioneAziendale({ perimetro = { mortali: true, gravi: false } }: Props) {
+// Dataset per sezione Ateco (questo componente ne carica i file solo quando
+// un settore è selezionato: ~1.2MB ciascuno, non vogliamo scaricarli sempre).
+const FILE_DATASET_ATECO = {
+  mortali: "/data/informo-cluster-ateco.json",
+  gravi: "/data/informo-cluster-ateco-gravi.json",
+} as const;
+
+export function FiltroDimensioneAziendale({ perimetro = { mortali: true, gravi: false }, settore = "" }: Props) {
   const [dati, setDati] = useState<ClusterDataset | null>(null);
   const [anno, setAnno] = useState(2024);
   const [vista, setVista] = useState<Vista>("incidenti");
   const [indice, setIndice] = useState(0);
   const refCarosello = useRef<HTMLDivElement | null>(null);
 
-  // Ricarica al cambio del perimetro, mantenendo la selezione anno/vista.
+  // Ricarica al cambio del perimetro o del settore, mantenendo la selezione
+  // anno/vista. Con settore valorizzato usa i cluster per sezione; con settore
+  // vuoto usa i cluster nazionali.
   useEffect(() => {
     const urls: string[] = [];
-    if (perimetro.mortali) urls.push(FILE_DATASET.mortali);
-    if (perimetro.gravi) urls.push(FILE_DATASET.gravi);
+    const base = settore ? FILE_DATASET_ATECO : FILE_DATASET;
+    if (perimetro.mortali) urls.push(base.mortali);
+    if (perimetro.gravi) urls.push(base.gravi);
     if (urls.length === 0) {
-      setDati(null);
+      Promise.resolve().then(() => setDati(null));
       return;
     }
     Promise.all(urls.map((u) => fetch(u).then((r) => r.json())))
       .then((ds) => {
-        if (ds.length === 1) {
-          setDati(ds[0] as ClusterDataset);
+        // Da un dataset per sezione estraiamo i cluster della sezione scelta.
+        const estrai = (raw: ClusterAtecoDataset | ClusterDataset): ClusterDataset => {
+          if (!settore || !("sezioni" in raw)) return raw as ClusterDataset;
+          const sez = (raw as ClusterAtecoDataset).sezioni.find((s) => s.sezione === settore);
+          return { meta: raw.meta, cluster: sez ? sez.cluster : [] } as ClusterDataset;
+        };
+        const lista: ClusterDataset[] = ds.map(estrai);
+        if (lista.length === 1) {
+          setDati(lista[0]);
           return;
         }
         // Somma dei due archivi: stesso cluster/anno/vista, conteggi additivi.
-        const [a, b] = ds as [ClusterDataset, ClusterDataset];
+        const [a, b] = lista as [ClusterDataset, ClusterDataset];
         const somma = (va: VoceQuota[], vb: VoceQuota[]): VoceQuota[] => {
           const m = new Map<string, number>();
           for (const v of [...va, ...vb]) m.set(v.nome, (m.get(v.nome) ?? 0) + v.count);
@@ -145,7 +175,7 @@ export function FiltroDimensioneAziendale({ perimetro = { mortali: true, gravi: 
         setDati({ meta: undefined, cluster } as ClusterDataset);
       })
       .catch(() => setDati(null));
-  }, [perimetro.mortali, perimetro.gravi]);
+  }, [perimetro.mortali, perimetro.gravi, settore]);
 
   const clusterOrdinati = useMemo(() => {
     const mappa = new Map((dati?.cluster ?? []).map((c) => [c.id, c]));
@@ -174,7 +204,6 @@ export function FiltroDimensioneAziendale({ perimetro = { mortali: true, gravi: 
     const onScroll = () => setIndice(Math.round(el.scrollLeft / passo()));
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dati, clusterOrdinati.length]);
 
   const vaiA = (i: number) => {
@@ -242,6 +271,9 @@ export function FiltroDimensioneAziendale({ perimetro = { mortali: true, gravi: 
           : perimetro.gravi
             ? "Archivio: infortuni gravi. "
             : "Archivio: infortuni mortali. "}
+        {settore
+          ? `Filtro attività economica: sezione ${settore}. `
+          : "Filtro attività economica: tutte le attività. "}
         Classi dimensionali (raccomandazione UE 2003/361): micro 0-9, piccole 10-49, medie 50-249,
         grandi 250+ addetti. Le quote sono sul totale del cluster e dell&apos;anno. Delta = variazione
         % dei casi rispetto all&apos;anno precedente. Casi nel periodo:{" "}

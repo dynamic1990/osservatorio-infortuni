@@ -505,7 +505,7 @@ export function AnalisiCauseContent() {
               Consulta dinamiche e settori per anno, con la variazione rispetto all&apos;anno precedente.
             </p>
           </div>
-          <FiltroDimensioneAziendale perimetro={perimetroQuery} />
+          <FiltroDimensioneAziendale perimetro={perimetroQuery} settore={sezioneAteco} />
         </div>
       </Sezione>
 
