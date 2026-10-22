@@ -1,34 +1,54 @@
 {
   "schemaVersion": 7,
   "datasetId": "news_infortuni",
-  "generatedAt": "2026-10-22T10:01:37+00:00",
+  "generatedAt": "2026-10-22T14:01:47+00:00",
   "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
   "periodo": "ultimi 365 giorni (archivio)",
   "stats": {
     "finestra": 365,
-    "generatoIl": "2026-10-22T10:01:37+00:00",
+    "generatoIl": "2026-10-22T14:01:47+00:00",
     "ultimi7": {
-      "mortali": 65,
-      "gravi": 26,
-      "totale": 91
+      "mortali": 61,
+      "gravi": 25,
+      "totale": 86
     },
     "precedenti7": {
-      "mortali": 35,
-      "gravi": 4,
-      "totale": 39
+      "mortali": 37,
+      "gravi": 5,
+      "totale": 42
     },
     "mese": {
       "codice": "2026-10",
       "etichetta": "Ottobre 2026",
-      "mortali": 142,
-      "totale": 184
+      "mortali": 143,
+      "totale": 185
     },
     "mesePrecedente": {
       "codice": "2026-09",
-      "mortali": 100
+      "mortali": 101
     }
   },
   "notizie": [
+    {
+      "titolo": "Morti sul lavoro, la Camera approva all’unanimità il patrocinio gratuito per i familiari delle vittime",
+      "fonte": "TGLA7",
+      "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPbWZzVk1ScDV5ZlU5MGNfVmxQQmZoZ3lwbHZiWkN4RlpiSlFCVTlJRnJraWJCZ3BmNzRmaHdNaW9pdURwMU5aWFQzZDNHaktGN2FZRUd0VWtFNHg5NVR0cmo1aEFxSm84ZWRPT2x4U1R5Z3pRZnVjV24yVmdRRE9hQzRsTkpjQ1g1ZHhRR3RfMWtYc2JSRWVsSUhkeEEzc3FtTC1qT2gzUlpSYzZNUWJaZnM4UW5XQ1FBSjdIM0hwaHhMcnVka0FWMndXM29YZzNyLUdlb0g3azFqeWI3YVEwQUZn0gHiAUFVX3lxTE9tZnNWTVJwNXlmVTkwY19WbFBCZmhneXBsdmJaQ3hGWmJKUUJVOUlGcmtpYkJncGY3NGZod01pb2l1RHAxTlpYVDNkM0dqS0Y3YVlFR3RVa0U0eDk1VHRyajVoQXFKbzhlZE9PbHhTVHlnelFmdWNXbjJWZ1FET2FDNGxOSmNDWDVkeFFHdF8xa1hzYlJFZWxJSGR4QTNzcW1MLWpPaDNSWlJjNk1RYlpmczhRbldDUUFKN0gzSHBoeExydWRrQVYyd1czb1hnM3ItR2VvSDdrMWp5YjdhUTBBRmc?oc=5",
+      "data": "Thu, 22 Oct 2026 11:20:38 GMT",
+      "provincia": null,
+      "regione": null,
+      "tipo": "evento",
+      "esito": "mortale",
+      "categoria": "mortale",
+      "workAccidentScore": 56,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ],
+      "sintesi": "Infortunio con vittima deceduta",
+      "eventGroupId": "evt-6c5bee7aeaf79db4",
+      "fonti": []
+    },
     {
       "titolo": "Infortunio mortale sul lavoro a Sarezzo: la vittima è l'imprenditore Roberto Fontana",
       "fonte": "Bresciaoggi",
@@ -47,7 +67,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-30a0b35cf5e041ed",
+      "eventGroupId": "evt-246287ac180f223e",
       "fonti": [
         {
           "titolo": "Morto sul lavoro, Sarezzo piange l’imprenditore Roberto Domenico Fontana",
@@ -75,7 +95,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-5696f9babcea570",
+      "eventGroupId": "evt-a1ae06f7115cb16",
       "fonti": []
     },
     {
@@ -96,7 +116,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-6f07bfed9289f1aa",
+      "eventGroupId": "evt-3e477cba75531b1f",
       "fonti": [
         {
           "titolo": "Brescia, operaio resta schiacciato in fabbrica e muore in ospedale",
@@ -131,7 +151,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Colpito da fuoco/esplosione, conseguenze gravi",
-      "eventGroupId": "evt-5ba0b6801fca8e7a",
+      "eventGroupId": "evt-165074fba36ca814",
       "fonti": []
     },
     {
@@ -152,7 +172,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7f2e2cb443f3695c",
+      "eventGroupId": "evt-3bba69d0a7d04079",
       "fonti": [
         {
           "titolo": "Ucciso in retromarcia dal trattore condotto dal figlio: tragedia in una azienda agricola",
@@ -181,7 +201,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-17b2ee38d74fd67d",
+      "eventGroupId": "evt-1f61793d09209695",
       "fonti": [
         {
           "titolo": "Operaio muore schiacciato da un cestello elevatore nelle Acciaierie Venete a Sarezzo",
@@ -223,7 +243,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-14abca15fff662df",
+      "eventGroupId": "evt-6576ca9372e56c30",
       "fonti": []
     },
     {
@@ -242,7 +262,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-1286df726d2550ad",
+      "eventGroupId": "evt-5e1808f0d73bfa79",
       "fonti": []
     },
     {
@@ -262,7 +282,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7fb23bd6cd7ea10c",
+      "eventGroupId": "evt-1b365accf13497ae",
       "fonti": []
     },
     {
@@ -282,7 +302,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-25ac4b91df1569a8",
+      "eventGroupId": "evt-11e2e35e1418b08a",
       "fonti": []
     },
     {
@@ -303,7 +323,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-68b673d5f2a37e8e",
+      "eventGroupId": "evt-56037799e700b834",
       "fonti": []
     },
     {
@@ -323,7 +343,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3d4a6c7a34efcc55",
+      "eventGroupId": "evt-763dd044cf0a6945",
       "fonti": []
     },
     {
@@ -343,7 +363,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-4cb2d86265afc2d2",
+      "eventGroupId": "evt-1eaefde9f74d3e03",
       "fonti": []
     },
     {
@@ -364,7 +384,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-b7ee700ab53643a",
+      "eventGroupId": "evt-37d3a2c53f6bead7",
       "fonti": []
     },
     {
@@ -385,7 +405,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-649edf734bae240e",
+      "eventGroupId": "evt-5db80ed50313447e",
       "fonti": []
     },
     {
@@ -405,7 +425,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-22afa1f95c102bbb",
+      "eventGroupId": "evt-4cafba3946963cf1",
       "fonti": []
     },
     {
@@ -426,7 +446,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7be99aa7d1e72bdd",
+      "eventGroupId": "evt-549c6e0954506061",
       "fonti": []
     },
     {
@@ -447,7 +467,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4829b1c265543eba",
+      "eventGroupId": "evt-7e5176c229d87844",
       "fonti": [
         {
           "titolo": "Operaio morto Cantiere Av Firenze, Giani al presidio dei sindacati",
@@ -618,13 +638,6 @@
           "score": 85
         },
         {
-          "titolo": "Incidente in cantiere stazione Av a Firenze, morto operaio",
-          "data": "Thu, 15 Oct 2026 15:41:00 GMT",
-          "fonte": "ANSA",
-          "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxObmVBTTU5VHJsT3YzR0tycXNlY1JXN1ZiTWpRSlJVM29sSlloTGZNQ3NqSnY5RmlvdFpWY3AzU0ZiQmJQOUc1SVM5VUlvYThQZVBHcWFUaXBObktGU1VxTFRCdEtVN3AxX2NuRlNSa3VxX2ZyS3l3TXhEd1V4NzA0UXh0T2kxTGRtbXo0TXdEaWF6bGRmZkNBZVB5QlNMOTdNNEx4b3pIUFJjTWFmRjdKZVlOb1hpQXgzMEQybmlqX01MZkF5Q1lxb0VGNi13YndNazBGNWRHalR6ODJ4clEw0gHkAUFVX3lxTE9pYzA4SVRpLUNCVkNQdWNQTXczczk2a3hkXzh6SUVma0o0RjN4bDJzQmt2ZWl4c3lnbWVHcjY2WE1LUlJZTDFpWnd0M2F5dlVvcmE4RzlmdmlwUV9CdzNpaHFCVGdKZU5reGFoZ3B6T2pra1ltY3BTRi1BOEFxaHp3NWRsejl0M0NmbFAwVGlveVpWVEVwYXhvbjBmUkhMUi1Fd2gzZmRhYy1aZHlqSmVISkJubVd3TUNWcmFEd2swdFlqLUh3MzZid0I2UlN6cVh5ZGFuOG5wRkRGbmZaUFkzMTZiWg?oc=5",
-          "score": 85
-        },
-        {
           "titolo": "Firenze, morte sul lavoro nel cantiere Tav",
           "data": "Thu, 15 Oct 2026 15:39:00 GMT",
           "fonte": "ToscanaOggi",
@@ -643,13 +656,6 @@
           "data": "Thu, 15 Oct 2026 15:31:00 GMT",
           "fonte": "Adnkronos",
           "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQN1c4NnpaekFnZkFpUlFsXzk3cTlBODZlT1ZmSU91TDZSRVB5Q3VzcE1DYXA3RGdtd1NRWlVlR2QwT2x6MlgtQjRTZy1MTkVfRDA5ekNucjF5V2xKWWtYT2NlaHlHM0RPajNNM0FqWXR4SWVpSlRyS0dOckgxbjdqdXhhVGtiZi0wWTh3UWtDeVo5U1c3V3ZsVlM3ck94eUxNZWE2Y3MyNEs?oc=5",
-          "score": 85
-        },
-        {
-          "titolo": "Incidente sul lavoro nel cantiere dell'Alta velocità a Firenze, muore un operaio 31enne",
-          "data": "Thu, 15 Oct 2026 15:25:37 GMT",
-          "fonte": "gonews.it",
-          "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPTEN3U3hFOE0yT0ZnU25rV2JnNGxidkxVVVAwRllOZDZHazhKQVN1MTNXRGRQbW9aUzVUM2lmbkZVdEMtaGlHaVlGdU1KdjRsSFl1OEJiTkhUTHdva3c0RXROR3hSVVBtWkJWNDlFUEdfRzB0T3hWQWxPbE1YbnRNNHFlblpoSE1yY2RXSm8wNmo1UGowTkVHaUtFS2RUN0dsc2JWSU44NTYtaEJTQ2pVSlpBWlFPamxnOS1QZ9IBxAFBVV95cUxNV19jSjZwdzExTnNCNHFIZjNIN3FIeWFQamxQZzRIUi1nMGZNSDR0cUE0bnVzNFo4YmwwZkYyUWt3aGdBbWg4azVETXMzTFFTTHg5WVJyRVVGSmZxNThFZWozQXl5ejNyMUlFd3Z6YnFSbWNHRW02aHk2QkJTZnhzTFJMZlY5eGdUZjE2Yld4SGR1SjBQUmk0YzRTMlZTa2ZvVHFJSENLMDRxVmJndDctZlBzcXl3ZnRtelVVUVg3X1IzeVRF?oc=5",
           "score": 85
         },
         {
@@ -714,7 +720,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-2bf5bde5ff68f37d",
+      "eventGroupId": "evt-364975e5422265f",
       "fonti": [
         {
           "titolo": "Incidente sul lavoro a Bolzano Vicentino, gamba tagliata mentre falcia l'erba. Gravissimo un 20enne",
@@ -743,7 +749,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-6024e4a9a966bd00",
+      "eventGroupId": "evt-685707ab63cebd78",
       "fonti": []
     },
     {
@@ -764,7 +770,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-6e50eb39879c23d0",
+      "eventGroupId": "evt-40ea3c530452544d",
       "fonti": []
     },
     {
@@ -785,7 +791,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-7220809cc7d004ca",
+      "eventGroupId": "evt-1300ae70f3ba2cd5",
       "fonti": []
     },
     {
@@ -805,7 +811,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-4e902c40e7610458",
+      "eventGroupId": "evt-67c10efbe2872d33",
       "fonti": []
     },
     {
@@ -825,7 +831,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-21e0149b0bd4bf33",
+      "eventGroupId": "evt-7f6e53827271deb9",
       "fonti": []
     },
     {
@@ -845,7 +851,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3e6233a7da4f0dd4",
+      "eventGroupId": "evt-440bcea4c8b3eaac",
       "fonti": []
     },
     {
@@ -866,7 +872,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-1b85525dea7c6567",
+      "eventGroupId": "evt-6bf513bfa38540ca",
       "fonti": []
     },
     {
@@ -887,7 +893,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-1b85525dea7c6567",
+      "eventGroupId": "evt-6bf513bfa38540ca",
       "fonti": []
     },
     {
@@ -908,7 +914,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-1b85525dea7c6567",
+      "eventGroupId": "evt-6bf513bfa38540ca",
       "fonti": []
     },
     {
@@ -929,7 +935,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2297c8bd8d5a8993",
+      "eventGroupId": "evt-2ab4801ec7aead9d",
       "fonti": []
     },
     {
@@ -950,7 +956,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3ac860f97c82a6e0",
+      "eventGroupId": "evt-3cea030707865521",
       "fonti": []
     },
     {
@@ -971,7 +977,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-36474c5b11ffad67",
+      "eventGroupId": "evt-23d9d7ee967bf4bc",
       "fonti": []
     },
     {
@@ -992,7 +998,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-567491b9890f5d41",
+      "eventGroupId": "evt-4b8617e5d203f8ac",
       "fonti": []
     },
     {
@@ -1012,7 +1018,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-23a931905a75fd27",
+      "eventGroupId": "evt-69ef278b30c13e42",
       "fonti": []
     },
     {
@@ -1033,7 +1039,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-353b34d903cb9527",
+      "eventGroupId": "evt-71a3a11e807b4180",
       "fonti": []
     },
     {
@@ -1053,7 +1059,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-22c14fe3d92e4384",
+      "eventGroupId": "evt-24bf7848fdaca7cd",
       "fonti": []
     },
     {
@@ -1074,7 +1080,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4631a783d92a6b28",
+      "eventGroupId": "evt-62c1df6b586e3ccf",
       "fonti": []
     },
     {
@@ -1093,7 +1099,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-5ded16824bd2f035",
+      "eventGroupId": "evt-6784e6b474207d2a",
       "fonti": []
     },
     {
@@ -1114,7 +1120,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-4df6026b826add13",
+      "eventGroupId": "evt-5dae805e574b83fe",
       "fonti": []
     },
     {
@@ -1134,7 +1140,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-719719b13316819f",
+      "eventGroupId": "evt-2aa12d3eabca355f",
       "fonti": []
     },
     {
@@ -1155,7 +1161,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-43a0d0431a4c00f3",
+      "eventGroupId": "evt-561e2ab4c744d08a",
       "fonti": []
     },
     {
@@ -1176,7 +1182,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-75b6aff19d825e52",
+      "eventGroupId": "evt-1c659eefa68a4f6d",
       "fonti": []
     },
     {
@@ -1196,7 +1202,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-75b6aff19d825e52",
+      "eventGroupId": "evt-1c659eefa68a4f6d",
       "fonti": []
     },
     {
@@ -1217,7 +1223,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2ace18ace80b2f0f",
+      "eventGroupId": "evt-19bf86eac709831c",
       "fonti": []
     },
     {
@@ -1237,7 +1243,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-43273f7ced826334",
+      "eventGroupId": "evt-790ab7a232ef7025",
       "fonti": []
     },
     {
@@ -1258,7 +1264,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1f9c10602cd19e00",
+      "eventGroupId": "evt-4ad00d97d8a816d0",
       "fonti": []
     },
     {
@@ -1278,7 +1284,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1fa4d0416c16b8f4",
+      "eventGroupId": "evt-2337e3190e16ac0e",
       "fonti": []
     },
     {
@@ -1298,7 +1304,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-7ddc2fc2210295c0",
+      "eventGroupId": "evt-dab97f22b3f1bb6",
       "fonti": [
         {
           "titolo": "Operaio cade da impalcatura a Napoli è grave al Cardarelli",
@@ -1334,7 +1340,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-496a5f60cede7b0c",
+      "eventGroupId": "evt-782a9df2a6cd33cc",
       "fonti": []
     },
     {
@@ -1354,7 +1360,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-99bdafbd670fe1d",
+      "eventGroupId": "evt-160f4abf5aab6abf",
       "fonti": []
     },
     {
@@ -1374,7 +1380,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-21a7dedd118aea8b",
+      "eventGroupId": "evt-6fd1c9e49d12b818",
       "fonti": []
     },
     {
@@ -1394,7 +1400,7 @@
         "esito mortale"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-f8c17494706e16e",
+      "eventGroupId": "evt-5634a33c7869b191",
       "fonti": []
     },
     {
@@ -1413,7 +1419,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-f1a165de1ebc663",
+      "eventGroupId": "evt-5f92d1bcef443959",
       "fonti": []
     },
     {
@@ -1433,7 +1439,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-600a7d2c53eebdcb",
+      "eventGroupId": "evt-60996f6f22e23809",
       "fonti": []
     },
     {
@@ -1454,7 +1460,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-286a68794504920d",
+      "eventGroupId": "evt-317ae17795ba21e",
       "fonti": [
         {
           "titolo": "Incidente nel cantiere dell’Alta velocità a Firenze: muore un operaio. A Chieti un’altra vittima",
@@ -1482,7 +1488,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-10fff4ba87f6911",
+      "eventGroupId": "evt-6aa80772eb09a257",
       "fonti": []
     },
     {
@@ -1503,7 +1509,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-72e5552534bb2a17",
+      "eventGroupId": "evt-5b96e7fad7149f80",
       "fonti": [
         {
           "titolo": "Comunicati stampa - Incidente mortale al porto canale di Cagliari, l’assessore Cani: “Cordoglio e amarezza. La sicurezza sul lavoro deve essere una priorità concreta e quotidiana”",
@@ -1546,7 +1552,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6f3428c8f06eb911",
+      "eventGroupId": "evt-3699884d60a54b31",
       "fonti": []
     },
     {
@@ -1565,7 +1571,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-252c2357c9962c9c",
+      "eventGroupId": "evt-149521c80906e1e5",
       "fonti": []
     },
     {
@@ -1585,7 +1591,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-777b8e9ba0f97a0b",
+      "eventGroupId": "evt-4b7e8dfa824caf17",
       "fonti": []
     },
     {
@@ -1606,7 +1612,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-307e3e901af1ad8b",
+      "eventGroupId": "evt-4f08cf34a6fcf279",
       "fonti": []
     },
     {
@@ -1625,7 +1631,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-82ee7995533279d",
+      "eventGroupId": "evt-f5753d74143a899",
       "fonti": []
     },
     {
@@ -1646,7 +1652,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-406e9a32ef33e8c8",
+      "eventGroupId": "evt-23ebbdcc3f1b1b1c",
       "fonti": []
     },
     {
@@ -1665,7 +1671,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-75d777d4ae91b5d3",
+      "eventGroupId": "evt-3efe9f2d0491d38f",
       "fonti": []
     },
     {
@@ -1685,7 +1691,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-12ff72501538d8fa",
+      "eventGroupId": "evt-5890c6e56c0263f0",
       "fonti": []
     },
     {
@@ -1706,7 +1712,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7ba411ddb2b8a8c4",
+      "eventGroupId": "evt-3227435fd9c209d1",
       "fonti": []
     },
     {
@@ -1726,7 +1732,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-488f306b33087afc",
+      "eventGroupId": "evt-1408b4b05dafde27",
       "fonti": []
     },
     {
@@ -1747,7 +1753,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-75e3d7bb8eeee1b8",
+      "eventGroupId": "evt-5982518ec1e79598",
       "fonti": []
     },
     {
@@ -1767,7 +1773,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-7b9acba3ff14bba4",
+      "eventGroupId": "evt-3b53a2e4b8739648",
       "fonti": []
     },
     {
@@ -1788,7 +1794,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7f47184386f99536",
+      "eventGroupId": "evt-6c3af388233308f8",
       "fonti": []
     },
     {
@@ -1808,7 +1814,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3f3a81b00a17cb53",
+      "eventGroupId": "evt-5b444529d4163e22",
       "fonti": []
     },
     {
@@ -1829,7 +1835,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-6edcc7d8400e709",
+      "eventGroupId": "evt-3f658fdf01a8ad45",
       "fonti": []
     },
     {
@@ -1849,7 +1855,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4f8f7a99d38fc1c1",
+      "eventGroupId": "evt-eef004d16b427f6",
       "fonti": []
     },
     {
@@ -1869,7 +1875,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-170d891f3446e71f",
+      "eventGroupId": "evt-40ff23b95b4d1a4b",
       "fonti": []
     },
     {
@@ -1889,7 +1895,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-27adf0886f1e1531",
+      "eventGroupId": "evt-534c728ab9f72e7",
       "fonti": []
     },
     {
@@ -1910,7 +1916,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3e5cbbe8fcb742a6",
+      "eventGroupId": "evt-68608e4f39c31e12",
       "fonti": []
     },
     {
@@ -1930,7 +1936,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4895b830d4f9e9db",
+      "eventGroupId": "evt-4ba33abd1d6f4f9",
       "fonti": []
     },
     {
@@ -1951,7 +1957,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1e8f143ca6e0a72a",
+      "eventGroupId": "evt-4a01adfaa10ea69a",
       "fonti": []
     },
     {
@@ -1971,7 +1977,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-42eb9b0655f9e70e",
+      "eventGroupId": "evt-6d4f5b754e20a8de",
       "fonti": []
     },
     {
@@ -1991,7 +1997,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-7358e5c0f1409277",
+      "eventGroupId": "evt-56e5168b66d27a56",
       "fonti": []
     },
     {
@@ -2012,7 +2018,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-38c4410364aeab4f",
+      "eventGroupId": "evt-28172a1c553b28ff",
       "fonti": [
         {
           "titolo": "Un 23enne muore nel Chietino, un 61enne schiacciato da tubi al porto di Cagliari, in Alto Adige cinque operai feriti",
@@ -2041,7 +2047,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-1c57835417e2ef0b",
+      "eventGroupId": "evt-5a19412c6a9d7409",
       "fonti": [
         {
           "titolo": "Potenza operaio muore schiacciato da un macchinario",
@@ -2140,7 +2146,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-43b4b85240bf6f60",
+      "eventGroupId": "evt-243eecaa983f96e2",
       "fonti": []
     },
     {
@@ -2160,7 +2166,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-5665491a7dd247ca",
+      "eventGroupId": "evt-36667d3c8bc826c6",
       "fonti": []
     },
     {
@@ -2180,7 +2186,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-9922b46b175399b",
+      "eventGroupId": "evt-1751f1e5b8e10508",
       "fonti": []
     },
     {
@@ -2201,7 +2207,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-5b80cce4738603fa",
+      "eventGroupId": "evt-63fe02dfed127874",
       "fonti": []
     },
     {
@@ -2222,7 +2228,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-1a902f6a43e102ff",
+      "eventGroupId": "evt-1321dbc81344790d",
       "fonti": []
     },
     {
@@ -2243,7 +2249,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-263edac4ce6d4c02",
+      "eventGroupId": "evt-1d3a8e2f043ef0b0",
       "fonti": []
     },
     {
@@ -2263,7 +2269,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-10b516f1ab9baaf1",
+      "eventGroupId": "evt-6ffc3117404978a5",
       "fonti": []
     },
     {
@@ -2284,7 +2290,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-25d4e0384a2b4b75",
+      "eventGroupId": "evt-1a3b58ba743272ff",
       "fonti": []
     },
     {
@@ -2305,7 +2311,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2872f6e53c7f2c15",
+      "eventGroupId": "evt-57f8a7981f12ade3",
       "fonti": [
         {
           "titolo": "Operaio cade da un ponteggio, incidente mortale sul lavoro nel bresciano",
@@ -2341,7 +2347,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-769672e669a92bc6",
+      "eventGroupId": "evt-5229594a5f04583c",
       "fonti": []
     },
     {
@@ -2362,7 +2368,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-75bb8d967b6175cd",
+      "eventGroupId": "evt-32a767c08bd64ae6",
       "fonti": []
     },
     {
@@ -2383,7 +2389,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6401843dd5f4f99",
+      "eventGroupId": "evt-6beddfd7fc537fb5",
       "fonti": [
         {
           "titolo": "Cade da ponteggio, morto operaio nel Bresciano",
@@ -2410,7 +2416,7 @@
         "evento/infortunio"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-4427b853a1d8284b",
+      "eventGroupId": "evt-15eaae6fce49e4f8",
       "fonti": []
     },
     {
@@ -2430,7 +2436,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-70db90c033d9b43b",
+      "eventGroupId": "evt-38533e95c5c5d82f",
       "fonti": []
     },
     {
@@ -2451,7 +2457,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-2c7a10326b070a57",
+      "eventGroupId": "evt-497c5655cfc50353",
       "fonti": []
     },
     {
@@ -2472,7 +2478,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-3231e21b88b164b4",
+      "eventGroupId": "evt-7080eb2038233d19",
       "fonti": []
     },
     {
@@ -2493,7 +2499,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-7021257e8b570be",
+      "eventGroupId": "evt-654f2e4e722827ad",
       "fonti": []
     },
     {
@@ -2514,7 +2520,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-6000dc46ad0914fd",
+      "eventGroupId": "evt-163a49617dd83995",
       "fonti": []
     },
     {
@@ -2535,7 +2541,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4c72737c795671c7",
+      "eventGroupId": "evt-69aa00ba9144028f",
       "fonti": []
     },
     {
@@ -2556,7 +2562,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-386a151f65bc7276",
+      "eventGroupId": "evt-292d2f8d55266bad",
       "fonti": []
     },
     {
@@ -2577,7 +2583,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-6545e261e44bd056",
+      "eventGroupId": "evt-23f641ffc294ff6",
       "fonti": []
     },
     {
@@ -2598,7 +2604,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4769db9283aa01a",
+      "eventGroupId": "evt-45c03d86827d6c7b",
       "fonti": []
     },
     {
@@ -2619,7 +2625,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1bee070ab8922547",
+      "eventGroupId": "evt-74937cd5f35a18d9",
       "fonti": []
     },
     {
@@ -2639,7 +2645,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-27133a5242c241b4",
+      "eventGroupId": "evt-75d9017ab24bdf7c",
       "fonti": []
     },
     {
@@ -2660,7 +2666,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-7df1842853bee434",
+      "eventGroupId": "evt-470c5e0301b7cbc3",
       "fonti": []
     },
     {
@@ -2680,7 +2686,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-715fae5824ffd79b",
+      "eventGroupId": "evt-1bd2170dd2f3a4f1",
       "fonti": []
     },
     {
@@ -2701,7 +2707,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-182fe0ec992babe3",
+      "eventGroupId": "evt-6930e385f1cd189",
       "fonti": []
     },
     {
@@ -2722,7 +2728,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-526533438459142a",
+      "eventGroupId": "evt-61d7cc0cb2cb952d",
       "fonti": []
     },
     {
@@ -2743,7 +2749,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-30b0708510b2beb3",
+      "eventGroupId": "evt-1b3ea8404c4100a",
       "fonti": []
     },
     {
@@ -2763,7 +2769,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-5c8bc155b966a6d5",
+      "eventGroupId": "evt-a5ea9a04fe28934",
       "fonti": [
         {
           "titolo": "Tragico incidente sul lavoro a Fiano Romano, operaio muore cadendo da un tetto",
@@ -2792,7 +2798,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-5c25c5d95c05c8f9",
+      "eventGroupId": "evt-5a4cd7f7b7d39645",
       "fonti": []
     },
     {
@@ -2812,7 +2818,7 @@
         "esito mortale"
       ],
       "sintesi": "Folgorato da corrente elettrica, vittima deceduta",
-      "eventGroupId": "evt-4e857e637fcfb923",
+      "eventGroupId": "evt-1266b098fa5a8240",
       "fonti": []
     },
     {
@@ -2832,7 +2838,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-378b69a848fccea4",
+      "eventGroupId": "evt-61c2e22b0c0fd758",
       "fonti": []
     },
     {
@@ -2852,7 +2858,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-5a4a5060360a9b62",
+      "eventGroupId": "evt-198ef2e8dd7176e4",
       "fonti": []
     },
     {
@@ -2872,7 +2878,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-45fda784192f67a",
+      "eventGroupId": "evt-4746c3588951b968",
       "fonti": []
     },
     {
@@ -2892,7 +2898,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-18e639949a070fcc",
+      "eventGroupId": "evt-77b600ead6615ef0",
       "fonti": []
     },
     {
@@ -2913,7 +2919,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-69faf1386a75ed49",
+      "eventGroupId": "evt-4026c7d63726c0bd",
       "fonti": []
     },
     {
@@ -2934,7 +2940,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-179994e4ef667b16",
+      "eventGroupId": "evt-bb2596492b896d8",
       "fonti": []
     },
     {
@@ -2955,7 +2961,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-2cdf84a5325ebb78",
+      "eventGroupId": "evt-7b2b0c3d53e93696",
       "fonti": []
     },
     {
@@ -2975,7 +2981,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-4ed0c787f0e3728e",
+      "eventGroupId": "evt-106b93e5b44d4453",
       "fonti": []
     },
     {
@@ -2996,7 +3002,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-31569fdb3ff78130",
+      "eventGroupId": "evt-6ddceee8e883a652",
       "fonti": []
     },
     {
@@ -3017,7 +3023,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-8a6d3f9897d01ce",
+      "eventGroupId": "evt-558e5008185a9ac2",
       "fonti": []
     },
     {
@@ -3037,7 +3043,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-644d9aadd0c760be",
+      "eventGroupId": "evt-78477bf20e4690b0",
       "fonti": []
     },
     {
@@ -3058,7 +3064,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-26e3277924e4e7d7",
+      "eventGroupId": "evt-270580d5b31eb6bc",
       "fonti": []
     },
     {
@@ -3079,7 +3085,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6ada21b53a05f08c",
+      "eventGroupId": "evt-18c6bade2821ae2e",
       "fonti": []
     },
     {
@@ -3100,7 +3106,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-2f5fe55ebc2cd320",
+      "eventGroupId": "evt-16fe46972a8e381e",
       "fonti": []
     },
     {
@@ -3120,7 +3126,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-3ac3188f42251a15",
+      "eventGroupId": "evt-411e29f7e88f4d9e",
       "fonti": []
     },
     {
@@ -3140,7 +3146,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-149fe67d398ddd4f",
+      "eventGroupId": "evt-261450b87e6af510",
       "fonti": []
     },
     {
@@ -3160,7 +3166,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-3c638e8731fa6974",
+      "eventGroupId": "evt-2259264dc1995ad4",
       "fonti": []
     },
     {
@@ -3180,7 +3186,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-5c2c00d406955071",
+      "eventGroupId": "evt-636d747ddf30fbb4",
       "fonti": []
     },
     {
@@ -3200,7 +3206,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-5200d7243592035f",
+      "eventGroupId": "evt-604ca650db342141",
       "fonti": [
         {
           "titolo": "Operaio morto a Caivano, arrestato il datore di lavoro",
@@ -3235,7 +3241,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-675c11a65536a50a",
+      "eventGroupId": "evt-6cd0cea1fbfbccbe",
       "fonti": []
     },
     {
@@ -3255,7 +3261,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-63240d3d775bdb02",
+      "eventGroupId": "evt-25d61613bb69bebd",
       "fonti": [
         {
           "titolo": "Morto schiacciato dall’escavatore. Dolore in Brianza per Dario Stucchi",
@@ -3270,6 +3276,13 @@
           "fonte": "Sky TG24",
           "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1VOGZ0aU4zNGhVckh0bFJ1QmhFZ3d5R1paT0dySER1NF9UUmpGZ3dXaVM4eUdCdmYzOUJYcm9JMmNRd0FrWmlYbVdDUkpVWlRMeU5aX09HbE92MWh1RnBab3NxVGNzNVpZeGtjZ1ZwTHN5bE5iUWlR?oc=5",
           "score": 80
+        },
+        {
+          "titolo": "Travolto dalla ruspa: l'imprenditore edile Dario Stucchi muore davanti al figlio",
+          "data": "Fri, 09 Oct 2026 07:00:00 GMT",
+          "fonte": "BresciaToday",
+          "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1RbTlnWGdtMDI2M3JNYUVSSjdGZGxuVXl4X1JJU09nbzhVeWcyR3VoeW95QUp6emNfMWZkNkZXUFhReXBEU2lZcE9HRDRKdkhrYWVvaTRoczBMZkZ2Z2lDMTVkMkpaUQ?oc=5",
+          "score": 57
         },
         {
           "titolo": "Operaio 62enne di Ornago morto in cantiere, la Cgil: «Non rassegniamoci a chiamarle fatalità",
@@ -3291,13 +3304,6 @@
           "fonte": "L'Eco di Bergamo",
           "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOdndkblM1UDZiWWRLZFNsYzhkVU5TMU9MekZSanhjTGRuRENWQkFYdVBJc2xMQUtwZHpvMDhWNWdQcHkxTG1SR1pieUdRUXNuYjJJWFZzTlZPV3BhdzFUMVJ6YmY0VXVudi1ZTFVDMEVMS1B5LUdpUmstNjg3blN0anRKU1NWcXE5Y2dGNFNpRE4yQWhWZnBlN2Z2UDVKQU9vYXFucndYUmxWX0lDaUlpSDhJeFRQWHJHV0dtT0JJWjdETGViZlhVbHZDSUlHWV84a2tzY2FkR3hUWGhtT0E0QWg5bzFFenpjMXE3OThB?oc=5",
           "score": 71
-        },
-        {
-          "titolo": "Travolto dalla ruspa: l'imprenditore edile Dario Stucchi muore davanti al figlio",
-          "data": "Fri, 09 Oct 2026 07:00:00 GMT",
-          "fonte": "BresciaToday",
-          "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1RbTlnWGdtMDI2M3JNYUVSSjdGZGxuVXl4X1JJU09nbzhVeWcyR3VoeW95QUp6emNfMWZkNkZXUFhReXBEU2lZcE9HRDRKdkhrYWVvaTRoczBMZkZ2Z2lDMTVkMkpaUQ?oc=5",
-          "score": 57
         },
         {
           "titolo": "Incidente sul lavoro a Filago: muore 62enne",
@@ -3332,7 +3338,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Trauma/lesione fisica",
-      "eventGroupId": "evt-192883fa7e2162dc",
+      "eventGroupId": "evt-1d9c496002c3254b",
       "fonti": []
     },
     {
@@ -3352,7 +3358,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-370fce40262de3c6",
+      "eventGroupId": "evt-66079e6ff6ada3d1",
       "fonti": []
     },
     {
@@ -3373,7 +3379,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-48c4e58129d5b1b3",
+      "eventGroupId": "evt-44d5ce6b9d112213",
       "fonti": []
     },
     {
@@ -3394,7 +3400,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-7f4a3c882ac8c84c",
+      "eventGroupId": "evt-27fa2d7fbcf789d3",
       "fonti": []
     },
     {
@@ -3414,7 +3420,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-7cb5bd5f67ee0230",
+      "eventGroupId": "evt-5a99c7fa6fbe0126",
       "fonti": []
     },
     {
@@ -3434,7 +3440,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-59d7dc63ea27a54d",
+      "eventGroupId": "evt-75201b1c2fbc3259",
       "fonti": []
     },
     {
@@ -3455,7 +3461,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-1428b2f0f608d723",
+      "eventGroupId": "evt-709c4f293e86e4a9",
       "fonti": []
     },
     {
@@ -3476,7 +3482,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-7bd65b28439f002e",
+      "eventGroupId": "evt-3dc050cddbc5fffd",
       "fonti": []
     },
     {
@@ -3497,7 +3503,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-609e186d3d24014b",
+      "eventGroupId": "evt-1b4a0c650cd422d2",
       "fonti": []
     },
     {
@@ -3517,7 +3523,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1f84f4e25c3fddde",
+      "eventGroupId": "evt-2959d2122f11e0c9",
       "fonti": []
     },
     {
@@ -3538,7 +3544,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-4eca0630409843a9",
+      "eventGroupId": "evt-5eff529373879909",
       "fonti": [
         {
           "titolo": "Tragedia in un'autofficina a Roma: esplode la sospensione di un camion, morto un uomo",
@@ -3567,7 +3573,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-6cdbc5de68087cab",
+      "eventGroupId": "evt-166b2773d50e8378",
       "fonti": []
     },
     {
@@ -3587,7 +3593,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1c27819fa55a7256",
+      "eventGroupId": "evt-43804e3f6f0f4f2c",
       "fonti": []
     },
     {
@@ -3607,7 +3613,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-27d2f3bec6549ff2",
+      "eventGroupId": "evt-1e6d776d8d4e69e2",
       "fonti": []
     },
     {
@@ -3627,7 +3633,7 @@
         "esito mortale"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-4984c735487afdb9",
+      "eventGroupId": "evt-2dda53f709553f59",
       "fonti": []
     },
     {
@@ -3648,7 +3654,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-765b5290b739de23",
+      "eventGroupId": "evt-681c32ec485feb",
       "fonti": []
     },
     {
@@ -3669,7 +3675,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-f66cf703d546853",
+      "eventGroupId": "evt-2953c6fe65aaff61",
       "fonti": []
     },
     {
@@ -3689,7 +3695,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-73bbd4e91dabe5bc",
+      "eventGroupId": "evt-7125c2c6da15cd95",
       "fonti": [
         {
           "titolo": "Apollosa, cede muro in un cantiere: muore operaio 46enne della provincia di Salerno",
@@ -3724,7 +3730,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2b44aa9912329b43",
+      "eventGroupId": "evt-12ad90afcef1734f",
       "fonti": []
     },
     {
@@ -3745,7 +3751,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-f375152c758aedd",
+      "eventGroupId": "evt-71918620732bb684",
       "fonti": []
     },
     {
@@ -3766,7 +3772,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-431bef7e7b08c5c6",
+      "eventGroupId": "evt-42cf3e3436bc561",
       "fonti": []
     },
     {
@@ -3786,7 +3792,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-56d69d14edf613df",
+      "eventGroupId": "evt-395995e3f0a50d13",
       "fonti": []
     },
     {
@@ -3807,7 +3813,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-a38b1ab4cfa4e85",
+      "eventGroupId": "evt-316a046ed37fbf90",
       "fonti": []
     },
     {
@@ -3827,7 +3833,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-10988cd4aaa4e863",
+      "eventGroupId": "evt-16ce174e09bb3bf2",
       "fonti": []
     },
     {
@@ -3847,7 +3853,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1fecd449d31599b2",
+      "eventGroupId": "evt-2f6706d3616d3e90",
       "fonti": []
     },
     {
@@ -3867,7 +3873,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-70e15b9dc5074e15",
+      "eventGroupId": "evt-6b36913f46c48586",
       "fonti": []
     },
     {
@@ -3888,7 +3894,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-36947323b714c3b6",
+      "eventGroupId": "evt-35360e5421db34cb",
       "fonti": []
     },
     {
@@ -3909,7 +3915,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-414f61b861213b6d",
+      "eventGroupId": "evt-741297ae2e26d875",
       "fonti": []
     },
     {
@@ -3928,7 +3934,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-5a4a8325215102c3",
+      "eventGroupId": "evt-41e8d1df6d65e0f7",
       "fonti": []
     },
     {
@@ -3949,7 +3955,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-288dc15d2a7818f1",
+      "eventGroupId": "evt-4584c713f89115f3",
       "fonti": [
         {
           "titolo": "Tragedia a Rimini: operaio perde la vita dopo caduta da impalcatura",
@@ -3978,7 +3984,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1de7e7389e020923",
+      "eventGroupId": "evt-7481fd27c444d658",
       "fonti": [
         {
           "titolo": "Tragedia sul lavoro a Gallese, uomo muore travolto da un mezzo in una cava di tufo",
@@ -4007,7 +4013,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-e0358c2bb0b885a",
+      "eventGroupId": "evt-51d4a1606b97162d",
       "fonti": []
     },
     {
@@ -4028,7 +4034,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-57c53d8b9999ee42",
+      "eventGroupId": "evt-1230ac987e9b030c",
       "fonti": []
     },
     {
@@ -4049,7 +4055,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2e460fe7ad8a582b",
+      "eventGroupId": "evt-72a91e5630f44069",
       "fonti": []
     },
     {
@@ -4069,7 +4075,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-60e56abeddfe9bbc",
+      "eventGroupId": "evt-6eca04a1197ff769",
       "fonti": []
     },
     {
@@ -4089,7 +4095,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2aad88de18cd50a3",
+      "eventGroupId": "evt-5ead9ba57ffe3406",
       "fonti": []
     },
     {
@@ -4110,7 +4116,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-5ebceb857419ef7e",
+      "eventGroupId": "evt-3c966dd69baf0553",
       "fonti": []
     },
     {
@@ -4130,7 +4136,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-4dbf4a5afa30d560",
+      "eventGroupId": "evt-72d2de6a5de1f59e",
       "fonti": []
     },
     {
@@ -4151,7 +4157,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-64ae12b842510609",
+      "eventGroupId": "evt-22f8ee098d7f82c",
       "fonti": []
     },
     {
@@ -4172,7 +4178,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-d8ceaa311ecc00b",
+      "eventGroupId": "evt-204a206a59c63b35",
       "fonti": []
     },
     {
@@ -4192,7 +4198,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-2e7932e379dc1a81",
+      "eventGroupId": "evt-1a25fc224340d6a8",
       "fonti": []
     },
     {
@@ -4211,7 +4217,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-5e6586062c937437",
+      "eventGroupId": "evt-3713a16a3b072f40",
       "fonti": []
     },
     {
@@ -4231,7 +4237,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-ad361fb5c3266d2",
+      "eventGroupId": "evt-2e31b2846c26c92e",
       "fonti": []
     },
     {
@@ -4252,7 +4258,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-40e8ce9d895e3f4e",
+      "eventGroupId": "evt-1b5671c33b740cc4",
       "fonti": []
     },
     {
@@ -4273,7 +4279,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2dc984581cf9cea4",
+      "eventGroupId": "evt-5709e6d1c78c7354",
       "fonti": []
     },
     {
@@ -4293,7 +4299,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-5edb881d48e90e73",
+      "eventGroupId": "evt-1e634fcca2a8b419",
       "fonti": []
     },
     {
@@ -4314,7 +4320,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3fb037ef4f1ab425",
+      "eventGroupId": "evt-45d9f876d429fb40",
       "fonti": [
         {
           "titolo": "Operaio morto a Caivano, la moglie: “Voglio giustizia”. Lavorava su un tetto",
@@ -4364,7 +4370,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-8f4c3950a596d64",
+      "eventGroupId": "evt-455140b4dc1be437",
       "fonti": []
     },
     {
@@ -4385,7 +4391,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-256e9823907edf38",
+      "eventGroupId": "evt-33ccc3c71e110859",
       "fonti": []
     },
     {
@@ -4406,7 +4412,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-469dbafb362668f7",
+      "eventGroupId": "evt-1dba293baac5d0b",
       "fonti": [
         {
           "titolo": "Borso del Grappa (TV), morto a 27 anni dopo l’incidente sul lavoro: investito da un getto di vapore",
@@ -4432,7 +4438,7 @@
         {
           "titolo": "Esplode un tubo di vapore a Borso del Grappa: operaio di 27 anni investito dall'onda d'urto, è gravissimo",
           "data": "Wed, 30 Sep 2026 07:00:00 GMT",
-          "fonte": "OggiTreviso",
+          "fonte": "Oggi Treviso",
           "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQa2hHSzNIa3ZmaW00MEJSYlhMWGFhMGpaZmtmUjFyRDRpVHAwX2J3cmhqeFNvYk5KS0EwYlNiNFRSSzU5NjVmNjNLYm1GcU84WUFzcHpBRW5mQTRCS3IyY3hYYVpVYVhGamItV2k3RV9sRXc2SE50enpBSXJhYzNNY08yV0liZ25CWGFrNVFFQnIxc2g1NngtMkc5SUhxd1BDQllaVXp4ZDc1eFhGS0pNdm5DOGNxVDZwM2pzVUNweGtsR2lYVExFcFhMTzdiR0VVMU1mLXNNM3ZXZkdXYThV?oc=5",
           "score": 63
         }
@@ -4456,7 +4462,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-73ee11f37b56ec4e",
+      "eventGroupId": "evt-13ded0e5d323ae0c",
       "fonti": []
     },
     {
@@ -4476,7 +4482,7 @@
         "esito mortale"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-5d1028b3cf276876",
+      "eventGroupId": "evt-d8c8db642a3a28",
       "fonti": [
         {
           "titolo": "Esplode il tubo del vapore, muore operaio di Borgo Valsugana. La vittima dell’incidente sul lavoro è Daniele Gremes, aveva solo 27 anni",
@@ -4505,7 +4511,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3dbd529e6e3d4960",
+      "eventGroupId": "evt-a89a4336a46be7f",
       "fonti": []
     },
     {
@@ -4526,7 +4532,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1cd76b8ca26ba86d",
+      "eventGroupId": "evt-4aa908b1fdb7be65",
       "fonti": []
     },
     {
@@ -4547,7 +4553,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-32bbd1937ab4220d",
+      "eventGroupId": "evt-1e96009be2d9cbd3",
       "fonti": [
         {
           "titolo": "Operaio morto nel cantiere di Faenza, sciopero e presidio davanti al cantiere",
@@ -4625,7 +4631,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-429340b768629fe9",
+      "eventGroupId": "evt-3a23d4d7a9a886b3",
       "fonti": []
     },
     {
@@ -4645,7 +4651,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-64d4e4ab745ea6a7",
+      "eventGroupId": "evt-17fbdb924ea86ac8",
       "fonti": []
     },
     {
@@ -4666,7 +4672,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, conseguenze gravi",
-      "eventGroupId": "evt-4100f74657b3a2fe",
+      "eventGroupId": "evt-207fd09b536856a0",
       "fonti": []
     },
     {
@@ -4686,7 +4692,7 @@
         "esito mortale"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-207facbb72024931",
+      "eventGroupId": "evt-5d9076c99c76bfbc",
       "fonti": []
     },
     {
@@ -4706,7 +4712,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3d8aa92d40dd8da0",
+      "eventGroupId": "evt-3e0f71ba3e2421a6",
       "fonti": []
     },
     {
@@ -4726,7 +4732,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-62e4332b0b8ad63a",
+      "eventGroupId": "evt-5e137eee02a8d697",
       "fonti": [
         {
           "titolo": "Ancona, operaio 55enne tunisino morto investito da una fiammata in cantiere navale Fincantieri, un 29enne ustionato grave – VIDEO",
@@ -4762,7 +4768,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-78bb38a76b376d41",
+      "eventGroupId": "evt-6dcd28777f3a6be4",
       "fonti": []
     },
     {
@@ -4782,7 +4788,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-5706b145172bf5be",
+      "eventGroupId": "evt-5d4b77a59f6b8fbb",
       "fonti": []
     },
     {
@@ -4802,7 +4808,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-4520e0ece68a1614",
+      "eventGroupId": "evt-4c62ae39936cde29",
       "fonti": []
     },
     {
@@ -4822,7 +4828,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6ce226adae75b92",
+      "eventGroupId": "evt-9ff9328b9bbc49",
       "fonti": []
     },
     {
@@ -4843,7 +4849,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-11dde0ab063e76a1",
+      "eventGroupId": "evt-6757c059d2462d36",
       "fonti": []
     },
     {
@@ -4863,7 +4869,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-7fe9fee140917a0d",
+      "eventGroupId": "evt-3278febfb419c4a3",
       "fonti": []
     },
     {
@@ -4884,7 +4890,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-2225f4755d34b10e",
+      "eventGroupId": "evt-36fbefbb7958038d",
       "fonti": [
         {
           "titolo": "Pistoia, operaio muore dopo una caduta dal tetto di un capannone",
@@ -4913,7 +4919,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-3fe1d4ede736cf5e",
+      "eventGroupId": "evt-7e82e9e58fca6b76",
       "fonti": []
     },
     {
@@ -4934,7 +4940,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-558c8f6f3ee285f5",
+      "eventGroupId": "evt-1d6261f3e2f47fc9",
       "fonti": []
     },
     {
@@ -4954,7 +4960,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Investito da un veicolo/mezzo, conseguenze gravi",
-      "eventGroupId": "evt-5ae141abdc54a62a",
+      "eventGroupId": "evt-6a38339f335af674",
       "fonti": [
         {
           "titolo": "Dramma a Sapri: operaio cade dal Bobcat e viene travolto da una pioggia di bitume bollente, è in prognosi riservata",
@@ -4983,7 +4989,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-7ec808b110f6ca0a",
+      "eventGroupId": "evt-2f6fe37731274a4b",
       "fonti": []
     },
     {
@@ -5004,7 +5010,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-653c932a55a5b2b7",
+      "eventGroupId": "evt-57cd1bfeb105fb04",
       "fonti": []
     },
     {
@@ -5024,7 +5030,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-64f495156edc1c6f",
+      "eventGroupId": "evt-49713d539a9fa486",
       "fonti": []
     },
     {
@@ -5044,7 +5050,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Colpito da fuoco/esplosione, conseguenze gravi",
-      "eventGroupId": "evt-61dbb0e8fbdd5ce3",
+      "eventGroupId": "evt-5d57114878888ba9",
       "fonti": []
     },
     {
@@ -5064,7 +5070,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-3595a04d9f9fd5bc",
+      "eventGroupId": "evt-7ffce4e091914486",
       "fonti": []
     },
     {
@@ -5085,7 +5091,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colpito da fuoco/esplosione, vittima deceduta",
-      "eventGroupId": "evt-7708074f3d8a0f",
+      "eventGroupId": "evt-1873b9a88271358e",
       "fonti": [
         {
           "titolo": "Un operaio morto, l'altro con gravi ustioni. La Fincantieri: «Massima collaborazione per fare piena luce sull'accaduto»",
@@ -5121,6 +5127,13 @@
           "fonte": "Tgcom24",
           "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNS0lLN29qa2EtdXd6ZlJCTzY1eWNFdHVhQUYzVnJMRHlGb2pvNzRkd1V3eEtQaWRSZ05fZlFFUS1wTVRMWEs4dENjVlhqRHpMRXpyZXY2RWVXZGloSG1SVUhqMkplMDBVYTg2N2hoZjM1bDFYUWhxODA2UmVSdnRNeEt0ZXVkX3hrR2E4ckl2QUJ1V0JpbjZOaUhnNmlfTUJab1pfS3FHeFFNUdIBaEFVX3lxTE5TWHdBVVNTNzlMTHhaODFHdWJPOEYyZkw5M3JiRndyS01SalFKUWxIajIxZU1vQW5HbHBNZHg4WlRQVUhJLXMxMFdNUW81UFpteXc4a1ZUMzFRdllYcjdjcUVYaEg1bDNr?oc=5",
           "score": 75
+        },
+        {
+          "titolo": "Incidente alla Fincantieri Ancona: operaio ucciso da una fiammata, un altro è gravissimo",
+          "data": "Wed, 30 Sep 2026 07:00:00 GMT",
+          "fonte": "Il Sole 24 ORE",
+          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPaHhaSFhQY1F0YkxfLVJCbGdCTkk2WC13TS1iX0FmTkFPaW5KbUViZUhFNkdWOTluNFZraHN6dFpmc2xQMTBTWG0xS2liWTkydWY1aVR2aF8tXzg2d3h4Y3VvQXlKUWJQVU1wMzhLR0t2X04zZ2lid3BwR0ZKS0RXeEgtdEctWGcybl9uNUkzXzM5NEdPSHNMWTAxeW1odXFLRGRkdGFyVWQtVUR1WXA1ZXZsQTRiUEE?oc=5",
+          "score": 71
         },
         {
           "titolo": "Incidente a Fincantieri Ancona, morto un operaio e un altro gravissimo",
@@ -5184,7 +5197,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-6c197e9585d529e3",
+      "eventGroupId": "evt-69f7e3736cc0bca6",
       "fonti": []
     },
     {
@@ -5205,7 +5218,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-520288eef14ccc8e",
+      "eventGroupId": "evt-72b4b29adcb7543a",
       "fonti": []
     },
     {
@@ -5226,7 +5239,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-251ac33277075b4f",
+      "eventGroupId": "evt-48bbc618748b65f4",
       "fonti": []
     },
     {
@@ -5247,7 +5260,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3fc1da1a39b1b26f",
+      "eventGroupId": "evt-5e6fd7f22875491b",
       "fonti": []
     },
     {
@@ -5267,7 +5280,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-402260434509cb20",
+      "eventGroupId": "evt-6b6f733bdcccdcef",
       "fonti": []
     },
     {
@@ -5288,7 +5301,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2c681780f2eef380",
+      "eventGroupId": "evt-77deabbf422e993f",
       "fonti": []
     },
     {
@@ -5309,7 +5322,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-8a33952f476210c",
+      "eventGroupId": "evt-306bbedaded9d429",
       "fonti": []
     },
     {
@@ -5329,7 +5342,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Trauma/lesione fisica",
-      "eventGroupId": "evt-23843e1f3a0c1649",
+      "eventGroupId": "evt-5934b6ce5e4b3a3c",
       "fonti": []
     },
     {
@@ -5349,7 +5362,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-262c701ecc53e2d9",
+      "eventGroupId": "evt-153158312536e505",
       "fonti": []
     },
     {
@@ -5370,7 +5383,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6106bbf3035cfd6b",
+      "eventGroupId": "evt-6db34a2c2e0a6779",
       "fonti": [
         {
           "titolo": "Operaio morto al Colosseo, folla ai funerali di Andrea Moretti. Applausi alla fine della cerimonia",
@@ -5399,7 +5412,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-69e782b83b48ce6b",
+      "eventGroupId": "evt-343f6f6ae9af7593",
       "fonti": []
     },
     {
@@ -5420,7 +5433,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-544084b54be42515",
+      "eventGroupId": "evt-2c38c42159372d5",
       "fonti": [
         {
           "titolo": "Fincantieri Ancona, due operai investiti da una fiammata: uno è morto, l’altro è ferito gravemente",
@@ -5455,7 +5468,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2f180043e2432862",
+      "eventGroupId": "evt-5ce2b8913fea2b33",
       "fonti": []
     },
     {
@@ -5476,7 +5489,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6f1ff6ba21de408a",
+      "eventGroupId": "evt-667fbf2f6583dbfe",
       "fonti": []
     },
     {
@@ -5496,7 +5509,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4fe997de6ff8f16",
+      "eventGroupId": "evt-4cb34988ead6914c",
       "fonti": []
     },
     {
@@ -5516,7 +5529,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-3a977afae8ab6fe3",
+      "eventGroupId": "evt-18e7c6dd9916dc26",
       "fonti": []
     },
     {
@@ -5537,7 +5550,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-4bd72b143cffa132",
+      "eventGroupId": "evt-26880e116c59ef96",
       "fonti": []
     },
     {
@@ -5557,7 +5570,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-12aa8ec41feccee1",
+      "eventGroupId": "evt-b9f36028395ed0a",
       "fonti": []
     },
     {
@@ -5577,7 +5590,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-42773642289e0496",
+      "eventGroupId": "evt-7ab886cf613f2b23",
       "fonti": []
     },
     {
@@ -5598,7 +5611,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-76e3a5c464b8402e",
+      "eventGroupId": "evt-652494dbd4463bfb",
       "fonti": [
         {
           "titolo": "Imprenditore muore schiacciato da un macchinario in una torneria a Santa Maria di Zevio",
@@ -5640,7 +5653,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-7e9334df0f609e9f",
+      "eventGroupId": "evt-4a5ed6792ad1c9e4",
       "fonti": []
     },
     {
@@ -5661,7 +5674,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-1ceaf587495a8aa7",
+      "eventGroupId": "evt-23cd5032f272226b",
       "fonti": []
     },
     {
@@ -5682,7 +5695,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-654c9bb1fe738bf8",
+      "eventGroupId": "evt-760b57fdea4f9c2b",
       "fonti": []
     },
     {
@@ -5702,7 +5715,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-697f911d1f32d58c",
+      "eventGroupId": "evt-7ccaf3855db800f8",
       "fonti": []
     },
     {
@@ -5722,7 +5735,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-528e5719586d67e2",
+      "eventGroupId": "evt-3af13aa631ae6831",
       "fonti": []
     },
     {
@@ -5742,8 +5755,16 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-11522de3f333ded",
-      "fonti": []
+      "eventGroupId": "evt-7aaf85af115e8e58",
+      "fonti": [
+        {
+          "titolo": "Morto l'operaio precipitato da un'impalcatura ad Altavilla Vicentina",
+          "data": "Tue, 29 Sep 2026 07:00:00 GMT",
+          "fonte": "RaiNews",
+          "link": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNNTVDaV9mYjVTNU9Xa2dHa1JGTUdGcEVCQzNRaS0xZzJYOVpoUEdaaTdNTHNLR2N0MDVXeFBwcEFhMnJ2NEludFhTcEREMnMzenA3azVkejU5ZW9ReS1OamJJajlzZ0IzS0dYcjI3Qk9ldklMWTdPel9PT0xvTWEtaHpyZUhZRHBvWl9Zd1BYVGdMcWhrVUdLMU5fQy05VmQwazc3d3VZWDM0eldlZ2t0N0JNelVYdkplTTBHTDlpcWhUWEtoVTBUNHRSMW5iaVM5WkRTR3NESG5hYlBnd1BaOWhDTXPSAeoBQVVfeXFMUHJaQVpwejVyOE9YdzdWdTVxTWRaaWJidjdhYTdyYWdoVDA4T1MtMy1aUWl1TFE0djRILS1SQUxWX1dMcF9RdHVfdUlVd1oyMXFnR0NiVThDZUVhZnhfZEJMNHgtX3FyZVpOWE1OVlUzZVlhMHhyX2x0WXpmS1UxMkhPeEdHRXZLUGRXcFVBXzd3WHloaTFfb296SzMxa3EtOUhxNmQwRENEVEk2TGNuZ1J0RnEzaUdCZUxrd1JBdTVlc0xsWEpSVDFVcHpFZ3liTEFSbWR2RE5JVXpOUTVPd1lsQ1hGaXQ1Mk9R?oc=5",
+          "score": 85
+        }
+      ]
     },
     {
       "titolo": "E' morto l'operaio caduto dall'impalcatura, aveva 56 anni",
@@ -5763,7 +5784,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-70f8e92c16081544",
+      "eventGroupId": "evt-321e4f151c9d5b86",
       "fonti": []
     },
     {
@@ -5784,27 +5805,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-1ca4ef6a11796f78",
-      "fonti": []
-    },
-    {
-      "titolo": "Imprenditore di 42 anni muore schiacciato da un macchinario (NOME e FOTO)",
-      "fonte": "Zoom24",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPTXoxTmpYYVd0ZllacDhUUEdSZUMtQ0ctVnZXb1pyaUVPeXhJNHdMRFBBY3BXQXhTWFR4c281ZDA3ci0wc1FMdzBkT1FNYm5wRFpKdE9KODE5cEdqQ2F3YXJvVDJPVEZZSW9xYmJvSkY4VzBLSE5RRUZPZzBsa1ZldFdreUJaTV93cXdsVHlTcXNnWkxid2hRTEhORW5QR3hncktSeENuNFcxT0hJYi1qZQ?oc=5",
-      "data": "Tue, 29 Sep 2026 07:00:00 GMT",
-      "provincia": null,
-      "regione": null,
-      "tipo": "evento",
-      "esito": "mortale",
-      "categoria": "mortale",
-      "workAccidentScore": 52,
-      "scoreReasons": [
-        "contesto lavorativo",
-        "evento/infortunio",
-        "esito mortale"
-      ],
-      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-6bcf59e4648f50b3",
+      "eventGroupId": "evt-2d9552293be5a831",
       "fonti": []
     },
     {
@@ -5824,7 +5825,27 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-4b8c45f01875a362",
+      "eventGroupId": "evt-36b6a7085f62de1",
+      "fonti": []
+    },
+    {
+      "titolo": "Imprenditore di 42 anni muore schiacciato da un macchinario (NOME e FOTO)",
+      "fonte": "Zoom24",
+      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPTXoxTmpYYVd0ZllacDhUUEdSZUMtQ0ctVnZXb1pyaUVPeXhJNHdMRFBBY3BXQXhTWFR4c281ZDA3ci0wc1FMdzBkT1FNYm5wRFpKdE9KODE5cEdqQ2F3YXJvVDJPVEZZSW9xYmJvSkY4VzBLSE5RRUZPZzBsa1ZldFdreUJaTV93cXdsVHlTcXNnWkxid2hRTEhORW5QR3hncktSeENuNFcxT0hJYi1qZQ?oc=5",
+      "data": "Tue, 29 Sep 2026 07:00:00 GMT",
+      "provincia": null,
+      "regione": null,
+      "tipo": "evento",
+      "esito": "mortale",
+      "categoria": "mortale",
+      "workAccidentScore": 52,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ],
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-52ec85566b7342d9",
       "fonti": []
     },
     {
@@ -5845,7 +5866,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-ca7e5aa659cd3e2",
+      "eventGroupId": "evt-7696412782a020a",
       "fonti": []
     },
     {
@@ -5865,7 +5886,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1787f2d7dd4268d",
+      "eventGroupId": "evt-24b9a3d5ddd99379",
       "fonti": []
     },
     {
@@ -5886,7 +5907,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-7edff05f7f54ba7c",
+      "eventGroupId": "evt-711631ea4ed9d778",
       "fonti": []
     },
     {
@@ -5906,7 +5927,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3cfd353b4af019eb",
+      "eventGroupId": "evt-480f6a0992f856a3",
       "fonti": []
     },
     {
@@ -5927,7 +5948,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Trauma/lesione fisica",
-      "eventGroupId": "evt-38548a95634c88ab",
+      "eventGroupId": "evt-2cb30a68310e8a69",
       "fonti": []
     },
     {
@@ -5948,7 +5969,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-2f15f7396de7a9d4",
+      "eventGroupId": "evt-2f49956637c4bfac",
       "fonti": []
     },
     {
@@ -5969,7 +5990,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-72eadd9e48edad3e",
+      "eventGroupId": "evt-4beca687f4642528",
       "fonti": []
     },
     {
@@ -5989,7 +6010,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-3086b1a52a8af424",
+      "eventGroupId": "evt-519346ef8689b518",
       "fonti": []
     },
     {
@@ -6009,7 +6030,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-782f393acfcd6368",
+      "eventGroupId": "evt-5c3d4eacc9866282",
       "fonti": []
     },
     {
@@ -6029,7 +6050,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-56f87009c4628ef6",
+      "eventGroupId": "evt-31a98818e48a8c82",
       "fonti": []
     },
     {
@@ -6050,7 +6071,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-498385ead147fc9b",
+      "eventGroupId": "evt-273730c59d0477cc",
       "fonti": []
     },
     {
@@ -6071,7 +6092,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-79fdca73376168a1",
+      "eventGroupId": "evt-3357397bcb75621f",
       "fonti": []
     },
     {
@@ -6092,7 +6113,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-715973b214523a3c",
+      "eventGroupId": "evt-1f4e7a2e5957f3b7",
       "fonti": [
         {
           "titolo": "Operaio morto sull’A14 a Bologna, Cgil proclama due ore di sciopero",
@@ -6149,7 +6170,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-7e872ce92d2ccc5f",
+      "eventGroupId": "evt-48cfff72b5a21cf3",
       "fonti": []
     },
     {
@@ -6170,7 +6191,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-105b6700d5e02ec8",
+      "eventGroupId": "evt-7470362869b3959f",
       "fonti": []
     },
     {
@@ -6190,7 +6211,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-5c53473ec3c41182",
+      "eventGroupId": "evt-4673581d9e7e4fae",
       "fonti": []
     },
     {
@@ -6210,7 +6231,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1d2fbf944ca8ec26",
+      "eventGroupId": "evt-65b9766e58d1da85",
       "fonti": []
     },
     {
@@ -6231,7 +6252,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-4100cb431fc38431",
+      "eventGroupId": "evt-1701021c81956569",
       "fonti": []
     },
     {
@@ -6252,7 +6273,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-62158dd3d60ed09c",
+      "eventGroupId": "evt-7c93c060c073d272",
       "fonti": []
     },
     {
@@ -6273,7 +6294,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-7703513668e5c01c",
+      "eventGroupId": "evt-9e6dddb500c84a6",
       "fonti": []
     },
     {
@@ -6294,7 +6315,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-47184f349dc60bc3",
+      "eventGroupId": "evt-10d8587fe08182c6",
       "fonti": []
     },
     {
@@ -6315,7 +6336,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-79dd8e7131d8a93c",
+      "eventGroupId": "evt-47feb6d0d10185cd",
       "fonti": [
         {
           "titolo": "Investito nel cantiere, muore operaio di 22 anni nel Casertano",
@@ -6344,7 +6365,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-37038b2065f6614d",
+      "eventGroupId": "evt-67f2cd802d6cd420",
       "fonti": []
     },
     {
@@ -6364,7 +6385,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-5f12b838ca9f75f8",
+      "eventGroupId": "evt-1c5da5676c437a8b",
       "fonti": []
     },
     {
@@ -6384,7 +6405,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-25a7f9f1d8325a92",
+      "eventGroupId": "evt-20c0eaf9ff8b24bc",
       "fonti": []
     },
     {
@@ -6405,7 +6426,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1878aef2246a8838",
+      "eventGroupId": "evt-2142eee47e580ccf",
       "fonti": []
     },
     {
@@ -6426,7 +6447,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4eaf4e4aba5bd381",
+      "eventGroupId": "evt-a1f110259d0ff3a",
       "fonti": [
         {
           "titolo": "Luca Piccinini morto sul lavoro a Cortenuova, colpito da una trave e schiacciato contro una ringhiera",
@@ -6454,7 +6475,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-f608cf945d9b198",
+      "eventGroupId": "evt-3f5844cb32d27a7c",
       "fonti": []
     },
     {
@@ -6473,7 +6494,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-47ef96b57404d830",
+      "eventGroupId": "evt-b72537b5c1de4cd",
       "fonti": []
     },
     {
@@ -6493,7 +6514,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-4f635b4eb3b644f7",
+      "eventGroupId": "evt-5cd916b938de5370",
       "fonti": []
     },
     {
@@ -6514,7 +6535,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6c342d47de17e71a",
+      "eventGroupId": "evt-457aae36b3bdd264",
       "fonti": []
     },
     {
@@ -6535,7 +6556,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6149ef4c17fded35",
+      "eventGroupId": "evt-3b0f68447c33ea72",
       "fonti": []
     },
     {
@@ -6555,7 +6576,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3c587087107e89a9",
+      "eventGroupId": "evt-1e26e46feb5e650c",
       "fonti": []
     },
     {
@@ -6575,7 +6596,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-bc5e292139db3e5",
+      "eventGroupId": "evt-c7003d55571136c",
       "fonti": []
     },
     {
@@ -6595,7 +6616,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-202a79ef476995cd",
+      "eventGroupId": "evt-c65fda60a230c6b",
       "fonti": []
     },
     {
@@ -6614,7 +6635,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-17820ed6fd9ee5f8",
+      "eventGroupId": "evt-1fe1b0beb0a4613f",
       "fonti": []
     },
     {
@@ -6635,7 +6656,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-35b8865c6854e6db",
+      "eventGroupId": "evt-439c4a77f33a996e",
       "fonti": []
     },
     {
@@ -6656,7 +6677,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-745d8a8495206d26",
+      "eventGroupId": "evt-4ce04c516d75c332",
       "fonti": []
     },
     {
@@ -6676,7 +6697,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-52964c66f317c9d",
+      "eventGroupId": "evt-3076535c648f3537",
       "fonti": []
     },
     {
@@ -6697,7 +6718,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-5fafc4f138c311d3",
+      "eventGroupId": "evt-53cc2e5f3711b70c",
       "fonti": []
     },
     {
@@ -6717,7 +6738,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-67fa3f41e25f7c0",
+      "eventGroupId": "evt-17235f1af6b3ae91",
       "fonti": []
     },
     {
@@ -6738,7 +6759,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7f16c010e52c6560",
+      "eventGroupId": "evt-42cd94a6a3f89f14",
       "fonti": []
     },
     {
@@ -6759,8 +6780,16 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-1bf9cd18b220662",
-      "fonti": []
+      "eventGroupId": "evt-6a5afc55635bcbed",
+      "fonti": [
+        {
+          "titolo": "Colosseo chiuso dopo la morte dell'operaio Andrea Moretti, rinviata la puntata di Noos con Alberto Angela",
+          "data": "Wed, 23 Sep 2026 07:00:00 GMT",
+          "fonte": "Virgilio",
+          "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNWFBXUTl4d1VHLWRxeExkSUctS2dhckNKc2xFSGN1bjMtV0djSXowaXA2QzNmU3pzS1JLOXg0MDZ2cHRmUEdmZTY2dEx0dWVER1BnUThlbXV0aU9EMmZiSEp3LUU3UjUzb2dIYzVHOFl3N0tTSUZEUlhDU292VlJTYm5nWWFKR1B6dzV0WlVRTlg4ckRWOFVZb2FXNEVFYndIWVE3cXZMOWNaaGZzYjZrdVdyMUFWSWItbkVTaENxa0RkcjNIVFAtenptdHd4WXJWSUUxUC1NSDFGUW4y0gHiAUFVX3lxTE5JYVlsc1pzS2FXTlR4OGdUdTNBaTNTd0ZCNTYxV0xYRkhiREZhVE5XWG53LWZVZjl2S002SjViQlFaY0ZhZ1hCeFg5Y1F4MnExckdXZk83M1N1dWQzR0dfakJiQ19UUmtfc1FYNWlBajh2MGtMQXBoLWJKWFRuUFZrTkEzbWVzUXlpTlBpTTVESDdON25VaUU0ejJOWmNvdU1PbkpOTEZQdE5xRmpQQTlVNC1FNU5qS1N1aTh2TEhXOVEwM1kzQ1JXNXZzanQ0cFd2NmpQUFh6cF9mTGRoeFIxaVE?oc=5",
+          "score": 46
+        }
+      ]
     },
     {
       "titolo": "Andrea Moretti chi era l' operaio 22enne morto in un incidente sul lavoro al Colosseo precipitato da un' impalcatura a 10 metri di altezza",
@@ -6779,7 +6808,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-24fc854126264324",
+      "eventGroupId": "evt-6b2d088dee3e67e7",
       "fonti": [
         {
           "titolo": "Chi era Andrea Moretti, l'operaio morto al Colosseo rocciatore come il padre rimasto invalido: \"Amava la vita\"",
@@ -6807,7 +6836,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-2f74e792cd605e2e",
+      "eventGroupId": "evt-61a322c737ea6ebf",
       "fonti": []
     },
     {
@@ -6827,7 +6856,27 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6c84d8a242c1ca04",
+      "eventGroupId": "evt-332f0b9b685a00dd",
+      "fonti": []
+    },
+    {
+      "titolo": "Due incidenti sul lavoro nel bergamasco, a Cortenuova 66enne morto schiacciato da trave, a Brembate grave un operaio 22enne finito in un compattatore",
+      "fonte": "Il Giornale d'Italia",
+      "link": "https://news.google.com/rss/articles/CBMirgJBVV95cUxQemtIVlowaTBtYVZmZHgxSXIzM1poT0lhX0M2N2NJdVlYbmk2UmdGNFFpOXBxakhGNm5tMkhEcV9xOFRIVFJLTjVNZ01yOVh0M3Z2TGg4a01wMjZET1Q5TXU3aGZDelZLMUVFQ0RTVmo0aDhZZFRzNkNaeVRqeV9VVENTTjRNa1p3dHFESW9Dc3Nha0ZYeUJOYTFPaU1LTFNSZ1k5bHFoRXAyWE5Tdm0telFlZFl6MGRXMU5rQnRzQUNWUVV6cWpfXy1RcUg4ZXBaNnhuSVNyRGl6TERjcVdKRkVfN3gydkpBM3hhN1FLVUdUWllGWENuOU5kRTJRcFhQbkJTNGVuMHFWTG9JRW1CSV9OaGx2S09US0VSRnFoYnZzem53RE94c0o0UmxGQQ?oc=5",
+      "data": "Wed, 23 Sep 2026 07:00:00 GMT",
+      "provincia": null,
+      "regione": null,
+      "tipo": "evento",
+      "esito": "mortale",
+      "categoria": "mortale",
+      "workAccidentScore": 80,
+      "scoreReasons": [
+        "contesto lavorativo",
+        "evento/infortunio",
+        "esito mortale"
+      ],
+      "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
+      "eventGroupId": "evt-72095e9f7756111",
       "fonti": []
     },
     {
@@ -6848,7 +6897,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-116d9f4413065405",
+      "eventGroupId": "evt-50a73e1c1c794e94",
       "fonti": [
         {
           "titolo": "Roma, tragedia al Colosseo: muore operaio precipitato da un’impalcatura",
@@ -6876,7 +6925,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-635085e0554fbf38",
+      "eventGroupId": "evt-41befebac09fba4c",
       "fonti": []
     },
     {
@@ -6897,7 +6946,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-73f88e5d66dbf95a",
+      "eventGroupId": "evt-42eb5b32adb5dc11",
       "fonti": []
     },
     {
@@ -6917,7 +6966,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-52dbe5230e027f29",
+      "eventGroupId": "evt-1600b102a5e53294",
       "fonti": []
     },
     {
@@ -6937,7 +6986,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-56a5df494f792b69",
+      "eventGroupId": "evt-634234ab1d17f20e",
       "fonti": []
     },
     {
@@ -6958,7 +7007,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-5c5d11ac4c960b93",
+      "eventGroupId": "evt-37cc13f2db17b25",
       "fonti": []
     },
     {
@@ -6978,7 +7027,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-6580e6b9031abbc8",
+      "eventGroupId": "evt-46f31f27adbd57d2",
       "fonti": []
     },
     {
@@ -6998,7 +7047,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-68365a96056d42f8",
+      "eventGroupId": "evt-172b0653c6427462",
       "fonti": []
     },
     {
@@ -7018,7 +7067,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2f74e792cd605e2e",
+      "eventGroupId": "evt-61a322c737ea6ebf",
       "fonti": []
     },
     {
@@ -7038,7 +7087,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7106015dd75158ba",
+      "eventGroupId": "evt-29198b7b09467454",
       "fonti": []
     },
     {
@@ -7059,7 +7108,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-12d90f354b781218",
+      "eventGroupId": "evt-3a732fb9e8781603",
       "fonti": []
     },
     {
@@ -7080,7 +7129,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-564eca0badf498ae",
+      "eventGroupId": "evt-6846052cb80e47cd",
       "fonti": []
     },
     {
@@ -7100,7 +7149,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-540643ced3a73b34",
+      "eventGroupId": "evt-37686ce51eb5df8c",
       "fonti": []
     },
     {
@@ -7120,7 +7169,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-76e00a42d49b0000",
+      "eventGroupId": "evt-70196f37007c47ff",
       "fonti": []
     },
     {
@@ -7141,7 +7190,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-3910c1ea4139e9e8",
+      "eventGroupId": "evt-73787df53fbafce2",
       "fonti": []
     },
     {
@@ -7162,7 +7211,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-7d6b9b22cd7bcc72",
+      "eventGroupId": "evt-6015c530bf675914",
       "fonti": []
     },
     {
@@ -7181,7 +7230,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-211f5575454fdea0",
+      "eventGroupId": "evt-1cfb165cd7a53fa7",
       "fonti": []
     },
     {
@@ -7202,7 +7251,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-67c53ef2a9b89de4",
+      "eventGroupId": "evt-2e3e3f1cc9171e57",
       "fonti": []
     },
     {
@@ -7221,7 +7270,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-3bf53759c7d7a2f3",
+      "eventGroupId": "evt-1809e2dca6fdd734",
       "fonti": []
     },
     {
@@ -7241,7 +7290,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-64a338047bb1e925",
+      "eventGroupId": "evt-20b91132c406669a",
       "fonti": []
     },
     {
@@ -7261,7 +7310,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-45e34a1590e56c30",
+      "eventGroupId": "evt-5ff8d232c7fa2aa1",
       "fonti": []
     },
     {
@@ -7281,7 +7330,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-24c454847538bc16",
+      "eventGroupId": "evt-10ee17a1403d44a1",
       "fonti": []
     },
     {
@@ -7302,7 +7351,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-177f5d31213d4b8f",
+      "eventGroupId": "evt-3b11a3fe3d8666bf",
       "fonti": []
     },
     {
@@ -7323,7 +7372,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-6cc4169a64cebae4",
+      "eventGroupId": "evt-697e0067437915f2",
       "fonti": []
     },
     {
@@ -7343,7 +7392,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-4bb0147f311704a3",
+      "eventGroupId": "evt-104723dd92882035",
       "fonti": []
     },
     {
@@ -7363,7 +7412,7 @@
         "esito mortale"
       ],
       "sintesi": "",
-      "eventGroupId": "evt-2d13981cccef592a",
+      "eventGroupId": "evt-6ffcdea72343996b",
       "fonti": []
     },
     {
@@ -7384,7 +7433,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-1b04d520cea7fbe5",
+      "eventGroupId": "evt-1813db09297daec9",
       "fonti": []
     },
     {
@@ -7405,16 +7454,8 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-45a8a7a05e1fee03",
-      "fonti": [
-        {
-          "titolo": "Parma, operaio schiacciato da un macchinario in una cava sul Po: è morto Pasquale Riillo. Aveva 51 anni",
-          "data": "Mon, 21 Sep 2026 07:00:00 GMT",
-          "fonte": "Corriere di Bologna",
-          "link": "https://news.google.com/rss/articles/CBMilwJBVV95cUxOSDczVWU5VzZTUUpSX1B6VEZueW53Q2RMTV9IYUcyd1R4M1pYaWxqbGRUbVpWNlJRdHd0V2pNZW5rWUpYMXJud0ttMDR0R2tlbzQwYm1tTF9PWFBlUGoyQjVISFB2eVYzNFVRd3J0SXpRUGRPSVFLYWhwcmtWQ3ZvenNwM19KY2FpS3hZdWpPM28xcmVkWFNYTEhRQ0pBSjdUSHNpbFFWajBCbkRMNTZCY1NLWTRQZ3RyYTlOaExNZFFYVEdqLWZtdXZ0eXpGM0NuaWZNSVhTMnFzQlpURHY4aG1oQTFIckxMdnFVZFJWaGhsVTNKdHFWUVlCV2FDZjRsbEl3NjRWS25sX3hWZEtfSklQQ1Y2NFHSAZwCQVVfeXFMUFhRV2VBQ2JtNGlrSVVFVmZhUFFaOWZTbTAySFlKeVdMenoxX2xCdHVxYkxWdVJaazZFSzdhX3duUWdHa3hMM1A2cFd3SmpfT002SElVdmNsTmVVRk1rb2h5Q3VZR29FcXFvcWhOR09jSHlteHJhaVo5RS1YeXlUTzZfUlNKTkFfY1lVWnBnX2hCRGQ0d1plaFBFZTNrVEZHZnR4YXEwYzVaLVdrSUhrbWxGOW1nUWZFNjZudG90NUpVdzBsNENmWTFVTFQ0Z3N5WGZoQnpsSlhxajQ3QTdSVlM4ZkhvVFN4TFBDTms3V0RSUmZtRHA1ZVFvOHhOblVDU01EWWhaVFJtQS11aWM0bnVGT29MeGVydUN0YlI?oc=5",
-          "score": 85
-        }
-      ]
+      "eventGroupId": "evt-63b7833842a4ab5c",
+      "fonti": []
     },
     {
       "titolo": "Tragedia in una cava: operaio di 51 anni muore schiacciato da un macchinario",
@@ -7433,7 +7474,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-6676681d0619b5bd",
+      "eventGroupId": "evt-68db2c35f9760895",
       "fonti": []
     },
     {
@@ -7454,7 +7495,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-1547130370c53d30",
+      "eventGroupId": "evt-1449712aea1c6b3b",
       "fonti": []
     },
     {
@@ -7474,7 +7515,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-2c6429f0b01ce953",
+      "eventGroupId": "evt-20db53b95ae3226d",
       "fonti": []
     },
     {
@@ -7494,7 +7535,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6fe3952ab8e95a1a",
+      "eventGroupId": "evt-38e88bd58a5ab097",
       "fonti": []
     },
     {
@@ -7514,7 +7555,7 @@
         "esito mortale"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-13b03efa92807d98",
+      "eventGroupId": "evt-6e6dfc730c1546b1",
       "fonti": []
     },
     {
@@ -7535,7 +7576,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-141d31cc49a71c04",
+      "eventGroupId": "evt-4897bd80ea265084",
       "fonti": []
     },
     {
@@ -7556,7 +7597,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, vittima deceduta",
-      "eventGroupId": "evt-e70ff0d3b40aa4b",
+      "eventGroupId": "evt-5be63d7769a18b1e",
       "fonti": []
     },
     {
@@ -7577,7 +7618,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-6cf967b852e6add9",
+      "eventGroupId": "evt-1700b5e5851c9768",
       "fonti": []
     },
     {
@@ -7598,7 +7639,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-6402093638867593",
+      "eventGroupId": "evt-c22be694ca8645e",
       "fonti": []
     },
     {
@@ -7618,7 +7659,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-731c2bf5617167f9",
+      "eventGroupId": "evt-185c6dead88c7e05",
       "fonti": []
     },
     {
@@ -7638,7 +7679,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-2f00becfb88313a3",
+      "eventGroupId": "evt-6ff15a0a21c6ae7e",
       "fonti": []
     },
     {
@@ -7658,7 +7699,7 @@
         "esito mortale"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-70004b5d9caf7ba",
+      "eventGroupId": "evt-72e832ed8154b25c",
       "fonti": []
     },
     {
@@ -7679,7 +7720,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, conseguenze gravi",
-      "eventGroupId": "evt-7e98c79ae54791c8",
+      "eventGroupId": "evt-2d1c03f62a5fb9a8",
       "fonti": []
     },
     {
@@ -7699,7 +7740,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-aab520ed3b7f010",
+      "eventGroupId": "evt-2cf64955f954d1cb",
       "fonti": []
     },
     {
@@ -7720,7 +7761,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-3f3876b148d80fd0",
+      "eventGroupId": "evt-37f7b01be2ed34a9",
       "fonti": []
     },
     {
@@ -7740,7 +7781,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-79b3071a56d82e5c",
+      "eventGroupId": "evt-27b125979e584bb2",
       "fonti": []
     },
     {
@@ -7761,7 +7802,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7563ee8bb35084a0",
+      "eventGroupId": "evt-1ada284cd73b4919",
       "fonti": []
     },
     {
@@ -7781,7 +7822,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-7e849aa7fcc45f68",
+      "eventGroupId": "evt-6714381517a63e03",
       "fonti": []
     },
     {
@@ -7802,7 +7843,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-c4a697da0843aa0",
+      "eventGroupId": "evt-345fded00715e560",
       "fonti": []
     },
     {
@@ -7822,7 +7863,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-7eb7895a56c47aa2",
+      "eventGroupId": "evt-6aaa804fc89b1",
       "fonti": []
     },
     {
@@ -7842,7 +7883,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Schiacciato da un carico/macchinario, conseguenze gravi",
-      "eventGroupId": "evt-353b10d430afefd7",
+      "eventGroupId": "evt-637c48f42bff548a",
       "fonti": []
     },
     {
@@ -7863,7 +7904,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-157462bdf86734b8",
+      "eventGroupId": "evt-7e30b9c23427ba56",
       "fonti": []
     },
     {
@@ -7883,7 +7924,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7c7de3e19d82c136",
+      "eventGroupId": "evt-1b785ae9770454f5",
       "fonti": []
     },
     {
@@ -7903,7 +7944,7 @@
         "conseguenza grave"
       ],
       "sintesi": "Folgorato da corrente elettrica, conseguenze gravi",
-      "eventGroupId": "evt-7e85e3fff4b988d8",
+      "eventGroupId": "evt-203ec75510b9bc5a",
       "fonti": []
     },
     {
@@ -7923,7 +7964,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con conseguenze gravi",
-      "eventGroupId": "evt-3b9a469e70d8af12",
+      "eventGroupId": "evt-4db112a13f1e268f",
       "fonti": []
     },
     {
@@ -7944,7 +7985,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-62a49c565aa54eab",
+      "eventGroupId": "evt-3fd42fd94139e52b",
       "fonti": []
     },
     {
@@ -7964,7 +8005,7 @@
         "esito mortale"
       ],
       "sintesi": "Investito da un veicolo/mezzo, vittima deceduta",
-      "eventGroupId": "evt-17237fb963284ff8",
+      "eventGroupId": "evt-27db904569dcb8dc",
       "fonti": []
     },
     {
@@ -7984,7 +8025,7 @@
         "esito mortale"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-3ac544e7a04400ce",
+      "eventGroupId": "evt-63eece609cab40e5",
       "fonti": []
     },
     {
@@ -8004,7 +8045,7 @@
         "esito mortale"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-5ac380189503f4c0",
+      "eventGroupId": "evt-3a58ad6d231dbbfc",
       "fonti": []
     },
     {
@@ -8025,7 +8066,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Colto da malore, vittima deceduta",
-      "eventGroupId": "evt-e12af4ecca6fc65",
+      "eventGroupId": "evt-6f7e5fde85be0158",
       "fonti": []
     },
     {
@@ -8046,7 +8087,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-7afe26279abde24c",
+      "eventGroupId": "evt-483dd7e846c91a21",
       "fonti": []
     },
     {
@@ -8067,7 +8108,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Infortunio con vittima deceduta",
-      "eventGroupId": "evt-46d6f9022fd4e2e",
+      "eventGroupId": "evt-24a8e8bddf5971ec",
       "fonti": []
     },
     {
@@ -8088,7 +8129,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Caduto dall'alto, vittima deceduta",
-      "eventGroupId": "evt-21fe38316b43a117",
+      "eventGroupId": "evt-323d76c6602cfec5",
       "fonti": []
     },
     {
@@ -8109,7 +8150,7 @@
         "localizzazione geografica"
       ],
       "sintesi": "Investito da un veicolo/mezzo, conseguenze gravi",
-      "eventGroupId": "evt-6b79324ff1866456",
+      "eventGroupId": "evt-53c20f8b2a859399",
       "fonti": []
     }
   ]
