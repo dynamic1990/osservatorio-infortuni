@@ -1,10 +1,8 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import newsRaw from "@/data/generated/news-infortuni.json";
-
-const subscribeNoop = () => () => {};
 
 interface Notizia {
   titolo: string;
@@ -44,13 +42,8 @@ function formatData(dataStr: string): string {
 
 export function NewsInfortuniWidget() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
-  // Timestamp client-side: sul server (prerender) vale 0, il filtro "ultimi 7 giorni"
-  // esclude tutto e dopo l'idratazione mostra i dati reali senza impurezza nel render.
-  const adesso = useSyncExternalStore(
-    subscribeNoop,
-    () => Date.now(),
-    () => 0,
-  );
+  // Timestamp deterministico: data di generazione del dataset (identica server/client).
+  const adesso = useMemo(() => new Date(dati.generatedAt).getTime(), [dati]);
   const notizie = useMemo(() => {
     const soglia = adesso - 7 * 86400_000;
     return (dati.notizie || [])
