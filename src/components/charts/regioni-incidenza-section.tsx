@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import italy from "@svg-maps/italy";
 import {
   ResponsiveContainer,
@@ -13,7 +13,7 @@ import {
   CartesianGrid,
   ReferenceLine,
 } from "recharts";
-import { getMultidimensionaleData, RegioneAnnualData, ProvinciaAutonomaData } from "@/lib/multidimensionale";
+import { getMultidimensionaleData, RegioneAnnualData } from "@/lib/multidimensionale";
 import { regioneName } from "@/lib/labels";
 import { getTemporale } from "@/lib/temporale";
 import { MAP_ID_REGIONE } from "@/lib/regioni-map";
@@ -35,12 +35,18 @@ export function RegioniIncidenzaSection() {
     modalita.lavoro && modalita.itinere ? "totale" : modalita.lavoro ? "lavoro" : "itinere";
 
   // Casi in base all'ambito selezionato
-  const casiAmbito = (r: { totale: number; lavoro: number; itinere: number }) =>
-    ambito === "lavoro" ? r.lavoro : ambito === "itinere" ? r.itinere : r.totale;
+  const casiAmbito = useCallback(
+    (r: { totale: number; lavoro: number; itinere: number }) =>
+      ambito === "lavoro" ? r.lavoro : ambito === "itinere" ? r.itinere : r.totale,
+    [ambito],
+  );
 
   // Incidenza per 1.000 occupati ricalcolata sull'ambito
-  const incidenzaAmbito = (r: { occupati: number; totale: number; lavoro: number; itinere: number }) =>
-    r.occupati > 0 ? Number(((casiAmbito(r) / r.occupati) * 1000).toFixed(2)) : 0;
+  const incidenzaAmbito = useCallback(
+    (r: { occupati: number; totale: number; lavoro: number; itinere: number }) =>
+      r.occupati > 0 ? Number(((casiAmbito(r) / r.occupati) * 1000).toFixed(2)) : 0,
+    [casiAmbito],
+  );
 
   // Dati dell'anno selezionato
   const annoData = useMemo(() => {
@@ -89,7 +95,7 @@ export function RegioniIncidenzaSection() {
         ? (annoData.indiceGravita ?? 0)
         : Math.round(casiAmbito(annoData) / 20);
     return { minVal: min === Infinity ? 0 : min, maxVal: max === -Infinity ? 1 : max, mediaNazionale: media };
-  }, [annoData, metrica, ambito]);
+  }, [annoData, metrica, casiAmbito, incidenzaAmbito]);
 
   // Colore per regione sulla mappa
   const colorForRegion = (code?: string): string => {
@@ -191,7 +197,7 @@ export function RegioniIncidenzaSection() {
         ...entry,
         color: PALETTE[i % PALETTE.length],
       }));
-  }, [annoData, metrica, mostraProvincePA]);
+  }, [annoData, metrica, mostraProvincePA, casiAmbito, incidenzaAmbito]);
 
   const hoverCode = hoverMapId ? MAP_ID_REGIONE[hoverMapId] : undefined;
   const activeRegData = selectedReg ? regMap[selectedReg] : hoverCode ? regMap[hoverCode] : null;

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { useMounted } from "@/lib/use-mounted";
 
 interface Props {
   height: number | string;
@@ -8,11 +9,7 @@ interface Props {
 }
 
 export function ClientChartOnly({ height, children }: Props) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMounted();
 
   if (!mounted) {
     return (

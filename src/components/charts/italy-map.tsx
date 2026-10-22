@@ -46,7 +46,6 @@ export function ItalyMap({ regions, onSelect, selected, title }: ItalyMapProps) 
       >
         {italy.locations.map((loc: { id: string; name: string; path: string }, i: number) => {
           const code = MAP_ID_REGIONE[loc.id];
-          const value = code ? regions[code] : undefined;
           const isActive = selected === code;
           const isHover = hover === loc.id;
           return (

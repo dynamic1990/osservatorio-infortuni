@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+
+const subscribeNoop = () => () => {};
 import { ExternalLink, Filter } from "lucide-react";
 import newsRaw from "@/data/generated/news-infortuni.json";
 
@@ -106,6 +108,15 @@ export function CronacaInfortuniClient() {
   const [limite, setLimite] = useState<number>(40);
   const [popupFonti, setPopupFonti] = useState<Notizia | null>(null);
 
+  // Timestamp client-side stabile per il render. useSyncExternalStore evita
+  // Date.now() impuro durante il render: sul server vale 0 (nessun filtro
+  // relativo sensato), dopo l'idratazione il valore è reale e stabile.
+  const adesso = useSyncExternalStore(
+    subscribeNoop,
+    () => Date.now(),
+    () => 0,
+  );
+
   // Esc chiude il popup delle fonti
   useEffect(() => {
     if (!popupFonti) return;
@@ -119,10 +130,11 @@ export function CronacaInfortuniClient() {
   const filtroPeriodo = (dataStr: string): boolean => {
     const t = new Date(dataStr).getTime();
     if (!Number.isFinite(t)) return true;
-    if (periodo === "7") return Date.now() - t <= 7 * 86400_000;
-    if (periodo === "30") return Date.now() - t <= 30 * 86400_000;
-    if (periodo === "90") return Date.now() - t <= 90 * 86400_000;
-    if (periodo === "180") return Date.now() - t <= 180 * 86400_000;
+    if (adesso === 0) return true; // prerender server: nessun filtro relativo
+    if (periodo === "7") return adesso - t <= 7 * 86400_000;
+    if (periodo === "30") return adesso - t <= 30 * 86400_000;
+    if (periodo === "90") return adesso - t <= 90 * 86400_000;
+    if (periodo === "180") return adesso - t <= 180 * 86400_000;
     return true;
   };
 

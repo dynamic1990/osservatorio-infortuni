@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Mail } from "lucide-react";
 import { LinkedInIcon } from "./social-icons";
 
@@ -50,7 +51,7 @@ export function Footer() {
           {/* Colonna brand */}
           <div style={{ alignContent: "start" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", fontWeight: 800, fontSize: "1.05rem", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
-              <img src="/icon.png" alt="Logo Osservatorio Infortuni" width={40} height={40} style={{ borderRadius: 8, display: "block", flex: "0 0 auto" }} />
+              <Image src="/icon.png" alt="Logo Osservatorio Infortuni" width={40} height={40} style={{ borderRadius: 8, display: "block", flex: "0 0 auto" }} />
               <span>
                 Osservatorio <span style={{ color: "var(--color-accent)" }}>Infortuni</span>
               </span>

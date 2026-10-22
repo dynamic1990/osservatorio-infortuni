@@ -30,6 +30,23 @@ interface DettaglioRiga {
   valore: string;
 }
 
+/**
+ * Forma minima consumata da righeDettaglio: copre AtecoMacroData filtrata e
+ * le divisioni arricchite con il filtro modalità (stessi campi numerici).
+ */
+interface DettaglioItem {
+  casi: number;
+  lavoro?: number;
+  itinere?: number;
+  mortali?: number;
+  giorni?: number;
+  durataMedia?: number;
+  indiceIncidenza?: number;
+  indiceGravita?: number;
+  quota?: number;
+  occupati?: number;
+}
+
 export function AtecoSettoriWidget() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2025");
@@ -40,7 +57,7 @@ export function AtecoSettoriWidget() {
   const [vista, setVista] = useState<"macro" | "divisione">("macro");
   const [cerca, setCerca] = useState<string>("");
   const [aperto, setAperto] = useState<string | null>(null);
-  const [trendDiv, setTrendDiv] = useState<string | null>(null);
+  const [, setTrendDiv] = useState<string | null>(null);
 
   // Cambiando anno o modalità chiudi i box aperti (reset fatto nelle callback di click)
 
@@ -92,17 +109,14 @@ export function AtecoSettoriWidget() {
 
   // ---- Vista divisioni (2 cifre): tutte le 86, con ricerca e trend ----
   const serieTot = multidim.atecoDivisioneSerie || {};
-  const serieLavoro = multidim.atecoDivisioneSerieLavoro || {};
-  const serieItinere = multidim.atecoDivisioneSerieItinere || {};
-  const serieMortali = multidim.atecoDivisioneSerieMortali || {};
 
   // Divisioni filtrate per testo (codice, nome, sezione) e per modalità selezionata
   const divisioniData = useMemo(() => {
     const lista = (annoData.atecoDivisioni || [])
       .filter((d) => d.key !== "ND")
       .map((d) => {
-        const f = filtraItem(d as any);
-        return { ...d, casi: f.casi, lavoro: f.lavoro, itinere: f.itinere } as any;
+        const f = filtraItem(d);
+        return { ...d, casi: f.casi, lavoro: f.lavoro, itinere: f.itinere };
       });
     const query = cerca.trim().toLowerCase();
     if (query) {
@@ -133,28 +147,7 @@ export function AtecoSettoriWidget() {
     return arr;
   }, [divisioniData, cerca]);
 
-  // Mini-sparkline: serie 2020-2025 della divisione selezionata
-  const trendDivisione = useMemo(() => {
-    if (!trendDiv) return null;
-    const anni = multidim.anniDisponibili || [];
-    const serie = modalita.lavoro && modalita.itinere
-      ? serieTot[trendDiv]
-      : (modalita.lavoro ? serieLavoro[trendDiv] : serieItinere[trendDiv]);
-    if (!serie) return null;
-    const valori = anni.map((a) => serie[a] || 0);
-    if (valori.every((v) => v === 0)) return null;
-    const max = Math.max(...valori, 1);
-    const min = Math.min(...valori);
-    const punti = valori.map((v, i) => ({ anno: anni[i], v, y: v === 0 ? 0 : 30 - ((v - min) / (max - min || 1)) * 28 }));
-    return {
-      anni,
-      valori,
-      punti,
-      mortali: (serieMortali[trendDiv] || {}) as Record<string, number>,
-    };
-  }, [trendDiv, modalita, multidim]);
-
-  const righeDettaglio = (p: any): DettaglioRiga[] => {
+  const righeDettaglio = (p: DettaglioItem): DettaglioRiga[] => {
     const righe: DettaglioRiga[] = [];
     righe.push({ label: "Infortuni denunciati", valore: exactNumber(p.casi) });
     if (modalita.lavoro && modalita.itinere) {

@@ -89,7 +89,7 @@ export function VigilanzaTipologieWidget() {
                 stroke="#f5f5f5"
                 strokeWidth={2}
                 labelLine={false}
-                label={(entry: any) => {
+                label={(entry: { valore?: number | string; x?: number; y?: number }) => {
                   const v = Number(entry?.valore ?? 0);
                   const p = totale > 0 ? (v / totale) * 100 : 0;
                   if (p < 7) return "";

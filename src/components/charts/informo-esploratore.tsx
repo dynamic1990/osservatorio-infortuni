@@ -27,6 +27,7 @@ interface CatalogoCaso {
 
 interface Catalogo {
   casi: CatalogoCaso[];
+  meta?: Record<string, unknown>;
 }
 
 type Ordina = "anno-desc" | "anno-asc" | "causa" | "settore";
@@ -89,7 +90,6 @@ export function InformoEsploratore({ perimetro = "mortali" }: { perimetro?: Peri
   );
   const [catMortali, setCatMortali] = useState<Catalogo | null>(null);
   const [catGravi, setCatGravi] = useState<Catalogo | null>(null);
-  const [catalogo, setCatalogo] = useState<Catalogo | null>(null);
   const [query, setQuery] = useState("");
   const [anno, setAnno] = useState<number | "tutti">(ANNO_DEFAULT);
   const [settore, setSettore] = useState<string>("tutti");
@@ -98,56 +98,46 @@ export function InformoEsploratore({ perimetro = "mortali" }: { perimetro?: Peri
   const [pagina, setPagina] = useState(0);
   const [aperto, setAperto] = useState<string | null>(null);
 
-  // Carica i cataloghi in base al filtro tipo, tenendoli in cache per non
-  // riscaricarli a ogni cambio: "tutti" unisce i due archivi con l'etichetta
-  // di provenienza su ogni caso.
+  // Carica i cataloghi mancanti (solo fetch async, niente setState sincrono in
+  // effect); il catalogo attivo è stato derivato qui sotto con useMemo.
   useEffect(() => {
-    setCatalogo(null);
-    setPagina(0);
     const carica = (archivio: "mortali" | "gravi") =>
       fetch(archivio === "mortali" ? "/data/informo-catalogo.json" : "/data/informo-catalogo-gravi.json")
         .then((r) => r.json())
         .catch(() => null);
-    if (tipo !== "tutti") {
-      if (tipo === "mortali") {
-        if (catMortali) return void setCatalogo(catMortali);
-        carica("mortali").then((d) => {
-          if (d) setCatMortali(d as Catalogo);
-          setCatalogo(d as Catalogo | null);
-        });
-      } else {
-        if (catGravi) return void setCatalogo(catGravi);
-        carica("gravi").then((d) => {
-          if (d) setCatGravi(d as Catalogo);
-          setCatalogo(d as Catalogo | null);
-        });
-      }
-      return;
+    if (tipo === "mortali") {
+      if (!catMortali) carica("mortali").then((d) => { if (d) setCatMortali(d as Catalogo); });
+    } else if (tipo === "gravi") {
+      if (!catGravi) carica("gravi").then((d) => { if (d) setCatGravi(d as Catalogo); });
+    } else {
+      if (!catMortali) carica("mortali").then((d) => { if (d) setCatMortali(d as Catalogo); });
+      if (!catGravi) carica("gravi").then((d) => { if (d) setCatGravi(d as Catalogo); });
     }
-    Promise.all([
-      catMortali ? Promise.resolve(catMortali) : carica("mortali"),
-      catGravi ? Promise.resolve(catGravi) : carica("gravi"),
-    ]).then(([m, g]) => {
-      if (m) setCatMortali(m as Catalogo);
-      if (g) setCatGravi(g as Catalogo);
-      if (m && g) {
-        setCatalogo({
-          casi: [
-            ...(m.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "mortali" })),
-            ...(g.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "gravi" })),
-          ],
-          meta: { ...(m.meta ?? {}), nota: "Unione dei cataloghi mortali e gravi" },
-        } as Catalogo);
-      } else {
-        setCatalogo(null);
-      }
-    });
-  }, [tipo]);
+  }, [tipo, catMortali, catGravi]);
 
-  // Quando i filtri cambiano, si riparte dalla prima pagina.
-  useEffect(() => {
-    setPagina(0);
-  }, [query, anno, settore, causa, ordina]);
+  // Catalogo attivo: derivato, non in stato. Se manca un archivio serve "null"
+  // (l'UI mostra il caricamento) invece di mantenere lo stantio.
+  const catalogo = useMemo<Catalogo | null>(() => {
+    if (tipo === "mortali") return catMortali;
+    if (tipo === "gravi") return catGravi;
+    if (!catMortali || !catGravi) return null;
+    return {
+      casi: [
+        ...(catMortali.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "mortali" })),
+        ...(catGravi.casi as CatalogoCaso[]).map((c) => ({ ...c, tipo: "gravi" })),
+      ],
+      meta: { ...(catMortali.meta ?? {}), nota: "Unione dei cataloghi mortali e gravi" },
+    } as Catalogo;
+  }, [tipo, catMortali, catGravi]);
+
+  // Quando i filtri cambiano, si riparte dalla prima pagina: stato derivato
+  // da chiave di reset, senza setState in effect separato.
+  const chiaveReset = `${tipo}|${query}|${anno}|${settore}|${causa}|${ordina}`;
+  const [chiaveResetPrec, setChiaveResetPrec] = useState(chiaveReset);
+  if (chiaveReset !== chiaveResetPrec) {
+    setChiaveResetPrec(chiaveReset);
+    if (pagina !== 0) setPagina(0);
+  }
 
   const settori = useMemo(() => {
     const s = new Set<string>();

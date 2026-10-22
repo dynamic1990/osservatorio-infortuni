@@ -1,20 +1,11 @@
 // Genera public/og-image.png (1200x630, formato social standard)
 // Stile: design system del sito (--color-accent #f36458, --color-text #1a1a1a, font display Georgia/Liberation Serif)
 import sharp from "sharp";
-import { execSync } from "node:child_process";
 import fs from "node:fs";
 
 const OUT = new URL("../public/og-image.png", import.meta.url).pathname;
 const W = 1200;
 const H = 630;
-
-function fontPath(name) {
-  const p = execSync(`fc-match -f '%{file}' '${name}'`, { encoding: "utf8" }).trim();
-  return p;
-}
-
-const serif = fontPath("Liberation Serif");
-const sans = fontPath("Liberation Sans");
 
 const TEXT_BG = "#ffffff";
 const ACCENT = "#f36458";

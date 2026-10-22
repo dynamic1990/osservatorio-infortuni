@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { getMultidimensionaleData } from "@/lib/multidimensionale";
 import { exactNumber, compactNumber } from "@/lib/format";
 import { PALETTE } from "@/lib/palette";
@@ -42,7 +42,7 @@ export function MacroAreaWidget() {
   const ambito: "totale" | "lavoro" | "itinere" =
     modalita.lavoro && modalita.itinere ? "totale" : modalita.lavoro ? "lavoro" : "itinere";
 
-  const agg = (annoKey: string): AreaAggregato[] | null => {
+  const agg = useCallback((annoKey: string): AreaAggregato[] | null => {
     const data = multidim.perAnno[annoKey];
     if (!data) return null;
     return Object.keys(MACRO_AREAS).map((area) => {
@@ -61,13 +61,13 @@ export function MacroAreaWidget() {
         indice: occupati > 0 ? Number(((casi / occupati) * 1000).toFixed(2)) : 0,
       };
     });
-  };
+  }, [multidim, ambito]);
 
-  const cur = useMemo(() => agg(anno), [anno, ambito]);
+  const cur = useMemo(() => agg(anno), [agg, anno]);
   const prev = useMemo(() => {
     const prevYear = String(Number(anno) - 1);
     return multidim.perAnno[prevYear] ? agg(prevYear) : null;
-  }, [anno, ambito]);
+  }, [agg, anno, multidim]);
 
   const rows = useMemo<AreaAggregato[]>(() => {
     if (!cur) return [];

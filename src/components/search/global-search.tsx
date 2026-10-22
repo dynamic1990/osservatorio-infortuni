@@ -103,11 +103,10 @@ export function GlobalSearch() {
   const [aperta, setAperta] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
-  const [newsCaricate, setNewsCaricate] = useState(false);
+  const [, setNewsCaricate] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const activeRef = useRef<HTMLAnchorElement | null>(null);
-  const newsCacheRef = useRef<NewsLite[] | null>(null);
 
   const puntiPartenza = useMemo(
     () => SEARCH_INDEX.filter((e) => e.type === "pagina" || e.type === "report").slice(0, 8),
@@ -124,10 +123,10 @@ export function GlobalSearch() {
   useEffect(() => {
     let annullato = false;
     const attiva = aperta && query.trim().length >= 2;
-    if (attiva && !newsCacheRef.current) {
+    if (attiva) {
       caricaNews().then((lista) => {
         if (annullato) return;
-        newsCacheRef.current = lista;
+        newsCache = lista;
         setNewsCaricate(true);
       });
     }
@@ -138,7 +137,7 @@ export function GlobalSearch() {
 
   const newsMatch = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const lista = newsCache ?? newsCacheRef.current ?? [];
+    const lista = newsCache ?? [];
     if (!lista.length || q.length < 2) return [];
     const termini = q.split(/\s+/);
     return lista
@@ -150,7 +149,7 @@ export function GlobalSearch() {
       })
       .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
       .slice(0, 5);
-  }, [query, newsCaricate]);
+  }, [query]);
 
   const righe = useMemo<Riga[]>(() => {
     if (!query.trim()) return puntiPartenza.map((entry) => ({ entry }));
@@ -164,6 +163,18 @@ export function GlobalSearch() {
   const chiudi = useCallback(() => {
     setAperta(false);
     setQuery("");
+    setSelected(0);
+  }, []);
+
+  // Reset selezione: eseguito direttamente nei punti di cambio query/apertura
+  // (onChange dell'input, apertura, chiudi) invece che in un effect duplicato.
+  const cambiaQuery = useCallback((nuova: string) => {
+    setQuery(nuova);
+    setSelected(0);
+  }, []);
+
+  const apriRicerca = useCallback(() => {
+    setAperta(true);
     setSelected(0);
   }, []);
 
@@ -194,19 +205,16 @@ export function GlobalSearch() {
         activeRef.current?.click();
       }
     };
-    const onApri = () => setAperta(true);
+    const onApri = () => apriRicerca();
     window.addEventListener("keydown", onKey);
     window.addEventListener(APRI_RICERCA, onApri);
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener(APRI_RICERCA, onApri);
     };
-  }, [aperta, righe.length, chiudi]);
+  }, [aperta, righe.length, chiudi, apriRicerca]);
 
-  // Reset selezione quando cambia la query
-  useEffect(() => {
-    setSelected(0);
-  }, [query, aperta]);
+  // Reset selezione quando cambia la query: gestito da cambiaQuery/apriRicerca.
 
   // Focus sull'input + blocco scroll quando si apre
   useEffect(() => {
@@ -264,7 +272,7 @@ export function GlobalSearch() {
             ref={inputRef}
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => cambiaQuery(e.target.value)}
             placeholder="Cerca in tutto il sito: dati, report, bandi, fonti, cronaca…"
             aria-label="Cerca in tutto il sito"
             style={{
@@ -280,7 +288,7 @@ export function GlobalSearch() {
           {query && (
             <button
               type="button"
-              onClick={() => setQuery("")}
+              onClick={() => cambiaQuery("")}
               aria-label="Cancella la ricerca"
               style={{
                 border: "none",

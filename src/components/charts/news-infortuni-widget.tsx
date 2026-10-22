@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { ExternalLink } from "lucide-react";
 import newsRaw from "@/data/generated/news-infortuni.json";
+
+const subscribeNoop = () => () => {};
 
 interface Notizia {
   titolo: string;
@@ -42,8 +44,15 @@ function formatData(dataStr: string): string {
 
 export function NewsInfortuniWidget() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
+  // Timestamp client-side: sul server (prerender) vale 0, il filtro "ultimi 7 giorni"
+  // esclude tutto e dopo l'idratazione mostra i dati reali senza impurezza nel render.
+  const adesso = useSyncExternalStore(
+    subscribeNoop,
+    () => Date.now(),
+    () => 0,
+  );
   const notizie = useMemo(() => {
-    const soglia = Date.now() - 7 * 86400_000;
+    const soglia = adesso - 7 * 86400_000;
     return (dati.notizie || [])
       .filter((n) => n.tipo !== "report")
       .filter((n) => (n.workAccidentScore ?? 0) >= 40)
@@ -58,7 +67,7 @@ export function NewsInfortuniWidget() {
         if (dateDelta !== 0) return dateDelta;
         return (b.workAccidentScore ?? 0) - (a.workAccidentScore ?? 0);
       })
-  }, [dati]);
+  }, [dati, adesso]);
 
   const [slide, setSlide] = useState(0);
   const totaleSlides = Math.max(1, Math.ceil(notizie.length / ITEMS_PER_SLIDE));

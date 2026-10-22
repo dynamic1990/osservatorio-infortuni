@@ -78,7 +78,7 @@ export function DemografiaAnnualeWidget() {
         fill: PALETTE[i % PALETTE.length],
       };
     });
-  }, [anno, modalita, annoData]);
+  }, [modalita, annoData]);
 
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>

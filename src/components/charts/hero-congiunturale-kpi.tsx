@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import { getCongiunturaleData } from "@/lib/multidimensionale";
 import metaRaw from "@/data/generated/inail-infortuni-serie.meta.json";
-import { compactNumber, exactNumber, percent } from "@/lib/format";
+import { compactNumber, exactNumber } from "@/lib/format";
 import { MODAL_COLORS } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
 
@@ -294,9 +294,9 @@ export function HeroCongiunturaleKpi() {
               <XAxis dataKey="mese" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => compactNumber(v)} width={50} />
               <Tooltip
-                formatter={(val: any, name: any) => [
+                formatter={(val: unknown, name: unknown) => [
                   `${exactNumber(Number(val))} casi`,
-                  `Anno ${name}`,
+                  `Anno ${String(name)}`,
                 ]}
               />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: 14, fontSize: "0.8rem" }} />
