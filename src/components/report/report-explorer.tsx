@@ -90,79 +90,105 @@ export default function ReportExplorer({ reports, latestDate }: ReportExplorerPr
 
   return (
     <div style={{ display: "grid", gap: "var(--space-6)" }}>
-      {/* Filtri: area tematica + ricerca */}
+      {/* Filtri: area tematica + ricerca, stessa riga su desktop */}
       <section aria-label="Filtra i report" style={{ display: "grid", gap: "var(--space-3)" }}>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)", alignItems: "center" }}>
-          <span className="metric-label" style={{ marginRight: "var(--space-1)" }}>
-            Filtra per tema
-          </span>
-          <button
-            type="button"
-            className={`btn-pill ${area === "tutti" ? "active" : ""}`}
-            aria-pressed={area === "tutti"}
-            onClick={() => selectArea("tutti")}
-          >
-            Tutti
-            <span style={{ marginLeft: 8, opacity: 0.75, fontSize: "0.72rem" }}>{countFor("tutti")}</span>
-          </button>
-          {AREE_IDS.map((a) => (
-            <button
-              key={a}
-              type="button"
-              className={`btn-pill ${area === a ? "active" : ""}`}
-              aria-pressed={area === a}
-              onClick={() => selectArea(a)}
-            >
-              {AREE[a].label}
-              <span style={{ marginLeft: 8, opacity: 0.75, fontSize: "0.72rem" }}>{countFor(a)}</span>
-            </button>
-          ))}
-        </div>
-
-        <div role="search" style={{ position: "relative", maxWidth: 520 }}>
-          <Search
-            aria-hidden="true"
-            size={16}
-            style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }}
-          />
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Cerca nei report: es. 'lavoro nero', 'itinere', 'INAIL'…"
-            aria-label="Cerca nei report"
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "var(--space-2)",
+            alignItems: "center",
+          }}
+        >
+          <div
             style={{
-              width: "100%",
-              border: "1px solid var(--color-text)",
-              borderRadius: "var(--radius-md)",
-              background: "var(--color-raised)",
-              color: "var(--color-text)",
-              padding: "8px 36px 8px 36px",
-              fontSize: "0.88rem",
-              minHeight: 38,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "var(--space-2)",
+              alignItems: "center",
             }}
-          />
-          {query && (
+          >
+            <span className="metric-label" style={{ marginRight: "var(--space-1)" }}>
+              Filtra per tema
+            </span>
             <button
               type="button"
-              onClick={() => setQuery("")}
-              aria-label="Cancella la ricerca"
-              style={{
-                position: "absolute",
-                right: 8,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: "var(--color-text-muted)",
-                display: "inline-flex",
-                padding: 4,
-              }}
+              className={`btn-pill ${area === "tutti" ? "active" : ""}`}
+              aria-pressed={area === "tutti"}
+              onClick={() => selectArea("tutti")}
             >
-              <X aria-hidden="true" size={16} />
+              Tutti
+              <span style={{ marginLeft: 8, opacity: 0.75, fontSize: "0.72rem" }}>{countFor("tutti")}</span>
             </button>
-          )}
+            {AREE_IDS.map((a) => (
+              <button
+                key={a}
+                type="button"
+                className={`btn-pill ${area === a ? "active" : ""}`}
+                aria-pressed={area === a}
+                onClick={() => selectArea(a)}
+              >
+                {AREE[a].label}
+                <span style={{ marginLeft: 8, opacity: 0.75, fontSize: "0.72rem" }}>{countFor(a)}</span>
+              </button>
+            ))}
+          </div>
+
+          <div
+            role="search"
+            style={{
+              position: "relative",
+              width: 280,
+              maxWidth: "100%",
+              minWidth: 200,
+              marginLeft: "auto",
+              flexShrink: 1,
+            }}
+          >
+            <Search
+              aria-hidden="true"
+              size={15}
+              style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }}
+            />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Cerca nei report…"
+              aria-label="Cerca nei report"
+              style={{
+                width: "100%",
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--radius-md)",
+                background: "var(--color-raised)",
+                color: "var(--color-text)",
+                padding: "6px 30px 6px 32px",
+                fontSize: "0.84rem",
+                minHeight: 34,
+              }}
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Cancella la ricerca"
+                style={{
+                  position: "absolute",
+                  right: 7,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "var(--color-text-muted)",
+                  display: "inline-flex",
+                  padding: 4,
+                }}
+              >
+                <X aria-hidden="true" size={15} />
+              </button>
+            )}
+          </div>
         </div>
       </section>
 

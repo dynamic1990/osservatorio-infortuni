@@ -92,11 +92,12 @@ export default function ReportIndexPage() {
       <header style={{ borderLeft: "4px solid var(--color-accent)", paddingLeft: "var(--space-4)" }}>
         <p className="eyebrow" style={{ margin: 0 }}>REPORT · DATI E CONTESTO</p>
         <h1 style={{ margin: "var(--space-2) 0 var(--space-2)" }}>Report</h1>
-        <p style={{ margin: 0, maxWidth: "70ch" }}>
+        <p style={{ margin: 0, maxWidth: "75ch", fontSize: "0.95rem", lineHeight: 1.65 }}>
           Report brevi per chi vuole i numeri senza navigare l&apos;intera app. Ogni report parte da una domanda
           frequente, risponde con i dati aggiornati e incrocia le fonti dell&apos;Osservatorio: infortuni,
           malattie professionali, vigilanza, cause e casi mortali. Lettura in cinque minuti, ogni numero con la
-          sua fonte.
+          sua fonte. I report sono redatti a partire dai dataset ufficiali INAIL e INL, con metodo, periodo di
+          riferimento e link alla fonte citati per ogni dato.
         </p>
       </header>
 
