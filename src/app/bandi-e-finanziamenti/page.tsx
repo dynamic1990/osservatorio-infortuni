@@ -15,6 +15,7 @@ const STATO_STYLE: Record<StatoBando, { background: string; color: string }> = {
   Aperto: { background: "var(--color-accent)", color: "var(--color-raised)" },
   "In scadenza": { background: "var(--color-accent)", color: "var(--color-raised)" },
   "Prossima apertura": { background: "var(--color-divider)", color: "var(--color-text)" },
+  Chiuso: { background: "var(--color-divider)", color: "var(--color-text-muted)" },
   "Da verificare": { background: "var(--color-surface)", color: "var(--color-text-muted)" },
 };
 
@@ -146,6 +147,7 @@ export default function BandiPrevenzionePage() {
               <ul className="modal-list">
                 <li><strong>Aperto / In scadenza:</strong> finestra di presentazione attiva, da controllare per eventuali proroghe.</li>
                 <li><strong>Prossima apertura:</strong> bando annunciato, non ancora presentabile.</li>
+                <li><strong>Chiuso:</strong> finestra di presentazione terminata; la scheda resta come riferimento per la prossima edizione.</li>
                 <li><strong>Da verificare:</strong> scadenza o condizioni da controllare sul portale ufficiale.</li>
               </ul>
             </section>

@@ -1,4 +1,4 @@
-export type StatoBando = "Aperto" | "In scadenza" | "Prossima apertura" | "Da verificare";
+export type StatoBando = "Aperto" | "In scadenza" | "Prossima apertura" | "Chiuso" | "Da verificare";
 
 export interface BandoPrevenzione {
   id: string;
@@ -14,7 +14,7 @@ export interface BandoPrevenzione {
   note?: string;
 }
 
-export const AGGIORNATO_AL = "17 settembre 2026";
+export const AGGIORNATO_AL = "27 ottobre 2026";
 
 export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
   {
@@ -25,11 +25,11 @@ export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
       "Contributi a fondo perduto per progetti che migliorano le condizioni di salute e sicurezza nei luoghi di lavoro: bonifica amianto, riduzione del rischio, robotica e macchinari innovativi, ambienti confinati, progetti per micro e piccole imprese di settori specifici.",
     dotazione: "600 milioni di euro",
     contributo: "Fino a 130.000 euro (65%, fino all'80% per alcune tipologie); intervento aggiuntivo fino a 20.000 euro",
-    scadenzaLabel: "Fase documentale domande ammesse: 26 ottobre 2026",
+    scadenzaLabel: "Fase documentale chiusa il 26 ottobre 2026 alle 18:00. Elenchi definitivi attesi il 26 gennaio 2027",
     regione: "Nazionale",
-    stato: "Aperto",
-    link: "https://www.inail.it/portale/prevenzione-e-sicurezza/it/prevenzione-e-sicurezza/finanziamenti-per-la-sicurezza/incentivi-alle-imprese.html",
-    note: "Selezione a sportello con click day; risorse ripartite per regione e asse di intervento.",
+    stato: "Chiuso",
+    link: "https://www.inail.it/portale/prevenzione-e-sicurezza/it/prevenzione-e-sicurezza/finanziamenti-per-la-sicurezza/incentivi-alle-imprese/bando-isi-2025.html",
+    note: "L'edizione 2025/2026 è chiusa. Le imprese con domanda ammessa dovevano completare la documentazione entro il 26 ottobre 2026, ore 18:00, a pena di decadenza. L'edizione 2026 non è ancora stata pubblicata: l'avviso attendibile è quello della Gazzetta Ufficiale, non le anticipazioni dei consulenti.",
   },
   {
     id: "inail-formazione",
@@ -51,10 +51,11 @@ export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
       "Finanziamento di piani formativi per le MPMI aderenti al Fondo, con priorità alla formazione obbligatoria in materia di sicurezza sul lavoro e alle competenze avanzate (inclusa l'area intelligenza artificiale).",
     dotazione: "30 milioni di euro",
     contributo: "Copertura dei piani formativi presentati dalle aziende aderenti (contributo 0,30%)",
-    scadenzaLabel: "Procedura a fasi: qualificazione dei cataloghi formativi e presentazione dei piani",
+    scadenzaLabel: "Presentazione dei piani formativi dal 1° al 22 dicembre 2026, previa adesione tramite ente qualificato",
     regione: "Nazionale",
     stato: "Aperto",
     link: "https://www.fondimpresa.it/",
+    note: "Avviso pubblicato il 30 giugno 2026. La qualificazione dei cataloghi si è chiusa il 30 settembre 2026; i piani formativi si presentano dal 1° al 22 dicembre 2026. L'azienda deve aderire tramite un ente qualificato prima di poter presentare il piano.",
   },
   {
     id: "lazio-fse-sicurezza",
@@ -65,9 +66,9 @@ export const BANDI_PREVENZIONE: BandoPrevenzione[] = [
     dotazione: "5 milioni di euro",
     contributo: "Contributo a fondo perduto sui costi ammissibili, in regime de minimis o in esenzione",
     regione: "Lazio",
-    stato: "Aperto",
+    stato: "Da verificare",
     link: "https://www.regione.lazio.it/sicurezzalavoro",
-    note: "Domanda telematica: le condizioni operative sono definite nell'avviso pubblicato dalla Regione.",
+    note: "La programmazione FSE+ Lazio colloca la pubblicazione dell'avviso sulla formazione continua a maggio 2027. Le pagine regionali consultate non riportano una finestra aperta al 27 ottobre 2026: verificare sul calendario degli avvisi del PR FSE+ Lazio 2021-2027 prima di contare su questa misura.",
   },
   {
     id: "campania-piu-sicurezza",
