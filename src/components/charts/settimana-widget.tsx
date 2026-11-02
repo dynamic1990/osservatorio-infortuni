@@ -21,7 +21,6 @@ import {
 import { exactNumber, percent } from "@/lib/format";
 import { ACCENT, LINK } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "./filtro-modalita";
-import { ChartTooltip } from "./chart-tooltip";
 
 type Tipo = "casi" | "mortali";
 type Scala = "assoluto" | "media";
@@ -258,21 +257,79 @@ export function SettimanaWidget() {
               tickFormatter={(v) => fmtAsse(Number(v))}
             />
             <Tooltip
-              content={({ active, payload, label }) => (
-                <ChartTooltip
-                  active={active}
-                  payload={payload}
-                  label={label}
-                  labelFormatter={(l) =>
-                    `${String(l)} · ${TIPO_LABEL[tipo]} · ${SCALA_LABEL[scala]}`
-                  }
-                  formatter={(v) =>
-                    scala === "assoluto"
-                      ? exactNumber(Math.round(v))
-                      : v.toLocaleString("it-IT", { maximumFractionDigits: 0 })
-                  }
-                />
-              )}
+              content={({ active, payload, label }) => {
+                if (!active || !payload?.length) return null;
+                const riga = payload[0]?.payload as Record<string, number | string> | undefined;
+                if (!riga) return null;
+                const giorno = String(riga.giorno ?? label ?? "");
+                return (
+                  <div className="custom-chart-tooltip">
+                    <div className="tooltip-title">
+                      {giorno} · {TIPO_LABEL[tipo]} · {SCALA_LABEL[scala]}
+                    </div>
+                    {payload.map((serie, i) => {
+                      const valore = Number(serie.value ?? 0);
+                      const annoSerie = Number(serie.dataKey ?? 0);
+                      const annoDati = anni.find((a) => a.anno === annoSerie);
+                      // Denominatore esplicito: il totale dell'anno per il giorno,
+                      // non la somma delle barre visibili (che con una serie sola
+                      // darebbe 100%).
+                      const totaleAnno = annoDati
+                        ? serieGiorni(annoDati, modalita, tipo).reduce(
+                            (acc, g) => acc + g.casi,
+                            0
+                          )
+                        : 0;
+                      const quota =
+                        scala === "assoluto" && totaleAnno > 0 ? valore / totaleAnno : null;
+                      return (
+                        <div
+                          className="tooltip-row"
+                          key={`${String(serie.dataKey)}-${i}`}
+                        >
+                          <span
+                            style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+                          >
+                            <i
+                              aria-hidden="true"
+                              style={{
+                                width: 8,
+                                height: 8,
+                                display: "inline-block",
+                                background: coloreAnno(
+                                  anni.findIndex((a) => a.anno === annoSerie),
+                                  anni.length
+                                ),
+                                borderRadius: 2,
+                                flexShrink: 0,
+                              }}
+                            />
+                            {String(serie.name ?? annoSerie)}
+                          </span>
+                          <strong>
+                            {scala === "assoluto"
+                              ? exactNumber(Math.round(valore))
+                              : valore.toLocaleString("it-IT", {
+                                  maximumFractionDigits: 0,
+                                })}
+                            {quota !== null ? (
+                              <span
+                                style={{
+                                  color: "var(--color-text-muted)",
+                                  fontWeight: 550,
+                                }}
+                              >
+                                {" "}
+                                ({percent(quota, 1)} del totale {annoSerie})
+                              </span>
+                            ) : null}
+                          </strong>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }}
             />
             <Legend
               verticalAlign="bottom"
@@ -306,7 +363,8 @@ export function SettimanaWidget() {
               marginBottom: "var(--space-2)",
             }}
           >
-            Stessi valori in tabella, con la media giornaliera per calendario.
+            Stessi valori in tabella. Sotto ogni conteggio, la quota del giorno sul totale
+            dell&apos;anno (le quote di ogni colonna sommano a 100%).
           </caption>
           <thead>
             <tr style={{ borderBottom: "2px solid var(--color-divider)", textAlign: "right" }}>
@@ -336,10 +394,24 @@ export function SettimanaWidget() {
                     {giorno}
                   </th>
                   {anniSel.map((a) => {
-                    const voceAnno = serieGiorni(a, modalita, tipo).find((g) => g.giorno === giorno);
+                    const serieAnno = serieGiorni(a, modalita, tipo);
+                    const voceAnno = serieAnno.find((g) => g.giorno === giorno);
+                    const totAnno = serieAnno.reduce((acc, g) => acc + g.casi, 0);
+                    const quota = totAnno > 0 ? (voceAnno?.casi ?? 0) / totAnno : null;
                     return (
                       <td key={a.anno} style={{ textAlign: "right" }}>
                         {exactNumber(voceAnno?.casi ?? 0)}
+                        {quota !== null ? (
+                          <div
+                            style={{
+                              fontSize: "0.72rem",
+                              color: "var(--color-text-soft)",
+                              fontWeight: 550,
+                            }}
+                          >
+                            {percent(quota, 1)}
+                          </div>
+                        ) : null}
                       </td>
                     );
                   })}
