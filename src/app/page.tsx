@@ -167,36 +167,7 @@ export default function HomePage() {
         <DemografiaAnnualeWidget />
       </section>
 
-      {/* 7. Analisi Qualitativa: Gravità del Danno, Durata delle Assenze e Stagionalità */}
-      <section className="card" aria-label="Analisi di Gravità e Durata Assenze" id="gravita-inabilita">
-        <div className="card-header">
-          <h2 className="card-title">Analisi di Gravità del Danno e Durata dell&apos;Inabilità Temporanea</h2>
-          <p className="card-desc">
-            Distribuzione per grado di menomazione accertato (franchigia 0–5%, indennizzo in capitale 6–15%, rendita diretta 16%+),
-            classi di durata in giorni dell&apos;inabilità temporanea indennizzata, gestione tariffaria e andamento mensile.
-          </p>
-        </div>
-        <GravitaDurataWidget />
-        <div style={{ height: "var(--space-6)" }} />
-        <DimensioniWidget />
-        <div style={{ height: "var(--space-6)" }} />
-        <StagionalitaWidget />
-      </section>
-
-      {/* 7bis. Benchmark Internazionale Eurostat */}
-      <section className="card" aria-label="Benchmark Internazionale" id="benchmark-europa">
-        <div className="card-header">
-          <h2 className="card-title">Benchmark Internazionale: il confronto con l&apos;Europa</h2>
-          <p className="card-desc">
-            Dove si colloca l&apos;Italia nella sicurezza sul lavoro rispetto agli altri grandi paesi europei?
-            Il tasso standardizzato Eurostat (ESAW) permette un confronto equo tra paesi, depurato dalle
-            differenze demografiche.
-          </p>
-        </div>
-        <BenchmarkEurostatWidget />
-      </section>
-
-      {/* 8. Distribuzione per giorno della settimana (open data INAIL, livello record) */}
+      {/* 7. Distribuzione per giorno della settimana (open data INAIL, livello record) */}
       <section className="card" aria-label="Distribuzione settimanale degli infortuni" id="giorno-settimana">
         <div className="card-header">
           <h2 className="card-title">In quali giorni della settimana accadono gli infortuni</h2>
@@ -244,6 +215,36 @@ export default function HomePage() {
         </div>
         <SettimanaWidget />
       </section>
+
+      {/* 8. Analisi Qualitativa: Gravità del Danno, Durata delle Assenze e Stagionalità */}
+      <section className="card" aria-label="Analisi di Gravità e Durata Assenze" id="gravita-inabilita">
+        <div className="card-header">
+          <h2 className="card-title">Analisi di Gravità del Danno e Durata dell&apos;Inabilità Temporanea</h2>
+          <p className="card-desc">
+            Distribuzione per grado di menomazione accertato (franchigia 0–5%, indennizzo in capitale 6–15%, rendita diretta 16%+),
+            classi di durata in giorni dell&apos;inabilità temporanea indennizzata, gestione tariffaria e andamento mensile.
+          </p>
+        </div>
+        <GravitaDurataWidget />
+        <div style={{ height: "var(--space-6)" }} />
+        <DimensioniWidget />
+        <div style={{ height: "var(--space-6)" }} />
+        <StagionalitaWidget />
+      </section>
+
+      {/* 9. Benchmark Internazionale Eurostat */}
+      <section className="card" aria-label="Benchmark Internazionale" id="benchmark-europa">
+        <div className="card-header">
+          <h2 className="card-title">Benchmark Internazionale: il confronto con l&apos;Europa</h2>
+          <p className="card-desc">
+            Dove si colloca l&apos;Italia nella sicurezza sul lavoro rispetto agli altri grandi paesi europei?
+            Il tasso standardizzato Eurostat (ESAW) permette un confronto equo tra paesi, depurato dalle
+            differenze demografiche.
+          </p>
+        </div>
+        <BenchmarkEurostatWidget />
+      </section>
+
 
     </div>
   );
