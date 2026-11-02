@@ -56,12 +56,15 @@ export const SOURCES: Record<SourceId, SourceInfo> = {
     owner: "INAIL",
     area: "Infortuni sul lavoro",
     landingUrl: "https://dati.inail.it/portale/it/dataset/infortuni-sul-lavoro/dati-con-cadenza-semestrale.html",
-    apiUrl: "https://dati.inail.it/api/OpenData/DatiConCadenzaSemestraleInfortuni",
-    format: "JSON (REST)",
-    coverage: "Come mensile + definizione amministrativa, esito mortale, indennizzo",
+    apiUrl:
+      "https://dati.inail.it/opendata/downloads/daticoncadenzasemestraleinfortuni/zip/DatiConCadenzaSemestraleInfortuni<Regione>_csv.zip",
+    format: "CSV (20 archivi regionali)",
+    coverage:
+      "Livello record, tutte le province e le 20 regioni, 2021-2025: come il mensile + definizione amministrativa, esito mortale, indennizzo",
     frequency: "Semestrale",
-    status: "planned",
-    notes: "Parametro Regione accetta valori particolari; da testare",
+    status: "active",
+    notes:
+      "Usato per la distribuzione per giorno della settimana: il campo DataAccadimento è completo su tutti i record. Non espone l'ora di accadimento, quindi nessuna analisi per fascia oraria è possibile da questa fonte.",
   },
   "inail-malattie-mensile": {
     id: "inail-malattie-mensile",

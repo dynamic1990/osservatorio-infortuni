@@ -1,0 +1,1693 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-02T13:59:39+00:00",
+ "fonte": "INAIL open data - DatiConCadenzaSemestraleInfortuni (livello record, 20 regioni)",
+ "periodo": {
+  "da": 2021,
+  "a": 2025
+ },
+ "metodo": {
+  "denominatore": "giorni-calendario per giorno della settimana nel periodo osservato",
+  "nonE": "tasso di incidenza su occupati: il denominatore occupati per singolo giorno non e' disponibile",
+  "annoParziale": "se un anno non copre 12 mesi, copertura.completo e' false e il confronto tra anni va evitato"
+ },
+ "recordUsati": 3052546,
+ "recordScartati": 0,
+ "anni": [
+  {
+   "anno": 2021,
+   "copertura": {
+    "da": "2021-01-01",
+    "a": "2021-12-31",
+    "giorni": 365,
+    "completo": true
+   },
+   "totale": {
+    "casi": 564418,
+    "mortali": 1474,
+    "giorni": [
+     {
+      "giorno": "Lun",
+      "casi": 107954,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2076.0,
+      "indiceVsFeriale": 1.08
+     },
+     {
+      "giorno": "Mar",
+      "casi": 101557,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1953.0,
+      "indiceVsFeriale": 1.016
+     },
+     {
+      "giorno": "Mer",
+      "casi": 97235,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1869.9,
+      "indiceVsFeriale": 0.972
+     },
+     {
+      "giorno": "Gio",
+      "casi": 99643,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1916.2,
+      "indiceVsFeriale": 0.997
+     },
+     {
+      "giorno": "Ven",
+      "casi": 93555,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 1765.2,
+      "indiceVsFeriale": 0.936
+     },
+     {
+      "giorno": "Sab",
+      "casi": 42319,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 813.8,
+      "indiceVsFeriale": 0.423
+     },
+     {
+      "giorno": "Dom",
+      "casi": 22155,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 426.1,
+      "indiceVsFeriale": 0.222
+     }
+    ],
+    "giorniMortali": [
+     {
+      "giorno": "Lun",
+      "casi": 291,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 5.6,
+      "indiceVsFeriale": 1.147
+     },
+     {
+      "giorno": "Mar",
+      "casi": 265,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 5.1,
+      "indiceVsFeriale": 1.045
+     },
+     {
+      "giorno": "Mer",
+      "casi": 242,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.7,
+      "indiceVsFeriale": 0.954
+     },
+     {
+      "giorno": "Gio",
+      "casi": 224,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.3,
+      "indiceVsFeriale": 0.883
+     },
+     {
+      "giorno": "Ven",
+      "casi": 246,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 4.6,
+      "indiceVsFeriale": 0.97
+     },
+     {
+      "giorno": "Sab",
+      "casi": 136,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2.6,
+      "indiceVsFeriale": 0.536
+     },
+     {
+      "giorno": "Dom",
+      "casi": 70,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1.3,
+      "indiceVsFeriale": 0.276
+     }
+    ],
+    "perModalita": {
+     "lavoro": {
+      "casi": 479523,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 91472,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1759.1,
+        "indiceVsFeriale": 1.08
+       },
+       {
+        "giorno": "Mar",
+        "casi": 85850,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1651.0,
+        "indiceVsFeriale": 1.014
+       },
+       {
+        "giorno": "Mer",
+        "casi": 82323,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1583.1,
+        "indiceVsFeriale": 0.972
+       },
+       {
+        "giorno": "Gio",
+        "casi": 84386,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1622.8,
+        "indiceVsFeriale": 0.996
+       },
+       {
+        "giorno": "Ven",
+        "casi": 79418,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1498.5,
+        "indiceVsFeriale": 0.938
+       },
+       {
+        "giorno": "Sab",
+        "casi": 36749,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 706.7,
+        "indiceVsFeriale": 0.434
+       },
+       {
+        "giorno": "Dom",
+        "casi": 19325,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 371.6,
+        "indiceVsFeriale": 0.228
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 84895,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 16482,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 317.0,
+        "indiceVsFeriale": 1.077
+       },
+       {
+        "giorno": "Mar",
+        "casi": 15707,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 302.1,
+        "indiceVsFeriale": 1.027
+       },
+       {
+        "giorno": "Mer",
+        "casi": 14912,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 286.8,
+        "indiceVsFeriale": 0.975
+       },
+       {
+        "giorno": "Gio",
+        "casi": 15257,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 293.4,
+        "indiceVsFeriale": 0.997
+       },
+       {
+        "giorno": "Ven",
+        "casi": 14137,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 266.7,
+        "indiceVsFeriale": 0.924
+       },
+       {
+        "giorno": "Sab",
+        "casi": 5570,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 107.1,
+        "indiceVsFeriale": 0.364
+       },
+       {
+        "giorno": "Dom",
+        "casi": 2830,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 54.4,
+        "indiceVsFeriale": 0.185
+       }
+      ]
+     }
+    },
+    "mortaliPerModalita": {
+     "lavoro": {
+      "casi": 1192,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 242,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 4.7,
+        "indiceVsFeriale": 1.182
+       },
+       {
+        "giorno": "Mar",
+        "casi": 208,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 4.0,
+        "indiceVsFeriale": 1.016
+       },
+       {
+        "giorno": "Mer",
+        "casi": 197,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.8,
+        "indiceVsFeriale": 0.962
+       },
+       {
+        "giorno": "Gio",
+        "casi": 182,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.5,
+        "indiceVsFeriale": 0.889
+       },
+       {
+        "giorno": "Ven",
+        "casi": 195,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 3.7,
+        "indiceVsFeriale": 0.952
+       },
+       {
+        "giorno": "Sab",
+        "casi": 113,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2.2,
+        "indiceVsFeriale": 0.552
+       },
+       {
+        "giorno": "Dom",
+        "casi": 55,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.1,
+        "indiceVsFeriale": 0.269
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 282,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 49,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.9,
+        "indiceVsFeriale": 1.004
+       },
+       {
+        "giorno": "Mar",
+        "casi": 57,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.1,
+        "indiceVsFeriale": 1.168
+       },
+       {
+        "giorno": "Mer",
+        "casi": 45,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.9,
+        "indiceVsFeriale": 0.922
+       },
+       {
+        "giorno": "Gio",
+        "casi": 42,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.8,
+        "indiceVsFeriale": 0.861
+       },
+       {
+        "giorno": "Ven",
+        "casi": 51,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 1.045
+       },
+       {
+        "giorno": "Sab",
+        "casi": 23,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.4,
+        "indiceVsFeriale": 0.471
+       },
+       {
+        "giorno": "Dom",
+        "casi": 15,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.3,
+        "indiceVsFeriale": 0.307
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "anno": 2022,
+   "copertura": {
+    "da": "2022-01-01",
+    "a": "2022-12-31",
+    "giorni": 365,
+    "completo": true
+   },
+   "totale": {
+    "casi": 703535,
+    "mortali": 1306,
+    "giorni": [
+     {
+      "giorno": "Lun",
+      "casi": 137740,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2648.8,
+      "indiceVsFeriale": 1.111
+     },
+     {
+      "giorno": "Mar",
+      "casi": 125705,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2417.4,
+      "indiceVsFeriale": 1.014
+     },
+     {
+      "giorno": "Mer",
+      "casi": 125209,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2407.9,
+      "indiceVsFeriale": 1.01
+     },
+     {
+      "giorno": "Gio",
+      "casi": 117063,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2251.2,
+      "indiceVsFeriale": 0.944
+     },
+     {
+      "giorno": "Ven",
+      "casi": 114395,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2199.9,
+      "indiceVsFeriale": 0.922
+     },
+     {
+      "giorno": "Sab",
+      "casi": 54612,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 1030.4,
+      "indiceVsFeriale": 0.44
+     },
+     {
+      "giorno": "Dom",
+      "casi": 28811,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 554.1,
+      "indiceVsFeriale": 0.232
+     }
+    ],
+    "giorniMortali": [
+     {
+      "giorno": "Lun",
+      "casi": 241,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.6,
+      "indiceVsFeriale": 1.058
+     },
+     {
+      "giorno": "Mar",
+      "casi": 219,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.2,
+      "indiceVsFeriale": 0.961
+     },
+     {
+      "giorno": "Mer",
+      "casi": 215,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.1,
+      "indiceVsFeriale": 0.944
+     },
+     {
+      "giorno": "Gio",
+      "casi": 227,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.4,
+      "indiceVsFeriale": 0.996
+     },
+     {
+      "giorno": "Ven",
+      "casi": 237,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.6,
+      "indiceVsFeriale": 1.04
+     },
+     {
+      "giorno": "Sab",
+      "casi": 107,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 2.0,
+      "indiceVsFeriale": 0.47
+     },
+     {
+      "giorno": "Dom",
+      "casi": 60,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1.2,
+      "indiceVsFeriale": 0.263
+     }
+    ],
+    "perModalita": {
+     "lavoro": {
+      "casi": 608062,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 120077,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2309.2,
+        "indiceVsFeriale": 1.123
+       },
+       {
+        "giorno": "Mar",
+        "casi": 107897,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2074.9,
+        "indiceVsFeriale": 1.009
+       },
+       {
+        "giorno": "Mer",
+        "casi": 107647,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2070.1,
+        "indiceVsFeriale": 1.007
+       },
+       {
+        "giorno": "Gio",
+        "casi": 100310,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1929.0,
+        "indiceVsFeriale": 0.938
+       },
+       {
+        "giorno": "Ven",
+        "casi": 98532,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1894.8,
+        "indiceVsFeriale": 0.922
+       },
+       {
+        "giorno": "Sab",
+        "casi": 48181,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 909.1,
+        "indiceVsFeriale": 0.451
+       },
+       {
+        "giorno": "Dom",
+        "casi": 25418,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 488.8,
+        "indiceVsFeriale": 0.238
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 95473,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 17663,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 339.7,
+        "indiceVsFeriale": 1.031
+       },
+       {
+        "giorno": "Mar",
+        "casi": 17808,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 342.5,
+        "indiceVsFeriale": 1.04
+       },
+       {
+        "giorno": "Mer",
+        "casi": 17562,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 337.7,
+        "indiceVsFeriale": 1.025
+       },
+       {
+        "giorno": "Gio",
+        "casi": 16753,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 322.2,
+        "indiceVsFeriale": 0.978
+       },
+       {
+        "giorno": "Ven",
+        "casi": 15863,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 305.1,
+        "indiceVsFeriale": 0.926
+       },
+       {
+        "giorno": "Sab",
+        "casi": 6431,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 121.3,
+        "indiceVsFeriale": 0.375
+       },
+       {
+        "giorno": "Dom",
+        "casi": 3393,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 65.2,
+        "indiceVsFeriale": 0.198
+       }
+      ]
+     }
+    },
+    "mortaliPerModalita": {
+     "lavoro": {
+      "casi": 961,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 185,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.6,
+        "indiceVsFeriale": 1.108
+       },
+       {
+        "giorno": "Mar",
+        "casi": 159,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.1,
+        "indiceVsFeriale": 0.952
+       },
+       {
+        "giorno": "Mer",
+        "casi": 155,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.0,
+        "indiceVsFeriale": 0.928
+       },
+       {
+        "giorno": "Gio",
+        "casi": 160,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.1,
+        "indiceVsFeriale": 0.958
+       },
+       {
+        "giorno": "Ven",
+        "casi": 176,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.4,
+        "indiceVsFeriale": 1.054
+       },
+       {
+        "giorno": "Sab",
+        "casi": 76,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1.4,
+        "indiceVsFeriale": 0.455
+       },
+       {
+        "giorno": "Dom",
+        "casi": 50,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 0.299
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 345,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 56,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.1,
+        "indiceVsFeriale": 0.921
+       },
+       {
+        "giorno": "Mar",
+        "casi": 60,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.2,
+        "indiceVsFeriale": 0.987
+       },
+       {
+        "giorno": "Mer",
+        "casi": 60,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.2,
+        "indiceVsFeriale": 0.987
+       },
+       {
+        "giorno": "Gio",
+        "casi": 67,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.3,
+        "indiceVsFeriale": 1.102
+       },
+       {
+        "giorno": "Ven",
+        "casi": 61,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.2,
+        "indiceVsFeriale": 1.003
+       },
+       {
+        "giorno": "Sab",
+        "casi": 31,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 0.6,
+        "indiceVsFeriale": 0.51
+       },
+       {
+        "giorno": "Dom",
+        "casi": 10,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.2,
+        "indiceVsFeriale": 0.164
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "anno": 2023,
+   "copertura": {
+    "da": "2023-01-01",
+    "a": "2023-12-31",
+    "giorni": 365,
+    "completo": true
+   },
+   "totale": {
+    "casi": 590316,
+    "mortali": 1212,
+    "giorni": [
+     {
+      "giorno": "Lun",
+      "casi": 110501,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2125.0,
+      "indiceVsFeriale": 1.051
+     },
+     {
+      "giorno": "Mar",
+      "casi": 106958,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2056.9,
+      "indiceVsFeriale": 1.017
+     },
+     {
+      "giorno": "Mer",
+      "casi": 107701,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2071.2,
+      "indiceVsFeriale": 1.024
+     },
+     {
+      "giorno": "Gio",
+      "casi": 105219,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2023.4,
+      "indiceVsFeriale": 1.0
+     },
+     {
+      "giorno": "Ven",
+      "casi": 95476,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1836.1,
+      "indiceVsFeriale": 0.908
+     },
+     {
+      "giorno": "Sab",
+      "casi": 42164,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 810.8,
+      "indiceVsFeriale": 0.401
+     },
+     {
+      "giorno": "Dom",
+      "casi": 22297,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 420.7,
+      "indiceVsFeriale": 0.212
+     }
+    ],
+    "giorniMortali": [
+     {
+      "giorno": "Lun",
+      "casi": 226,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.3,
+      "indiceVsFeriale": 1.073
+     },
+     {
+      "giorno": "Mar",
+      "casi": 181,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 3.5,
+      "indiceVsFeriale": 0.859
+     },
+     {
+      "giorno": "Mer",
+      "casi": 222,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.3,
+      "indiceVsFeriale": 1.054
+     },
+     {
+      "giorno": "Gio",
+      "casi": 208,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.0,
+      "indiceVsFeriale": 0.988
+     },
+     {
+      "giorno": "Ven",
+      "casi": 216,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.2,
+      "indiceVsFeriale": 1.026
+     },
+     {
+      "giorno": "Sab",
+      "casi": 102,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2.0,
+      "indiceVsFeriale": 0.484
+     },
+     {
+      "giorno": "Dom",
+      "casi": 57,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 1.1,
+      "indiceVsFeriale": 0.271
+     }
+    ],
+    "perModalita": {
+     "lavoro": {
+      "casi": 490090,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 91544,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1760.5,
+        "indiceVsFeriale": 1.051
+       },
+       {
+        "giorno": "Mar",
+        "casi": 88046,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1693.2,
+        "indiceVsFeriale": 1.011
+       },
+       {
+        "giorno": "Mer",
+        "casi": 89350,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1718.3,
+        "indiceVsFeriale": 1.026
+       },
+       {
+        "giorno": "Gio",
+        "casi": 87202,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1677.0,
+        "indiceVsFeriale": 1.001
+       },
+       {
+        "giorno": "Ven",
+        "casi": 79310,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1525.2,
+        "indiceVsFeriale": 0.911
+       },
+       {
+        "giorno": "Sab",
+        "casi": 35897,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 690.3,
+        "indiceVsFeriale": 0.412
+       },
+       {
+        "giorno": "Dom",
+        "casi": 18741,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 353.6,
+        "indiceVsFeriale": 0.215
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 100226,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 18957,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 364.6,
+        "indiceVsFeriale": 1.048
+       },
+       {
+        "giorno": "Mar",
+        "casi": 18912,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 363.7,
+        "indiceVsFeriale": 1.046
+       },
+       {
+        "giorno": "Mer",
+        "casi": 18351,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 352.9,
+        "indiceVsFeriale": 1.015
+       },
+       {
+        "giorno": "Gio",
+        "casi": 18017,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 346.5,
+        "indiceVsFeriale": 0.996
+       },
+       {
+        "giorno": "Ven",
+        "casi": 16166,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 310.9,
+        "indiceVsFeriale": 0.894
+       },
+       {
+        "giorno": "Sab",
+        "casi": 6267,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 120.5,
+        "indiceVsFeriale": 0.347
+       },
+       {
+        "giorno": "Dom",
+        "casi": 3556,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 67.1,
+        "indiceVsFeriale": 0.197
+       }
+      ]
+     }
+    },
+    "mortaliPerModalita": {
+     "lavoro": {
+      "casi": 935,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 181,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.5,
+        "indiceVsFeriale": 1.102
+       },
+       {
+        "giorno": "Mar",
+        "casi": 135,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2.6,
+        "indiceVsFeriale": 0.822
+       },
+       {
+        "giorno": "Mer",
+        "casi": 172,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.3,
+        "indiceVsFeriale": 1.048
+       },
+       {
+        "giorno": "Gio",
+        "casi": 171,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.3,
+        "indiceVsFeriale": 1.041
+       },
+       {
+        "giorno": "Ven",
+        "casi": 162,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.1,
+        "indiceVsFeriale": 0.987
+       },
+       {
+        "giorno": "Sab",
+        "casi": 74,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.4,
+        "indiceVsFeriale": 0.451
+       },
+       {
+        "giorno": "Dom",
+        "casi": 40,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 0.8,
+        "indiceVsFeriale": 0.244
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 277,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 45,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.9,
+        "indiceVsFeriale": 0.97
+       },
+       {
+        "giorno": "Mar",
+        "casi": 46,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.9,
+        "indiceVsFeriale": 0.991
+       },
+       {
+        "giorno": "Mer",
+        "casi": 50,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 1.078
+       },
+       {
+        "giorno": "Gio",
+        "casi": 37,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.7,
+        "indiceVsFeriale": 0.797
+       },
+       {
+        "giorno": "Ven",
+        "casi": 54,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 1.164
+       },
+       {
+        "giorno": "Sab",
+        "casi": 28,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.5,
+        "indiceVsFeriale": 0.603
+       },
+       {
+        "giorno": "Dom",
+        "casi": 17,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 0.3,
+        "indiceVsFeriale": 0.366
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "anno": 2024,
+   "copertura": {
+    "da": "2024-01-01",
+    "a": "2024-12-31",
+    "giorni": 366,
+    "completo": true
+   },
+   "totale": {
+    "casi": 593637,
+    "mortali": 1239,
+    "giorni": [
+     {
+      "giorno": "Lun",
+      "casi": 113627,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 2143.9,
+      "indiceVsFeriale": 1.071
+     },
+     {
+      "giorno": "Mar",
+      "casi": 109747,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 2070.7,
+      "indiceVsFeriale": 1.034
+     },
+     {
+      "giorno": "Mer",
+      "casi": 106546,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2049.0,
+      "indiceVsFeriale": 1.004
+     },
+     {
+      "giorno": "Gio",
+      "casi": 103832,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1996.8,
+      "indiceVsFeriale": 0.979
+     },
+     {
+      "giorno": "Ven",
+      "casi": 96686,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1859.3,
+      "indiceVsFeriale": 0.911
+     },
+     {
+      "giorno": "Sab",
+      "casi": 40773,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 784.1,
+      "indiceVsFeriale": 0.384
+     },
+     {
+      "giorno": "Dom",
+      "casi": 22426,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 431.3,
+      "indiceVsFeriale": 0.211
+     }
+    ],
+    "giorniMortali": [
+     {
+      "giorno": "Lun",
+      "casi": 223,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 4.2,
+      "indiceVsFeriale": 1.06
+     },
+     {
+      "giorno": "Mar",
+      "casi": 243,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 4.6,
+      "indiceVsFeriale": 1.155
+     },
+     {
+      "giorno": "Mer",
+      "casi": 196,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 3.8,
+      "indiceVsFeriale": 0.932
+     },
+     {
+      "giorno": "Gio",
+      "casi": 189,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 3.6,
+      "indiceVsFeriale": 0.898
+     },
+     {
+      "giorno": "Ven",
+      "casi": 201,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 3.9,
+      "indiceVsFeriale": 0.955
+     },
+     {
+      "giorno": "Sab",
+      "casi": 128,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2.5,
+      "indiceVsFeriale": 0.608
+     },
+     {
+      "giorno": "Dom",
+      "casi": 59,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1.1,
+      "indiceVsFeriale": 0.28
+     }
+    ],
+    "perModalita": {
+     "lavoro": {
+      "casi": 489617,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 93515,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1764.4,
+        "indiceVsFeriale": 1.071
+       },
+       {
+        "giorno": "Mar",
+        "casi": 90385,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1705.4,
+        "indiceVsFeriale": 1.035
+       },
+       {
+        "giorno": "Mer",
+        "casi": 87611,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1684.8,
+        "indiceVsFeriale": 1.003
+       },
+       {
+        "giorno": "Gio",
+        "casi": 85435,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1643.0,
+        "indiceVsFeriale": 0.978
+       },
+       {
+        "giorno": "Ven",
+        "casi": 79813,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1534.9,
+        "indiceVsFeriale": 0.914
+       },
+       {
+        "giorno": "Sab",
+        "casi": 34233,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 658.3,
+        "indiceVsFeriale": 0.392
+       },
+       {
+        "giorno": "Dom",
+        "casi": 18625,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 358.2,
+        "indiceVsFeriale": 0.213
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 104020,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 20112,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 379.5,
+        "indiceVsFeriale": 1.073
+       },
+       {
+        "giorno": "Mar",
+        "casi": 19362,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 365.3,
+        "indiceVsFeriale": 1.033
+       },
+       {
+        "giorno": "Mer",
+        "casi": 18935,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 364.1,
+        "indiceVsFeriale": 1.011
+       },
+       {
+        "giorno": "Gio",
+        "casi": 18397,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 353.8,
+        "indiceVsFeriale": 0.982
+       },
+       {
+        "giorno": "Ven",
+        "casi": 16873,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 324.5,
+        "indiceVsFeriale": 0.901
+       },
+       {
+        "giorno": "Sab",
+        "casi": 6540,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 125.8,
+        "indiceVsFeriale": 0.349
+       },
+       {
+        "giorno": "Dom",
+        "casi": 3801,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 73.1,
+        "indiceVsFeriale": 0.203
+       }
+      ]
+     }
+    },
+    "mortaliPerModalita": {
+     "lavoro": {
+      "casi": 936,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 171,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 3.2,
+        "indiceVsFeriale": 1.066
+       },
+       {
+        "giorno": "Mar",
+        "casi": 190,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 3.6,
+        "indiceVsFeriale": 1.185
+       },
+       {
+        "giorno": "Mer",
+        "casi": 150,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2.9,
+        "indiceVsFeriale": 0.935
+       },
+       {
+        "giorno": "Gio",
+        "casi": 149,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2.9,
+        "indiceVsFeriale": 0.929
+       },
+       {
+        "giorno": "Ven",
+        "casi": 142,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2.7,
+        "indiceVsFeriale": 0.885
+       },
+       {
+        "giorno": "Sab",
+        "casi": 92,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.8,
+        "indiceVsFeriale": 0.574
+       },
+       {
+        "giorno": "Dom",
+        "casi": 42,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.8,
+        "indiceVsFeriale": 0.262
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 303,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 52,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 1.04
+       },
+       {
+        "giorno": "Mar",
+        "casi": 53,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 1.06
+       },
+       {
+        "giorno": "Mer",
+        "casi": 46,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.9,
+        "indiceVsFeriale": 0.92
+       },
+       {
+        "giorno": "Gio",
+        "casi": 40,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.8,
+        "indiceVsFeriale": 0.8
+       },
+       {
+        "giorno": "Ven",
+        "casi": 59,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.1,
+        "indiceVsFeriale": 1.18
+       },
+       {
+        "giorno": "Sab",
+        "casi": 36,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.7,
+        "indiceVsFeriale": 0.72
+       },
+       {
+        "giorno": "Dom",
+        "casi": 17,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.3,
+        "indiceVsFeriale": 0.34
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "anno": 2025,
+   "copertura": {
+    "da": "2025-01-01",
+    "a": "2025-12-31",
+    "giorni": 365,
+    "completo": true
+   },
+   "totale": {
+    "casi": 600640,
+    "mortali": 1198,
+    "giorni": [
+     {
+      "giorno": "Lun",
+      "casi": 110899,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2132.7,
+      "indiceVsFeriale": 1.032
+     },
+     {
+      "giorno": "Mar",
+      "casi": 112402,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2161.6,
+      "indiceVsFeriale": 1.046
+     },
+     {
+      "giorno": "Mer",
+      "casi": 111152,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 2097.2,
+      "indiceVsFeriale": 1.034
+     },
+     {
+      "giorno": "Gio",
+      "casi": 105711,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 2032.9,
+      "indiceVsFeriale": 0.983
+     },
+     {
+      "giorno": "Ven",
+      "casi": 97277,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1870.7,
+      "indiceVsFeriale": 0.905
+     },
+     {
+      "giorno": "Sab",
+      "casi": 40612,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 781.0,
+      "indiceVsFeriale": 0.378
+     },
+     {
+      "giorno": "Dom",
+      "casi": 22587,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 434.4,
+      "indiceVsFeriale": 0.21
+     }
+    ],
+    "giorniMortali": [
+     {
+      "giorno": "Lun",
+      "casi": 245,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.7,
+      "indiceVsFeriale": 1.147
+     },
+     {
+      "giorno": "Mar",
+      "casi": 205,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 3.9,
+      "indiceVsFeriale": 0.96
+     },
+     {
+      "giorno": "Mer",
+      "casi": 188,
+      "giorniCalendario": 53,
+      "mediaPerGiorno": 3.5,
+      "indiceVsFeriale": 0.88
+     },
+     {
+      "giorno": "Gio",
+      "casi": 190,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 3.7,
+      "indiceVsFeriale": 0.89
+     },
+     {
+      "giorno": "Ven",
+      "casi": 240,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 4.6,
+      "indiceVsFeriale": 1.124
+     },
+     {
+      "giorno": "Sab",
+      "casi": 91,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 1.8,
+      "indiceVsFeriale": 0.426
+     },
+     {
+      "giorno": "Dom",
+      "casi": 39,
+      "giorniCalendario": 52,
+      "mediaPerGiorno": 0.8,
+      "indiceVsFeriale": 0.183
+     }
+    ],
+    "perModalita": {
+     "lavoro": {
+      "casi": 494059,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 90795,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1746.1,
+        "indiceVsFeriale": 1.029
+       },
+       {
+        "giorno": "Mar",
+        "casi": 91903,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1767.4,
+        "indiceVsFeriale": 1.041
+       },
+       {
+        "giorno": "Mer",
+        "casi": 91331,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 1723.2,
+        "indiceVsFeriale": 1.035
+       },
+       {
+        "giorno": "Gio",
+        "casi": 86870,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1670.6,
+        "indiceVsFeriale": 0.984
+       },
+       {
+        "giorno": "Ven",
+        "casi": 80321,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1544.6,
+        "indiceVsFeriale": 0.91
+       },
+       {
+        "giorno": "Sab",
+        "casi": 33992,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 653.7,
+        "indiceVsFeriale": 0.385
+       },
+       {
+        "giorno": "Dom",
+        "casi": 18847,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 362.4,
+        "indiceVsFeriale": 0.214
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 106581,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 20104,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 386.6,
+        "indiceVsFeriale": 1.045
+       },
+       {
+        "giorno": "Mar",
+        "casi": 20499,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 394.2,
+        "indiceVsFeriale": 1.065
+       },
+       {
+        "giorno": "Mer",
+        "casi": 19821,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 374.0,
+        "indiceVsFeriale": 1.03
+       },
+       {
+        "giorno": "Gio",
+        "casi": 18841,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 362.3,
+        "indiceVsFeriale": 0.979
+       },
+       {
+        "giorno": "Ven",
+        "casi": 16956,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 326.1,
+        "indiceVsFeriale": 0.881
+       },
+       {
+        "giorno": "Sab",
+        "casi": 6620,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 127.3,
+        "indiceVsFeriale": 0.344
+       },
+       {
+        "giorno": "Dom",
+        "casi": 3740,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 71.9,
+        "indiceVsFeriale": 0.194
+       }
+      ]
+     }
+    },
+    "mortaliPerModalita": {
+     "lavoro": {
+      "casi": 897,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 195,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.8,
+        "indiceVsFeriale": 1.199
+       },
+       {
+        "giorno": "Mar",
+        "casi": 152,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2.9,
+        "indiceVsFeriale": 0.935
+       },
+       {
+        "giorno": "Mer",
+        "casi": 141,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 2.7,
+        "indiceVsFeriale": 0.867
+       },
+       {
+        "giorno": "Gio",
+        "casi": 142,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 2.7,
+        "indiceVsFeriale": 0.873
+       },
+       {
+        "giorno": "Ven",
+        "casi": 183,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 3.5,
+        "indiceVsFeriale": 1.125
+       },
+       {
+        "giorno": "Sab",
+        "casi": 59,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.1,
+        "indiceVsFeriale": 0.363
+       },
+       {
+        "giorno": "Dom",
+        "casi": 25,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.5,
+        "indiceVsFeriale": 0.154
+       }
+      ]
+     },
+     "itinere": {
+      "casi": 301,
+      "giorni": [
+       {
+        "giorno": "Lun",
+        "casi": 50,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 0.98
+       },
+       {
+        "giorno": "Mar",
+        "casi": 53,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.0,
+        "indiceVsFeriale": 1.039
+       },
+       {
+        "giorno": "Mer",
+        "casi": 47,
+        "giorniCalendario": 53,
+        "mediaPerGiorno": 0.9,
+        "indiceVsFeriale": 0.922
+       },
+       {
+        "giorno": "Gio",
+        "casi": 48,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.9,
+        "indiceVsFeriale": 0.941
+       },
+       {
+        "giorno": "Ven",
+        "casi": 57,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 1.1,
+        "indiceVsFeriale": 1.118
+       },
+       {
+        "giorno": "Sab",
+        "casi": 32,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.6,
+        "indiceVsFeriale": 0.627
+       },
+       {
+        "giorno": "Dom",
+        "casi": 14,
+        "giorniCalendario": 52,
+        "mediaPerGiorno": 0.3,
+        "indiceVsFeriale": 0.275
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

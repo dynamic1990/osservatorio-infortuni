@@ -8,6 +8,7 @@ import { DemografiaAnnualeWidget } from "@/components/charts/demografia-annuale-
 import { GravitaDurataWidget } from "@/components/charts/gravita-durata-widget";
 import { DimensioniWidget } from "@/components/charts/dimensioni-widget";
 import { StagionalitaWidget } from "@/components/charts/stagionalita-widget";
+import { SettimanaWidget } from "@/components/charts/settimana-widget";
 import { SerieDecennaleWidget } from "@/components/charts/serie-decennale-widget";
 import { BenchmarkEurostatWidget } from "@/components/charts/benchmark-eurostat-widget";
 import { InfoModalButton } from "@/components/ui/info-modal";
@@ -193,6 +194,55 @@ export default function HomePage() {
           </p>
         </div>
         <BenchmarkEurostatWidget />
+      </section>
+
+      {/* 8. Distribuzione per giorno della settimana (open data INAIL, livello record) */}
+      <section className="card" aria-label="Distribuzione settimanale degli infortuni" id="giorno-settimana">
+        <div className="card-header">
+          <h2 className="card-title">In quali giorni della settimana accadono gli infortuni</h2>
+          <p className="card-desc">
+            Distribuzione delle denunce INAIL per giorno della settimana, calcolata sull&apos;intero
+            insieme dei record open data (tutte le regioni, non un campione). Seleziona uno o più anni
+            per confrontarli, scegli tra denunce totali e mortali, e separa gli infortuni in occasione
+            di lavoro da quelli in itinere.
+          </p>
+          <InfoModalButton>
+            <section className="modal-section">
+              <h3 className="modal-section-title">Distribuzione per giorno della settimana</h3>
+              <p>
+                Fonte: open data INAIL, dataset semestrali per regione con dettaglio record
+                (campo <em>DataAccadimento</em>). Perimetro: 20 regioni, anni 2021-2025, tutte le
+                denunce presenti nei file, infortuni in occasione di lavoro e in itinere.
+              </p>
+              <ul>
+                <li>
+                  <strong>Giorno derivato dalla data</strong>: nessun record scartato per data non
+                  valida. Il conteggio è un censimento delle denunce contenute nei file, non un
+                  campione.
+                </li>
+                <li>
+                  <strong>Valori assoluti e calendario</strong>: in un anno ci sono circa 52
+                  lunedì e 52 domeniche, quindi il conteggio grezzo non è confrontabile tra giorni.
+                  La vista <em>media per giorno</em> divide per il numero di giorni di quel tipo.
+                </li>
+                <li>
+                  <strong>Indice vs feriale</strong>: casi del giorno diviso la media dei giorni
+                  Lun-Ven dello stesso anno e perimetro. 1,00 = giorno feriale medio, 0,50 = metà.
+                </li>
+                <li>
+                  <strong>Limite dichiarato</strong>: non è un tasso di incidenza su occupati. Il
+                  numero di occupati per singolo giorno della settimana non è disponibile nella
+                  fonte, quindi il denominatore resta di calendario e non di esposizione.
+                </li>
+                <li>
+                  <strong>Anno parziale</strong>: se un anno non copre dodici mesi il campo
+                  <em>copertura.completo</em> è falso e il confronto con gli altri anni va evitato.
+                </li>
+              </ul>
+            </section>
+          </InfoModalButton>
+        </div>
+        <SettimanaWidget />
       </section>
 
     </div>
