@@ -15,13 +15,13 @@ La banca dati INAIL è ricchissima ma di difficile lettura: dataset enormi, codi
 
 ## Copertura dei dati
 
-Copertura verificata al 2026-08-27 per la base INAIL e aggiornata nel registro delle fonti:
+Copertura verificata al 2026-11-11 per la base INAIL e aggiornata nel registro delle fonti:
 
 - **Serie storica consolidata 2021-2025**: dataset semestrali regionali INAIL (file CSV), tutte le 20 regioni, ~3,05 milioni di record (rilevazione 30/04/2026), con definizione amministrativa, indennizzo e giorni indennizzati.
-- **Congiuntura mensile 2025-2026**: API REST mensile (16 regioni) + CSV mensili delle 4 regioni con nome composto (Valle d'Aosta, Trentino-Alto Adige, Friuli-Venezia Giulia, Emilia-Romagna).
+- **Congiuntura mensile 2025-2026**: CSV mensili regionali INAIL, **tutte le 20 regioni** (gennaio-settembre per entrambi gli anni, vintage 30/09/2026). L'API REST mensile non viene usata: rifiuta i nomi delle regioni con il trattino e coprirebbe 16-17 regioni su 20.
 - Analisi per: tempo (serie storiche), luogo (regione/provincia ISTAT), persona (età, genere), modalità (in occasione di lavoro / in itinere, con/senza mezzo di trasporto), settore (ATECO), esito.
 
-Limiti noti: l'API REST mensile espone una finestra di circa 18 mesi; per lo storico si usano i CSV semestrali regionali. Le denunce non coincidono automaticamente con gli infortuni definiti e indennizzati. Ogni pagina dichiara il proprio perimetro, la data del dato e le discontinuità note.
+Limiti noti: la cadenza mensile non pubblica ottobre-dicembre dell'anno precedente, quindi la serie congiunturale si ferma a settembre per entrambi gli anni; ogni anno è letto alla propria rilevazione, a pari ritardo dalla fine del periodo. Le denunce non coincidono automaticamente con gli infortuni definiti e indennizzati. Ogni pagina dichiara il proprio perimetro, la data del dato e le discontinuità note.
 
 ## Principi
 
@@ -49,7 +49,7 @@ Il registro completo, con URL, copertura, note metodologiche e stato di integraz
 
 ## Aggiornamento e controllo delle fonti
 
-Il sito pubblica snapshot verificati, non interroga le API in tempo reale durante la navigazione. Un audit automatico, separato dal Radar, controlla il 15 di ogni mese gli endpoint delle fonti ufficiali. L'audit confronta le risposte con la baseline precedente e segnala possibili cambiamenti, ma non inserisce nuovi dati senza una revisione.
+Il sito pubblica snapshot verificati, non interroga le API in tempo reale durante la navigazione. Un audit automatico, separato dal Radar e schedulato dal Gateway (automazione mensile, non GitHub Actions), controlla il 15 di ogni mese gli endpoint delle fonti ufficiali. L'audit confronta le risposte con la baseline precedente e segnala possibili cambiamenti, ma non inserisce nuovi dati senza una revisione.
 
 ## Struttura
 
@@ -80,10 +80,11 @@ Controllo leggero delle fonti:
 npm run audit:sources
 ```
 
-Lo stesso controllo viene eseguito automaticamente il 15 di ogni mese da
-GitHub Actions e può essere avviato manualmente dalla scheda Actions. Ogni
-esecuzione pubblica un report JSON come artifact scaricabile per 90 giorni.
-Un errore di rete o una fonte non raggiungibile rende fallita l'esecuzione;
+Lo stesso controllo viene eseguito automaticamente il 15 di ogni mese (automazione
+mensile del Gateway) e può essere avviato a mano con il comando sopra. Il workflow
+GitHub Actions corrispondente è disattivato (`source-audit.yml.bak`): non è mai
+girato e sarebbe ridondante. Ogni esecuzione produce un report leggibile.
+Un errore di rete o una fonte non raggiungibile rende l'esito negativo;
 avvisi e cambiamenti di contenuto restano invece nel report per la revisione.
 
 L'audit non modifica i dataset pubblicati. Per rigenerare uno snapshot o cambiare il perimetro dei dati, leggere prima `docs/RULES.md` e la documentazione dello script interessato.

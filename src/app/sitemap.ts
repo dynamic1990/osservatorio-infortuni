@@ -29,8 +29,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/": () => lastmodDaFile("src/data/generated/news-infortuni.json"),
     "/cronaca-infortuni": () => lastmodDaFile("src/data/generated/news-infortuni.json"),
     "/analisi-delle-cause": () => lastmodDaFile("public/data/informo-catalogo.json"),
-    "/malattie-professionali": () => lastmodDaFile("src/data/generated/inail-infortuni-serie.meta.json"),
-    "/vigilanza": () => lastmodDaFile("src/data/generated/inail-multidimensionale.json"),
+    "/malattie-professionali": () => lastmodDaFile("src/data/generated/malattie-professionali.json"),
+    "/vigilanza": () => lastmodDaFile("src/data/generated/vigilanza-inl.json"),
+    "/report/lavori-piu-pericolosi-in-italia": () => lastmodDaFile("src/data/generated/informo-mortali-analisi.json"),
+    "/report/malattie-professionali-piu-denunciate": () => lastmodDaFile("src/data/generated/malattie-professionali.json"),
+    "/report/infortunio-in-itinere": () => lastmodDaFile("src/data/generated/inail-congiunturale-pari-perimetro.json"),
+    "/report/relazione-annuale-inail-2025": () => lastmodDaFile("src/data/generated/inail-serie-decennale.json"),
+    "/report/vigilanza-sul-lavoro": () => lastmodDaFile("src/data/generated/vigilanza-inl.json"),
     "/report/infortuni-1-semestre-2026": () => lastmodDaFile("src/data/generated/inail-congiunturale-pari-perimetro.json"),
   };
   return routes.map((route) => ({

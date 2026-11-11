@@ -21,14 +21,24 @@ const CONTATORI = [
     sub: "orchestratore + 5 specializzati: product, data, design, comunicazione, supervisione",
   },
   {
-    valore: "11",
-    label: "fonti monitorate",
-    sub: "INAIL, INL, Eurostat, Google News",
+    valore: "10",
+    label: "fonti nel registro",
+    sub: "INAIL, INL, Eurostat/ISTAT, Google News",
   },
   {
-    valore: "10",
+    valore: "22",
+    label: "snapshot verificati",
+    sub: "artifact controllati con hash SHA-256 prima di ogni pubblicazione",
+  },
+  {
+    valore: "11",
     label: "job automatici",
-    sub: "aggiornamenti, audit e backup",
+    sub: "aggiornamenti, audit e backup schedulati",
+  },
+  {
+    valore: "57",
+    label: "test automatici",
+    sub: "controlli ETL, snapshot e build in CI a ogni push",
   },
 ];
 
@@ -55,7 +65,7 @@ const sections = [
   },
   {
     title: "Un controllo mensile, senza import automatici",
-    body: "Il 15 di ogni mese un audit separato dalla rassegna controlla gli endpoint delle fonti ufficiali e confronta la loro impronta con la baseline precedente. Se rileva una variazione, invia una segnalazione. Non modifica dataset e non integra nuove annualità senza una decisione e una verifica manuale.",
+    body: "Il 15 di ogni mese un audit separato dalla rassegna controlla gli endpoint delle fonti ufficiali e confronta la loro impronta con la baseline precedente. Se rileva una variazione, invia una segnalazione. Gira come automazione mensile del Gateway, non su GitHub Actions. Non modifica dataset e non integra nuove annualità senza una decisione e una verifica manuale.",
   },
   {
     title: "Licenza: codice aperto, dati pubblici",

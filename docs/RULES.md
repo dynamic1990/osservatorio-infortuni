@@ -18,7 +18,7 @@ Prescrizioni operative:
 - Se l'anno precedente non è disponibile nella serie, il delta va omesso e va indicato perché (es. "serie disponibile dal 2014").
 - Quello che è vietato è sommare o mediare gli anni in un unico valore.
 
-**Le serie storiche non sono un aggregato multi-anno.** Una serie con un punto (o una barra) per ogni anno è il modo corretto di raccontare il trend, ed è anzi la forma preferita. La serie decennale 2014-2024 è quindi ammessa così com'è: ogni barra è un anno distinto e l'andamento si legge lungo l'asse. La regola colpisce solo il valore unico che comprime più anni in un numero ("2020-2024: 2,4 milioni di denunce").
+**Le serie storiche non sono un aggregato multi-anno.** Una serie con un punto (o una barra) per ogni anno è il modo corretto di raccontare il trend, ed è anzi la forma preferita. La serie decennale 2014-2025 è quindi ammessa così com'è: ogni barra è un anno distinto e l'andamento si legge lungo l'asse. La regola colpisce solo il valore unico che comprime più anni in un numero ("2020-2024: 2,4 milioni di denunce").
 
 Eventuali totali di periodo sono ammessi solo se l'utente li seleziona esplicitamente e solo con etichetta chiara del perimetro.
 

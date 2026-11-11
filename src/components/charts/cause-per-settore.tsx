@@ -57,6 +57,8 @@ export function CausePerSettore() {
   );
 
   const copertura = dati?.meta?.criteri;
+  const periodoIncrocio =
+    (dati as { meta?: { periodo?: string } } | null)?.meta?.periodo ?? "2010-2024";
 
   if (!dati) {
     return (
@@ -73,7 +75,7 @@ export function CausePerSettore() {
         <p className="source-note" style={{ marginBottom: 0 }}>
           Incrocio calcolato su {copertura.casiConIncrocio?.toLocaleString("it-IT")} casi su{" "}
           {copertura.casiTotali?.toLocaleString("it-IT")} con settore e causa classificati
-          (periodo 2014-2024). Quote riferite al totale casi del settore.
+          (periodo {periodoIncrocio}). Quote riferite al totale casi del settore.
         </p>
       )}
 

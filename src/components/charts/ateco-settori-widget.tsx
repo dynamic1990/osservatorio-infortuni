@@ -565,7 +565,7 @@ export function AtecoSettoriWidget() {
       )}
 
       <p className="source-note">
-        Classificazione ATECO 2007: l&apos;incidenza settoriale è calcolata rapportando gli infortuni INAIL per macro-sezione (A–U) agli occupati effettivi rilevati da ISTAT (Rilevazione Forze di Lavoro). Il dettaglio per divisione (2 cifre) usa la decodifica ufficiale INAIL e mostra il trend 2020 – {multidim.anniDisponibili?.[multidim.anniDisponibili.length - 1]} per ciascuna divisione. Il filtro modalità consente di separare gli infortuni in occasione di lavoro da quelli in itinere per ciascun comparto. Casi non attribuiti a specifico settore (ND): {exactNumber(casiND)} ({percND}% del totale {modalita.lavoro && modalita.itinere ? "complessivo" : "della modalità selezionata"}).
+        Classificazione ATECO 2007: l&apos;incidenza settoriale è calcolata rapportando gli infortuni INAIL per macro-sezione (A–U) agli occupati 15-64 rilevati da ISTAT/Eurostat (Rilevazione sulle forze di lavoro, lfst_r_lfe2emp). Per il solo 2025 il dato di settore è una proiezione, ottenuta applicando ai valori 2024 la crescita degli occupati totali: per quell&apos;anno l&apos;incidenza va letta come stima. Il dettaglio per divisione (2 cifre) usa la decodifica ufficiale INAIL e mostra il trend 2020 – {multidim.anniDisponibili?.[multidim.anniDisponibili.length - 1]} per ciascuna divisione. Il filtro modalità consente di separare gli infortuni in occasione di lavoro da quelli in itinere per ciascun comparto. Casi non attribuiti a specifico settore (ND): {exactNumber(casiND)} ({percND}% del totale {modalita.lavoro && modalita.itinere ? "complessivo" : "della modalità selezionata"}).
       </p>
     </div>
   );

@@ -233,7 +233,7 @@ const REPORT: SearchEntry[] = [
       "98.312 denunce nel 2025, record da 26 anni: le patologie più comuni (rachide, spalla, tunnel carpale), i decessi e perché i numeri crescono.",
     href: "/report/malattie-professionali-piu-denunciate",
     keywords: ["malattie professionali", "denunce", "rachide", "spalla", "tunnel carpale", "record"],
-    meta: "Dati e tendenze · 17 ottobre 2026",
+    meta: "Dati e tendenze · 11 novembre 2026",
   },
   {
     type: "report",
@@ -264,12 +264,12 @@ const REPORT: SearchEntry[] = [
   },
   {
     type: "report",
-    title: "Infortuni sul lavoro, primo semestre 2026: più denunce, meno casi mortali",
+    title: "Infortuni sul lavoro 2026: più denunce e, da agosto, più casi mortali",
     description:
-      "Quanti infortuni sono stati denunciati nei primi sei mesi del 2026? Il confronto con il 2025, la crescita dell'itinere e il calo dei casi mortali.",
+      "Quanti infortuni sono stati denunciati nei primi nove mesi del 2026? Il confronto con il 2025 su tutte le 20 regioni e il terzo trimestre che ribalta il quadro: 250 morti, +16,8%.",
     href: "/report/infortuni-1-semestre-2026",
-    keywords: ["infortuni", "semestre", "2026", "denunce", "casi mortali", "confronto"],
-    meta: "Dati e tendenze · 16 settembre 2026",
+    keywords: ["infortuni", "2026", "denunce", "casi mortali", "confronto", "terzo trimestre"],
+    meta: "Dati e tendenze · 11 novembre 2026",
   },
 ];
 
