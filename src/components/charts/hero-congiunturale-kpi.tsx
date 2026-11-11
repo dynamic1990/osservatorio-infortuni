@@ -215,7 +215,7 @@ export function HeroCongiunturaleKpi() {
           </div>
         </div>
 
-        {/* KPI 3: Incidenza semestrale per 1.000 occupati */}
+        {/* KPI 3: Incidenza nel periodo osservato per 1.000 occupati */}
         {/* Media YTD morti al giorno */}
         <div
           style={{
@@ -249,7 +249,7 @@ export function HeroCongiunturaleKpi() {
           </div>
         </div>
 
-        {/* KPI 3: Incidenza semestrale per 1.000 occupati */}
+        {/* KPI 3: Incidenza nel periodo osservato per 1.000 occupati */}
         <div
           style={{
             background: "var(--color-surface)",
@@ -258,7 +258,7 @@ export function HeroCongiunturaleKpi() {
             border: "1px solid var(--color-divider)",
           }}
         >
-          <div className="metric-label">Incidenza semestrale</div>
+          <div className="metric-label">Incidenza nel periodo</div>
           <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-2)", marginTop: "var(--space-1)" }}>
             <span className="metric" style={{ fontSize: "1.7rem" }}>{inc26}</span>
             <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)" }}>per 1.000 occ.</span>
