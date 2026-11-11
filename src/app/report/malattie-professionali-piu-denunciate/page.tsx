@@ -13,17 +13,17 @@ const faq = [
   {
     question: "Qual è la malattia professionale più denunciata in Italia?",
     answer:
-      "Le malattie dell'apparato muscolo-scheletrico da sovraccarico biomeccanico: ernie e discopatie del rachide (25,3% delle denunce), patologie della spalla o cuffia dei rotatori (21,4%) e sindromi canalicolari come il tunnel carpale (10,6%). Insieme superano il 57% del totale.",
+      "Le malattie dell'apparato muscolo-scheletrico da sovraccarico biomeccanico: ernie e discopatie del rachide (23,6% delle denunce), patologie della spalla o cuffia dei rotatori (19,9%) e sindromi canalicolari come il tunnel carpale (9,9%). Insieme sono il 53,4% del totale.",
   },
   {
     question: "Quante denunce di malattia professionale ci sono state nel 2025?",
     answer:
-      "98.312 denunce, il numero più alto degli ultimi 26 anni: +11,3% rispetto al 2024. La crescita prosegue nel 2026: nel primo semestre le denunce sono 59.394, +16,7% sullo stesso periodo del 2025.",
+      "98.312 denunce, il numero più alto degli ultimi 26 anni: +11,3% rispetto al 2024. La crescita prosegue nel 2026: nei primi nove mesi le denunce sono 83.335, +16,3% sullo stesso periodo del 2025.",
   },
   {
     question: "Il tunnel carpale è una malattia professionale riconosciuta?",
     answer:
-      "Sì, la sindrome del tunnel carpale (codice ICD-10 G56.0) è una delle malattie professionali più denunciate: 11.644 casi nei due semestri osservati, il 10,6% del totale. È tipica dei lavori con movimenti ripetuti di polso e mano; ha la quota femminile più alta tra le principali patologie (36,7%).",
+      "Sì, la sindrome del tunnel carpale (codice ICD-10 G56.0) è una delle malattie professionali più denunciate: 15.400 casi nel periodo osservato (gennaio-settembre 2025 e 2026), il 9,9% del totale. È tipica dei lavori con movimenti ripetuti di polso e mano; ha la quota femminile più alta tra le principali patologie (37,1%).",
   },
   {
     question: "Perché le malattie professionali aumentano?",
@@ -33,7 +33,7 @@ const faq = [
   {
     question: "Che differenza c'è tra malattie denunciate e malattie riconosciute?",
     answer:
-      "La denuncia è la segnalazione all'INAIL, il riconoscimento è l'esito dell'istruttoria. Nel 2025 su 98.312 denunce, 36.019 sono state riconosciute (42,0%), 49.803 rigettate (58,0%) e 12.490 erano ancora in istruttoria. I dati statistici INAIL si riferiscono alle denunce.",
+      "La denuncia è la segnalazione all'INAIL, il riconoscimento è l'esito dell'istruttoria. Nel 2025 su 98.312 denunce, 36.019 sono state riconosciute (36,6%), 49.803 rigettate (50,7%) e 12.490 erano ancora in istruttoria (12,7%). Fra le pratiche già definite, il tasso di riconoscimento è il 42,0%. I dati statistici INAIL si riferiscono alle denunce.",
   },
 ];
 
@@ -66,12 +66,12 @@ const SERIE_DENUNCE = [
 ];
 
 const PATOLOGIE = [
-  { nome: "Ernie e discopatie del rachide", casi: 27.920, quota: "25,3%", maschi: "75,8%" },
-  { nome: "Patologie della spalla (cuffia dei rotatori)", casi: 23.592, quota: "21,4%", maschi: "71,0%" },
-  { nome: "Sindromi canalicolari (tunnel carpale)", casi: 11.644, quota: "10,6%", maschi: "63,3%" },
-  { nome: "Codice non indicato", casi: 11.186, quota: "10,1%", maschi: "—" },
-  { nome: "Epicondiliti e tendinopatie", casi: 8.769, quota: "8,0%", maschi: "70,9%" },
-  { nome: "Ipoacusia da rumore", casi: 5.871, quota: "5,3%", maschi: "96,9%" },
+  { nome: "Ernie e discopatie del rachide", casi: 36.518, quota: "23,6%", maschi: "75,9%" },
+  { nome: "Patologie della spalla (cuffia dei rotatori)", casi: 30.885, quota: "19,9%", maschi: "70,8%" },
+  { nome: "Codice non indicato", casi: 24.507, quota: "15,8%", maschi: "75,9%" },
+  { nome: "Sindromi canalicolari (tunnel carpale)", casi: 15.400, quota: "9,9%", maschi: "62,9%" },
+  { nome: "Epicondiliti e tendinopatie", casi: 11.524, quota: "7,4%", maschi: "70,6%" },
+  { nome: "Ipoacusia da rumore", casi: 7.699, quota: "5,0%", maschi: "96,8%" },
 ];
 
 const DECESSI = [
@@ -92,26 +92,26 @@ export default function ReportMalattieProfessionaliPage() {
               <p className="eyebrow" style={{ margin: 0 }}>REPORT · MALATTIE PROFESSIONALI</p>
               <h1 style={{ fontSize: "clamp(2rem, 7vw, 3.5rem)", lineHeight: 1.06, margin: "var(--space-2) 0 var(--space-3)" }}>Malattie professionali più denunciate in Italia</h1>
               <p style={{ color: "var(--color-text-muted)", margin: 0, fontSize: "0.86rem" }}>
-                <strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-10-17">17 ottobre 2026</time>. Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori H1 2026.
+                <strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-11-11">11 novembre 2026</time>. Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori gennaio-settembre 2026.
               </p>
             </div>
             <InfoModalButton>
               <section className="modal-section">
                 <h3 className="modal-section-title">1. Fonti dei dati</h3>
-                <p className="modal-text">Open Data INAIL: dataset semestrali delle denunce di malattia professionale (malattie-professionali) e delle definizioni di istruttoria (malattie-esiti). Il dato 2025 (98.312 denunce) è il valore annuale consolidato; il primo semestre 2026 è provvisorio.</p>
+                <p className="modal-text">Open Data INAIL: dataset delle denunce di malattia professionale (malattie-professionali) e delle definizioni di istruttoria (malattie-esiti). Il dato 2025 (98.312 denunce) è il valore annuale consolidato; il periodo gennaio-settembre 2026 è provvisorio.</p>
               </section>
               <section className="modal-section">
                 <h3 className="modal-section-title">2. Metodo e perimetro</h3>
                 <ul className="modal-list">
                   <li><strong>Denunce, non malattie riconosciute:</strong> il dato statistico INAIL è quello delle denunce di malattia professionale, non coincidente con le patologie riconosciute dopo l&apos;istruttoria.</li>
                   <li><strong>Raggruppamento clinico:</strong> le patologie sono aggregate per gruppi ICD-10 (rachide, spalla, canalicolari, ecc.), non per singolo codice.</li>
-                  <li><strong>Quote:</strong> calcolate sui 110.279 casi dei due semestri osservati (I 2025 + I 2026), compatibili con la struttura del dataset ufficiale.</li>
+                  <li><strong>Quote:</strong> calcolate sui 155.017 casi del periodo osservato (gennaio-settembre 2025 piu gennaio-settembre 2026), come pubblicati dal dataset ufficiale.</li>
                   <li><strong>Decessi:</strong> casi mortali per malattia professionale riconosciuta, con dettaglio silicosi e asbestosi.</li>
                 </ul>
               </section>
               <section className="modal-section">
                 <h3 className="modal-section-title">3. Limitazioni</h3>
-                <p className="modal-text">Una quota rilevante di denunce (10,1%) arriva con codice clinico non indicato: le quote per patologia sono quindi una soglia minima. I dati 2026 sono provvisori e verranno riclassificati nel tempo. Metodo completo nella sezione <Link href="/fonti">Fonti e metodo</Link>.</p>
+                <p className="modal-text">Una quota rilevante di denunce (15,8%) arriva con codice clinico non indicato: le quote per patologia sono quindi una soglia minima. I dati 2026 sono provvisori e verranno riclassificati nel tempo. Metodo completo nella sezione <Link href="/fonti">Fonti e metodo</Link>.</p>
               </section>
             </InfoModalButton>
           </div>
@@ -120,10 +120,10 @@ export default function ReportMalattieProfessionaliPage() {
         <section aria-labelledby="risposta-diretta" style={{ borderLeft: "4px solid var(--color-accent)", padding: "var(--space-4)", background: "var(--color-accent-soft)" }}>
           <h2 id="risposta-diretta" style={{ margin: "0 0 var(--space-2)", fontSize: "1.2rem" }}>Quali sono le malattie professionali più denunciate in Italia?</h2>
           <p style={{ margin: 0, fontSize: "1.12rem", lineHeight: 1.6 }}>
-            Nel <strong>2025</strong> le denunce di malattia professionale in Italia sono state <strong>98.312</strong>: il numero più alto degli ultimi 26 anni, <strong>+11,3%</strong> sul 2024. Le patologie più denunciate sono quelle da <strong>sovraccarico biomeccanico</strong>: ernie e discopatie del rachide (25,3%), patologie della spalla (21,4%) e tunnel carpale (10,6%).
+            Nel <strong>2025</strong> le denunce di malattia professionale in Italia sono state <strong>98.312</strong>: il numero più alto degli ultimi 26 anni, <strong>+11,3%</strong> sul 2024. Le patologie più denunciate sono quelle da <strong>sovraccarico biomeccanico</strong>: ernie e discopatie del rachide (23,6%), patologie della spalla (19,9%) e tunnel carpale (9,9%).
           </p>
           <p style={{ margin: "var(--space-4) 0 0", fontSize: "1.05rem", lineHeight: 1.6 }}>
-            Nel <strong>primo semestre 2026</strong> le denunce sono <strong>59.394</strong>, <strong>+16,7%</strong> sullo stesso periodo del 2025 (50.885): la crescita accelera.
+            Nei <strong>primi nove mesi del 2026</strong> le denunce sono <strong>83.335</strong>, <strong>+16,3%</strong> sullo stesso periodo del 2025 (71.682): la crescita accelera. Nel solo primo semestre l&apos;aumento era +16,7%.
           </p>
         </section>
 
@@ -131,9 +131,9 @@ export default function ReportMalattieProfessionaliPage() {
           <h2 id="in-breve" style={{ margin: "0 0 var(--space-3)" }}>In breve</h2>
           <ul style={{ margin: 0, paddingLeft: "1.25rem", display: "grid", gap: "var(--space-2)", lineHeight: 1.5 }}>
             <li>98.312 denunce di malattia professionale nel 2025, record da 26 anni (+11,3%)</li>
-            <li>H1 2026: 59.394 denunce, +16,7% sullo stesso periodo del 2025</li>
-            <li>Ernie e discopatie del rachide in testa: 25,3% delle denunce</li>
-            <li>Solo il 42% delle denunce 2025 risulta riconosciuto (36.019 casi)</li>
+            <li>Gennaio-settembre 2026: 83.335 denunce, +16,3% sullo stesso periodo del 2025</li>
+            <li>Ernie e discopatie del rachide in testa: 23,6% delle denunce</li>
+            <li>Solo il 36,6% delle denunce 2025 risulta riconosciuto (36.019 casi); il 42,0% fra le pratiche definite</li>
             <li>4.853 decessi per malattia professionale riconosciuta nel quinquennio 2021-2025, in calo</li>
             <li>63.136 lavoratori coinvolti dalle denunce 2025</li>
           </ul>
@@ -171,11 +171,11 @@ export default function ReportMalattieProfessionaliPage() {
 
         <Section title="Le patologie più denunciate: il sovraccarico biomeccanico domina">
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            Le prime tre patologie sono tutte da <strong>sovraccarico biomeccanico</strong> e insieme coprono il <strong>57,2%</strong> delle denunce: ernie e discopatie del rachide, patologie della spalla e sindromi canalicolari come il tunnel carpale. Sono le malattie legate a movimenti ripetuti, sollevamento di carichi e posture, tipiche di manifattura, logistica, edilizia e agricoltura.
+            Le prime tre patologie sono tutte da <strong>sovraccarico biomeccanico</strong> e insieme coprono il <strong>53,4%</strong> delle denunce: ernie e discopatie del rachide, patologie della spalla e sindromi canalicolari come il tunnel carpale. Sono le malattie legate a movimenti ripetuti, sollevamento di carichi e posture, tipiche di manifattura, logistica, edilizia e agricoltura.
           </p>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.92rem" }}>
-              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Patologie più denunciate nei due semestri osservati (I 2025 + I 2026), raggruppamento clinico ICD-10. Quota = casi sul totale di 110.279.</caption>
+              <caption style={{ textAlign: "left", color: "var(--color-text-soft)", fontSize: "0.82rem", marginBottom: "var(--space-2)" }}>Patologie più denunciate nel periodo osservato (gennaio-settembre 2025 e 2026), raggruppamento clinico ICD-10. Quota = casi sul totale di 155.017.</caption>
               <thead>
                 <tr style={{ borderBottom: "2px solid var(--color-divider)", textAlign: "left" }}>
                   <th style={{ padding: "var(--space-2)", color: "var(--color-text-soft)" }}>Patologia</th>
@@ -197,13 +197,13 @@ export default function ReportMalattieProfessionaliPage() {
             </table>
           </div>
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            Il <strong>tunnel carpale</strong> merita un approfondimento: la sindrome del tunnel carpale (G56.0) è la malattia professionale con la quota femminile più alta tra le principali (36,7% delle denunce), tipica dei lavori ripetitivi di polso e mano. L&apos;<strong>ipoacusia da rumore</strong> è invece quasi esclusivamente maschile (96,9%) e riflette l&apos;esposizione storica in industria e edilizia.
+            Il <strong>tunnel carpale</strong> merita un approfondimento: la sindrome del tunnel carpale (G56.0) è la malattia professionale con la quota femminile più alta tra le principali (37,1% delle denunce), tipica dei lavori ripetitivi di polso e mano. L&apos;<strong>ipoacusia da rumore</strong> è invece quasi esclusivamente maschile (96,8%) e riflette l&apos;esposizione storica in industria e edilizia.
           </p>
         </Section>
 
-        <Section title="Denunce vs riconosciute: solo il 42% delle denunce 2025 è stato accertato">
+        <Section title="Denunce vs riconosciute: solo il 36,6% delle denunce 2025 è stato riconosciuto">
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            Le denunce non coincidono con le malattie riconosciute: nel 2025, su 98.312 denunce, <strong>36.019 sono state riconosciute</strong> (42,0%), 49.803 rigettate (58,0%) e 12.490 erano ancora in istruttoria. Il tasso di riconoscimento è in calo dal 2021 (52,3%): cresce il volume delle denunce, ma anche la quota di esiti negativi, segno di un sistema sotto pressione e di un&apos;emersione che porta con sé anche infondate.
+            Le denunce non coincidono con le malattie riconosciute: nel 2025, su 98.312 denunce, <strong>36.019 sono state riconosciute</strong> (36,6%), 49.803 rigettate (50,7%) e 12.490 erano ancora in istruttoria (12,7%). Se si guarda solo alle pratiche già definite, il tasso di riconoscimento è il 42,0%, in calo dal 52,3% del 2021: cresce il volume delle denunce, ma anche la quota di esiti negativi, segno di un sistema sotto pressione e di un&apos;emersione che porta con sé anche infondate.
           </p>
           <p style={{ margin: 0, lineHeight: 1.7 }}>
             I 63.136 lavoratori coinvolti dalle denunce 2025 mostrano un&apos;altra faccia del fenomeno: ogni denuncia è una persona, spesso in età matura, con una patologia cronica che può cambiare la vita lavorativa. Il quadro completo di riconosciute e rigettate per anno è nella sezione <Link href="/malattie-professionali">malattie professionali</Link>.
@@ -265,7 +265,7 @@ export default function ReportMalattieProfessionaliPage() {
           ))}
         </section>
 
-        <p className="source-note">Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori H1 2026. Ultimo aggiornamento: 17 ottobre 2026. Metodo e limiti nel pulsante &quot;Metodologia, Formule e Fonti&quot; in alto; la pagina Fonti contiene la metodologia completa.</p>
+        <p className="source-note">Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori gennaio-settembre 2026. Ultimo aggiornamento: 11 novembre 2026. Metodo e limiti nel pulsante &quot;Metodologia, Formule e Fonti&quot; in alto; la pagina Fonti contiene la metodologia completa.</p>
       </article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </main>

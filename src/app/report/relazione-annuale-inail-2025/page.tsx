@@ -13,7 +13,7 @@ const faq = [
   { question: "Quanti morti sul lavoro in Italia nel 2025?", answer: "1.198 denunce con esito mortale: 1.189 lavoratori e 9 studenti. È un calo del 3,3% rispetto alle 1.239 del 2024, ma resta una media di circa 3 vittime al giorno." },
   { question: "Quante denunce di infortunio sono state registrate nel 2025?", answer: "600.000 denunce complessive, +1,2% rispetto al 2024: 519.334 di lavoratori (+0,8%) e 81.000 di studenti (+3,4%). Di queste, 104.417 riguardano infortuni in itinere, il tragitto casa-lavoro." },
   { question: "Quante sono le malattie professionali denunciate nel 2025?", answer: "98.312 denunce, +11,3% rispetto alle 88.338 del 2024: il valore più alto degli ultimi 26 anni. La crescita è interpretata come emersione del sommerso, non come peggioramento generalizzato delle condizioni di lavoro." },
-  { question: "Quali sono i settori con più morti sul lavoro?", answer: "Costruzioni (175 decessi), manifatturiero (129) e trasporto e magazzinaggio (126) concentrano oltre il 60% dei decessi in occasione di lavoro della gestione Industria e servizi." },
+  { question: "Quali sono i settori con più morti sul lavoro?", answer: "Costruzioni (175 decessi), manifatturiero (129) e trasporto e magazzinaggio (126) concentrano poco meno della metà (48%) dei 897 decessi in occasione di lavoro del 2025." },
   { question: "Che cosa sono gli infortuni in itinere e come sono cambiati?", answer: "Sono gli infortuni nel tragitto tra casa e luogo di lavoro. Nel 2025 le denunce sono 104.417, +2,4%, sopra i livelli pre-pandemia del 2019 (103.492)." },
   { question: "Dove posso scaricare la Relazione annuale INAIL 2025 in PDF?", answer: "Sul sito ufficiale INAIL sono disponibili la Relazione completa (PDF, 1,8 MB), il volume dei Grafici e la Sintesi dell'andamento infortunistico e tecnopatico, con download gratuito. I link sono nella sezione dedicata di questo report." },
 ];
@@ -105,7 +105,7 @@ export default function ReportRelazioneAnnualePage() {
         </Section>
 
         <Section title="Settori, età, genere e lavoratori stranieri">
-          <p style={{ margin: 0, lineHeight: 1.7 }}>I settori più esposti sono sempre gli stessi. L&apos;89,7% delle denunce in occasione di lavoro riguarda la gestione Industria e servizi, il 5,8% l&apos;Agricoltura e il 4,5% il conto Stato. Oltre il 60% dei decessi in occasione di lavoro della gestione Industria e servizi si concentra in tre ambiti:</p>
+          <p style={{ margin: 0, lineHeight: 1.7 }}>I settori più esposti sono sempre gli stessi. L&apos;89,7% delle denunce in occasione di lavoro riguarda la gestione Industria e servizi, il 5,8% l&apos;Agricoltura e il 4,5% il conto Stato. Poco meno della metà dei 897 decessi in occasione di lavoro del 2025 (430 casi, il 48%) si concentra in tre ambiti:</p>
           <ul style={{ margin: 0, paddingLeft: "1.25rem", display: "grid", gap: "var(--space-1)", lineHeight: 1.6 }}>
             <li><strong>Costruzioni:</strong> 175 morti</li>
             <li><strong>Manifatturiero:</strong> 129 morti</li>

@@ -33,6 +33,13 @@ interface NewsPayload {
   generatedAt: string;
   fonte: string;
   periodo: string;
+  copertura?: {
+    dal: string | null;
+    al: string | null;
+    giorni: number;
+    finestraMassima: number;
+    nota: string;
+  };
   notizie: Notizia[];
 }
 
@@ -77,6 +84,7 @@ function badgeFor(categoria: string): { label: string; bg: string; border: strin
 
 export function CronacaInfortuniClient() {
   const dati = useMemo(() => newsRaw as unknown as NewsPayload, []);
+  const copertura = dati.copertura;
 
   // Tutte le voci (eventi imminenti + analisi), ordinate per data desc
   const eventi = useMemo(() => {
@@ -233,7 +241,9 @@ export function CronacaInfortuniClient() {
               color: "inherit",
             }}
           >
-            <option value="tutto">Tutto il periodo (365 giorni)</option>
+            <option value="tutto">
+              Tutto l&apos;archivio ({copertura ? `${copertura.giorni} giorni` : "max 365 giorni"})
+            </option>
             <option value="7">Ultimi 7 giorni</option>
             <option value="30">Ultimo mese</option>
             <option value="90">Ultimi 3 mesi</option>

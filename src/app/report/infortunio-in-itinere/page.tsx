@@ -28,7 +28,7 @@ const faq = [
   {
     question: "Quanti infortuni in itinere ci sono in Italia?",
     answer:
-      "106.581 denunce nel 2025, in crescita costante: +2,5% rispetto al 2024, il 17,7% di tutte le denunce. Nel primo semestre 2026 sono 41.997, +7,97% sullo stesso periodo del 2025.",
+      "106.581 denunce nel 2025, in crescita costante: +2,5% rispetto al 2024, il 17,7% di tutte le denunce. Nei primi nove mesi del 2026 sono 77.542, +6,36% sullo stesso periodo del 2025, con 228 casi mortali (+9,09%).",
   },
   {
     question: "La bicicletta o il monopattino sono coperti dall'assicurazione?",
@@ -92,13 +92,13 @@ export default function ReportItinerePage() {
               <p className="eyebrow" style={{ margin: 0 }}>REPORT · INFORTUNI IN ITINERE</p>
               <h1 style={{ fontSize: "clamp(2rem, 7vw, 3.5rem)", lineHeight: 1.06, margin: "var(--space-2) 0 var(--space-3)" }}>Infortunio in itinere: cos&apos;è, quando è riconosciuto, quanti casi in Italia</h1>
               <p style={{ color: "var(--color-text-muted)", margin: 0, fontSize: "0.86rem" }}>
-                <strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-10-16">16 ottobre 2026</time>. Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori H1 2026.
+                <strong style={{ color: "var(--color-text-soft)" }}>Ultimo aggiornamento:</strong> <time dateTime="2026-11-11">11 novembre 2026</time>. Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori gennaio-settembre 2026.
               </p>
             </div>
             <InfoModalButton>
               <section className="modal-section">
                 <h3 className="modal-section-title">1. Fonti dei dati</h3>
-                <p className="modal-text">Dati INAIL: serie storica consolidata 2021-2025 delle denunce (dataset semestrale ufficiale) e dati congiunturali provvisori del primo semestre 2026. La normativa di riferimento è l&apos;art. 12 del D.Lgs. 38/2000 e la circolare INAIL 14/2016.</p>
+                <p className="modal-text">Dati INAIL: serie storica consolidata 2021-2025 delle denunce (dataset semestrale ufficiale) e dati congiunturali provvisori gennaio-settembre 2026. La normativa di riferimento è l&apos;art. 12 del D.Lgs. 38/2000 e la circolare INAIL 14/2016.</p>
               </section>
               <section className="modal-section">
                 <h3 className="modal-section-title">2. Metodo e perimetro</h3>
@@ -123,7 +123,7 @@ export default function ReportItinerePage() {
             L&apos;<strong>infortunio in itinere</strong> è l&apos;infortunio che accade nel percorso tra casa e luogo di lavoro, o negli spostamenti connessi al lavoro nei limiti previsti dalla legge. È tutelato dall&apos;INAIL come infortunio sul lavoro. Nel <strong>2025</strong> le denunce in itinere sono state <strong>106.581</strong>, il 17,7% del totale: in costante crescita da anni.
           </p>
           <p style={{ margin: "var(--space-4) 0 0", fontSize: "1.05rem", lineHeight: 1.6 }}>
-            Nel <strong>primo semestre 2026</strong> le denunce in itinere sono <strong>41.997</strong>, <strong>+7,97%</strong> sullo stesso periodo del 2025, con <strong>118 casi mortali</strong> (+2,61%).
+            Nei <strong>primi nove mesi del 2026</strong> le denunce in itinere sono <strong>77.542</strong>, <strong>+6,36%</strong> sullo stesso periodo del 2025, con <strong>228 casi mortali</strong> (+9,09%). È la componente che cresce più delle denunce complessive (+5,05%) e soprattutto sugli esiti mortali.
           </p>
         </section>
 
@@ -134,7 +134,7 @@ export default function ReportItinerePage() {
             <li>17,7% di tutte le denunce di infortunio sono in itinere</li>
             <li>35.686 denunce in più in 4 anni: da 84.895 (2021) a 106.581 (2025), +25,5%</li>
             <li>301 casi mortali in itinere nel 2025</li>
-            <li>H1 2026: 41.997 denunce (+7,97%) e 118 casi mortali (+2,61%)</li>
+            <li>Gennaio-settembre 2026: 77.542 denunce (+6,36%) e 228 casi mortali (+9,09%)</li>
             <li>Prima regione: Lombardia con 21.402 denunce nel 2025</li>
           </ul>
         </section>
@@ -233,7 +233,7 @@ export default function ReportItinerePage() {
           ))}
         </section>
 
-        <p className="source-note">Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori H1 2026. Ultimo aggiornamento: 16 ottobre 2026. Metodo e limiti nel pulsante &quot;Metodologia, Formule e Fonti&quot; in alto; la pagina Fonti contiene la metodologia completa.</p>
+        <p className="source-note">Fonte: INAIL, dati consolidati 2021-2025 e dati congiunturali provvisori gennaio-settembre 2026. Ultimo aggiornamento: 11 novembre 2026. Metodo e limiti nel pulsante &quot;Metodologia, Formule e Fonti&quot; in alto; la pagina Fonti contiene la metodologia completa.</p>
       </article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </main>

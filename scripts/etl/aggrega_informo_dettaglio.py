@@ -120,7 +120,17 @@ def main() -> int:
     if not gravi and SERIE.exists():
         sdec = json.loads(SERIE.read_text(encoding="utf-8"))
         mortali_naz = {s["anno"]: s.get("mortali") for s in sdec.get("serie", [])}
-    totale_mortali_naz = sum(v for v in mortali_naz.values() if isinstance(v, int))
+
+    # Perimetro coerente: si sommano solo gli anni in cui esistono ENTRAMBI i
+    # dati, casi analizzati Infor.MO e mortali nazionali da denuncia. La serie
+    # INAIL copre 2014-2025 mentre l'archivio Infor.MO parte dal 2010: sommare
+    # l'intero denominatore su un numeratore piu' corto (o viceversa) produce
+    # una quota sbagliata mischiando due perimetri (RULES.md, regola 1).
+    anni_quota = sorted(
+        a for a in by_anno if isinstance(mortali_naz.get(a), int)
+    )
+    totale_mortali_naz = sum(mortali_naz[a] for a in anni_quota)
+    casi_perimetro = sum(len(by_anno[a]) for a in anni_quota)
 
     # ---- serie (casi analizzati vs totale filtri) ----
     serie = []
@@ -218,10 +228,17 @@ def main() -> int:
     }
     if not gravi:
         dataset["totaleMortaliNazionali"] = totale_mortali_naz
-        dataset["casiPeriodo"] = len(casi)
+        dataset["casiPeriodo"] = casi_perimetro
         dataset["quotaPeriodo"] = round(
-            len(casi) / totale_mortali_naz * 100, 1
+            casi_perimetro / totale_mortali_naz * 100, 1
         ) if totale_mortali_naz else None
+        dataset["quotaPeriodoNota"] = (
+            f"Quota calcolata su perimetro omogeneo {anni_quota[0]}-"
+            f"{anni_quota[-1]}: {casi_perimetro} casi analizzati su "
+            f"{totale_mortali_naz} denunce con esito mortale INAIL. "
+            "Gli anni fuori da questo intervallo sono esclusi da entrambi i "
+            "termini del rapporto."
+        ) if anni_quota else None
 
     out_path.write_text(json.dumps(dataset, ensure_ascii=False), encoding="utf-8")
     print(f"[informo-analisi] salvato {out_path}")

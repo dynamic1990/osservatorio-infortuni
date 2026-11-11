@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const faq = [
   { question: "Quanti infortuni sul lavoro ci sono stati in Italia nel 2026?", answer: "457.879 denunce all'INAIL nei primi nove mesi (gennaio-settembre), dato provvisorio, +5,05% rispetto allo stesso periodo del 2025." },
   { question: "Quanti sono i morti sul lavoro nel 2026?", answer: "823 denunce con esito mortale da gennaio a settembre, 39 in più rispetto allo stesso periodo del 2025 (+4,97%)." },
-  { question: "Quali sono i settori più colpiti dagli infortuni?", answer: "Nel 2024: manifattura per numero di denunce, costruzioni per morti sul lavoro (220), davanti a trasporti (173) e manifattura (176)." },
+  { question: "Quali sono i settori più colpiti dagli infortuni?", answer: "Nel 2024: manifattura per numero di denunce, costruzioni per morti sul lavoro (223), davanti a manifattura e trasporti (177 ciascuno)." },
   { question: "Quali regioni registrano più infortuni?", answer: "Nei primi nove mesi del 2026: Lombardia (85.070), Emilia-Romagna (60.070), Veneto (53.873), Toscana (35.859) e Lazio (34.471). La crescita più forte è della Sicilia (+8,4%)." },
   { question: "Che differenza c'è tra occasione di lavoro e itinere?", answer: "L'occasione di lavoro è l'attività lavorativa in sé. L'itinere è il percorso tra casa e lavoro, o gli spostamenti connessi nei limiti previsti. Nel 2026, gennaio-settembre: 380.337 in occasione, 77.542 in itinere." },
   { question: "Perché i numeri possono cambiare?", answer: "I dati sono provvisori: le denunce vengono integrate e riclassificate nel tempo. I definitivi arrivano con le successive pubblicazioni INAIL." },
@@ -96,12 +96,12 @@ export default function ReportArticlePage() {
         </Section>
 
         <Section title="I settori più colpiti dagli infortuni (dettaglio 2024)">
-          <p style={{ margin: 0, lineHeight: 1.7 }}>Le attività manifatturiere guidano per numero di denunce (quasi 90.000), seguite da sanità e assistenza sociale (50.281), commercio (46.695), trasporti e magazzinaggio (45.001) e costruzioni (44.755). Sul fronte degli esiti mortali la gerarchia cambia: <strong>le costruzioni sono il settore con più morti sul lavoro (220 nel 2024)</strong>, davanti a manifattura (176) e trasporti (173). In termini di singole attività, spiccano assistenza sanitaria, lavori di costruzione specializzati e commercio al dettaglio.</p>
+          <p style={{ margin: 0, lineHeight: 1.7 }}>Le attività manifatturiere guidano per numero di denunce (89.804), seguite da sanità e assistenza sociale (51.526), commercio (46.792), trasporti e magazzinaggio (45.096) e costruzioni (44.870). Sul fronte degli esiti mortali la gerarchia cambia: <strong>le costruzioni sono il settore con più morti sul lavoro (223 nel 2024)</strong>, davanti a manifattura e trasporti (177 ciascuno). In termini di singole attività, spiccano assistenza sanitaria, lavori di costruzione specializzati e commercio al dettaglio.</p>
           <p style={{ margin: 0, lineHeight: 1.7 }}>Le dinamiche delle cause sono approfondite in <Link href="/analisi-delle-cause">Analisi delle cause</Link>; per il quadro dell&apos;azione preventiva si può consultare anche la pagina <Link href="/vigilanza">Vigilanza</Link>.</p>
         </Section>
 
         <Section title="Gravità del danno e inabilità (dettaglio 2024)">
-          <p style={{ margin: 0, lineHeight: 1.7 }}>Nell&apos;88,4% delle denunce non risultano postumi permanenti. Dove il danno è riconosciuto: franchigia nel 6,4% dei casi, capitale nel 4,3%, rendita nell&apos;1,0%. La durata media dell&apos;inabilità temporanea è di <strong>36 giorni</strong>, con circa 69.000 casi con menomazione e un indice di gravità complessivo di 492,7.</p>
+          <p style={{ margin: 0, lineHeight: 1.7 }}>Nell&apos;88,0% delle denunce non risultano postumi permanenti. Dove il danno è riconosciuto: franchigia nel 6,5% dei casi, capitale nel 4,5%, rendita nell&apos;1,1%. La durata media dell&apos;inabilità temporanea è di <strong>37,1 giorni</strong>, con 71.401 casi con menomazione e un indice di gravità complessivo di 507,2.</p>
           <p style={{ margin: 0, lineHeight: 1.7 }}>Il tema si inserisce nel quadro più ampio delle <Link href="/malattie-professionali">malattie professionali</Link>, che hanno tempi e criteri di lettura differenti.</p>
         </Section>
 

@@ -23,7 +23,7 @@ const faq = [
   {
     question: "Quanti morti sul lavoro ci sono stati in Italia?",
     answer:
-      "Le denunce con esito mortale all'INAIL: 1.228 nel 2024, 1.208 nel 2023, con punte di 1.742 nel 2020 e 1.472 nel 2021. Il numero è altalenante, senza un calo strutturale netto negli ultimi dieci anni.",
+      "Le denunce con esito mortale all'INAIL: 1.239 nel 2024, 1.212 nel 2023, con punte di 1.742 nel 2020 e 1.474 nel 2021. Il numero è altalenante, senza un calo strutturale netto negli ultimi dieci anni.",
   },
   {
     question: "L'agricoltura o l'edilizia è più pericolosa?",
@@ -38,7 +38,7 @@ const faq = [
   {
     question: "Cosa dice Infor.MO? È affidabile?",
     answer:
-      "Infor.MO è il database pubblico INAIL degli infortuni mortali analizzati con un modello di indagine su dinamica, fattori causali e profili. Copre una parte dei decessi denunciati (24,7% nel 2010-2024): è un campione di approfondimento, non il censimento di tutte le morti sul lavoro.",
+      "Infor.MO è il database pubblico INAIL degli infortuni mortali analizzati con un modello di indagine su dinamica, fattori causali e profili. Copre una parte dei decessi denunciati (18,6% nel 2014-2024, l'unico intervallo confrontabile con la serie nazionale): è un campione di approfondimento, non il censimento di tutte le morti sul lavoro.",
   },
 ];
 
@@ -161,7 +161,7 @@ export default function ReportLavoriPericolosiPage() {
               <section className="modal-section">
                 <h3 className="modal-section-title">2. Metodo e perimetro</h3>
                 <ul className="modal-list">
-                  <li><strong>Campione, non censimento:</strong> i 3.766 casi analizzati coprono il 24,7% delle 15.268 denunce con esito mortale INAIL del periodo. Le classi emerse valgono per i casi analizzati, non per tutti i decessi.</li>
+                  <li><strong>Campione, non censimento:</strong> l&apos;archivio copre il 2010-2024 (3.766 casi), ma il confronto con le denunce nazionali si calcola sul solo 2014-2024, dove esistono entrambi i dati: 2.617 casi analizzati su 14.070 denunce con esito mortale INAIL, il 18,6%. Le classi emerse valgono per i casi analizzati, non per tutti i decessi.</li>
                   <li><strong>Quote calcolate sulle voci registrate:</strong> settori 3.489 voci su 3.766 casi (93%), dinamiche 3.844 voci, fattori 7.360. La differenza (casi senza attribuzione) è dichiarata e non viene nascosta.</li>
                   <li><strong>Serie annuali:</strong> ogni confronto conserva l&apos;anno di riferimento. I totali di periodo (2010-2024) sono riportati solo con perimetro esplicito e affiancati dalle serie per anno.</li>
                   <li><strong>Morti denunciati:</strong> serie INAIL ufficiale delle denunce con esito mortale, usata per il contesto generale.</li>
@@ -181,14 +181,14 @@ export default function ReportLavoriPericolosiPage() {
             Nei casi mortali analizzati da <strong>Infor.MO 2010-2024</strong> (3.766 casi) i settori in testa sono <strong>costruzioni</strong> (1.084 casi) e <strong>agricoltura</strong> (1.043), quasi appaiate sul periodo. Dal <strong>2021</strong>, però, le costruzioni sono il settore con più casi ogni anno. La causa singola più frequente è la <strong>caduta dall&apos;alto</strong>: 1.217 casi, quasi un caso su tre.
           </p>
           <p style={{ margin: "var(--space-4) 0 0", fontSize: "1.05rem", lineHeight: 1.6 }}>
-            <strong>Attenzione al perimetro:</strong> l&apos;archivio Infor.MO approfondisce 3.766 casi sul totale di 15.268 denunce con esito mortale del periodo (<strong>24,7%</strong>). È il campione più ricco disponibile su cause e dinamiche, non il censimento di tutte le morti sul lavoro.
+            <strong>Attenzione al perimetro:</strong> l&apos;archivio Infor.MO approfondisce 3.766 casi dal 2010 al 2024. Il confronto con le denunce nazionali è possibile solo dal 2014, quando inizia la serie INAIL utilizzata qui: 2.617 casi analizzati su 14.070 denunce con esito mortale, il <strong>18,6%</strong>. È il campione più ricco disponibile su cause e dinamiche, non il censimento di tutte le morti sul lavoro.
           </p>
         </section>
 
         <section aria-labelledby="in-breve" className="card" style={{ background: "var(--color-surface)" }}>
           <h2 id="in-breve" style={{ margin: "0 0 var(--space-3)" }}>In breve</h2>
           <ul style={{ margin: 0, paddingLeft: "1.25rem", display: "grid", gap: "var(--space-2)", lineHeight: 1.5 }}>
-            <li>3.766 casi mortali analizzati da Infor.MO nel 2010-2024, su 15.268 denunce (24,7%)</li>
+            <li>3.766 casi mortali analizzati da Infor.MO nel 2010-2024; sul perimetro confrontabile 2014-2024 sono 2.617 su 14.070 denunce (18,6%)</li>
             <li>Costruzioni (1.084) e agricoltura (1.043) davanti a tutti; costruzioni in testa dal 2021</li>
             <li>Caduta dall&apos;alto di persona: 1.217 casi, 31,7% delle dinamiche registrate</li>
             <li>Le prime tre dinamiche (caduta di persona, ribaltamento, caduta di gravi) coprono il 63,7%</li>
@@ -199,7 +199,7 @@ export default function ReportLavoriPericolosiPage() {
 
         <Section title="Che cos'è Infor.MO e perché questi numeri non sono tutti i morti sul lavoro">
           <p style={{ margin: 0, lineHeight: 1.7 }}>
-            Infor.MO è l&apos;archivio pubblico di INAIL che raccoglie gli infortuni sul lavoro analizzati in profondità: per ogni caso vengono ricostruiti dinamica, fattori causali, profilo del lavoratore e dell&apos;azienda. Non tutti i decessi denunciati entrano nell&apos;archivio: l&apos;analisi è lunga e il database si popola con il ritardo delle indagini. Nel periodo 2010-2024 i casi analizzati sono 3.766 su 15.268 denunce (24,7%), con una copertura che si aggira intorno ai 190-320 casi l&apos;anno.
+            Infor.MO è l&apos;archivio pubblico di INAIL che raccoglie gli infortuni sul lavoro analizzati in profondità: per ogni caso vengono ricostruiti dinamica, fattori causali, profilo del lavoratore e dell&apos;azienda. Non tutti i decessi denunciati entrano nell&apos;archivio: l&apos;analisi è lunga e il database si popola con il ritardo delle indagini. Dal 2010 al 2024 i casi analizzati sono 3.766, con una copertura che si aggira intorno ai 190-320 casi l&apos;anno. Il rapporto con le denunce nazionali si può calcolare solo sul 2014-2024, dove la serie INAIL usata qui è disponibile: 2.617 casi su 14.070 denunce, il 18,6%.
           </p>
           <p style={{ margin: 0, lineHeight: 1.7 }}>
             Questo report usa l&apos;archivio perché è la fonte che dice <strong>perché</strong> si muore, non solo quante volte: settori, cause e profili. I totali nazionali INAIL restano il riferimento per il quadro generale.

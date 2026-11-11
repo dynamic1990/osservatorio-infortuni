@@ -6,7 +6,7 @@ export const revalidate = 86_400;
 export const metadata: Metadata = {
   title: "Cronaca di infortuni | Osservatorio Infortuni sul Lavoro",
   description:
-    "Rassegna stampa automatica degli infortuni gravi e mortali sul lavoro in Italia: archivio a 365 giorni, KPI di periodo, mappa regionale e timeline filtrabile per categoria, regione, periodo e parole chiave. Indicatore congiunturale della cronaca, non dati INAIL.",
+    "Rassegna stampa automatica degli infortuni gravi e mortali sul lavoro in Italia: archivio fino a 365 giorni con copertura dichiarata, KPI di periodo, mappa regionale e timeline filtrabile per categoria, regione, periodo e parole chiave. Indicatore congiunturale della cronaca, non dati INAIL.",
   alternates: { canonical: "/cronaca-infortuni" },
 };
 
@@ -74,7 +74,7 @@ export default function CronacaInfortuniPage() {
               ufficiali INAIL, disponibili nella sezione statistiche.
             </p>
             <div style={{ marginTop: "var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-              Finestra di osservazione: archivio fino a 365 giorni · ogni voce rimanda all&apos;articolo originale
+              Finestra di osservazione: archivio fino a 365 giorni, con la copertura reale dichiarata in pagina · ogni voce rimanda all&apos;articolo originale
             </div>
           </div>
         </div>

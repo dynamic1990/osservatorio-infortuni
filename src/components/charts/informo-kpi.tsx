@@ -96,12 +96,15 @@ export function InformoKpi() {
 
       <p className="source-note">
         Fonte: INAIL, archivio Infor.MO (InformoWeb), casi con tipoEvento mortale
-        analizzati con il modello Informo nel periodo 2014-2024. Il campione è
-        una parte delle denunce di morte registrate da INAIL nello stesso
-        periodo: la quota è dichiarata perché l&apos;analisi dei fattori
-        vale per i casi analizzati, non per tutti i decessi denunciati. La
-        copertura &ldquo;dettaglio completo&rdquo; misura invece quanti casi dell&apos;archivio
-        hanno la scheda di analisi, ed è indipendente dal totale nazionale.
+        analizzati con il modello Informo. L&apos;archivio copre il 2010-2024, ma il
+        confronto con le denunce nazionali è calcolato sul solo 2014-2024, l&apos;unico
+        intervallo in cui esistono entrambi i dati: 2.617 casi analizzati su 14.070
+        denunce con esito mortale. Il campione è una parte delle denunce di morte
+        registrate da INAIL nello stesso periodo: la quota è dichiarata perché
+        l&apos;analisi dei fattori vale per i casi analizzati, non per tutti i decessi
+        denunciati. La copertura &ldquo;dettaglio completo&rdquo; misura invece quanti casi
+        dell&apos;archivio hanno la scheda di analisi, ed è indipendente dal totale
+        nazionale.
       </p>
     </div>
   );

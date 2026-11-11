@@ -172,9 +172,64 @@ REGIONI_NOMI = [
     "Trentino-Alto Adige", "Trentino", "Umbria", "Valle d'Aosta", "Veneto",
 ]
 
+# L'Osservatorio racconta gli infortuni sul lavoro IN ITALIA. Google News
+# restituisce anche cronaca estera ("17 operai morti in Turchia"), che in un
+# contatore nazionale è rumore: gonfia i KPI e falsa la lettura del fenomeno.
+# Regola: un titolo che cita un paese estero e non contiene alcun luogo
+# italiano viene scartato. Se il luogo italiano c'è, l'articolo resta: può
+# essere un lavoratore italiano morto all'estero o una notizia con contesto
+# italiano.
+PAESI_ESTERI = [
+    "Turchia", "Belgio", "Austria", "Francia", "Germania", "Spagna",
+    "Portogallo", "Grecia", "Croazia", "Slovenia", "Svizzera", "Polonia",
+    "Romania", "Bulgaria", "Ungheria", "Cechia", "Repubblica Ceca",
+    "Slovacchia", "Serbia", "Albania", "Moldavia", "Ucraina", "Russia",
+    "Olanda", "Paesi Bassi", "Lussemburgo", "Danimarca", "Svezia",
+    "Norvegia", "Finlandia", "Islanda", "Irlanda", "Inghilterra",
+    "Scozia", "Galles", "Regno Unito", "Stati Uniti", "USA", "Canada",
+    "Messico", "Brasile", "Argentina", "Cile", "Perù", "Colombia",
+    "Venezuela", "Marocco", "Tunisia", "Algeria", "Libia", "Egitto",
+    "Nigeria", "Ghana", "Kenya", "Etiopia", "Somalia", "Sudafrica",
+    "Israele", "Palestina", "Gaza", "Libano", "Siria", "Iraq", "Iran",
+    "Arabia Saudita", "Emirati", "Qatar", "Kuwait", "Afghanistan",
+    "Pakistan", "India", "Bangladesh", "Nepal", "Sri Lanka", "Cina",
+    "Giappone", "Corea", "Thailandia", "Vietnam", "Malesia", "Indonesia",
+    "Filippine", "Australia", "Nuova Zelanda", "Kazakistan", "Uzbekistan",
+    "Georgia", "Armenia", "Azerbaigian", "Cipro", "Malta",
+]
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def luogo_italiano(item: dict) -> bool:
+    """True se il titolo (o la localizzazione estratta) indica un luogo italiano."""
+    if item.get("provincia") or item.get("regione"):
+        return True
+    tl = normalize_place(item.get("titolo", ""))
+    for prov, reg in PROVINCE:
+        if len(prov) >= 4 and re.search(rf"(?<![a-z]){re.escape(normalize_place(prov))}(?![a-z])", tl):
+            return True
+        if re.search(rf"(?<![a-z]){re.escape(normalize_place(reg))}(?![a-z])", tl):
+            return True
+    for nome, _, _ in LUOGHI_ORDINATI:
+        nn = normalize_place(nome)
+        if len(nn) >= 4 and re.search(rf"(?<![a-z]){re.escape(nn)}(?![a-z])", tl):
+            return True
+    return False
+
+
+def cita_paese_estero(item: dict) -> bool:
+    """True se il titolo cita un paese estero."""
+    tl = normalize_place(item.get("titolo", ""))
+    for paese in PAESI_ESTERI:
+        pn = normalize_place(paese)
+        if len(pn) < 3:
+            continue
+        if re.search(rf"(?<![a-z]){re.escape(pn)}(?![a-z])", tl):
+            return True
+    return False
 
 
 def fetch_rss(query: str, when: str = "30d") -> list[dict]:
@@ -996,6 +1051,16 @@ def dedupe_eventi(items: list[dict]) -> list[dict]:
     ordinati = sorted(items, key=news_datetime, reverse=True)
     gruppi: list[list[dict]] = []
     for item in ordinati:
+        # Stesso link = stesso articolo, sempre: due titoli che differiscono
+        # per una coda ("... Proclamato lo sciopero") non devono produrre due
+        # righe né due eventi nei KPI.
+        stesso_link = next(
+            (g for g in gruppi if any(m.get("link") == item.get("link") for m in g)),
+            None,
+        )
+        if stesso_link is not None:
+            stesso_link.append(item)
+            continue
         gruppo = next((g for g in gruppi if any(is_same_event(item, other) for other in g)), None)
         if gruppo is None:
             gruppi.append([item])
@@ -1175,6 +1240,10 @@ def main() -> int:
         n["sintesi"] = "" if n["tipo"] != "evento" else estrai_sintesi(n["titolo"])
         if score < MIN_WORK_ACCIDENT_SCORE:
             continue
+        # Perimetro Italia: gli eventi esteri senza alcun riferimento
+        # italiano restano fuori dal contatore nazionale.
+        if cita_paese_estero(n) and not luogo_italiano(n):
+            continue
         filtrate.append(n)
 
     filtrate = dedupe_eventi(filtrate)
@@ -1191,12 +1260,30 @@ def main() -> int:
     # le notizie: altrimenti i KPI tornano gonfiati dai doppioni della cronaca
     # (stesso infortunio raccontato da più testate).
     stats = calcola_stats(filtrate)
+    # Copertura reale dell'archivio: la finestra dichiarata è 365 giorni, ma
+    # l'archivio si popola giorno per giorno, quindi all'inizio copre meno.
+    # Dichiarare 365 quando i dati arrivano a 60 giorni sarebbe falso.
+    date_arch = sorted(news_datetime(n) for n in filtrate)
+    copertura = {
+        "dal": date_arch[0].date().isoformat() if date_arch else None,
+        "al": date_arch[-1].date().isoformat() if date_arch else None,
+        "giorni": (
+            (date_arch[-1] - date_arch[0]).days + 1 if date_arch else 0
+        ),
+        "finestraMassima": ARCHIVIO_GIORNI,
+        "nota": (
+            "L'archivio si costruisce giorno per giorno e conserva al massimo "
+            f"{ARCHIVIO_GIORNI} giorni: la copertura reale è quella indicata da "
+            "'giorni', non la finestra massima."
+        ),
+    }
     payload = {
-        "schemaVersion": 7,
+        "schemaVersion": 8,
         "datasetId": "news_infortuni",
         "generatedAt": utc_now(),
         "fonte": "Google News RSS, filtro WORK_ACCIDENT_SCORE >= 45 (query: infortuni sul lavoro Italia)",
-        "periodo": "ultimi 365 giorni (archivio)",
+        "periodo": f"archivio {copertura['giorni']} giorni ({copertura['dal']} - {copertura['al']})",
+        "copertura": copertura,
         "stats": stats,
         "notizie": filtrate[:MAX_KEEP],
     }
