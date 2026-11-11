@@ -245,7 +245,7 @@ export function HeroCongiunturaleKpi() {
             )
           </div>
           <div style={{ fontSize: "0.78rem", marginTop: "var(--space-1)", color: "var(--color-text-muted)" }}>
-            {modLabel.toLowerCase()} · {mortali.anno2026} esiti sui giorni effettivi disponibili fino a {etichettaMeseFinale} 2026
+            {modLabel.toLowerCase()} · {mortali.anno2026} esiti sui giorni effettivi disponibili fino a fine {etichettaMeseFinale} 2026
           </div>
         </div>
 
