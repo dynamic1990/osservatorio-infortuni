@@ -53,7 +53,7 @@ export function MalattieAndamentoWidget() {
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-2)" }}>
         <div style={{ fontSize: "0.95rem", fontWeight: 700 }}>
-          Denunce di malattia professionale: I semestre  2025 vs  2026
+          Denunce di malattia professionale: gennaio-settembre 2025 vs 2026
         </div>
         <div style={{ display: "flex", gap: "var(--space-1)" }}>
           {(["totale", "maschi", "femmine"] as const).map((v) => (
@@ -88,7 +88,7 @@ export function MalattieAndamentoWidget() {
 
       <p className="source-note">
         Fonte: INAIL Open Data, dataset <em>DatiMensiliMalattieProfessionaliDataProt</em> (denunce protocollate nel
-        mese). I CSV ufficiali coprono i primi due semestri: gennaio-giugno 2025 e gennaio-giugno 2026. Il confronto
+        mese). I CSV ufficiali coprono gennaio-settembre sia per il 2025 sia per il 2026. Il confronto
         è a pari periodo e non va esteso all&apos;intero anno. Il toggle consente di isolare la componente di genere.
 
       </p>

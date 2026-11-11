@@ -34,7 +34,11 @@ SCHEMA_VERSION = 1
 # I CSV INAIL contengono una finestra mobile più ampia (ultimi ~24 mesi):
 # aggregare mesi fuori da questa finestra renderebbe i totali incoerenti
 # con la serie mensile pubblicata e con l'etichetta "I semestre".
-MESI_CONFRONTO = (1, 2, 3, 4, 5, 6)
+# Finestra di confronto: gennaio-settembre.
+# La vintage dei CSV INAIL al 2026-11-11 si ferma a settembre 2026 per le
+# denunce; ottobre-dicembre 2025 non sono nella finestra pubblicata, quindi
+# il confronto a pari periodo si ferma a settembre.
+MESI_CONFRONTO = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 
 REGIONI = {
     "Piemonte": "01", "ValledAosta": "02", "Lombardia": "03", "TrentinoAltoAdige": "04",
@@ -173,7 +177,7 @@ def main():
 
     print(f"   denunce totali: {totale}")
 
-    # Serie mensile nazionale (soli mesi della finestra di confronto: gen-giu).
+    # Serie mensile nazionale (soli mesi della finestra di confronto: gen-set).
     # NB: non inserire zeri per mesi fuori finestra (lug-dic): sarebbero falsi zero.
     mesi_nomi = ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"]
     serie_mensile = []
@@ -187,9 +191,12 @@ def main():
                 "femmine": g.get("F", 0),
             })
 
-    # Confronto I semestre
-    s1_2025 = sum(per_mese["2025"].get(m, 0) for m in range(1, 7))
-    s1_2026 = sum(per_mese["2026"].get(m, 0) for m in range(1, 7))
+    # Confronto cumulato gennaio-settembre.
+    # I nomi "semestre"/"PrimoSemestre" restano nei campi per compatibilità con
+    # i tipi della UI, ma il contenuto è il cumulato da gennaio a settembre:
+    # le chiavi esplicite periodoDa/periodoA dichiarano la finestra reale.
+    s1_2025 = sum(per_mese["2025"].get(m, 0) for m in MESI_CONFRONTO)
+    s1_2026 = sum(per_mese["2026"].get(m, 0) for m in MESI_CONFRONTO)
     delta = s1_2026 - s1_2025
     delta_perc = round(delta / s1_2025 * 100, 1) if s1_2025 else None
 
@@ -329,8 +336,8 @@ def main():
         "schemaVersion": SCHEMA_VERSION,
         "datasetId": DATASET_ID,
         "generatedAt": utc_now(),
-        "periodo": "Gennaio - Giugno 2025 e Gennaio - Giugno 2026",
-        "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. Il sito pubblica il confronto a pari periodo (gen-giu 2025 vs gen-giu 2026); i CSV sorgente contengono una finestra mobile più ampia (ultimi 24 mesi), che consente estensioni future come una serie congiunturale mensile. Il campo totale regionale è la somma dei due semestri (I 2025 + I 2026): non è un valore annuale e non va usato come indicatore; il confronto corretto è tra i due semestri a pari periodo.",
+        "periodo": "Gennaio - Settembre 2025 e Gennaio - Settembre 2026",
+        "nota": "La disaggregazione regionale riflette la sede INAIL competente per la protocollazione della denuncia (dove il caso è gestito), non il luogo di lavoro o la residenza del lavoratore. Il sito pubblica il confronto a pari periodo (gen-set 2025 vs gen-set 2026), sui mesi di protocollo: la vintage dei CSV INAIL si ferma a settembre 2026 e non include ottobre-dicembre 2025. Il campo totale regionale è la somma dei due periodi (gen-set 2025 + gen-set 2026): non è un valore annuale e non va usato come indicatore; il confronto corretto è tra i due periodi a pari finestra.",
         "fonte": "INAIL Open Data — DatiMensiliMalattieProfessionaliDataProt (denunce) + DatiSemestraliMalattieProfessionaliDataDec (decessi)",
         "nazionale": {
             "totale": totale,
@@ -341,6 +348,9 @@ def main():
                 "anno2026": s1_2026,
                 "delta": delta,
                 "deltaPerc": delta_perc,
+                "periodoDa": 1,
+                "periodoA": max(MESI_CONFRONTO),
+                "etichetta": "Gennaio - Settembre",
             },
             "serieMensile": serie_mensile,
         },

@@ -90,14 +90,16 @@ def main():
     }
     
     # 2. Elaborazione Congiuntura 2025 vs 2026 a pari perimetro
-    print("2. Elaborazione congiuntura 2025 vs 2026 (mesi 1..6 a pari perimetro)...")
+    # Gennaio-settembre: è la finestra pubblicata dalla cadenza mensile
+    # (ottobre-dicembre 2025 non esistono in questa vintage).
+    print("2. Elaborazione congiuntura 2025 vs 2026 (mesi 1..9 a pari perimetro)...")
     temporale_data = json.loads((GEN_DIR / "inail-infortuni-temporale.json").read_text(encoding="utf-8"))
     mensile = temporale_data.get("serieMensile", [])
     
     # Raggruppamento per mese e regione
-    pari_mesi = [1, 2, 3, 4, 5, 6]
+    pari_mesi = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     congiuntura = {
-        "periodo": "I Semestre (Gennaio - Giugno)",
+        "periodo": "Gennaio - Settembre",
         "mesi": pari_mesi,
         "nazionale": {
             "totale": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
@@ -107,8 +109,8 @@ def main():
             "mortaliLavoro": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
             "mortaliItinere": {"anno2025": 0, "anno2026": 0, "delta": 0, "deltaPerc": 0.0},
             "occupati2024": sum(occ_reg[r]["2024"] * 1000 for r in occ_reg if occ_reg[r].get("2024")),
-            "incidenzaSemestrale2025": 0.0,
-            "incidenzaSemestrale2026": 0.0,
+            "incidenzaPeriodo2025": 0.0,
+            "incidenzaPeriodo2026": 0.0,
         },
         "perMese": [],
         "perRegione": {}
@@ -176,8 +178,8 @@ def main():
         congiuntura["nazionale"][k]["deltaPerc"] = dp
         
     occ_tot_k = congiuntura["nazionale"]["occupati2024"] / 1000.0
-    congiuntura["nazionale"]["incidenzaSemestrale2025"] = round(congiuntura["nazionale"]["totale"]["anno2025"] / occ_tot_k, 2)
-    congiuntura["nazionale"]["incidenzaSemestrale2026"] = round(congiuntura["nazionale"]["totale"]["anno2026"] / occ_tot_k, 2)
+    congiuntura["nazionale"]["incidenzaPeriodo2025"] = round(congiuntura["nazionale"]["totale"]["anno2025"] / occ_tot_k, 2)
+    congiuntura["nazionale"]["incidenzaPeriodo2026"] = round(congiuntura["nazionale"]["totale"]["anno2026"] / occ_tot_k, 2)
 
     for m in pari_mesi:
         d = mese_naz[m]

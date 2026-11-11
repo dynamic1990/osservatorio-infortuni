@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-"""Unifica mensile (16 regioni via API) + mensile CSV (4 regioni) + semestrale
-storico (2021-2025, tutte le regioni) in un'unica vista per il sito.
+"""Unifica mensile (20 regioni dai CSV) + semestrale storico (2021-2025,
+tutte le regioni) in un'unica vista per il sito.
+
+Dal 2026-11-11 lo snapshot mensile è costruito dai CSV regionali e copre già
+tutte e 20 le regioni: le regioni con il trattino nel nome (Emilia-Romagna,
+Trentino-Alto Adige, Friuli-Venezia Giulia) non sono più un caso a parte.
 
 Output: src/data/generated/inail-infortuni-viste.json (viste, piccolo) e
 meta aggiornato. Le serie coprono 2021-2026 con tutte le 20 regioni.
@@ -11,11 +15,8 @@ Usa:
 
 from __future__ import annotations
 
-import csv
-import io
 import json
 import sys
-import zipfile
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -24,67 +25,17 @@ ROOT = Path(__file__).resolve().parents[2]
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "src" / "data" / "generated"
 
-REGIONI_CSV_MENSILE = {
-    "EmiliaRomagna": "08", "ValledAosta": "02",
-    "TrentinoAltoAdige": "04", "FriuliVeneziaGiulia": "06",
-}
-
-
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
 def leggi_mensile_api() -> list[dict]:
-    """16 regioni via API (già aggregate)."""
+    """Aggregati mensili 2025-2026, tutte le 20 regioni."""
     path = OUT / "inail-infortuni-serie.json"
     if not path.exists():
         return []
     data = json.loads(path.read_text(encoding="utf-8"))
     return data["aggregates"]
-
-
-def leggi_mensile_csv(regione, code) -> list[dict]:
-    """CSV mensile per le regioni con nome composto. Dedup per caso, tiene la
-    rilevazione più recente (30/06/2026)."""
-    zip_path = RAW / f"mensile-{regione}.zip"
-    if not zip_path.exists():
-        return []
-    with zipfile.ZipFile(zip_path) as zf:
-        name = zf.namelist()[0]
-        with zf.open(name) as f:
-            text = io.TextIOWrapper(f, encoding="utf-8-sig")
-            reader = csv.DictReader(text, delimiter=";")
-            records = list(reader)
-    best: dict[str, dict] = {}
-    for r in records:
-        if not r.get("DataAccadimento") or len(r["DataAccadimento"]) != 10:
-            continue
-        if r.get("DataRilevazione") < "30/06/2026":
-            continue
-        best[r.get("IdentificativoCaso", "")] = r
-    agg: dict[tuple, int] = Counter()
-    for r in best.values():
-        try:
-            eta = int(r.get("Eta", "-1"))
-        except ValueError:
-            eta = -1
-        data_acc = r["DataAccadimento"]
-        anno = int(data_acc[6:10])
-        mese = int(data_acc[3:5])
-        if anno < 2025:
-            continue
-        k = (anno, mese, code, r.get("LuogoAccadimento", ""), r.get("SettoreAttivitaEconomica", ""),
-             r.get("GrandeGruppoTariffario", ""), r.get("Gestione", ""), r.get("GestioneTariffaria", ""),
-             r.get("Genere", ""), eta, r.get("ModalitaAccadimento", ""), r.get("ConSenzaMezzoTrasporto", ""))
-        agg[k] += 1
-    rows = [
-        {"key": f"{a}-{m:02d}|{reg}|{prov}", "anno": a, "mese": m, "regione": reg, "provincia": prov,
-         "settoreAteco": ateco, "grandeGruppo": gg, "gestione": gest, "gestioneTariffaria": gt,
-         "genere": g, "eta": e, "modalita": mod, "mezzoTrasporto": mz, "esitoMortale": True if False else False,
-         "casi": c}
-        for (a, m, reg, prov, ateco, gg, gest, gt, g, e, mod, mz), c in agg.items()
-    ]
-    return rows
 
 
 def fascia(eta: int) -> str:
@@ -111,10 +62,16 @@ def main() -> int:
     storico = json.loads(storico_path.read_text(encoding="utf-8"))
     semi = storico["aggregates"]
 
-    # 2) Mensile: API (16 regioni) + CSV (4 regioni)
+    # 2) Mensile: 2025-2026, tutte le 20 regioni (fonte unica: serie.json)
     mens = leggi_mensile_api()
-    for reg, code in REGIONI_CSV_MENSILE.items():
-        mens.extend(leggi_mensile_csv(reg, code))
+
+    regioni_mensile = {r["regione"] for r in mens}
+    if len(regioni_mensile) < 20:
+        print(
+            f"[!] attenzione: lo snapshot mensile copre {len(regioni_mensile)} regioni, "
+            "non 20. Rigenerare prima inail-infortuni-serie.json.",
+            file=sys.stderr,
+        )
 
     # 3) Viste
     serie_annuale: Counter[int] = Counter()
@@ -163,7 +120,7 @@ def main() -> int:
             "casi": sum(v for v in serie_annuale.values()),
             "mortali": viste_mortali,
             "casiPerAnno": {str(a): serie_annuale[a] for a in sorted(serie_annuale)},
-            "notaPeriodo": "Serie annuale consolidata 2021-2025 (cadenza semestrale, tutte le 20 regioni). I dati mensili 2025-2026 sono congiunturali su finestre di rilevazione (gen-giu).",
+            "notaPeriodo": "Serie annuale consolidata 2021-2025 (cadenza semestrale, tutte le 20 regioni). I dati mensili 2025-2026 sono congiunturali e coprono gennaio-settembre su tutte le 20 regioni, con una rilevazione per anno (30/09/2025 e 30/09/2026).",
         },
         "serieAnnuale": [{"anno": a, "casi": serie_annuale[a]} for a in sorted(serie_annuale)],
         "serieAnnualeRegioni": [
@@ -182,6 +139,54 @@ def main() -> int:
     out = OUT / "inail-infortuni-viste.json"
     out.write_text(json.dumps(viste, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"Viste salvate: {out} ({out.stat().st_size} bytes)")
+
+    # Il meta delle viste appartiene a questo dataset (consolidato 2021-2025),
+    # non allo snapshot mensile: lo scrive l'ETL delle viste, così i due
+    # artefatti non si sovrascrivono a vicenda.
+    meta_path = OUT / "inail-infortuni-serie.meta.json"
+    meta = {
+        "schemaVersion": 1,
+        "datasetId": "inail_infortuni_viste",
+        "artifactScope": "viste-consolidate",
+        "source": {
+            "owner": "INAIL – Istituto Nazionale Assicurazione contro gli Infortuni sul Lavoro",
+            "landingUrl": "https://dati.inail.it/portale/it/dataset/infortuni-sul-lavoro/dati-con-cadenza-semestrale.html",
+            "apiUrl": "https://dati.inail.it/opendata/downloads/daticoncadenzasemestraleinfortuni/zip/",
+            "license": "Italian Open Data License v2.0",
+            "attribution": "INAIL Open Data",
+        },
+        "extractedAt": utc_now(),
+        "period": {"annoDa": 2021, "annoA": 2025, "mesi": None},
+        "coverage": {
+            "regioni": len(regioni),
+            "province": storico["coverage"].get("province", 0),
+            "record": storico["coverage"]["record"],
+            "casi": storico["coverage"]["casi"],
+            "mortali": storico["coverage"]["mortali"],
+        },
+        "limits": [
+            "Serie annuale consolidata da cadenza semestrale: copre 5 anni interi (2021-2025), rilevazione 30/04/2026.",
+            "I dati mensili 2025-2026 (congiunturali) sono in un artefatto separato e coprono gennaio-settembre su tutte le 20 regioni.",
+            "La definizione amministrativa e l'indennizzo sono disponibili solo nella cadenza semestrale.",
+            "Le denunce sono provvisorie e vengono integrate e riclassificate nel tempo.",
+        ],
+        "methodology": [
+            "Aggregazione di record pseudonimizzati: mai record singoli nel sito.",
+            "Le viste sono precalcolate: il sito carica solo queste, non lo snapshot completo.",
+            "Le regioni sono codici ISTAT a due cifre; le province sono codici ISTAT a tre cifre.",
+        ],
+    }
+    meta_path.write_text(
+        json.dumps(meta, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+    )
+    print(f"Meta viste: {meta_path}")
+
+    # Riallinea gli hash del registro artefatti: le viste e il loro meta sono
+    # appena cambiati, e un registro divergente blocca la validazione CI.
+    import subprocess
+    registry_script = ROOT / "scripts" / "ci" / "aggiorna_registry.py"
+    if registry_script.is_file():
+        subprocess.run([sys.executable, str(registry_script)], cwd=ROOT, check=False)
     print("Casi per anno:", dict(sorted(serie_annuale.items())))
     print("Regioni:", len(regioni))
     return 0

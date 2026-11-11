@@ -68,11 +68,11 @@ const REPORT: ReportItem[] = [
   {
     href: "/report/infortuni-1-semestre-2026",
     name: "Report overview infortuni",
-    title: "Infortuni sul lavoro, primo semestre 2026: più denunce, meno casi mortali",
-    date: "16 settembre 2026",
-    isoDate: "2026-09-16",
+    title: "Infortuni sul lavoro 2026: più denunce e, da agosto, più casi mortali",
+    date: "11 novembre 2026",
+    isoDate: "2026-11-11",
     description:
-      "Quanti infortuni sono stati denunciati nei primi sei mesi del 2026? Il confronto con il 2025, la crescita dell'itinere e il calo dei casi mortali.",
+      "Quanti infortuni sono stati denunciati nei primi nove mesi del 2026? Il confronto con il 2025 su tutte le 20 regioni e il terzo trimestre che ribalta il quadro: 250 morti, +16,8%.",
     tags: ["Infortuni", "Morti sul lavoro", "Dati INAIL"],
     area: "dati-tendenze",
   },

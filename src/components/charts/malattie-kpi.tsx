@@ -44,11 +44,11 @@ export function MalattieKpi() {
     {
       label: "Denunce nel periodo",
       value: exactNumber(dati.nazionale.totale),
-      sub: "gen-giu 2025 e gen-giu 2026 (CSV INAIL)",
+      sub: "gen-set 2025 e gen-set 2026 (CSV INAIL)",
       split: <QuotaGenere maschi={genere.M ?? 0} femmine={genere.F ?? 0} compact />,
     },
     {
-      label: "I semestre 2026 vs 2025",
+      label: "Gen-set 2026 vs 2025",
       value: `${deltaPerc !== null && deltaPerc > 0 ? "+" : ""}${(deltaPerc ?? 0).toLocaleString("it-IT", { maximumFractionDigits: 1 })}%`,
       sub: `${trendUp ? "+" : ""}${exactNumber(delta)} denunce`,
       accent: trendUp,

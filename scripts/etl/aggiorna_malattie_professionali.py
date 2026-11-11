@@ -29,9 +29,9 @@ import argparse
 import hashlib
 import sys
 import time
+import urllib.error
+import urllib.request
 from pathlib import Path
-
-from scrapling.fetchers import Fetcher
 
 ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / "data" / "raw" / "malattie-professionali"
@@ -66,12 +66,13 @@ def download_one(url: str, dest: Path, retries: int = 3) -> tuple[bool, str]:
     last_err = None
     for attempt in range(1, retries + 1):
         try:
-            r = Fetcher.get(url, timeout=60, headers={"User-Agent": USER_AGENT})
-            if r.status != 200:
-                last_err = f"HTTP {r.status}"
-                time.sleep(2 * attempt)
-                continue
-            body = r.body if hasattr(r, "body") else r.content
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                if resp.status != 200:
+                    last_err = f"HTTP {resp.status}"
+                    time.sleep(2 * attempt)
+                    continue
+                body = resp.read()
             if not body or len(body) < 100:
                 last_err = f"risposta vuota ({len(body) if body else 0} byte)"
                 time.sleep(2 * attempt)

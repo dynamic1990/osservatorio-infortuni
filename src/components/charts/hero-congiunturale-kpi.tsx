@@ -17,7 +17,11 @@ import { compactNumber, exactNumber } from "@/lib/format";
 import { MODAL_COLORS } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
 
-const MESI_NOMI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu"];
+const MESI_NOMI = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+const MESI_NOMI_LUNGHI = [
+  "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
+  "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre",
+];
 
 // Data di estrazione della fonte (metadato ETL), formattata per la UI.
 function dataEstrazioneFonte(): string {
@@ -34,9 +38,10 @@ function dataEstrazioneFonte(): string {
 }
 
 // Giorni effettivi dei dati YTD disponibili, gestendo i bisestili.
-function giorniSemestre(anno: number): number {
-  const giorniMesi = [31, anno % 4 === 0 ? 29 : 28, 31, 30, 31, 30];
-  return giorniMesi.reduce((a, b) => a + b, 0);
+/** Giorni effettivi da gennaio al mese finale del periodo osservato. */
+function giorniPeriodo(anno: number, meseFinale: number): number {
+  const giorniMesi = [31, anno % 4 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return giorniMesi.slice(0, meseFinale).reduce((a, b) => a + b, 0);
 }
 
 export function HeroCongiunturaleKpi() {
@@ -63,15 +68,20 @@ export function HeroCongiunturaleKpi() {
     return data.nazionale.mortali;
   }, [data, filtroMod]);
 
+  // Periodo osservato: da gennaio all'ultimo mese presente nei dati.
+  const meseFinale = data.mesi.length ? Math.max(...data.mesi) : 9;
+  const etichettaPeriodo = `gennaio-${MESI_NOMI_LUNGHI[meseFinale - 1] ?? ""}`;
+  const etichettaMeseFinale = MESI_NOMI_LUNGHI[meseFinale - 1] ?? "";
+
   // Media YTD: morti sul lavoro al giorno nel periodo coperto
-  const giorni25 = giorniSemestre(2025);
-  const giorni26 = giorniSemestre(2026);
+  const giorni25 = giorniPeriodo(2025, meseFinale);
+  const giorni26 = giorniPeriodo(2026, meseFinale);
   const mediaMortali25 = mortali.anno2025 / giorni25;
   const mediaMortali26 = mortali.anno2026 / giorni26;
   const deltaMedia = mediaMortali26 - mediaMortali25;
   const occMln = (data.nazionale.occupati2024 / 1_000_000).toFixed(1);
 
-  // Calcolo incidenza semestrale per la modalità
+  // Calcolo incidenza nel periodo osservato per la modalità
   const occMigliaia = data.nazionale.occupati2024 / 1000;
   const inc25 = (kpiMod.anno2025 / occMigliaia).toFixed(2);
   const inc26 = (kpiMod.anno2026 / occMigliaia).toFixed(2);
@@ -124,7 +134,7 @@ export function HeroCongiunturaleKpi() {
             Monitoraggio YTD a pari perimetro
           </div>
           <div style={{ fontSize: "1.15rem", fontWeight: 700 }}>
-            Dati da inizio anno (YTD), aggiornati a giugno 2026
+            Dati da inizio anno (YTD), aggiornati a {etichettaMeseFinale} 2026
           </div>
           {dataEstrazioneFonte() && (
             <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", marginTop: 2 }}>
@@ -235,7 +245,7 @@ export function HeroCongiunturaleKpi() {
             )
           </div>
           <div style={{ fontSize: "0.78rem", marginTop: "var(--space-1)", color: "var(--color-text-muted)" }}>
-            {modLabel.toLowerCase()} · {mortali.anno2026} esiti sui giorni effettivi disponibili fino a giugno 2026
+            {modLabel.toLowerCase()} · {mortali.anno2026} esiti sui giorni effettivi disponibili fino a {etichettaMeseFinale} 2026
           </div>
         </div>
 
@@ -285,7 +295,7 @@ export function HeroCongiunturaleKpi() {
       {/* Grafico a barre mensile a confronto 2025 vs 2026 */}
       <div style={{ marginTop: "var(--space-2)" }}>
         <div style={{ fontSize: "0.9rem", fontWeight: 650, marginBottom: "var(--space-2)" }}>
-          Andamento mensile dei dati YTD fino a giugno ({modLabel.toLowerCase()})
+          Andamento mensile dei dati YTD fino a {etichettaMeseFinale} ({modLabel.toLowerCase()})
         </div>
         <div style={{ width: "100%", height: 244 }}>
           <ResponsiveContainer width="100%" height="100%">
@@ -306,7 +316,7 @@ export function HeroCongiunturaleKpi() {
           </ResponsiveContainer>
         </div>
         <div className="source-note" style={{ marginTop: "var(--space-2)" }}>
-          Nota metodologica: confronto a pari periodo da inizio anno. L&apos;ultimo mese disponibile è giugno 2026; i dati 2025 e 2026 sono denunce mensili provvisorie soggette a consolidamento e non sono sommati alle serie storiche consolidate 2021-2025.
+          Nota metodologica: confronto a pari periodo ({etichettaPeriodo}) su tutte le 20 regioni. Ogni anno è letto alla propria rilevazione (30 settembre), quindi il confronto è a pari ritardo dalla fine del periodo e non su dati definitivi. I dati 2025 e 2026 sono denunce mensili provvisorie soggette a consolidamento e non sono sommati alle serie storiche consolidate 2021-2025.
         </div>
       </div>
     </div>

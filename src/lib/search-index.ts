@@ -350,11 +350,11 @@ const GRAFICI: SearchEntry[] = [
   },
   {
     type: "grafico",
-    title: "Denunce mensili: I semestre 2025 vs 2026",
+    title: "Denunce mensili: gennaio-settembre 2025 vs 2026",
     description:
-      "L'andamento mensile delle denunce di malattie professionali nel confronto tra i primi semestri 2025 e 2026.",
+      "L'andamento mensile delle denunce di malattie professionali nel confronto tra gennaio-settembre 2025 e 2026.",
     href: "/malattie-professionali#denunce-mensili",
-    keywords: ["denunce mensili", "semestre", "mensile", "2025", "2026", "confronto", "andamento"],
+    keywords: ["denunce mensili", "semestre", "trimestre", "mensile", "2025", "2026", "confronto", "andamento"],
     meta: "Malattie professionali",
   },
   {

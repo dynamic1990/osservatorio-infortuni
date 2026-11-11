@@ -136,8 +136,10 @@ export interface CongiunturaleDataset {
     mortaliLavoro: { anno2025: number; anno2026: number; delta: number; deltaPerc: number };
     mortaliItinere: { anno2025: number; anno2026: number; delta: number; deltaPerc: number };
     occupati2024: number;
-    incidenzaSemestrale2025: number;
-    incidenzaSemestrale2026: number;
+    /** Incidenza nel periodo osservato (gennaio-settembre) per 1.000 occupati. */
+    incidenzaPeriodo2025: number;
+    /** Incidenza nel periodo osservato (gennaio-settembre) per 1.000 occupati. */
+    incidenzaPeriodo2026: number;
   };
   perMese: Array<{
     mese: number;

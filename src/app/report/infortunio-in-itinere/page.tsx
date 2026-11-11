@@ -105,7 +105,7 @@ export default function ReportItinerePage() {
                 <ul className="modal-list">
                   <li><strong>Denunce, non infortuni riconosciuti:</strong> il dato statistico INAIL è quello delle denunce di infortunio, non coincidente con gli infortuni riconosciuti dopo l&apos;istruttoria.</li>
                   <li><strong>Occasione di lavoro / itinere:</strong> l&apos;occasione di lavoro è l&apos;attività lavorativa in sé; l&apos;itinere è il percorso casa-lavoro e gli spostamenti connessi nei limiti previsti.</li>
-                  <li><strong>Classifica per regione:</strong> usa i dati consolidati 2025, che coprono tutte le 20 regioni. I dati congiunturali H1 2026 coprono 16 regioni (4 hanno solo cadenza semestrale), quindi non sono usati per i confronti territoriali.</li>
+                  <li><strong>Classifica per regione:</strong> usa i dati consolidati 2025. Il dato congiunturale gennaio-settembre 2026 copre ora tutte le 20 regioni (letto dai CSV mensili), quindi è confrontabile a pari periodo con il 2025.</li>
                   <li><strong>Delta e quote:</strong> confronto con l&apos;anno precedente in valore assoluto e percentuale; la quota indica il peso dell&apos;itinere sul totale delle denunce.</li>
                 </ul>
               </section>
@@ -181,7 +181,7 @@ export default function ReportItinerePage() {
             </table>
           </div>
           <p style={{ color: "var(--color-text-muted)", fontSize: "0.86rem", margin: 0 }}>
-            Fonte: INAIL, serie storica consolidata. Il dato congiunturale H1 2026 (41.997 denunce, +7,97%) è aggiornato nel <Link href="/report/infortuni-1-semestre-2026">report sul primo semestre 2026</Link>.
+            Fonte: INAIL, serie storica consolidata. Il dato congiunturale gennaio-settembre 2026 (77.542 denunce in itinere, +6,36%, e 228 esiti mortali, +9,09%) è aggiornato nel <Link href="/report/infortuni-1-semestre-2026">report sugli infortuni 2026</Link>.
           </p>
         </Section>
 

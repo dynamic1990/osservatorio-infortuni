@@ -112,7 +112,7 @@ export function InfoModalButton({ children }: { children?: ReactNode }) {
                         <strong>INAIL Open Data (Dati Consolidati Semestrali 2021–2025):</strong> microdati elementari e tabelle B1–B7 estratti dagli archivi ufficiali INAIL (cadenza semestrale, rilevazione 30/04/2026), comprendenti esito amministrativo, grado di menomazione (D.Lgs. 38/2000), giornate indennizzate, gestione assicurativa, classificazione ATECO e provincia/regione di accadimento (3.052.546 record consolidati).
                       </li>
                       <li>
-                        <strong>INAIL Open Data (Flussi mensili 2025–2026):</strong> dati provvisori mensili da inizio anno (YTD), con ultimo mese disponibile giugno 2026 e confronto a pari periodo con il 2025.
+                        <strong>INAIL Open Data (Flussi mensili 2025–2026):</strong> dati provvisori mensili da inizio anno (YTD), con ultimo mese disponibile settembre 2026 e confronto a pari periodo con il 2025. Letti dai CSV regionali, coprono tutte e 20 le regioni.
                       </li>
                       <li>
                         <strong>ISTAT &amp; Eurostat (Denominatori Occupazionali):</strong> dati della Rilevazione sulle Forze di Lavoro (RCFL) per regione (Eurostat NUTS2 <code>lfst_r_lfe2emp</code>) e per sezione di attività economica ATECO 2007 (lettere A–U).

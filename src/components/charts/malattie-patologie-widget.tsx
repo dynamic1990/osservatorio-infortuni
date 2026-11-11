@@ -28,9 +28,9 @@ export function MalattiePatologieWidget() {
     const delta = c.anno2026 - c.anno2025;
     const deltaPerc = c.anno2025 > 0 ? (delta / c.anno2025) * 100 : null;
     const righe: RigaDettaglio[] = [];
-    righe.push({ label: "Denunce I semestre", valore: `${exactNumber(c.anno2025)} (2025) · ${exactNumber(c.anno2026)} (2026)` });
+    righe.push({ label: "Denunce gen-set", valore: `${exactNumber(c.anno2025)} (2025) · ${exactNumber(c.anno2026)} (2026)` });
     righe.push({
-      label: "Variazione vs I sem 2025",
+      label: "Variazione vs gen-set 2025",
       valore: `${delta >= 0 ? "+" : ""}${exactNumber(delta)} (${deltaPerc !== null ? (deltaPerc >= 0 ? "+" : "") + deltaPerc.toFixed(1) + "%" : "n.d."})`,
     });
     righe.push({ label: "Quota sul totale", valore: `${(c.quota ?? 0).toLocaleString("it-IT", { maximumFractionDigits: 1 })}%` });
@@ -53,7 +53,7 @@ export function MalattiePatologieWidget() {
   return (
     <div style={{ display: "grid", gap: "var(--space-4)" }}>
       <div style={{ fontSize: "0.88rem", fontWeight: 700 }}>
-        Patologie denunciate per gruppo clinico (ICD-10): I semestre 2026, variazione vs I sem 2025
+        Patologie denunciate per gruppo clinico (ICD-10): gennaio-settembre 2026, variazione vs 2025
       </div>
 
       <div style={{ display: "grid", gap: "var(--space-2)" }}>
@@ -124,8 +124,8 @@ export function MalattiePatologieWidget() {
 
       <p className="source-note">
         Raggruppamento clinico dei codici ICD-10 presenti nel dataset INAIL delle denunce protocollate. Le barre
-        mostrano le denunce del I semestre 2026; il badge accanto riporta la variazione assoluta e percentuale
-        rispetto allo stesso semestre del 2025. Le patologie muscolo-scheletriche (capitolo M) dominano il quadro;
+        mostrano le denunce di gennaio-settembre 2026; il badge accanto riporta la variazione assoluta e percentuale
+        rispetto allo stesso periodo del 2025. Le patologie muscolo-scheletriche (capitolo M) dominano il quadro;
         i tumori professionali e le patologie da polveri emergono per gravità anche se numericamente minori.
       </p>
     </div>

@@ -71,10 +71,10 @@ export default function MalattieProfessionaliPage() {
       {/* Andamento mensile confronto semestri */}
       <section className="card" aria-label="Andamento mensile denunce" id="denunce-mensili">
         <div className="card-header">
-          <h2 className="card-title">Denunce mensili: I semestre 2025 vs 2026</h2>
+          <h2 className="card-title">Denunce mensili: gennaio-settembre 2025 vs 2026</h2>
           <p className="card-desc">
             Il confronto mese per mese a pari periodo mostra un aumento diffuso delle denunce di
-            malattia professionale protocollate nel primo semestre 2026 rispetto allo stesso periodo
+            malattia professionale protocollate nei primi nove mesi del 2026 rispetto allo stesso periodo
             del 2025.
           </p>
         </div>

@@ -9,9 +9,9 @@ Serie annuale per regione (da cadenza semestrale, 25 campi):
   totale, lavoro (N), itinere (S), mortali, menomati (danno permanente >=0),
   giorni (giorni indennizzati)
 
-Serie mensile congiunturale 2025-2026: totale/lavoro/itinere dall'aggregato
-mensile, mortali dai file raw API. Dato congiunturale, tenuto separato
-(nessun confronto improprio con la serie consolidata).
+Serie mensile congiunturale 2025-2026 (gennaio-settembre, tutte le 20 regioni):
+totale/lavoro/itinere/mortali dallo snapshot mensile. Dato congiunturale,
+tenuto separato (nessun confronto improprio con la serie consolidata).
 
 Nota metodologica: mortalita, menomazione e giorni indennizzati sono esposti
 solo dalla cadenza semestrale; il dataset mensile INAIL non li fornisce a
@@ -129,59 +129,39 @@ def compatta_semestrale(per_regione: dict) -> list:
 
 
 def estrai_mensile() -> tuple[list, int]:
-    """Serie mensile congiunturale 2025-2026.
+    """Serie mensile congiunturale 2025-2026, tutte le 20 regioni.
 
-    totale/lavoro/itinere dall'aggregato mensile; mortali dai file raw API
-    (16 regioni). Le 4 regioni da CSV non hanno mortali a livello elementare.
+    Tutte le dimensioni vengono dallo snapshot mensile, esiti mortali inclusi:
+    la mortalità è una dimensione dell'aggregato, quindi non serve più
+    ricorrere ai raw dell'API (che coprivano solo 16-17 regioni).
     """
     serie_path = OUT_DIR / "inail-infortuni-serie.json"
-    per_chiave: dict = defaultdict(lambda: {"N": 0, "S": 0, "ND": 0})
-    if serie_path.exists():
-        data = json.loads(serie_path.read_text(encoding="utf-8"))
-        for r in data.get("aggregates", []):
-            ch = (str(r["regione"]).zfill(2), r["anno"], r["mese"])
-            mod = r.get("modalita", "N") or "N"
-            per_chiave[ch][mod if mod in ("N", "S") else "ND"] += r["casi"]
+    per_chiave: dict = defaultdict(
+        lambda: {"N": 0, "S": 0, "ND": 0, "mortN": 0, "mortS": 0, "mortND": 0}
+    )
+    if not serie_path.exists():
+        print(f"[!] manca {serie_path.name}: serie mensile vuota", file=sys.stderr)
+        return [], 0
 
-    # mortali mensili dai raw API (16 regioni), con divisione per modalita
-    # (N = in occasione di lavoro, S = in itinere)
-    morti_raw: dict = defaultdict(int)
-    for path in sorted(glob.glob(str(RAW / "infortuni-*.json"))):
-        stem = Path(path).stem.split("-")
-        if len(stem) < 4:
-            continue
-        try:
-            anno = int(stem[-2]); mese = int(stem[-1])
-        except ValueError:
-            continue
-        if anno < 2025:
-            continue
-        try:
-            d = json.load(open(path, encoding="utf-8"))
-        except Exception:
-            continue
-        rec = d.get("record")
-        if not isinstance(rec, list):
-            continue
-        for r in rec:
-            if (r.get("DataMorte") or "").strip():
-                mod = r.get("ModalitaAccadimento") or ""
-                if mod not in ("N", "S"):
-                    mod = "ND"
-                morti_raw[(str(r.get("Regione", "")).zfill(2), anno, mese, mod)] += 1
+    data = json.loads(serie_path.read_text(encoding="utf-8"))
+    for r in data.get("aggregates", []):
+        ch = (str(r["regione"]).zfill(2), r["anno"], r["mese"])
+        mod = r.get("modalita", "N") or "N"
+        mod = mod if mod in ("N", "S") else "ND"
+        casi = r["casi"]
+        per_chiave[ch][mod] += casi
+        if r.get("esitoMortale"):
+            per_chiave[ch][f"mort{mod}"] += casi
 
     serie = []
     for (reg, anno, mese), d in sorted(per_chiave.items()):
-        morti = sum(
-            morti_raw.get((reg, anno, mese, mod), 0) for mod in ("N", "S", "ND")
-        )
         serie.append({
             "regione": reg, "anno": anno, "mese": mese,
             "totale": d["N"] + d["S"] + d["ND"],
             "lavoro": d["N"], "itinere": d["S"],
-            "mortali": morti,
-            "mortaliLavoro": morti_raw.get((reg, anno, mese, "N"), 0),
-            "mortaliItinere": morti_raw.get((reg, anno, mese, "S"), 0),
+            "mortali": d["mortN"] + d["mortS"] + d["mortND"],
+            "mortaliLavoro": d["mortN"],
+            "mortaliItinere": d["mortS"],
         })
     return serie, len(per_chiave)
 
@@ -202,7 +182,7 @@ def main() -> int:
         "schemaVersion": 1,
         "datasetId": "inail_infortuni_temporale",
         "generatedAt": utc_now(),
-        "period": {"annoDa": 2021, "annoA": 2025, "mesi": {"da": "2025-01", "a": "2026-06"}},
+        "period": {"annoDa": 2021, "annoA": 2025, "mesi": {"da": "2025-01", "a": "2026-09"}},
         "coverage": {"regioni": 20, "casiAnnuali": tot_generale},
         "serieAnnuale": serie_annuale,
         "serieMensile": serie_mensile,

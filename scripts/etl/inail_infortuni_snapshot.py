@@ -1,67 +1,109 @@
 #!/usr/bin/env python3
 """Scarica, valida e aggrega gli infortuni INAIL in uno snapshot verificato.
 
-Seguendo il modello di DoveVannoINostriSoldi:
+Fonte unica: i CSV mensili regionali del portale open data INAIL.
 
-- scarica solo da endpoint ufficiali INAIL (host verificato);
-- ritenta con backoff sui codici HTTP transitori;
-- fallisce in modo esplicito (StructuralError) se il contratto non è più attendibile;
-- produce due artefatti:
-    * src/data/generated/inail-infortuni-serie.json      (aggregati, mai record singoli)
-    * src/data/generated/inail-infortuni-serie.meta.json (provenienza, copertura, limiti)
+  https://dati.inail.it/opendata/downloads/daticoncadenzamensileinfortuni/zip/
+      DatiConCadenzaMensileInfortuni<Regione>_csv.zip
+
+Perché i CSV e non l'API REST:
+
+- l'API rifiuta i nomi delle regioni con il trattino (Emilia-Romagna,
+  Trentino-Alto Adige, Friuli-Venezia Giulia) con "Descrizione Regione
+  errata": restavano 16-17 regioni su 20;
+- i CSV usano i nomi composti senza trattino (EmiliaRomagna,
+  TrentinoAltoAdige, FriuliVeneziaGiulia) e coprono tutte le 20 regioni;
+- i valori coincidono con l'API dove i due si sovrappongono (verificato
+  il 2026-11-11 su Lombardia, Molise, Sicilia, ValledAosta per 2025-07 e
+  2026-09: stessi conteggi al record).
+
+Vintage del dato: ogni file contiene una rilevazione per anno di
+accadimento. Al 2026-11-11 la finestra è 2025-01..2026-09, con 2025 letto
+alla rilevazione 30/09/2025 e 2026 alla rilevazione 30/09/2026. I mesi di
+ottobre-dicembre 2025 non sono pubblicati in questa cadenza.
+
+Produce:
+
+    * src/data/generated/inail-infortuni-serie.json         (aggregati, non versionato)
+    * src/data/generated/inail-infortuni-mensile.meta.json  (provenienza mensile, versionato)
+    * src/data/generated/inail-infortuni-viste.json         (viste mensili, sovrascritte da unify_views)
+
+Nota: `inail-infortuni-serie.meta.json` NON è di competenza di questo script.
+Quel file descrive le viste consolidate 2021-2025 (cadenza semestrale) e viene
+scritto da `inail_unify_views.py`. Lo snapshot mensile ha un meta separato,
+così i due dataset non si sovrascrivono a vicenda.
 
 I record singoli (pseudonimizzati) restano nel raw layer, fuori dal sito.
 
-Nota: l'API REST espone una finestra di circa 18 mesi (verificato 2026-08-27:
-dal 2025-01 al 2026-06). Per serie storiche più lunghe servono i dataset CSV
-completi del portale (fase 2).
-
 Esempio:
-    python3 scripts/etl/inail_infortuni_snapshot.py --anno-da 2025 --anno-a 2026
+    python3 scripts/etl/inail_infortuni_snapshot.py --anno-da 2025 --anno-a 2026 --mese-a 9
 """
 
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
+import io
 import json
 import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from collections import Counter, defaultdict
+import zipfile
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-API_URL = "https://dati.inail.it/api/OpenData/DatiConCadenzaMensileInfortuni"
+BASE_ZIP = "https://dati.inail.it/opendata/downloads/daticoncadenzamensileinfortuni/zip"
 OFFICIAL_HOST = "dati.inail.it"
-USER_AGENT = "OsservatorioInfortuni-ETL/0.1 (+https://github.com/dynamic1990/osservatorio-infortuni)"
+USER_AGENT = "OsservatorioInfortuni-ETL/0.3 (+https://github.com/dynamic1990/osservatorio-infortuni)"
 TRANSIENT_HTTP = {408, 425, 429, 500, 502, 503, 504}
 MAX_RETRIES = 3
 RETRY_DELAY_MS = 500
 
-# Regioni accettate dall'API (verificate il 2026-08-27).
-# Nomi composti non ancora risolti: Valle d'Aosta, Trentino-Alto Adige,
-# Friuli-Venezia Giulia, Emilia-Romagna (da investigare, vedi TODO).
-REGIONI = [
-    "Piemonte", "Lombardia", "Veneto", "Liguria", "Toscana", "Umbria",
-    "Marche", "Lazio", "Abruzzo", "Molise", "Campania", "Puglia",
-    "Basilicata", "Calabria", "Sicilia", "Sardegna",
-]
-
-# Mappa codice regione ISTAT -> nome (per aggregazione)
-CODICE_REGIONE = {
-    1: "Piemonte", 2: "Valle d'Aosta", 3: "Lombardia", 4: "Trentino-Alto Adige",
-    5: "Veneto", 6: "Friuli-Venezia Giulia", 7: "Liguria", 8: "Emilia-Romagna",
-    9: "Toscana", 10: "Umbria", 11: "Marche", 12: "Lazio", 13: "Abruzzo",
-    14: "Molise", 15: "Campania", 16: "Puglia", 17: "Basilicata",
-    18: "Calabria", 19: "Sicilia", 20: "Sardegna",
+# Nome del file regionale -> codice ISTAT della regione.
+# Il nome è quello usato dal portale: i composti perdono il trattino.
+REGIONI_CSV = {
+    "Piemonte": "01",
+    "ValledAosta": "02",
+    "Lombardia": "03",
+    "TrentinoAltoAdige": "04",
+    "Veneto": "05",
+    "FriuliVeneziaGiulia": "06",
+    "Liguria": "07",
+    "EmiliaRomagna": "08",
+    "Toscana": "09",
+    "Umbria": "10",
+    "Marche": "11",
+    "Lazio": "12",
+    "Abruzzo": "13",
+    "Molise": "14",
+    "Campania": "15",
+    "Puglia": "16",
+    "Basilicata": "17",
+    "Calabria": "18",
+    "Sicilia": "19",
+    "Sardegna": "20",
 }
+
+CAMPI_OBBLIGATORI = (
+    "DataRilevazione", "DataAccadimento", "Genere", "LuogoAccadimento",
+    "Eta", "ModalitaAccadimento", "ConSenzaMezzoTrasporto",
+    "IdentificativoCaso", "SettoreAttivitaEconomica", "GestioneTariffaria",
+)
 
 
 class StructuralError(RuntimeError):
-    """L'API ha risposto, ma il contratto non è più attendibile."""
+    """La fonte ha risposto, ma il contratto non è più attendibile."""
+
+
+def verifica_host(url: str) -> None:
+    """Accetta solo URL https sul host ufficiale INAIL."""
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme != "https" or parsed.hostname != OFFICIAL_HOST:
+        raise StructuralError(f"URL non ufficiale: {url!r}")
 
 
 def utc_now() -> str:
@@ -76,110 +118,172 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def fetch_json(url: str) -> dict:
-    parsed = urllib.parse.urlparse(url)
-    if parsed.scheme != "https" or parsed.hostname != OFFICIAL_HOST:
-        raise StructuralError(f"URL non ufficiale: {url!r}")
+def scarica_zip(regione: str, dest: Path, force: bool = False) -> Path:
+    """Scarica il CSV mensile regionale, saltando se il contenuto è identico.
 
-    last_error: Exception | None = None
-    for attempt in range(MAX_RETRIES):
+    Il confronto è su sha256 del file scaricato: i timestamp dei raw restano
+    l'ultimo aggiornamento reale del dato, non l'ultima esecuzione dell'ETL.
+    """
+    url = f"{BASE_ZIP}/DatiConCadenzaMensileInfortuni{regione}_csv.zip"
+    verifica_host(url)
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    ultimo: Exception | None = None
+    for tentativo in range(MAX_RETRIES):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
-            with urllib.request.urlopen(req, timeout=120) as resp:
-                return json.load(resp)
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=300) as resp:
+                payload = resp.read()
+            break
         except urllib.error.HTTPError as error:
-            if error.code in TRANSIENT_HTTP and attempt < MAX_RETRIES - 1:
-                time.sleep(RETRY_DELAY_MS * (2**attempt) / 1000)
-                last_error = error
+            ultimo = error
+            if error.code in TRANSIENT_HTTP and tentativo < MAX_RETRIES - 1:
+                time.sleep(RETRY_DELAY_MS * (2**tentativo) / 1000)
                 continue
-            body = error.read(200).decode("utf-8", "replace")
-            if error.code == 500 and "Dati non trovati" in body:
-                return None  # mese/anno non disponibile (finestra API), non è un errore
-            raise StructuralError(f"HTTP {error.code} da {url}: {body}") from error
+            raise StructuralError(f"HTTP {error.code} da {url}") from error
         except urllib.error.URLError as error:
-            last_error = error
+            ultimo = error
             time.sleep(RETRY_DELAY_MS / 1000)
-    raise StructuralError(f"Impossibile scaricare {url}: {last_error}")
+    else:
+        raise StructuralError(f"Impossibile scaricare {url}: {ultimo}")
+
+    nuovo = hashlib.sha256(payload).hexdigest()
+    if not force and dest.exists() and sha256_file(dest) == nuovo:
+        return dest
+    dest.write_bytes(payload)
+    return dest
 
 
-def fetch_regione_mese(regione: str, anno: int, mese: int) -> list[dict]:
-    params = urllib.parse.urlencode({
-        "Regione": regione,
-        "AnnoAccadimento": anno,
-        "MeseAccadimento": f"{mese:02d}",
-    })
-    data = fetch_json(f"{API_URL}?{params}")
-    if data is None:
-        return None  # non disponibile
-    records = data.get("DatiConCadenzaMensileInfortuni")
-    if records is None:
-        raise StructuralError(f"Chiave DatiConCadenzaMensileInfortuni assente per {regione} {anno}-{mese:02d}")
-    return records
+def leggi_zip(zip_path: Path) -> list[dict]:
+    with zipfile.ZipFile(zip_path) as zf:
+        nomi = [n for n in zf.namelist() if n.lower().endswith(".csv")]
+        if not nomi:
+            raise StructuralError(f"{zip_path.name}: nessun CSV nello zip")
+        with zf.open(nomi[0]) as raw:
+            testo = io.TextIOWrapper(raw, encoding="utf-8-sig", errors="replace")
+            return list(csv.DictReader(testo, delimiter=";"))
 
 
-def validate_record(record: dict, regione: str, anno: int, mese: int) -> None:
-    for field in ("DataAccadimento", "DataRilevazione", "Genere", "LuogoAccadimento",
-                  "Eta", "ModalitaAccadimento", "ConSenzaMezzoTrasporto",
-                  "IdentificativoCaso", "SettoreAttivitaEconomica", "GestioneTariffaria"):
-        if not isinstance(record.get(field), str) or not record[field]:
-            raise StructuralError(
-                f"Campo {field!r} mancante/invalido per {regione} {anno}-{mese:02d}: {record!r}"
-            )
+def valida_record(record: dict) -> None:
+    for campo in CAMPI_OBBLIGATORI:
+        if not isinstance(record.get(campo), str) or not record[campo].strip():
+            raise StructuralError(f"Campo {campo!r} mancante/invalido: {record!r}")
     if record["Genere"] not in ("M", "F"):
         raise StructuralError(f"Genere non valido: {record.get('Genere')!r}")
     if record["ModalitaAccadimento"] not in ("S", "N"):
-        raise StructuralError(f"ModalitaAccadimento non valida: {record.get('ModalitaAccadimento')!r}")
-    eta = record["Eta"]
+        raise StructuralError(
+            f"ModalitaAccadimento non valida: {record.get('ModalitaAccadimento')!r}"
+        )
+    eta = record["Eta"].strip()
     if eta == "-1":
         return  # età sconosciuta (missing, come da fonte)
     if not eta.isdigit() or int(eta) > 110:
-        raise StructuralError(f"Eta non valida: {eta!r}")
-    if not record["LuogoAccadimento"].isdigit():
-        raise StructuralError(f"LuogoAccadimento non valido: {record.get('LuogoAccadimento')!r}")
+        raise StructuralError(f"Eta non valida: {record.get('Eta')!r}")
+    if not record["LuogoAccadimento"].strip().isdigit():
+        raise StructuralError(
+            f"LuogoAccadimento non valido: {record.get('LuogoAccadimento')!r}"
+        )
 
 
-def aggregate(records: list[dict], regione: str, anno: int, mese: int) -> list[dict]:
+def data_iso(record: dict, campo: str) -> str | None:
+    """Data gg/mm/aaaa -> aaaa-mm-gg, oppure None se assente."""
+    valore = (record.get(campo) or "").strip()
+    if len(valore) != 10 or valore[2] != "/" or valore[5] != "/":
+        return None
+    return f"{valore[6:10]}-{valore[3:5]}-{valore[0:2]}"
+
+
+def aggrega(
+    record_list: list[dict],
+    codice_regione: str,
+    anno_da: int,
+    anno_a: int,
+    mese_a: int,
+) -> tuple[list[dict], dict]:
     """Aggrega i record in contatori per dimensione di lettura.
 
     Mai record singoli negli artefatti pubblicati: privacy + peso.
+    L'esito mortale è una dimensione dell'aggregato, quindi la mortalità è
+    disponibile per tutte le 20 regioni e per ogni incrocio, non solo a
+    livello nazionale.
     """
-    counter: Counter[tuple] = Counter()
-    mortali = 0
-    for record in records:
-        validate_record(record, regione, anno, mese)
-        key = (
-            anno, mese,
-            record["Regione"], record["LuogoAccadimento"],
-            record["SettoreAttivitaEconomica"], record["GrandeGruppoTariffario"],
-            record["Gestione"], record["GestioneTariffaria"],
-            record["Genere"], int(record["Eta"]),
-            record["ModalitaAccadimento"], record["ConSenzaMezzoTrasporto"],
+    contatore: Counter[tuple] = Counter()
+    fuori_finestra = 0
+    rilevazioni: dict[int, Counter[str]] = {}
+
+    for record in record_list:
+        accadimento = data_iso(record, "DataAccadimento")
+        if accadimento is None:
+            raise StructuralError(f"DataAccadimento non valida: {record!r}")
+        anno = int(accadimento[0:4])
+        mese = int(accadimento[5:7])
+        if anno < anno_da or anno > anno_a or mese > mese_a:
+            fuori_finestra += 1
+            continue
+
+        valida_record(record)
+        rilevazione = data_iso(record, "DataRilevazione") or "ND"
+        rilevazioni.setdefault(anno, Counter())[rilevazione] += 1
+        eta = int(record["Eta"].strip())
+        esito = 1 if (record.get("DataMorte") or "").strip() else 0
+        chiave = (
+            anno, mese, codice_regione,
+            record["LuogoAccadimento"].strip(),
+            record["SettoreAttivitaEconomica"].strip(),
+            (record.get("GrandeGruppoTariffario") or "ND").strip(),
+            (record.get("Gestione") or "ND").strip(),
+            record["GestioneTariffaria"].strip(),
+            record["Genere"], eta,
+            record["ModalitaAccadimento"],
+            record["ConSenzaMezzoTrasporto"].strip(),
+            esito,
         )
-        counter[key] += 1
-        if record.get("DataMorte"):
-            mortali += 1
-    rows = []
-    for (a, m, reg, prov, ateco, gg, gest, gest_tar, genere, eta, modalita, mezzo), casi in counter.items():
-        rows.append({
-            "key": f"{a}-{m:02d}|{reg}|{prov}",
+        contatore[chiave] += 1
+
+    righe = []
+    for (a, m, reg, prov, ateco, gg, gest, gest_tar, genere, eta,
+         modalita, mezzo, esito), casi in contatore.items():
+        righe.append({
+            "key": f"{a}-{m:02d}|{reg}|{prov}|{'M' if esito else '-'}",
             "anno": a, "mese": m,
             "regione": reg, "provincia": prov,
             "settoreAteco": ateco, "grandeGruppo": gg,
             "gestione": gest, "gestioneTariffaria": gest_tar,
             "genere": genere, "eta": eta,
             "modalita": modalita, "mezzoTrasporto": mezzo,
-            "esitoMortale": False, "casi": casi,
+            "esitoMortale": bool(esito), "casi": casi,
         })
-    # Nota: gli esiti mortali vengono conteggiati a parte nel meta (coverage),
-    # la granularità completa esito x dimensione arriva in fase 2 con il semestrale.
-    return rows
+    return righe, {"fuoriFinestra": fuori_finestra, "rilevazioni": rilevazioni}
+
+
+def fascia(eta: int) -> str:
+    if eta < 0:
+        return "ND"
+    if eta < 15:
+        return "0-14"
+    if eta < 25:
+        return "15-24"
+    if eta < 35:
+        return "25-34"
+    if eta < 45:
+        return "35-44"
+    if eta < 55:
+        return "45-54"
+    if eta < 65:
+        return "55-64"
+    return "65+"
 
 
 def build_views(aggregates: list[dict], period: dict, coverage: dict) -> dict:
     """Viste precalcolate per la dashboard (piccole, versionate).
 
-    Lo snapshot completo resta nel file serie (rigenerabile); il sito
-    carica solo queste viste per restare leggero.
+    ATTENZIONE: questo helper produce viste sul perimetro mensile e NON viene
+    scritto su disco. Il file `inail-infortuni-viste.json` è di competenza di
+    `inail_unify_views.py`, che lo costruisce sulla serie consolidata
+    2021-2025 con la serie mensile innestata. Sovrascriverlo da qui
+    romperebbe il contratto del sito (schemaVersion 2, 20 regioni, 5 anni).
+
+    Resta disponibile per ispezione manuale e per i test.
     """
     per_mese: Counter[str] = Counter()
     per_settore: Counter[str] = Counter()
@@ -189,23 +293,6 @@ def build_views(aggregates: list[dict], period: dict, coverage: dict) -> dict:
     per_modalita: Counter[str] = Counter()
     per_gestione: Counter[str] = Counter()
     per_gruppo: Counter[str] = Counter()
-
-    def fascia(eta: int) -> str:
-        if eta < 0:
-            return "ND"
-        if eta < 15:
-            return "0-14"
-        if eta < 25:
-            return "15-24"
-        if eta < 35:
-            return "25-34"
-        if eta < 45:
-            return "35-44"
-        if eta < 55:
-            return "45-54"
-        if eta < 65:
-            return "55-64"
-        return "65+"
 
     for row in aggregates:
         mese_key = f"{row['anno']}-{row['mese']:02d}"
@@ -239,20 +326,20 @@ def build_views(aggregates: list[dict], period: dict, coverage: dict) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--anno-da", type=int, default=2021)
-    parser.add_argument("--anno-a", type=int, default=datetime.now().year - 1)
-    parser.add_argument("--mese-a", type=int, default=6, choices=range(1, 13),
-                        help="Mese finale (default 6: la finestra API arriva a giugno)")
+    parser.add_argument("--anno-da", type=int, default=2025)
+    parser.add_argument("--anno-a", type=int, default=datetime.now().year)
+    parser.add_argument("--mese-a", type=int, default=9, choices=range(1, 13),
+                        help="Mese finale (default 9: ultimo pubblicato al 2026-11-11)")
     parser.add_argument("--output-dir", type=Path, default=Path("src/data/generated"))
     parser.add_argument("--raw-dir", type=Path, default=Path("data/raw"))
+    parser.add_argument("--force-download", action="store_true",
+                        help="Riscarica anche se lo sha256 non è cambiato")
     args = parser.parse_args()
 
     if args.anno_da > args.anno_a:
         print("--anno-da deve essere <= --anno-a", file=sys.stderr)
         return 2
 
-    raw_dir = args.raw_dir
-    raw_dir.mkdir(parents=True, exist_ok=True)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     tutti: list[dict] = []
@@ -260,50 +347,55 @@ def main() -> int:
     regioni_ok: set[str] = set()
     province_ok: set[str] = set()
     casi_mortali = 0
+    rilevazioni_per_anno: dict[int, Counter[str]] = {}
+    regioni_per_anno: dict[int, set[str]] = {}
+    fuori_finestra = 0
 
-    for anno in range(args.anno_da, args.anno_a + 1):
-        for mese in range(1, args.mese_a + 1):
-            for regione in REGIONI:
-                raw_path = raw_dir / f"infortuni-{regione.lower()}-{anno}-{mese:02d}.json"
-                if raw_path.exists() and raw_path.stat().st_size > 0:
-                    # Già scaricato: riavvii idempotenti, rileggi e aggrega.
-                    with open(raw_path, encoding="utf-8") as f:
-                        fetched = json.load(f)["record"]
-                else:
-                    fetched = fetch_regione_mese(regione, anno, mese)
-                    if fetched is None:
-                        continue  # finestra API: mese non disponibile
-                    # Raw layer: salva i record grezzi (gitignored)
-                    with open(raw_path, "w", encoding="utf-8") as f:
-                        json.dump({"fonte": API_URL, "regione": regione, "anno": anno, "mese": mese, "record": fetched}, f, ensure_ascii=False)
-                    time.sleep(0.15)  # gentilezza verso l'API
-                tutti.extend(aggregate(fetched, regione, anno, mese))
-                totale_record += len(fetched)
-                regioni_ok.add(regione)
-                for r in fetched:
-                    province_ok.add(r["LuogoAccadimento"])
-                    if r.get("DataMorte"):
-                        casi_mortali += 1
+    for regione, codice in REGIONI_CSV.items():
+        zip_path = args.raw_dir / f"mensile-{regione}.zip"
+        scarica_zip(regione, zip_path, force=args.force_download)
+        record_list = leggi_zip(zip_path)
+        righe, extra = aggrega(record_list, codice, args.anno_da, args.anno_a, args.mese_a)
+        fuori_finestra += extra["fuoriFinestra"]
+        for anno_accadimento, contatore_rilevazioni in extra["rilevazioni"].items():
+            rilevazioni_per_anno.setdefault(anno_accadimento, Counter()).update(
+                contatore_rilevazioni
+            )
+            regioni_per_anno.setdefault(anno_accadimento, set()).add(codice)
+        tutti.extend(righe)
+        regioni_ok.add(codice)
+        dentro = sum(r["casi"] for r in righe)
+        totale_record += dentro
+        casi_mortali += sum(r["casi"] for r in righe if r["esitoMortale"])
+        for r in righe:
+            province_ok.add(r["provincia"])
+        print(f"[{regione:20s}] {len(record_list):>7d} righe -> {dentro:>7d} casi in finestra")
 
     if not tutti:
         print("Nessun dato scaricato", file=sys.stderr)
         return 1
 
+    mesi_coperti = (args.anno_a - args.anno_da + 1) * args.mese_a
+    period = {"annoDa": args.anno_da, "annoA": args.anno_a, "mesi": mesi_coperti}
+    coverage = {
+        "regioni": len(regioni_ok),
+        "province": len(province_ok),
+        "record": totale_record,
+        "casi": sum(row["casi"] for row in tutti),
+        "casiMortali": casi_mortali,
+        "fuoriFinestra": fuori_finestra,
+    }
+
     serialized = {
         "schemaVersion": 1,
         "datasetId": "inail_infortuni_mensili",
-        "period": {"annoDa": args.anno_da, "annoA": args.anno_a, "mesi": (args.anno_a - args.anno_da + 1) * args.mese_a},
-        "coverage": {
-            "regioni": len(regioni_ok),
-            "province": len(province_ok),
-            "record": totale_record,
-            "casi": sum(row["casi"] for row in tutti),
-        },
+        "period": period,
+        "coverage": coverage,
         "aggregates": tutti,
     }
 
     data_path = args.output_dir / "inail-infortuni-serie.json"
-    meta_path = args.output_dir / "inail-infortuni-serie.meta.json"
+    meta_path = args.output_dir / "inail-infortuni-mensile.meta.json"
 
     with open(data_path, "w", encoding="utf-8") as f:
         json.dump(serialized, f, ensure_ascii=False, separators=(",", ":"))
@@ -311,52 +403,55 @@ def main() -> int:
     meta = {
         "schemaVersion": 1,
         "datasetId": "inail_infortuni_mensili",
+        "artifactScope": "snapshot-mensile",
         "source": {
             "owner": "INAIL – Istituto Nazionale Assicurazione contro gli Infortuni sul Lavoro",
             "landingUrl": "https://dati.inail.it/portale/it/dataset/infortuni-sul-lavoro/dati-con-cadenza-mensile.html",
-            "apiUrl": API_URL,
-            "license": "Da verificare (open data INAIL)",
+            "apiUrl": f"{BASE_ZIP}/DatiConCadenzaMensileInfortuni<Regione>_csv.zip",
+            "license": "Italian Open Data License v2.0",
             "attribution": "INAIL Open Data",
         },
         "extractedAt": utc_now(),
-        "period": {"annoDa": args.anno_da, "annoA": args.anno_a, "mesi": (args.anno_a - args.anno_da + 1) * args.mese_a},
-        "coverage": {
-            "regioni": len(regioni_ok),
-            "province": len(province_ok),
-            "record": totale_record,
-            "casi": sum(row["casi"] for row in tutti),
-            "casiMortali": casi_mortali,
-        },
+        "period": period,
+        "coverage": coverage,
         "limits": [
-            "Sono incluse solo le regioni i cui nomi sono accettati dall'API INAIL (16 su 20 al 2026-08-27).",
-            "La definizione amministrativa (positivo/negativo) non è disponibile nella cadenza mensile.",
-            "Esito mortale rilevato dal campo DataMorte non nullo; la conferma amministrativa è nel semestrale.",
-            "L'API REST INAIL espone una finestra di circa 18 mesi: per serie storiche più lunghe servono i dataset CSV completi del portale.",
-            "Le serie storiche vanno lette con cautela: dal 2026 è attiva la nuova classificazione ATECO e la nuova suddivisione delle province della Sardegna.",
+            "Copertura completa: tutte le 20 regioni, lette dai CSV mensili regionali.",
+            "I mesi di ottobre-dicembre 2025 non sono pubblicati nella cadenza mensile: la serie si ferma a settembre per entrambi gli anni.",
+            "Ogni anno ha una rilevazione diversa (2025 al 30/09/2025, 2026 al 30/09/2026): il confronto è a pari ritardo dalla fine del periodo, non su dati definitivi.",
+            "Le denunce sono provvisorie e vengono integrate e riclassificate nel tempo. Gli esiti mortali risultano invece stabili tra rilevazioni (verificato 2026-11-11: Q3 2025 vale 190 sia a un anno di distanza sia oggi).",
+            "La definizione amministrativa (positivo/negativo) non è disponibile nella cadenza mensile: arriva dalla cadenza semestrale.",
+            "La finestra API REST INAIL resta più stretta (16-17 regioni, nomi senza trattino): l'ETL non la usa.",
         ],
         "methodology": [
             "I record singoli pseudonimizzati restano nel raw layer e non sono pubblicati nel sito.",
-            "Le aggregazioni usano i codici così come forniti dall'API (regione/provincia ISTAT, ATECO, grande gruppo tariffario).",
+            "Le aggregazioni usano i codici così come forniti dai CSV (provincia ISTAT, ATECO, grande gruppo tariffario).",
+            "L'esito mortale deriva dal campo DataMorte non nullo ed è una dimensione dell'aggregato: la mortalità è quindi disponibile per regione, settore, età e modalità.",
+            "I file regionali vengono riscaricati solo se lo sha256 cambia: i timestamp dei raw riflettono l'aggiornamento reale della fonte.",
+            "I valori dei CSV coincidono con quelli dell'API REST dove i due si sovrappongono (verifica puntuale su 4 regioni, 2 mesi).",
             "Il confronto tra settori richiede denominatori (occupati) che non sono in questo dataset.",
         ],
+        "vintage": {
+            anno: {
+                "rilevazioni": sorted(rilevazioni_per_anno.get(anno, Counter()).keys()),
+                "regioni": len(regioni_per_anno.get(anno, set())),
+            }
+            for anno in sorted(rilevazioni_per_anno)
+        },
         "dataArtifactSha256": sha256_file(data_path),
         "dataArtifactBytes": data_path.stat().st_size,
     }
-    viste = build_views(tutti, serialized["period"], serialized["coverage"])
-    viste_path = args.output_dir / "inail-infortuni-viste.json"
-    with open(viste_path, "w", encoding="utf-8") as f:
-        json.dump(viste, f, ensure_ascii=False, separators=(",", ":"))
-
-    # Il file completo (serie) non viene versionato (grande); il meta e le
-    # viste sì. Lo snapshot si rigenera con questo script.
-    print(f"Viste:    {viste_path} ({viste_path.stat().st_size} bytes)")
 
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, separators=(",", ":"))
 
     print(f"\nSnapshot: {data_path}")
     print(f"Meta:     {meta_path}")
-    print(f"Record scaricati: {totale_record}, aggregati: {len(tutti)}, regioni: {len(regioni_ok)}, province: {len(province_ok)}")
+    print(
+        f"Record in finestra: {totale_record}, aggregati: {len(tutti)}, "
+        f"regioni: {len(regioni_ok)}, province: {len(province_ok)}, mortali: {casi_mortali}"
+    )
+    print(f"Vintage: {json.dumps(meta['vintage'], ensure_ascii=False)}")
+    print("Nota: le viste del sito le scrive inail_unify_views.py (serie consolidata).")
     return 0
 
 
