@@ -169,13 +169,13 @@ def main() -> int:
             "I dati mensili 2025-2026 (congiunturali) sono in un artefatto separato e coprono gennaio-settembre su tutte le 20 regioni.",
             "La definizione amministrativa e l'indennizzo sono disponibili solo nella cadenza semestrale.",
             "Le denunce sono provvisorie e vengono integrate e riclassificate nel tempo.",
-            "Le province sono 107 nella serie consolidata e 110 nella congiuntura mensile: la differenza non è un errore ma il riordino amministrativo della Sardegna, che nella serie storica compare con i codici 090, 091, 092, 095 e 111 e nei dati 2025-2026 con i nuovi codici 112-119. I confronti provinciali tra i due archivi non sono quindi omogenei.",
+            "Le province sono 107 nella serie consolidata e 110 nella congiuntura mensile: la differenza non è un errore ma il riordino amministrativo della Sardegna, che nella serie storica compare con i codici 090, 091, 092, 095 e 111 e nei dati 2025-2026 con i nuovi codici 112-119. La corrispondenza ufficiale e i livelli di confronto sono in province-sardegna-mappatura.json: per una serie storica usare le aree, non il singolo codice.",
         ],
         "methodology": [
             "Aggregazione di record pseudonimizzati: mai record singoli nel sito.",
             "Le viste sono precalcolate: il sito carica solo queste, non lo snapshot completo.",
             "Le regioni sono codici ISTAT a due cifre; le province sono codici ISTAT a tre cifre.",
-            "Per la Sardegna i codici provinciali cambiano tra i due periodi: aggregare per provincia su anni diversi richiede una mappatura esplicita verso i nuovi codici.",
+            "Per la Sardegna i codici provinciali cambiano tra i due periodi: aggregare per provincia su anni diversi richiede la mappatura esplicita in province-sardegna-mappatura.json (province 107 vs 110, quattro aree confrontabili).",
         ],
     }
     meta_path.write_text(
