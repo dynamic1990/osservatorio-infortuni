@@ -40,5 +40,11 @@ jobs:
       - name: Verify generated artifacts and snapshots
         run: npm run test:snapshots
 
+      - name: Data consistency tests
+        run: npm run test:dati
+
+      - name: ETL unit tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' && python3 -m unittest discover -s tests/etl -p 'test_*.py'
+
       - name: Build
         run: npm run build

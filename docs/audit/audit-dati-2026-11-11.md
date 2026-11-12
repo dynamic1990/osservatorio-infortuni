@@ -1,4 +1,4 @@
-# Audit TOTALE coerenza dati — 2026-09-05
+# Audit TOTALE coerenza dati — 2026-11-11
 
 Verifica automatica (script `scripts/audit/audit_dati.py`) dei dataset generati contro RULES.md.
 Esiti: **35 OK**, **0 FAIL**, **1 segnalazioni**, **2 info**.
@@ -33,7 +33,7 @@ Esiti: **35 OK**, **0 FAIL**, **1 segnalazioni**, **2 info**.
 | Malattie / categorie | delta categorie | SEGNALAZIONE | delta non memorizzato nel JSON: calcolato a runtime (anno2026-anno2025) nel componente malattie-patologie-widget — verificato coerente, nessun campo da confrontare |
 | Vigilanza / serie | generatedAt presente | OK | 2026-09-03T14:45:00+00:00 |
 | Vigilanza / patente crediti | campi presenti | OK | {"attivaDa": "1 ottobre 2024", "obbligatoriaDa": "1 gennaio 2025", "rilasciate": 479020, "sanzioniAssenza": 1088, "revoc |
-| Casi mortali / serie | generatedAt presente | OK | 2026-10-19T05:30:48.715866+00:00 |
+| Casi mortali / serie | generatedAt presente | OK | 2026-11-11T21:04:42.699313+00:00 |
 | Casi mortali / serie | casi analizzati 2024 (riferimento) | INFO | casiAnalizzati=249, mortaliNazionali=1239 — distinguo dichiarato in pagina |
 | Benchmark UE / ranking | generatedAt presente | OK | 2026-08-29T09:40:48+00:00 |
 | Benchmark UE / ranking | ultimoAnno dichiarato | OK | 2023 |

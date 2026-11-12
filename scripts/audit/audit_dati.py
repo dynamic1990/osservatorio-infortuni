@@ -10,7 +10,8 @@ Verifica automatica dei dataset generati contro RULES.md:
 - coerenza interna (totali = somma componenti)
 
 Uso: python3 scripts/audit/audit_dati.py
-Output: docs/audit/audit-dati-2026-09-05.md
+Output: docs/audit/audit-dati-<data di esecuzione>.md (sempre la data reale,
+        cosi' il nome del file dice quando l'audit e' stato girato).
 """
 
 import json
@@ -277,7 +278,9 @@ def main() -> None:
     audit_eurostat()
     audit_occupati()
 
-    out = ROOT / "docs" / "audit" / "audit-dati-2026-09-05.md"
+    from datetime import date
+    oggi = date.today().isoformat()
+    out = ROOT / "docs" / "audit" / f"audit-dati-{oggi}.md"
     out.parent.mkdir(parents=True, exist_ok=True)
 
     n_ok = sum(1 for r in RISULTATI if r["esito"] == "OK")
@@ -286,7 +289,7 @@ def main() -> None:
     n_info = sum(1 for r in RISULTATI if r["esito"] == "INFO")
 
     lines = [
-        "# Audit TOTALE coerenza dati — 2026-09-05",
+        f"# Audit TOTALE coerenza dati — {oggi}",
         "",
         f"Verifica automatica (script `scripts/audit/audit_dati.py`) dei dataset generati contro RULES.md.",
         f"Esiti: **{n_ok} OK**, **{n_fail} FAIL**, **{n_seg} segnalazioni**, **{n_info} info**.",
