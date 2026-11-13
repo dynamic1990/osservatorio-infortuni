@@ -14,6 +14,14 @@ export interface RegioneAnnualData {
   occupati: number;
   indiceIncidenza: number;
   indiceMortali: number;
+  /** Esito amministrativo delle denunce: P positivo, N negativo, F definizione, I istruttoria */
+  esito?: Record<string, number>;
+  /** Quota di denunce con esito negativo o in definizione (negati + archiviati), in percentuale */
+  tassoRigetto?: number;
+  /** Casi senza settore ATECO attribuito nel territorio */
+  settoreND?: number;
+  /** Quota percentuale di casi senza settore ATECO attribuito */
+  quotaSettoreND?: number;
 }
 
 export interface ProvinciaAutonomaData {

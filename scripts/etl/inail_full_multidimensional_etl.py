@@ -65,6 +65,21 @@ def map_gravita(gm_str):
     except:
         return "nessuna"
 
+def tasso_rigetto(r_data):
+    """Quota di denunce non riconosciute: esiti negativi (N) + archiviati (F).
+
+    Non e' un tasso di "frode": comprende anche le denunce respinte per motivi
+    tecnici o amministrativi. Serve a dichiarare quanto del dato regionale non
+    arriva mai a un riconoscimento, prima di confrontare le regioni tra loro.
+    """
+    tot = r_data["totale"]
+    if not tot:
+        return 0.0
+    esiti = r_data["esito"]
+    rigettate = esiti.get("N", 0) + esiti.get("F", 0)
+    return round(rigettate / tot * 100, 1)
+
+
 def map_durata(g_str):
     try:
         g = int(g_str)
@@ -248,7 +263,7 @@ def main():
             "mensile": defaultdict(int),
             "mensileLavoro": defaultdict(int),
             "mensileItinere": defaultdict(int),
-            "regioni": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0}),
+            "regioni": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0, "esito": defaultdict(int), "settoreND": 0}),
             "provinceAutonome": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0})
         }
 
@@ -336,6 +351,13 @@ def main():
         if is_itinere: r_stat["itinere"] += 1
         else: r_stat["lavoro"] += 1
         if is_menomato: r_stat["menomati"] += 1
+        # Esito amministrativo per regione: serve a calcolare il tasso di rigetto
+        # territoriale (negati + archiviati sul totale delle denunce).
+        r_stat["esito"][es] += 1
+        # Casi senza settore ATECO attribuito: misura la copertura della
+        # classificazione per territorio, che cambia molto da regione a regione.
+        if macro == "ND":
+            r_stat["settoreND"] += 1
         if g_val > 0:
             r_stat["giorni"] += g_val
             r_stat["casi_con_giorni"] += 1
@@ -467,7 +489,11 @@ def main():
                 "indiceGravita": indice_gravita,
                 "occupati": int(occ_k * 1000),
                 "indiceIncidenza": inc,
-                "indiceMortali": inc_mor
+                "indiceMortali": inc_mor,
+                "esito": dict(r_data["esito"]),
+                "tassoRigetto": tasso_rigetto(r_data),
+                "settoreND": r_data["settoreND"],
+                "quotaSettoreND": round(r_data["settoreND"] / r_data["totale"] * 100, 1) if r_data["totale"] else 0.0
             })
 
         # Province Autonome Bolzano (021) e Trento (022) per il Trentino-Alto Adige

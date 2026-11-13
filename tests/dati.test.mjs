@@ -166,3 +166,43 @@ test("cronaca: la copertura dichiarata corrisponde alle date presenti", () => {
   const giorni = Math.floor((Math.max(...date) - Math.min(...date)) / 86_400_000) + 1;
   assert.ok(Math.abs(giorni - news.copertura.giorni) <= 1, `${giorni} vs ${news.copertura.giorni}`);
 });
+
+// --- Qualità del dato dichiarata in home (sezione "Dove il dato va letto con cautela") ---
+// Le tre misure sotto alimentano testi pubblici: se un ETL smette di popolarle,
+// la sezione mostrerebbe zeri senza che nessuno se ne accorga.
+
+test("multidimensionale: ogni regione ha l'esito amministrativo completo", () => {
+  for (const anno of multidim.anniDisponibili) {
+    for (const r of multidim.perAnno[anno].regioni) {
+      assert.ok(r.esito && typeof r.esito === "object", `${anno} regione ${r.regione}: esito mancante`);
+      const somma = Object.values(r.esito).reduce((x, v) => x + v, 0);
+      assert.equal(somma, r.totale, `${anno} regione ${r.regione}: esiti ${somma} vs totale ${r.totale}`);
+    }
+  }
+});
+
+test("multidimensionale: tasso di rigetto coerente con gli esiti della regione", () => {
+  for (const anno of multidim.anniDisponibili) {
+    const a = multidim.perAnno[anno];
+    for (const r of a.regioni) {
+      const atteso = r.totale > 0 ? ((r.esito.N ?? 0) + (r.esito.F ?? 0)) / r.totale * 100 : 0;
+      assert.ok(Math.abs((r.tassoRigetto ?? 0) - atteso) < 0.15, `${anno} regione ${r.regione}: ${r.tassoRigetto} vs ${atteso}`);
+      assert.ok(r.tassoRigetto >= 0 && r.tassoRigetto <= 100, `${anno} regione ${r.regione}: fuori scala`);
+    }
+  }
+});
+
+test("multidimensionale: la quota di casi senza settore è calcolata sul totale regionale", () => {
+  for (const anno of multidim.anniDisponibili) {
+    const a = multidim.perAnno[anno];
+    let ndTotale = 0;
+    for (const r of a.regioni) {
+      ndTotale += r.settoreND ?? 0;
+      const atteso = r.totale > 0 ? ((r.settoreND ?? 0) / r.totale) * 100 : 0;
+      assert.ok(Math.abs((r.quotaSettoreND ?? 0) - atteso) < 0.15, `${anno} regione ${r.regione}: quota ${r.quotaSettoreND} vs ${atteso}`);
+    }
+    // La somma regionale deve coincidere con il settore ND dell'aggregato ATECO nazionale
+    const ndAteco = a.atecoMacro.find((m) => m.key === "ND")?.casi ?? 0;
+    assert.equal(ndTotale, ndAteco, `${anno}: ND regioni ${ndTotale} vs ND ATECO ${ndAteco}`);
+  }
+});

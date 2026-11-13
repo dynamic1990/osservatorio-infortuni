@@ -55,6 +55,12 @@ const METRICA_TITOLO: Record<Metrica, string> = {
   totale: "Volume casi",
 };
 
+// Ripartizioni per la decomposizione: Nord (tutte le regioni del Nord) contro
+// Sud e Isole. Servono a mostrare che il divario nei morti per occupato nasce
+// da due fattori che vanno in direzioni opposte, non da un unico "rischio".
+const NORD = ["01", "02", "03", "04", "05", "06", "07", "08"];
+const SUD_ISOLE = ["13", "14", "15", "16", "17", "18", "19", "20"];
+
 function unitaMetrica(m: Metrica): string {
   if (m === "incidenza" || m === "mortaliInc") return "‰";
   if (m === "letalita") return "%";
@@ -249,6 +255,38 @@ export function RegioniIncidenzaSection() {
     return {
       bolzano: annoData.provinceAutonome.find((p) => p.codice === "021"),
       trento: annoData.provinceAutonome.find((p) => p.codice === "022"),
+    };
+  }, [annoData]);
+
+  // Decomposizione del divario Nord / Sud e Isole:
+  // morti per 100.000 occupati = (denunce / occupati) x (morti / denunce) x 100.000
+  // Cosi' il confronto non costringe a scegliere una metrica sola.
+  const decomposizione = useMemo(() => {
+    const gruppo = (codici: string[]) => {
+      let casi = 0;
+      let morti = 0;
+      let occupati = 0;
+      for (const r of annoData.regioni) {
+        if (!codici.includes(r.regione)) continue;
+        casi += r.totale;
+        morti += r.mortali;
+        occupati += r.occupati;
+      }
+      return {
+        denunce: occupati > 0 ? (casi / occupati) * 1000 : 0,
+        letalita: casi > 0 ? (morti / casi) * 100 : 0,
+        mortiPerOccupato: occupati > 0 ? (morti / occupati) * 100000 : 0,
+      };
+    };
+    const nord = gruppo(NORD);
+    const sud = gruppo(SUD_ISOLE);
+    const rapporto = (a: number, b: number) => (b > 0 ? a / b : 0);
+    return {
+      nord,
+      sud,
+      ratioDenunce: rapporto(sud.denunce, nord.denunce),
+      ratioLetalita: rapporto(sud.letalita, nord.letalita),
+      ratioMorti: rapporto(sud.mortiPerOccupato, nord.mortiPerOccupato),
     };
   }, [annoData]);
 
@@ -701,6 +739,49 @@ export function RegioniIncidenzaSection() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Decomposizione del divario territoriale: perché una metrica sola non basta */}
+      <div
+        style={{
+          background: "var(--color-surface)",
+          border: "1px solid var(--color-divider)",
+          borderRadius: "var(--radius-md)",
+          padding: "var(--space-3)",
+        }}
+      >
+        <div style={{ fontSize: "0.92rem", fontWeight: 700, marginBottom: 4 }}>
+          Perché il confronto Nord / Sud cambia a seconda della metrica
+        </div>
+        <p style={{ margin: "0 0 var(--space-2)", fontSize: "0.82rem", color: "var(--color-text-soft)", lineHeight: 1.55 }}>
+          Morti per 100.000 occupati = denunce ogni 1.000 occupati &times; letalità. Il divario nasce da due
+          fattori che vanno in direzioni opposte: al Sud e nelle Isole si denuncia meno, ma gli eventi
+          denunciati sono più spesso letali. Dati {anno}, infortuni in occasione di lavoro e in itinere.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "var(--space-2)" }}>
+          {[
+            { etichetta: "Denunce / 1.000 occ.", nord: formattaMetrica("incidenza", decomposizione.nord.denunce), sud: formattaMetrica("incidenza", decomposizione.sud.denunce), ratio: decomposizione.ratioDenunce, },
+            { etichetta: "Letalità (%)", nord: formattaMetrica("letalita", decomposizione.nord.letalita), sud: formattaMetrica("letalita", decomposizione.sud.letalita), ratio: decomposizione.ratioLetalita, },
+            { etichetta: "Morti / 100.000 occ.", nord: decomposizione.nord.mortiPerOccupato.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }), sud: decomposizione.sud.mortiPerOccupato.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }), ratio: decomposizione.ratioMorti, },
+          ].map((c) => (
+            <div key={c.etichetta} style={{ background: "var(--color-raised)", border: "1px solid var(--color-divider)", borderRadius: 4, padding: 8 }}>
+              <div style={{ fontSize: "0.7rem", textTransform: "uppercase", color: "var(--color-text-soft)", marginBottom: 4 }}>
+                {c.etichetta}
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem" }}>
+                <span>Nord</span>
+                <strong>{c.nord}</strong>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem" }}>
+                <span>Sud e Isole</span>
+                <strong>{c.sud}</strong>
+              </div>
+              <div style={{ marginTop: 4, fontSize: "0.74rem", color: "var(--color-text-soft)" }}>
+                Sud / Nord: <strong>{c.ratio.toLocaleString("it-IT", { maximumFractionDigits: 2 })}x</strong>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

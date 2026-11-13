@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HeroCongiunturaleKpi } from "@/components/charts/hero-congiunturale-kpi";
 import { TrendDoppiaScalaWidget } from "@/components/charts/trend-doppia-scala-widget";
 import { RegioniIncidenzaSection } from "@/components/charts/regioni-incidenza-section";
+import { LimitiDatoSection } from "@/components/charts/limiti-dato-section";
 import { MacroAreaWidget } from "@/components/charts/macro-area-widget";
 import { AtecoSettoriWidget } from "@/components/charts/ateco-settori-widget";
 import { DemografiaAnnualeWidget } from "@/components/charts/demografia-annuale-widget";
@@ -120,13 +121,28 @@ export default function HomePage() {
       {/* 4. Mappa Territoriale Interattiva: Colore = Tasso di Incidenza */}
       <section className="card" aria-label="Mappa Territoriale del Rischio" id="mappa-regioni">
         <div className="card-header">
-          <h2 className="card-title">Mappa Territoriale e Ranking Regionale: Tasso di Incidenza e Gravità</h2>
+          <h2 className="card-title">Mappa Territoriale e Ranking Regionale: Incidenza, Letalità e Impatto</h2>
           <p className="card-desc">
             Visualizzazione comparata per regione con possibilità di dettagliare le <strong>Province Autonome di Bolzano e Trento</strong>.
             Le barre del ranking includono scorrimento dedicato per una lettura nitida delle etichette e del benchmark nazionale.
           </p>
         </div>
         <RegioniIncidenzaSection />
+      </section>
+
+      {/* 4b. Limiti del dato dichiarati: dispersione, copertura settoriale, rigetto */}
+      <section className="card" aria-label="Dove il dato va letto con cautela" id="limiti-del-dato">
+        <div className="card-header">
+          <h2 className="card-title">Dove il dato va letto con cautela</h2>
+          <p className="card-desc">
+            Tre cose che questi numeri non dicono da soli. La prima: incidenza e letalità vanno in
+            direzioni opposte, quindi una classifica regionale dipende da quale delle due si guarda. La
+            seconda: una parte consistente delle denunce non ha un settore attribuito, e la quota cambia
+            molto da regione a regione. La terza: tre denunce su dieci non arrivano a un riconoscimento.
+            Nessun ente pubblica i propri buchi di classificazione; qui sono dichiarati accanto ai dati.
+          </p>
+        </div>
+        <LimitiDatoSection />
       </section>
 
       {/* 5. Macro-aree: Tasso di Incidenza per ripartizione geografica */}
@@ -148,7 +164,7 @@ export default function HomePage() {
           <h2 className="card-title">Comparti Produttivi e Attività Economiche (Classificazione ATECO)</h2>
           <p className="card-desc">
             Analisi comparativa per macro-settori (Sezioni A–U) con <strong>tasso di incidenza su 1.000 occupati</strong>,
-            <strong>indice di gravità</strong> (giornate di assenza perse su occupati) e filtro annuale. È disponibile anche il
+            <strong>giornate perse su 1.000 occupati</strong> (impatto complessivo, non gravità per evento) e filtro annuale. È disponibile anche il
             <strong>dettaglio per divisione ATECO (2 cifre)</strong> con ricerca per codice o settore, trend 2020 – 2025 e conteggi per singola attività economica. I settori sono ordinati per incidenza: tocca un box per aprire il dettaglio completo.
           </p>
         </div>
