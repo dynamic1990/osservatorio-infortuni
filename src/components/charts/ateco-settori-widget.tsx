@@ -164,7 +164,7 @@ export function AtecoSettoriWidget() {
     }
     righe.push({ label: "Incidenza", valore: `${p.indiceIncidenza} per 1.000 occupati` });
     if (p.indiceGravita !== undefined) {
-      righe.push({ label: "Indice gravità", valore: `${p.indiceGravita ?? 0} gg per 1.000 occupati` });
+      righe.push({ label: "Giornate perse / 1.000 occupati", valore: `${p.indiceGravita ?? 0} gg` });
     }
     righe.push({ label: "Quota sul totale", valore: `${(p.quota || 0).toFixed(1)}%` });
     if (p.occupati !== undefined) {

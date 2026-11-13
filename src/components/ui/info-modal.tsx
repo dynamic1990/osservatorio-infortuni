@@ -84,6 +84,16 @@ export function InfoModalButton({ children }: { children?: ReactNode }) {
                     </div>
 
                     <div className="formula-box">
+                      <div className="formula-name">Letalità degli Infortuni (Gravità Relativa per Evento)</div>
+                      <div className="formula-math">
+                        Letalità = (Infortuni Mortali / Infortuni Denunciati) &times; 100
+                      </div>
+                      <p className="formula-desc">
+                        Quanti infortuni su cento si chiudono con la morte del lavoratore. Misura la gravità media dell&apos;evento infortunistico a parità di denunce: un valore alto indica che gli incidenti che avvengono in quel territorio o comparto sono più spesso letali. È indipendente dalla propensione alla denuncia, che invece muove il tasso di incidenza.
+                      </p>
+                    </div>
+
+                    <div className="formula-box">
                       <div className="formula-name">Durata Media dell&apos;Inabilità Temporanea (Gravità Media per Evento)</div>
                       <div className="formula-math">
                         Durata Media (giorni) = Totale Giornate Indennizzate / Numero Infortuni Indennizzati
@@ -94,12 +104,12 @@ export function InfoModalButton({ children }: { children?: ReactNode }) {
                     </div>
 
                     <div className="formula-box">
-                      <div className="formula-name">Indice di Gravità / Tasso Giornate Perse</div>
+                      <div className="formula-name">Giornate Perse per 1.000 Occupati (Indice di Impatto, non di Gravità)</div>
                       <div className="formula-math">
-                        Indice di Gravità = (Totale Giornate Indennizzate / Numero Occupati) &times; 1.000
+                        Giornate perse / 1.000 occupati = (Totale Giornate Indennizzate / Numero Occupati) &times; 1.000
                       </div>
                       <p className="formula-desc">
-                        Misura il volume complessivo di giornate lavorative perse a causa di infortuni per ogni 1.000 lavoratori occupati (in linea con le linee guida INAIL e la norma tecnica UNI 7249).
+                        Misura il volume complessivo di giornate lavorative perse per ogni 1.000 occupati. È il prodotto tra frequenza e durata media, quindi descrive l&apos;impatto sul territorio, non la gravità del singolo evento: un territorio con molti infortuni brevi può avere un valore alto e una letalità bassa. Per la gravità per evento si usano la durata media e la letalità.
                       </p>
                     </div>
                   </section>

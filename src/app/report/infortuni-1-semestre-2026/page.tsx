@@ -101,7 +101,7 @@ export default function ReportArticlePage() {
         </Section>
 
         <Section title="Gravità del danno e inabilità (dettaglio 2024)">
-          <p style={{ margin: 0, lineHeight: 1.7 }}>Nell&apos;88,0% delle denunce non risultano postumi permanenti. Dove il danno è riconosciuto: franchigia nel 6,5% dei casi, capitale nel 4,5%, rendita nell&apos;1,1%. La durata media dell&apos;inabilità temporanea è di <strong>37,1 giorni</strong>, con 71.401 casi con menomazione e un indice di gravità complessivo di 507,2.</p>
+          <p style={{ margin: 0, lineHeight: 1.7 }}>Nell&apos;88,0% delle denunce non risultano postumi permanenti. Dove il danno è riconosciuto: franchigia nel 6,5% dei casi, capitale nel 4,5%, rendita nell&apos;1,1%. La durata media dell&apos;inabilità temporanea è di <strong>37,1 giorni</strong>, con 71.401 casi con menomazione; le giornate perse sono <strong>507,2 per 1.000 occupati</strong> (indice di impatto, non di gravità per evento). La letalità, cioè i mortali ogni 100 denunce, è dello <strong>0,209%</strong>.</p>
           <p style={{ margin: 0, lineHeight: 1.7 }}>Il tema si inserisce nel quadro più ampio delle <Link href="/malattie-professionali">malattie professionali</Link>, che hanno tempi e criteri di lettura differenti.</p>
         </Section>
 

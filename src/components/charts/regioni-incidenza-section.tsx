@@ -21,10 +21,63 @@ import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE, RISK_SCALE } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
 
+type Metrica = "incidenza" | "letalita" | "durataMedia" | "giornatePerse" | "mortaliInc" | "totale";
+
+interface RigaMetrica {
+  totale: number;
+  lavoro: number;
+  itinere: number;
+  mortali: number;
+  occupati: number;
+  giorni: number;
+  durataMedia?: number;
+  indiceGravita?: number;
+  indiceMortali: number;
+}
+
+// Etichette delle metriche. "giornatePerse" era l'ex «Indice di Gravità»:
+// giornate perse / occupati e' un indice di impatto, non di gravita' per evento.
+const METRICA_LABEL: Record<Metrica, string> = {
+  incidenza: "Incidenza (infortuni / 1.000 occ.)",
+  letalita: "Letalità (mortali / 100 infortuni)",
+  durataMedia: "Durata media (gg / caso)",
+  giornatePerse: "Giornate perse / 1.000 occ.",
+  mortaliInc: "Tasso mortali (‰ occupati)",
+  totale: "Volume casi",
+};
+
+const METRICA_TITOLO: Record<Metrica, string> = {
+  incidenza: "Tasso di Incidenza (infortuni / 1.000 occupati)",
+  letalita: "Letalità (infortuni mortali / 100 infortuni denunciati)",
+  durataMedia: "Durata media dell'inabilità (giorni per caso)",
+  giornatePerse: "Giornate perse / 1.000 occupati (impatto complessivo)",
+  mortaliInc: "Tasso Infortuni Mortali (per 1.000 occupati)",
+  totale: "Volume casi",
+};
+
+function unitaMetrica(m: Metrica): string {
+  if (m === "incidenza" || m === "mortaliInc") return "‰";
+  if (m === "letalita") return "%";
+  if (m === "durataMedia" || m === "giornatePerse") return " gg";
+  return "";
+}
+
+function decimaliMetrica(m: Metrica): number {
+  if (m === "letalita" || m === "mortaliInc") return 3;
+  if (m === "durataMedia" || m === "giornatePerse") return 1;
+  if (m === "incidenza") return 2;
+  return 0;
+}
+
+function formattaMetrica(m: Metrica, v: number): string {
+  const dec = decimaliMetrica(m);
+  return v.toLocaleString("it-IT", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
 export function RegioniIncidenzaSection() {
   const multidim = useMemo(() => getMultidimensionaleData(), []);
   const [anno, setAnno] = useState<string>("2025");
-  const [metrica, setMetrica] = useState<"incidenza" | "mortaliInc" | "gravita" | "totale">("incidenza");
+  const [metrica, setMetrica] = useState<Metrica>("incidenza");
   const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
   const [selectedReg, setSelectedReg] = useState<string | null>(null);
   const [hoverMapId, setHoverMapId] = useState<string | null>(null);
@@ -46,6 +99,29 @@ export function RegioniIncidenzaSection() {
     (r: { occupati: number; totale: number; lavoro: number; itinere: number }) =>
       r.occupati > 0 ? Number(((casiAmbito(r) / r.occupati) * 1000).toFixed(2)) : 0,
     [casiAmbito],
+  );
+
+  // Valore della metrica selezionata per una regione o provincia autonoma.
+  // Letalità e durata media sono calcolate sull'insieme lavoro + itinere:
+  // l'artifact espone i mortali e la durata solo a livello aggregato.
+  const valoreMetrica = useCallback(
+    (r: RigaMetrica): number => {
+      switch (metrica) {
+        case "incidenza":
+          return incidenzaAmbito(r);
+        case "letalita":
+          return r.totale > 0 ? Number(((r.mortali / r.totale) * 100).toFixed(3)) : 0;
+        case "durataMedia":
+          return r.durataMedia ?? 0;
+        case "giornatePerse":
+          return r.indiceGravita ?? 0;
+        case "mortaliInc":
+          return r.indiceMortali;
+        case "totale":
+          return casiAmbito(r);
+      }
+    },
+    [metrica, incidenzaAmbito, casiAmbito],
   );
 
   // Dati dell'anno selezionato
@@ -75,39 +151,18 @@ export function RegioniIncidenzaSection() {
     let min = Infinity;
     let max = -Infinity;
     for (const r of annoData.regioni) {
-      const val =
-        metrica === "incidenza"
-          ? incidenzaAmbito(r)
-          : metrica === "mortaliInc"
-          ? r.indiceMortali
-          : metrica === "gravita"
-          ? (r.indiceGravita ?? 0)
-          : casiAmbito(r);
+      const val = valoreMetrica(r);
       if (val < min) min = val;
       if (val > max) max = val;
     }
-    const media =
-      metrica === "incidenza"
-        ? incidenzaAmbito(annoData)
-        : metrica === "mortaliInc"
-        ? annoData.indiceMortali
-        : metrica === "gravita"
-        ? (annoData.indiceGravita ?? 0)
-        : Math.round(casiAmbito(annoData) / 20);
+    const media = metrica === "totale" ? Math.round(casiAmbito(annoData) / 20) : valoreMetrica(annoData);
     return { minVal: min === Infinity ? 0 : min, maxVal: max === -Infinity ? 1 : max, mediaNazionale: media };
-  }, [annoData, metrica, casiAmbito, incidenzaAmbito]);
+  }, [annoData, metrica, casiAmbito, valoreMetrica]);
 
   // Colore per regione sulla mappa
   const colorForRegion = (code?: string): string => {
     if (!code || !regMap[code]) return "#e0e0e0";
-    const val =
-      metrica === "incidenza"
-        ? incidenzaAmbito(regMap[code])
-        : metrica === "mortaliInc"
-        ? regMap[code].indiceMortali
-        : metrica === "gravita"
-        ? (regMap[code].indiceGravita ?? 0)
-        : casiAmbito(regMap[code]);
+    const val = valoreMetrica(regMap[code]);
 
     const range = maxVal - minVal || 1;
     const ratio = Math.max(0, Math.min(1, (val - minVal) / range));
@@ -139,14 +194,7 @@ export function RegioniIncidenzaSection() {
       if (r.regione === "04" && mostraProvincePA && annoData.provinceAutonome) {
         // Mostra le 2 province autonome separate
         for (const pa of annoData.provinceAutonome) {
-          const val =
-            metrica === "incidenza"
-              ? incidenzaAmbito(pa)
-              : metrica === "mortaliInc"
-              ? pa.indiceMortali
-              : metrica === "gravita"
-              ? (pa.indiceGravita ?? 0)
-              : casiAmbito(pa);
+          const val = valoreMetrica(pa);
           items.push({
             code: pa.codice,
             name: pa.nome,
@@ -165,14 +213,7 @@ export function RegioniIncidenzaSection() {
           });
         }
       } else {
-        const val =
-          metrica === "incidenza"
-            ? incidenzaAmbito(r)
-            : metrica === "mortaliInc"
-            ? r.indiceMortali
-            : metrica === "gravita"
-            ? (r.indiceGravita ?? 0)
-            : casiAmbito(r);
+        const val = valoreMetrica(r);
         items.push({
           code: r.regione,
           name: regioneName(r.regione),
@@ -197,7 +238,7 @@ export function RegioniIncidenzaSection() {
         ...entry,
         color: PALETTE[i % PALETTE.length],
       }));
-  }, [annoData, metrica, mostraProvincePA, casiAmbito, incidenzaAmbito]);
+  }, [annoData, mostraProvincePA, valoreMetrica]);
 
   const hoverCode = hoverMapId ? MAP_ID_REGIONE[hoverMapId] : undefined;
   const activeRegData = selectedReg ? regMap[selectedReg] : hoverCode ? regMap[hoverCode] : null;
@@ -259,30 +300,17 @@ export function RegioniIncidenzaSection() {
         {/* Selettore Metrica Visualizzata */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
           <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Visualizza per:</span>
-          <button
-            onClick={() => setMetrica("incidenza")}
-            className={`btn-pill ${metrica === "incidenza" ? "active" : ""}`}
-          >
-            Incidenza (infortuni / 1.000 occ.)
-          </button>
-          <button
-            onClick={() => setMetrica("gravita")}
-            className={`btn-pill ${metrica === "gravita" ? "active" : ""}`}
-          >
-            Indice Gravità (gg / 1.000 occ.)
-          </button>
-          <button
-            onClick={() => setMetrica("mortaliInc")}
-            className={`btn-pill ${metrica === "mortaliInc" ? "active" : ""}`}
-          >
-            Tasso Mortali
-          </button>
-          <button
-            onClick={() => setMetrica("totale")}
-            className={`btn-pill ${metrica === "totale" ? "active" : ""}`}
-          >
-            Volume Casi
-          </button>
+          {(
+            ["incidenza", "letalita", "durataMedia", "giornatePerse", "mortaliInc", "totale"] as Metrica[]
+          ).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMetrica(m)}
+              className={`btn-pill ${metrica === m ? "active" : ""}`}
+            >
+              {METRICA_LABEL[m]}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -302,20 +330,16 @@ export function RegioniIncidenzaSection() {
         >
           <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "var(--space-2)" }}>
             <div style={{ fontSize: "0.9rem", fontWeight: 700 }}>
-              {metrica === "incidenza"
-                ? "Tasso di Incidenza (infortuni / 1.000 occupati)"
-                : metrica === "gravita"
-                ? "Indice di Gravità (giornate perse / 1.000 occupati)"
-                : metrica === "mortaliInc"
-                ? "Tasso Infortuni Mortali (per 1.000 occupati)"
-                : ambito === "lavoro"
-                ? "Volume infortuni in occasione di lavoro"
-                : ambito === "itinere"
-                ? "Volume infortuni in itinere"
-                : "Volume totale infortuni denunciati"}
+              {metrica === "totale"
+                ? ambito === "lavoro"
+                  ? "Volume infortuni in occasione di lavoro"
+                  : ambito === "itinere"
+                  ? "Volume infortuni in itinere"
+                  : "Volume totale infortuni denunciati"
+                : METRICA_TITOLO[metrica]}
             </div>
             <div style={{ fontSize: "0.82rem", color: "var(--color-text)", background: "var(--color-raised)", padding: "2px 8px", borderRadius: "4px", border: "1px solid var(--color-divider)" }}>
-              Media Nazionale: <strong>{metrica === "incidenza" ? `${mediaNazionale}‰` : metrica === "gravita" ? `${mediaNazionale} gg` : metrica === "mortaliInc" ? `${mediaNazionale}‰` : compactNumber(casiAmbito(annoData))}</strong>
+              Media Nazionale: <strong>{metrica === "totale" ? compactNumber(casiAmbito(annoData)) : `${formattaMetrica(metrica, mediaNazionale)}${unitaMetrica(metrica)}`}</strong>
             </div>
           </div>
 
@@ -352,9 +376,9 @@ export function RegioniIncidenzaSection() {
           {/* Scala Legenda Colori */}
           <div style={{ width: "100%", marginTop: "var(--space-3)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.72rem", color: "var(--color-text-soft)", marginBottom: 3 }}>
-              <span>Min: {minVal}{metrica === "incidenza" || metrica === "mortaliInc" ? "‰" : metrica === "gravita" ? " gg" : ""}</span>
+              <span>Min: {formattaMetrica(metrica, minVal)}{unitaMetrica(metrica)}</span>
               <span>Intensità crescente</span>
-              <span>Max: {maxVal}{metrica === "incidenza" || metrica === "mortaliInc" ? "‰" : metrica === "gravita" ? " gg" : ""}</span>
+              <span>Max: {formattaMetrica(metrica, maxVal)}{unitaMetrica(metrica)}</span>
             </div>
             <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden" }}>
               {RISK_SCALE.map((c, i) => (
@@ -549,7 +573,7 @@ export function RegioniIncidenzaSection() {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-2)" }}>
               <div style={{ fontSize: "0.88rem", fontWeight: 700 }}>
-                Ranking Territoriale ({metrica === "incidenza" ? "Incidenza ‰ occupati" : metrica === "gravita" ? "Indice Gravità (gg / 1.000 occ.)" : metrica === "mortaliInc" ? "Tasso mortali ‰" : "Volume casi"})
+                Ranking Territoriale ({METRICA_LABEL[metrica]}
               </div>
               <label style={{ fontSize: "0.75rem", display: "flex", alignItems: "center", gap: 4, cursor: "pointer", color: "var(--color-text-soft)" }}>
                 <input
@@ -609,12 +633,22 @@ export function RegioniIncidenzaSection() {
                               <strong>{p.indiceIncidenza} per 1.000 occ.</strong>
                             </div>
                             <div className="tooltip-row">
-                              <span>Indice di Gravità:</span>
-                              <strong>{p.indiceGravita || 0} gg per 1.000 occ.</strong>
+                              <span>Letalità:</span>
+                              <strong>
+                                {p.totale > 0 ? ((Number(p.mortali ?? 0) / Number(p.totale)) * 100).toLocaleString("it-IT", { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : "0,000"}%
+                              </strong>
+                            </div>
+                            <div className="tooltip-row">
+                              <span>Durata media per caso:</span>
+                              <strong>{p.durataMedia || 0} gg</strong>
+                            </div>
+                            <div className="tooltip-row">
+                              <span>Giornate perse / 1.000 occ.:</span>
+                              <strong>{compactNumber(p.indiceGravita || 0)} gg</strong>
                             </div>
                             <div className="tooltip-row">
                               <span>Giornate di inabilità:</span>
-                              <strong>{compactNumber(p.giorni)} gg (media {p.durataMedia || 0} gg/caso)</strong>
+                              <strong>{compactNumber(p.giorni)} gg</strong>
                             </div>
                             <div className="tooltip-row">
                               <span>Casi totali denunciati:</span>
@@ -671,7 +705,7 @@ export function RegioniIncidenzaSection() {
       </div>
 
       <p className="source-note">
-        Metodologia di calcolo: <strong>Tasso di Incidenza</strong> = (Infortuni / Occupati residenti) &times; 1.000. <strong>Indice di Gravità</strong> = (Giornate di inabilità temporanea indennizzate / Occupati residenti) &times; 1.000. Denominatori occupazionali: ISTAT ed Eurostat NUTS2 (<code>lfst_r_lfe2emp</code>). La linea tratteggiata rossa indica il benchmark della media nazionale ponderata.
+        Metodologia di calcolo: <strong>Tasso di Incidenza</strong> = (Infortuni / Occupati residenti) &times; 1.000. <strong>Letalità</strong> = (Infortuni mortali / Infortuni denunciati) &times; 100. <strong>Durata media per caso</strong> = Giornate di inabilità indennizzate / Casi con giornate indennizzate. <strong>Giornate perse / 1.000 occupati</strong> = (Giornate di inabilità indennizzate / Occupati residenti) &times; 1.000: misura l&apos;impatto complessivo sul territorio, non la gravità del singolo evento. Letalità e durata media sono calcolate su infortuni in occasione di lavoro e in itinere insieme, quindi non cambiano con il filtro di modalità. Denominatori occupazionali: ISTAT ed Eurostat NUTS2 (<code>lfst_r_lfe2emp</code>). La linea tratteggiata rossa indica il benchmark della media nazionale ponderata.
       </p>
     </div>
   );
