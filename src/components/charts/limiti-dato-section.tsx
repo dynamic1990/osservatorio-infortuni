@@ -101,16 +101,22 @@ export function LimitiDatoSection() {
         regione: r.regione,
         nome: regioneName(r.regione),
         tasso: r.tassoRigetto ?? 0,
+        franchigia: r.tassoFranchigia ?? 0,
         negativi: r.esito?.N ?? 0,
-        definizione: r.esito?.F ?? 0,
+        franchigiaCasi: r.esito?.F ?? 0,
         totale: r.totale,
       }))
       .sort((a, b) => b.tasso - a.tasso);
   }, [annoData]);
 
   const rigettoNazionale = useMemo(() => {
-    const neg = annoData.regioni.reduce((acc, r) => acc + (r.esito?.N ?? 0) + (r.esito?.F ?? 0), 0);
+    const neg = annoData.regioni.reduce((acc, r) => acc + (r.esito?.N ?? 0), 0);
     return annoData.totale > 0 ? Number(((neg / annoData.totale) * 100).toFixed(1)) : 0;
+  }, [annoData]);
+
+  const franchigiaNazionale = useMemo(() => {
+    const fr = annoData.regioni.reduce((acc, r) => acc + (r.esito?.F ?? 0), 0);
+    return annoData.totale > 0 ? Number(((fr / annoData.totale) * 100).toFixed(1)) : 0;
   }, [annoData]);
 
   return (
@@ -269,14 +275,19 @@ export function LimitiDatoSection() {
       {/* 3. Tasso di rigetto */}
       <section aria-label="Tasso di rigetto delle denunce">
         <h3 style={{ fontSize: "1.05rem", fontWeight: 700, margin: "0 0 var(--space-1)" }}>
-          Tre denunce su dieci non arrivano a un riconoscimento
+          Una denuncia su sette non arriva a un riconoscimento
         </h3>
         <p className="card-desc" style={{ marginBottom: "var(--space-3)" }}>
           A livello nazionale il <strong>{num(rigettoNazionale)}%</strong> delle denunce del {anno} ha esito
-          negativo o è ancora in fase di definizione. Non è un tasso di frode: comprende i casi respinti per
-          motivi tecnici, quelli chiusi senza indennizzo e quelli non ancora decisi. Ma è la ragione per cui
-          il numero di denunce non coincide con il numero di infortuni riconosciuti, e va tenuto presente
-          prima di leggere qualunque classifica.
+          negativo. Non è un tasso di frode: comprende i casi respinti per motivi tecnici e quelli chiusi
+          senza riconoscimento. Va tenuto presente prima di leggere qualunque classifica, perché il numero di
+          denunce non coincide con il numero di infortuni riconosciuti.
+        </p>
+        <p className="card-desc" style={{ marginBottom: "var(--space-3)" }}>
+          Un altro <strong>{num(franchigiaNazionale)}%</strong> è <em>franchigia</em>: infortuni riconosciuti,
+          ma con menomazione inferiore al 6%, quindi senza indennizzo. Non sono rigetti e non vanno sommati
+          ai negativi. Sono la misura di quanto danno lieve emerge in un territorio: la quota di franchigia
+          correla <strong>+0,82</strong> con il tasso di denuncia, cioè cresce dove si denuncia di più.
         </p>
 
         <div style={{ display: "grid", gap: 4 }}>
@@ -304,9 +315,10 @@ export function LimitiDatoSection() {
           ))}
         </div>
         <p className="source-note" style={{ marginTop: "var(--space-2)" }}>
-          Esiti «negativo» (N) e «in fase di definizione» (F) sul totale delle denunce della regione. La
-          seconda cifra è il totale delle denunce: una percentuale alta su poche denunce pesa meno di una
-          percentuale media su centomila.
+          Esito «negativo» (N) sul totale delle denunce della regione. La seconda cifra è il totale delle
+          denunce: una percentuale alta su poche denunce pesa meno di una percentuale media su centomila.
+          La franchigia (F) è esclusa da questo conteggio: è un caso riconosciuto, non un rigetto. Fonte
+          della decodifica: INAIL Open Data, <em>DefinizioneAmministrativa.csv</em>.
         </p>
       </section>
     </div>

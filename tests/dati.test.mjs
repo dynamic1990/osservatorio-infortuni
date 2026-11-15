@@ -181,14 +181,34 @@ test("multidimensionale: ogni regione ha l'esito amministrativo completo", () =>
   }
 });
 
-test("multidimensionale: tasso di rigetto coerente con gli esiti della regione", () => {
+test("multidimensionale: tasso di rigetto = soli esiti negativi (N), franchigia esclusa", () => {
+  // Decodifica ufficiale INAIL (DefinizioneAmministrativa.csv):
+  //   P = Positivo · F = Franchigia · I = In istruttoria · N = Negativo
+  // F non e' "in fase di definizione": e' un infortunio RICONOSCIUTO con menomazione
+  // sotto il 6%, senza indennizzo. Sommarlo a N (formula usata fino al 15/11/2026)
+  // gonfiava il dato nazionale dal 13,8% al 30,9% e creava un falso divario territoriale.
   for (const anno of multidim.anniDisponibili) {
     const a = multidim.perAnno[anno];
     for (const r of a.regioni) {
-      const atteso = r.totale > 0 ? ((r.esito.N ?? 0) + (r.esito.F ?? 0)) / r.totale * 100 : 0;
+      const atteso = r.totale > 0 ? (r.esito.N ?? 0) / r.totale * 100 : 0;
       assert.ok(Math.abs((r.tassoRigetto ?? 0) - atteso) < 0.15, `${anno} regione ${r.regione}: ${r.tassoRigetto} vs ${atteso}`);
       assert.ok(r.tassoRigetto >= 0 && r.tassoRigetto <= 100, `${anno} regione ${r.regione}: fuori scala`);
+      // La franchigia deve essere esposta separata e coerente con F.
+      const attesaFr = r.totale > 0 ? (r.esito.F ?? 0) / r.totale * 100 : 0;
+      assert.ok(Math.abs((r.tassoFranchigia ?? 0) - attesaFr) < 0.15, `${anno} regione ${r.regione}: franchigia ${r.tassoFranchigia} vs ${attesaFr}`);
     }
+  }
+});
+
+test("multidimensionale: rigetto e franchigia non si sovrappongono", () => {
+  // Se qualcuno reintroducesse la somma N+F dentro tassoRigetto, questo test
+  // lo intercetta: la somma dei due tassi non puo' superare il 100% e il
+  // rigetto nazionale deve restare sotto il 20% (valore reale 13,8% nel 2025).
+  const a = multidim.perAnno["2025"];
+  assert.ok(a.tassoRigetto < 20, `rigetto nazionale 2025 sospetto: ${a.tassoRigetto}%`);
+  for (const r of a.regioni) {
+    const somma = (r.tassoRigetto ?? 0) + (r.tassoFranchigia ?? 0);
+    assert.ok(somma <= 100, `${r.regione}: rigetto+franchigia = ${somma}%`);
   }
 });
 

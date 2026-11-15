@@ -14,10 +14,16 @@ export interface RegioneAnnualData {
   occupati: number;
   indiceIncidenza: number;
   indiceMortali: number;
-  /** Esito amministrativo delle denunce: P positivo, N negativo, F definizione, I istruttoria */
+  /** Esito amministrativo delle denunce. Decodifica ufficiale INAIL:
+   *  P = Positivo · F = Franchigia (menomazione <6%, riconosciuto ma non indennizzato)
+   *  I = In istruttoria · N = Negativo · ND = Non applicabile */
   esito?: Record<string, number>;
-  /** Quota di denunce con esito negativo o in definizione (negati + archiviati), in percentuale */
+  /** Quota di denunce con esito NEGATIVO (N) sul totale, in percentuale.
+   *  NON include la franchigia: F e' un caso riconosciuto, non un rigetto. */
   tassoRigetto?: number;
+  /** Quota di denunce riconosciute con menomazione sotto il 6% (esito F), in percentuale.
+   *  Indicatore della soglia di emersione del danno lieve, non un rigetto. */
+  tassoFranchigia?: number;
   /** Casi senza settore ATECO attribuito nel territorio */
   settoreND?: number;
   /** Quota percentuale di casi senza settore ATECO attribuito */

@@ -66,18 +66,42 @@ def map_gravita(gm_str):
         return "nessuna"
 
 def tasso_rigetto(r_data):
-    """Quota di denunce non riconosciute: esiti negativi (N) + archiviati (F).
+    """Quota di denunce con esito NEGATIVO (N) sul totale.
 
-    Non e' un tasso di "frode": comprende anche le denunce respinte per motivi
-    tecnici o amministrativi. Serve a dichiarare quanto del dato regionale non
-    arriva mai a un riconoscimento, prima di confrontare le regioni tra loro.
+    ATTENZIONE alla decodifica ufficiale INAIL (DefinizioneAmministrativa.csv):
+      P = Positivo · F = Franchigia · I = In istruttoria · N = Negativo · ND = Non applicabile
+
+    F non significa "in fase di definizione": significa FRANCHIGIA, cioe' un
+    infortunio riconosciuto con menomazione inferiore al 6%, che non da' diritto
+    a indennizzo. Sommare F a N (come si faceva fino al 15/11/2026) produceva un
+    numero che non e' un tasso di rigetto: mescolava i casi respinti con quelli
+    riconosciuti ma sotto soglia. L'errore gonfiava il dato nazionale dal 13,8%
+    al 30,9% e allargava la forbice tra regioni da 7,9 a 29,1 punti, creando un
+    falso fenomeno territoriale.
+
+    I casi in istruttoria (I) restano fuori dal denominatore delle decisioni ma
+    dentro il totale: sono denunce non ancora decise, non rigettate.
     """
     tot = r_data["totale"]
     if not tot:
         return 0.0
     esiti = r_data["esito"]
-    rigettate = esiti.get("N", 0) + esiti.get("F", 0)
-    return round(rigettate / tot * 100, 1)
+    return round(esiti.get("N", 0) / tot * 100, 1)
+
+
+def tasso_franchigia(r_data):
+    """Quota di denunce riconosciute con menomazione sotto il 6% (esito F).
+
+    Non e' un rigetto: il caso e' riconosciuto, ma la menomazione e' troppo lieve
+    per dare diritto a indennizzo. E' un indicatore della soglia di emersione del
+    danno lieve, e correla fortemente con la propensione alla denuncia (+0,82 con
+    l'incidenza nel 2025): dove si denuncia di piu', cresce anche la quota di casi
+    sotto soglia. Va mostrato separato, mai sommato ai negativi.
+    """
+    tot = r_data["totale"]
+    if not tot:
+        return 0.0
+    return round(r_data["esito"].get("F", 0) / tot * 100, 1)
 
 
 def map_durata(g_str):
@@ -492,6 +516,7 @@ def main():
                 "indiceMortali": inc_mor,
                 "esito": dict(r_data["esito"]),
                 "tassoRigetto": tasso_rigetto(r_data),
+                "tassoFranchigia": tasso_franchigia(r_data),
                 "settoreND": r_data["settoreND"],
                 "quotaSettoreND": round(r_data["settoreND"] / r_data["totale"] * 100, 1) if r_data["totale"] else 0.0
             })
@@ -638,6 +663,8 @@ def main():
             "esito": dict(c["esito"]),
             "esitoLavoro": dict(c["esitoLavoro"]),
             "esitoItinere": dict(c["esitoItinere"]),
+            "tassoRigetto": round(c["esito"].get("N", 0) / c["totale"] * 100, 1) if c["totale"] else 0.0,
+            "tassoFranchigia": round(c["esito"].get("F", 0) / c["totale"] * 100, 1) if c["totale"] else 0.0,
             "indennizzo": dict(c["indennizzo"]),
             "indennizzoLavoro": dict(c["indennizzoLavoro"]),
             "indennizzoItinere": dict(c["indennizzoItinere"]),
