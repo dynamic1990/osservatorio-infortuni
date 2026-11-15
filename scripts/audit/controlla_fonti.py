@@ -12,6 +12,7 @@ import sys
 import hashlib
 import json
 import argparse
+import time
 from pathlib import Path
 import urllib.error
 import urllib.request
@@ -19,6 +20,11 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 
 TIMEOUT = 25
+# Un 404 isolato su dati.inail.it non significa che la pagina sia sparita:
+# il portale risponde 200 alla richiesta successiva. Senza retry l'audit
+# produce un falso allarme che costa una verifica manuale ogni mese.
+RETRIES = 2
+RETRY_DELAY = 2.0
 USER_AGENT = "OsservatorioInfortuni-FonteAudit/1.0"
 STATE_FILE = Path.home() / ".cache" / "osservatorio-infortuni" / "source-audit-state.json"
 
@@ -61,7 +67,7 @@ class Check:
         }
 
 
-def fetch(url: str, *, inspect_body: bool = False, post_payload: dict | None = None) -> Check:
+def fetch_once(url: str, *, inspect_body: bool = False, post_payload: dict | None = None) -> Check:
     headers = {"User-Agent": USER_AGENT}
     data = None
     method = "GET"
@@ -86,6 +92,26 @@ def fetch(url: str, *, inspect_body: bool = False, post_payload: dict | None = N
         return Check("", url, "WARN", f"HTTP {exc.code} {exc.reason}", "")
     except Exception as exc:  # rete, DNS, timeout, TLS
         return Check("", url, "FAIL", f"{type(exc).__name__}: {exc}", "")
+
+
+def fetch(url: str, *, inspect_body: bool = False, post_payload: dict | None = None) -> Check:
+    """Come fetch_once, ma ritenta gli errori transitori prima di dichiararli.
+
+    Il portale INAIL alterna 200 e 404 sulla stessa URL a distanza di secondi.
+    Un errore HTTP o di rete viene ritentato; se al secondo tentativo la
+    risposta torna valida, il check passa e il dettaglio dichiara il retry.
+    """
+    result = fetch_once(url, inspect_body=inspect_body, post_payload=post_payload)
+    tentativi = 1
+    while result.status != "OK" and tentativi <= RETRIES:
+        time.sleep(RETRY_DELAY)
+        tentativi += 1
+        result = fetch_once(url, inspect_body=inspect_body, post_payload=post_payload)
+    if result.status == "OK" and tentativi > 1:
+        result.detail = f"{result.detail} (ok al tentativo {tentativi})"
+    elif tentativi > 1:
+        result.detail = f"{result.detail} (dopo {tentativi} tentativi)"
+    return result
 
 
 def main() -> int:
@@ -113,6 +139,7 @@ def main() -> int:
         old_state = {}
     new_state: dict[str, dict[str, str]] = {}
     changes: list[str] = []
+    content_changes: list[str] = []
     checks: list[Check] = []
     for label, landing, api in SOURCES:
         for kind, url in (("landing", landing), ("endpoint", api)):
@@ -129,6 +156,7 @@ def main() -> int:
                 previous = old_state.get(url, {}).get("fingerprint")
                 if previous and previous != fingerprint:
                     changes.append(f"{label}: contenuto dell'endpoint cambiato")
+                    content_changes.append(label)
                 elif not previous:
                     changes.append(f"{label}: baseline iniziale registrata")
             if result.status != "OK":
@@ -140,7 +168,9 @@ def main() -> int:
     print(f"- fonti controllate: {len(SOURCES)}, endpoint dati: {len(new_state)}")
     print(f"- errori: {failures}")
     print(f"- avvisi: {warnings}")
-    print(f"- endpoint con contenuto cambiato: {len([x for x in changes if 'baseline' not in x])}")
+    # Solo i cambi di contenuto veri: prima qui finivano anche gli avvisi HTTP,
+    # quindi un 404 gonfiava il contatore dei "contenuti cambiati".
+    print(f"- endpoint con contenuto cambiato: {len(content_changes)}")
     if changes:
         print("- segnalazioni:")
         for change in changes:
@@ -162,7 +192,7 @@ def main() -> int:
                 "checks": len(checks),
                 "failures": failures,
                 "warnings": warnings,
-                "changedEndpoints": len([x for x in changes if "baseline" not in x]),
+                "changedEndpoints": len(content_changes),
             },
             "checks": [check.as_dict() for check in checks],
             "signals": changes,

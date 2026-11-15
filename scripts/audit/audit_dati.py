@@ -166,14 +166,32 @@ def audit_malattie() -> None:
     # categorie: somma casi vs totale (le categorie possono essere subset: solo top)
     tot_cat = sum(c["casi"] for c in d["categorie"])
     rep("Malattie / categorie", "somma categorie <= totale", "OK" if tot_cat <= n["totale"] * 1.001 else "FAIL", f"{tot_cat} vs {n['totale']} (top 20, atteso <=)")
-    # categorie: delta NON memorizzato nel JSON (calcolato a runtime nel componente).
-    # Verifica che il calcolo anno2026-anno2025 sia coerente e segnala la freschezza.
-    for c in d["categorie"]:
-        if c.get("anno2025") and c.get("anno2026"):
-            att = c["anno2026"] - c["anno2025"]
-            if c.get("delta") is not None and abs(att - c["delta"]) > 1:
-                rep("Malattie / categorie", f"delta {c['key']}", "FAIL", f"atteso {att}, trovato {c['delta']}")
-    rep("Malattie / categorie", "delta categorie", "SEGNALAZIONE", "delta non memorizzato nel JSON: calcolato a runtime (anno2026-anno2025) nel componente malattie-patologie-widget — verificato coerente, nessun campo da confrontare")
+    # categorie: il delta non è memorizzato nel JSON, è calcolato a runtime nel
+    # componente. Qui si verifica che la base del calcolo esista e che il
+    # risultato sia ricostruibile: se manca anno2025 o anno2026 il componente
+    # mostrerebbe un delta inventato, e questo è un FAIL, non una segnalazione.
+    senza_base = [c["key"] for c in d["categorie"] if not c.get("anno2025") or not c.get("anno2026")]
+    rep(
+        "Malattie / categorie",
+        "base del delta presente per ogni categoria",
+        "OK" if not senza_base else "FAIL",
+        "anno2025 e anno2026 presenti su tutte le categorie" if not senza_base else f"mancano: {', '.join(senza_base)}",
+    )
+    # Il delta memorizzato, quando c'è, deve coincidere con la differenza.
+    incoerenti = [
+        c["key"]
+        for c in d["categorie"]
+        if c.get("delta") is not None
+        and c.get("anno2025") is not None
+        and c.get("anno2026") is not None
+        and abs((c["anno2026"] - c["anno2025"]) - c["delta"]) > 1
+    ]
+    rep(
+        "Malattie / categorie",
+        "delta memorizzato coerente con anno2026-anno2025",
+        "OK" if not incoerenti else "FAIL",
+        "nessun delta memorizzato da confrontare" if not any(c.get("delta") is not None for c in d["categorie"]) else (f"incoerenti: {', '.join(incoerenti)}" if incoerenti else "tutti coerenti"),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -306,6 +324,10 @@ def main() -> None:
     for r in RISULTATI:
         if r["esito"] != "OK":
             print(f"  [{r['esito']}] {r['pagina']} | {r['voce']} | {r['nota']}")
+    # Codice di uscita: senza questo la CI resterebbe verde anche con un FAIL,
+    # che è esattamente il problema che l'audit doveva evitare.
+    if n_fail:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

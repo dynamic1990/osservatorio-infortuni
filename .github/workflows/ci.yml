@@ -43,6 +43,12 @@ jobs:
       - name: Data consistency tests
         run: npm run test:dati
 
+      # L'audit di coerenza esisteva ma nessuno lo eseguiva: un controllo che
+      # non gira non è un controllo. Esce con codice diverso da zero se trova
+      # un FAIL, così un dataset incoerente non arriva al deploy.
+      - name: Audit coerenza dati
+        run: python3 scripts/audit/audit_dati.py
+
       - name: ETL unit tests
         run: python3 -m unittest discover -s tests -p 'test_*.py' && python3 -m unittest discover -s tests/etl -p 'test_*.py'
 
