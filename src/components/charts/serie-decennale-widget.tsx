@@ -158,6 +158,20 @@ export function SerieDecennaleWidget() {
         include i casi COVID riconosciuti come infortunio (picco dei casi mortali). La serie
         consente di leggere il rischio reale separandolo dalle oscillazioni della platea occupazionale.
       </p>
+
+      <p className="source-note">
+        <strong>Il picco del 2022 non è un peggioramento della sicurezza.</strong> Le denunce passano da
+        564.418 a 703.535 (+24,6%) e l&apos;anno successivo scendono a 590.316: nessuna serie reale si muove
+        così. La spiegazione è nei contagi da Covid-19 denunciati come infortunio sul lavoro, che secondo
+        l&apos;INAIL passano da circa 49.000 nel 2021 a 120.000 nel 2022 (una denuncia su sei, contro una su
+        dodici l&apos;anno prima). Al netto dei contagi la crescita si riduce dal +24,6% al +13,2%. La
+        concentrazione anomala si vede anche nei dati: il settore Sanità e assistenza sociale cresce del
+        +90,3%, da solo spiega quasi metà dell&apos;incremento nazionale (66.858 denunce su 139.117), e il
+        59,8% dell&apos;aumento complessivo riguarda personale femminile. Sono proporzioni compatibili con la
+        composizione dei contagi, non con un cambiamento delle modalità di accadimento degli infortuni
+        tradizionali. Il picco del 2020 nei casi mortali ha la stessa natura. Fonte della spiegazione:
+        INAIL, Dati Inail dell&apos;11 ottobre 2023.
+      </p>
     </div>
   );
 }
