@@ -275,6 +275,8 @@ def main():
             "esito": defaultdict(int),
             "esitoLavoro": defaultdict(int),
             "esitoItinere": defaultdict(int),
+            # Perimetro franchigia legale (assenza <=3 gg) a livello nazionale.
+            "franchigia": defaultdict(int),
             "indennizzo": defaultdict(int),
             "indennizzoLavoro": defaultdict(int),
             "indennizzoItinere": defaultdict(int),
@@ -301,7 +303,11 @@ def main():
             "mensile": defaultdict(int),
             "mensileLavoro": defaultdict(int),
             "mensileItinere": defaultdict(int),
-            "regioni": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0, "esito": defaultdict(int), "settoreND": 0}),
+            "regioni": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0, "esito": defaultdict(int), "settoreND": 0,
+                                       # Perimetro per soglia di denuncia: separa i casi in
+                                       # franchigia legale (assenza <=3 gg, codice F) dal resto,
+                                       # cosi' la UI puo' mostrare denunce e comunicazioni distinte.
+                                       "franchigia": {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0}}),
             "provinceAutonome": defaultdict(lambda: {"totale": 0, "mortali": 0, "lavoro": 0, "itinere": 0, "giorni": 0, "menomati": 0, "casi_con_giorni": 0})
         }
 
@@ -355,6 +361,12 @@ def main():
         T["esito"][es] += 1
         T["indennizzo"][ind] += 1
         T["gravita"][gr] += 1
+        # Perimetro franchigia legale (assenza <=3 gg): aggregato nazionale e per modalita'.
+        if es == "F":
+            T["franchigia"]["totale"] += 1
+            if is_mortale: T["franchigia"]["mortali"] += 1
+            if is_itinere: T["franchigia"]["itinere"] += 1
+            else: T["franchigia"]["lavoro"] += 1
         if is_menomato: T["menomati"] += 1
         T["durata"][dur] += 1
         if g_val > 0:
@@ -390,8 +402,17 @@ def main():
         else: r_stat["lavoro"] += 1
         if is_menomato: r_stat["menomati"] += 1
         # Esito amministrativo per regione: serve a calcolare il tasso di rigetto
-        # territoriale (negati + archiviati sul totale delle denunce).
+        # territoriale (soli esiti negativi N sul totale delle denunce).
         r_stat["esito"][es] += 1
+        # Casi in franchigia legale (assenza <=3 giorni): sotto la soglia dell'art. 54
+        # D.Lgs. 81/2008 il datore comunica a fini statistici ma la denuncia non e'
+        # obbligatoria. Servono separati per poter mostrare denunce e comunicazioni
+        # come due perimetri distinti e filtrabili in UI.
+        if es == "F":
+            r_stat["franchigia"]["totale"] += 1
+            if is_mortale: r_stat["franchigia"]["mortali"] += 1
+            if is_itinere: r_stat["franchigia"]["itinere"] += 1
+            else: r_stat["franchigia"]["lavoro"] += 1
         # Casi senza settore ATECO attribuito: misura la copertura della
         # classificazione per territorio, che cambia molto da regione a regione.
         if macro == "ND":
@@ -531,6 +552,10 @@ def main():
                 "esito": dict(r_data["esito"]),
                 "tassoRigetto": tasso_rigetto(r_data),
                 "tassoFranchigia": tasso_franchigia(r_data),
+                # Perimetro franchigia legale (assenza <=3 gg): casi che il datore comunica
+                # a fini statistici ma che non rientrano nella denuncia obbligatoria.
+                # Nazione: zero mortali osservati nel 2025 su 102.529 casi.
+                "franchigia": dict(r_data["franchigia"]),
                 "settoreND": r_data["settoreND"],
                 "quotaSettoreND": round(r_data["settoreND"] / r_data["totale"] * 100, 1) if r_data["totale"] else 0.0
             })
@@ -679,6 +704,19 @@ def main():
             "esitoItinere": dict(c["esitoItinere"]),
             "tassoRigetto": round(c["esito"].get("N", 0) / c["totale"] * 100, 1) if c["totale"] else 0.0,
             "tassoFranchigia": round(c["esito"].get("F", 0) / c["totale"] * 100, 1) if c["totale"] else 0.0,
+            # Perimetro franchigia legale a livello nazionale: la UI lo usa per il
+            # filtro "solo denunce" (esclude i casi con assenza <=3 giorni).
+            # Chiavi esplicite: un defaultdict non toccato non finisce nel JSON,
+            # e "mortali" a zero deve comunque essere presente per la UI.
+            "franchigia": {
+                "totale": c["franchigia"].get("totale", 0),
+                "mortali": c["franchigia"].get("mortali", 0),
+                "lavoro": c["franchigia"].get("lavoro", 0),
+                "itinere": c["franchigia"].get("itinere", 0),
+            },
+            "franchigiaLavoro": c["franchigia"].get("lavoro", 0),
+            "franchigiaItinere": c["franchigia"].get("itinere", 0),
+            "franchigiaMortali": c["franchigia"].get("mortali", 0),
             "indennizzo": dict(c["indennizzo"]),
             "indennizzoLavoro": dict(c["indennizzoLavoro"]),
             "indennizzoItinere": dict(c["indennizzoItinere"]),

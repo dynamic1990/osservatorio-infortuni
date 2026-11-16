@@ -15,7 +15,7 @@ export interface RegioneAnnualData {
   indiceIncidenza: number;
   indiceMortali: number;
   /** Esito amministrativo delle denunce. Decodifica ufficiale INAIL:
-   *  P = Positivo · F = Franchigia (menomazione <6%, riconosciuto ma non indennizzato)
+   *  P = Positivo · F = Franchigia (assenza <=3 gg, art. 54 D.Lgs. 81/2008)
    *  I = In istruttoria · N = Negativo · ND = Non applicabile */
   esito?: Record<string, number>;
   /** Quota di denunce con esito NEGATIVO (N) sul totale, in percentuale.
@@ -26,6 +26,10 @@ export interface RegioneAnnualData {
    *  (sotto la soglia dell'art. 54 D.Lgs. 81/2008). Non e' la franchigia sulla
    *  menomazione, che non ha codice proprio e resta dentro P senza indennizzo. */
   tassoFranchigia?: number;
+  /** Perimetro franchigia legale della regione: casi con assenza <=3 giorni,
+   *  comunicati a fini statistici ma fuori dalla denuncia obbligatoria.
+   *  Servono a mostrare "denunce" e "comunicazioni" come perimetri distinti. */
+  franchigia?: { totale: number; mortali: number; lavoro: number; itinere: number };
   /** Casi senza settore ATECO attribuito nel territorio */
   settoreND?: number;
   /** Quota percentuale di casi senza settore ATECO attribuito */
@@ -105,6 +109,13 @@ export interface AnnualMultidimData {
   esito: Record<string, number>;
   esitoLavoro: Record<string, number>;
   esitoItinere: Record<string, number>;
+  /** Quota di denunce con esito NEGATIVO (N), franchigia esclusa. */
+  tassoRigetto?: number;
+  /** Quota di denunce in franchigia legale (F, assenza <=3 giorni). */
+  tassoFranchigia?: number;
+  /** Perimetro franchigia legale nazionale: la UI lo usa per il filtro
+   *  "solo denunce obbligatorie" (esclude i casi sotto i 3 giorni). */
+  franchigia?: { totale: number; mortali: number; lavoro: number; itinere: number };
   indennizzo: Record<string, number>;
   indennizzoLavoro: Record<string, number>;
   indennizzoItinere: Record<string, number>;

@@ -20,6 +20,7 @@ import { MAP_ID_REGIONE } from "@/lib/regioni-map";
 import { compactNumber, exactNumber } from "@/lib/format";
 import { PALETTE, RISK_SCALE } from "@/lib/palette";
 import { FiltroModalita, type ModalitaState } from "@/components/charts/filtro-modalita";
+import { FiltroPerimetroDenuncia, type PerimetroDenunciaState } from "@/components/charts/filtro-perimetro-denuncia";
 
 type Metrica = "incidenza" | "letalita" | "durataMedia" | "giornatePerse" | "mortaliInc" | "totale";
 
@@ -33,6 +34,8 @@ interface RigaMetrica {
   durataMedia?: number;
   indiceGravita?: number;
   indiceMortali: number;
+  /** Perimetro franchigia legale (assenza <=3 gg), se presente nell'artifact. */
+  franchigia?: { totale: number; mortali?: number; lavoro: number; itinere: number };
 }
 
 // Etichette delle metriche. "giornatePerse" era l'ex «Indice di Gravità»:
@@ -85,6 +88,7 @@ export function RegioniIncidenzaSection() {
   const [anno, setAnno] = useState<string>("2025");
   const [metrica, setMetrica] = useState<Metrica>("incidenza");
   const [modalita, setModalita] = useState<ModalitaState>({ lavoro: true, itinere: true });
+  const [perimetro, setPerimetro] = useState<PerimetroDenunciaState>({ denunce: true, comunicazioni: true });
   const [selectedReg, setSelectedReg] = useState<string | null>(null);
   const [hoverMapId, setHoverMapId] = useState<string | null>(null);
   const [mostraProvincePA, setMostraProvincePA] = useState<boolean>(true);
@@ -100,11 +104,54 @@ export function RegioniIncidenzaSection() {
     [ambito],
   );
 
-  // Incidenza per 1.000 occupati ricalcolata sull'ambito
+  // Perimetro selezionato: "denunce" = prognosi oltre 3 giorni (P/N/I),
+  // "comunicazioni" = casi in franchigia legale (F, assenza fino a 3 giorni).
+  // Il dato INAIL comprende entrambi: qui separiamo i due perimetri.
+  // Nota: la franchigia ha 0 giornate indennizzate e 0 mortali in tutti gli anni
+  // verificati (2020-2025), quindi durata media, giornate perse e tasso mortali
+  // non cambiano al variare del perimetro. Cambiano incidenza, letalità e volumi.
+  const soloDenunce = perimetro.denunce && !perimetro.comunicazioni;
+  const soloComunicazioni = perimetro.comunicazioni && !perimetro.denunce;
+
+  const casiPerimetro = useCallback(
+    (r: RigaMetrica) => {
+      const fr = r.franchigia;
+      if (!fr) return casiAmbito(r);
+      if (soloComunicazioni) {
+        return ambito === "lavoro" ? fr.lavoro : ambito === "itinere" ? fr.itinere : fr.totale;
+      }
+      if (soloDenunce) {
+        const netto = {
+          totale: r.totale - fr.totale,
+          lavoro: r.lavoro - fr.lavoro,
+          itinere: r.itinere - fr.itinere,
+        };
+        return ambito === "lavoro" ? netto.lavoro : ambito === "itinere" ? netto.itinere : netto.totale;
+      }
+      return casiAmbito(r);
+    },
+    [ambito, casiAmbito, soloDenunce, soloComunicazioni],
+  );
+
+  // Incidenza per 1.000 occupati ricalcolata sull'ambito e sul perimetro
   const incidenzaAmbito = useCallback(
-    (r: { occupati: number; totale: number; lavoro: number; itinere: number }) =>
-      r.occupati > 0 ? Number(((casiAmbito(r) / r.occupati) * 1000).toFixed(2)) : 0,
-    [casiAmbito],
+    (r: RigaMetrica) =>
+      r.occupati > 0 ? Number(((casiPerimetro(r) / r.occupati) * 1000).toFixed(2)) : 0,
+    [casiPerimetro],
+  );
+
+  // Mortali del perimetro selezionato.
+  // La franchigia legale (assenza <=3 gg) non contiene infortuni mortali: 0 in tutti
+  // gli anni 2020-2025, verificato sui microdati. Quindi selezionando le sole
+  // comunicazioni il numeratore della letalita' deve essere 0, non il totale dei morti.
+  const mortiPerimetro = useCallback(
+    (r: RigaMetrica): number => {
+      const mortiFr = r.franchigia?.mortali ?? 0;
+      if (soloComunicazioni) return mortiFr;
+      if (soloDenunce) return r.mortali - mortiFr;
+      return r.mortali;
+    },
+    [soloDenunce, soloComunicazioni],
   );
 
   // Valore della metrica selezionata per una regione o provincia autonoma.
@@ -115,19 +162,22 @@ export function RegioniIncidenzaSection() {
       switch (metrica) {
         case "incidenza":
           return incidenzaAmbito(r);
-        case "letalita":
-          return r.totale > 0 ? Number(((r.mortali / r.totale) * 100).toFixed(3)) : 0;
+        case "letalita": {
+          const denom = casiPerimetro(r);
+          return denom > 0 ? Number(((mortiPerimetro(r) / denom) * 100).toFixed(3)) : 0;
+        }
         case "durataMedia":
           return r.durataMedia ?? 0;
         case "giornatePerse":
           return r.indiceGravita ?? 0;
         case "mortaliInc":
-          return r.indiceMortali;
+          // mortali per 1.000 occupati: stesso numeratore della letalità
+          return r.occupati > 0 ? Number(((mortiPerimetro(r) / r.occupati) * 1000).toFixed(3)) : 0;
         case "totale":
-          return casiAmbito(r);
+          return casiPerimetro(r);
       }
     },
-    [metrica, incidenzaAmbito, casiAmbito],
+    [metrica, incidenzaAmbito, casiPerimetro, mortiPerimetro],
   );
 
   // Dati dell'anno selezionato
@@ -144,13 +194,22 @@ export function RegioniIncidenzaSection() {
     return map;
   }, [annoData]);
 
+  // Totale casi in franchigia legale nell'anno selezionato (per la nota metodologica)
+  const franchigiaNazionale = useCallback(() => {
+    const tot = annoData.regioni.reduce((acc, r) => acc + (r.franchigia?.totale ?? 0), 0);
+    return tot.toLocaleString("it-IT");
+  }, [annoData]);
+
   // Totali nazionali per le quote nel tooltip (dall'anno selezionato)
+  // Totali nazionali del perimetro selezionato, per le quote nel tooltip.
+  // Se il perimetro e' la sola franchigia i mortali sono 0: la percentuale va
+  // calcolata sul perimetro, non sul totale INAIL, altrimenti il tooltip mente.
   const totMortaliNazionali = useMemo(() => {
     const regs = annoData.regioni ?? [];
     let tot = 0;
-    for (const r of regs) tot += Number(r.mortali ?? 0);
+    for (const r of regs) tot += mortiPerimetro(r);
     return tot;
-  }, [annoData]);
+  }, [annoData, mortiPerimetro]);
 
   // Calcolo valori min/max per la scala cromatica
   const { minVal, maxVal, mediaNazionale } = useMemo(() => {
@@ -161,9 +220,9 @@ export function RegioniIncidenzaSection() {
       if (val < min) min = val;
       if (val > max) max = val;
     }
-    const media = metrica === "totale" ? Math.round(casiAmbito(annoData) / 20) : valoreMetrica(annoData);
+    const media = metrica === "totale" ? Math.round(casiPerimetro(annoData) / 20) : valoreMetrica(annoData);
     return { minVal: min === Infinity ? 0 : min, maxVal: max === -Infinity ? 1 : max, mediaNazionale: media };
-  }, [annoData, metrica, casiAmbito, valoreMetrica]);
+  }, [annoData, metrica, casiPerimetro, valoreMetrica]);
 
   // Colore per regione sulla mappa
   const colorForRegion = (code?: string): string => {
@@ -193,6 +252,10 @@ export function RegioniIncidenzaSection() {
       occupati: number;
       indiceIncidenza: number;
       indiceMortali: number;
+      /** Casi del perimetro selezionato (denunce / comunicazioni / tutti). */
+      casiPerimetro: number;
+      /** Mortali del perimetro selezionato. */
+      mortiPerimetro: number;
       color?: string;
     }> = [];
 
@@ -216,6 +279,10 @@ export function RegioniIncidenzaSection() {
             occupati: pa.occupati,
             indiceIncidenza: pa.indiceIncidenza,
             indiceMortali: pa.indiceMortali,
+            // Le province autonome non hanno il dettaglio franchigia: il perimetro
+            // si applica al totale provincia (la nota in pagina lo dichiara).
+            casiPerimetro: casiAmbito(pa),
+            mortiPerimetro: pa.mortali,
           });
         }
       } else {
@@ -232,8 +299,10 @@ export function RegioniIncidenzaSection() {
           durataMedia: r.durataMedia,
           indiceGravita: r.indiceGravita,
           occupati: r.occupati,
-          indiceIncidenza: r.indiceIncidenza,
+          indiceIncidenza: incidenzaAmbito(r),
           indiceMortali: r.indiceMortali,
+          casiPerimetro: casiPerimetro(r),
+          mortiPerimetro: mortiPerimetro(r),
         });
       }
     }
@@ -244,7 +313,7 @@ export function RegioniIncidenzaSection() {
         ...entry,
         color: PALETTE[i % PALETTE.length],
       }));
-  }, [annoData, mostraProvincePA, valoreMetrica]);
+  }, [annoData, mostraProvincePA, valoreMetrica, casiPerimetro, mortiPerimetro]);
 
   const hoverCode = hoverMapId ? MAP_ID_REGIONE[hoverMapId] : undefined;
   const activeRegData = selectedReg ? regMap[selectedReg] : hoverCode ? regMap[hoverCode] : null;
@@ -335,6 +404,9 @@ export function RegioniIncidenzaSection() {
         {/* Filtro multiselezione modalità */}
         <FiltroModalita value={modalita} onChange={setModalita} />
 
+        {/* Perimetro: denunce obbligatorie vs comunicazioni in franchigia */}
+        <FiltroPerimetroDenuncia value={perimetro} onChange={setPerimetro} />
+
         {/* Selettore Metrica Visualizzata */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
           <span style={{ fontSize: "0.82rem", color: "var(--color-text-soft)", fontWeight: 600 }}>Visualizza per:</span>
@@ -377,7 +449,7 @@ export function RegioniIncidenzaSection() {
                 : METRICA_TITOLO[metrica]}
             </div>
             <div style={{ fontSize: "0.82rem", color: "var(--color-text)", background: "var(--color-raised)", padding: "2px 8px", borderRadius: "4px", border: "1px solid var(--color-divider)" }}>
-              Media Nazionale: <strong>{metrica === "totale" ? compactNumber(casiAmbito(annoData)) : `${formattaMetrica(metrica, mediaNazionale)}${unitaMetrica(metrica)}`}</strong>
+              Media Nazionale: <strong>{metrica === "totale" ? compactNumber(casiPerimetro(annoData)) : `${formattaMetrica(metrica, mediaNazionale)}${unitaMetrica(metrica)}`}</strong>
             </div>
           </div>
 
@@ -661,7 +733,7 @@ export function RegioniIncidenzaSection() {
                       content={({ active, payload }) => {
                         if (!active || !payload || !payload.length) return null;
                         const p = payload[0].payload;
-                        const totaleNazionale = Number(annoData.totale ?? 0);
+                        const totaleNazionale = Number(casiPerimetro(annoData) ?? 0);
                         const totaleMortali = totMortaliNazionali;
                         return (
                           <div className="custom-chart-tooltip">
@@ -673,7 +745,7 @@ export function RegioniIncidenzaSection() {
                             <div className="tooltip-row">
                               <span>Letalità:</span>
                               <strong>
-                                {p.totale > 0 ? ((Number(p.mortali ?? 0) / Number(p.totale)) * 100).toLocaleString("it-IT", { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : "0,000"}%
+                                {p.casiPerimetro > 0 ? ((Number(p.mortiPerimetro ?? 0) / Number(p.casiPerimetro)) * 100).toLocaleString("it-IT", { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : "0,000"}%
                               </strong>
                             </div>
                             <div className="tooltip-row">
@@ -689,12 +761,12 @@ export function RegioniIncidenzaSection() {
                               <strong>{compactNumber(p.giorni)} gg</strong>
                             </div>
                             <div className="tooltip-row">
-                              <span>Casi totali denunciati:</span>
+                              <span>Casi nel perimetro:</span>
                               <strong>
-                                {exactNumber(p.totale)}
+                                {exactNumber(p.casiPerimetro)}
                                 {totaleNazionale > 0 ? (
                                   <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>
-                                    {" "}({Math.round((Number(p.totale ?? 0) * 100) / totaleNazionale)}%)
+                                    {" "}({Math.round((Number(p.casiPerimetro ?? 0) * 100) / totaleNazionale)}%)
                                   </span>
                                 ) : null}
                               </strong>
@@ -702,10 +774,10 @@ export function RegioniIncidenzaSection() {
                             <div className="tooltip-row">
                               <span>Infortuni mortali:</span>
                               <strong>
-                                {exactNumber(p.mortali)}
+                                {exactNumber(p.mortiPerimetro)}
                                 {totaleMortali > 0 ? (
                                   <span style={{ color: "var(--color-text-muted)", fontWeight: 550 }}>
-                                    {" "}({Math.round((Number(p.mortali ?? 0) * 100) / totaleMortali)}%)
+                                    {" "}({Math.round((Number(p.mortiPerimetro ?? 0) * 100) / totaleMortali)}%)
                                   </span>
                                 ) : null}
                               </strong>
@@ -787,6 +859,17 @@ export function RegioniIncidenzaSection() {
 
       <p className="source-note">
         Metodologia di calcolo: <strong>Tasso di Incidenza</strong> = (Infortuni / Occupati residenti) &times; 1.000. <strong>Letalità</strong> = (Infortuni mortali / Infortuni denunciati) &times; 100. <strong>Durata media per caso</strong> = Giornate di inabilità indennizzate / Casi con giornate indennizzate. <strong>Giornate perse / 1.000 occupati</strong> = (Giornate di inabilità indennizzate / Occupati residenti) &times; 1.000: misura l&apos;impatto complessivo sul territorio, non la gravità del singolo evento. Letalità e durata media sono calcolate su infortuni in occasione di lavoro e in itinere insieme, quindi non cambiano con il filtro di modalità. Denominatori occupazionali: ISTAT ed Eurostat NUTS2 (<code>lfst_r_lfe2emp</code>). La linea tratteggiata rossa indica il benchmark della media nazionale ponderata.
+      </p>
+
+      <p className="source-note">
+        <strong>Perimetro delle denunce.</strong> Il totale INAIL comprende due cose diverse. Le <em>denunce</em>
+        sono gli infortuni con prognosi oltre 3 giorni (escluso quello dell&apos;evento): è l&apos;atto che apre la
+        pratica assicurativa, obbligatorio per il datore. Le <em>comunicazioni</em> sono gli infortuni con
+        assenza fino a 3 giorni: vanno comunicati a fini statistici al SINP ma non richiedono denuncia, e
+        l&apos;INAIL li classifica in franchigia (art. 54 D.Lgs. 81/2008). Il filtro <em>Perimetro</em> permette di
+        leggere i due insiemi separatamente o insieme. I casi in franchigia non contengono infortuni mortali
+        (0 su {franchigiaNazionale()} nel {anno}) e hanno zero giornate indennizzate: durata media e giornate
+        perse non cambiano con il perimetro, mentre incidenza, letalità e volumi sì.
       </p>
     </div>
   );

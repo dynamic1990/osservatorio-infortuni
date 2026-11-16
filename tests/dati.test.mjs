@@ -229,6 +229,42 @@ test("multidimensionale: rigetto e franchigia non si sovrappongono", () => {
   }
 });
 
+test("multidimensionale: il perimetro franchigia e' coerente e non nasconde mortali", () => {
+  // Il filtro "Perimetro" della UI separa denunce (prognosi >3 gg) e comunicazioni
+  // (assenza <=3 gg, codice F). Se questi campi fossero incoerenti il filtro
+  // mostrerebbe numeri sbagliati senza errori visibili.
+  for (const anno of multidim.anniDisponibili) {
+    const a = multidim.perAnno[anno];
+    if (!a.franchigia) continue;
+    // 1. La franchigia coincide con l'esito F: sono lo stesso insieme.
+    assert.equal(a.franchigia.totale, a.esito.F, `${anno}: franchigia != esito F`);
+    // 2. Lavoro + itinere = totale franchigia.
+    assert.equal(
+      a.franchigia.lavoro + a.franchigia.itinere,
+      a.franchigia.totale,
+      `${anno}: franchigia lavoro+itinere != totale`,
+    );
+    // 3. Nessun mortale in franchigia: sotto i 3 giorni non si muore.
+    //    Coerente con la norma e verificato sui microdati 2020-2025.
+    assert.equal(a.franchigia.mortali, 0, `${anno}: mortali in franchigia = ${a.franchigia.mortali}`);
+    // 4. Per ogni regione la franchigia non puo' superare il totale.
+    for (const r of a.regioni) {
+      assert.ok(r.franchigia, `${anno} regione ${r.regione}: franchigia mancante`);
+      assert.ok(
+        r.franchigia.totale <= r.totale,
+        `${anno} regione ${r.regione}: franchigia ${r.franchigia.totale} > totale ${r.totale}`,
+      );
+      assert.ok(
+        r.franchigia.lavoro <= r.lavoro && r.franchigia.itinere <= r.itinere,
+        `${anno} regione ${r.regione}: franchigia supera la componente`,
+      );
+    }
+    // 5. La somma regionale ricostruisce il nazionale.
+    const somma = a.regioni.reduce((acc, r) => acc + r.franchigia.totale, 0);
+    assert.equal(somma, a.franchigia.totale, `${anno}: somma regionale ${somma} != nazionale ${a.franchigia.totale}`);
+  }
+});
+
 test("multidimensionale: la quota di casi senza settore è calcolata sul totale regionale", () => {
   for (const anno of multidim.anniDisponibili) {
     const a = multidim.perAnno[anno];
