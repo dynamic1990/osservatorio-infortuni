@@ -200,6 +200,23 @@ test("multidimensionale: tasso di rigetto = soli esiti negativi (N), franchigia 
   }
 });
 
+test("multidimensionale: franchigia (F) e' la soglia dei 3 giorni, non la menomazione", () => {
+  // Due istituti si chiamano "franchigia" e non vanno confusi:
+  //  - F = franchigia LEGALE (assenza <=3 giorni, art. 54 D.Lgs. 81/2008)
+  //  - franchigia sulla MENOMAZIONE (<6%): nessun codice, resta dentro P con NE
+  // Verificato sui microdati: nessun caso F ha grado di menomazione tra 1 e 5,
+  // mentre i gradi 1-5 compaiono solo dentro P. Se F fosse la franchigia sulla
+  // menomazione, i casi F avrebbero tutti un grado basso. Non ce l'hanno.
+  const a = multidim.perAnno["2025"];
+  const e = a.esito;
+  // Identita' contabile: P+F+N+I = totale
+  assert.equal(e.P + e.F + e.N + e.I, a.totale, "esiti non sommano al totale");
+  // La franchigia e' una quota rilevante ma non dominante del totale.
+  assert.ok(a.tassoFranchigia > 5 && a.tassoFranchigia < 40, `franchigia nazionale sospetta: ${a.tassoFranchigia}%`);
+  // La franchigia non eroga indennizzi: NE >= F + N + I
+  assert.ok(a.indennizzo.NE >= e.F + e.N + e.I, "NE inferiore alla somma di F+N+I");
+});
+
 test("multidimensionale: rigetto e franchigia non si sovrappongono", () => {
   // Se qualcuno reintroducesse la somma N+F dentro tassoRigetto, questo test
   // lo intercetta: la somma dei due tassi non puo' superare il 100% e il

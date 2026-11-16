@@ -284,10 +284,18 @@ export function LimitiDatoSection() {
           denunce non coincide con il numero di infortuni riconosciuti.
         </p>
         <p className="card-desc" style={{ marginBottom: "var(--space-3)" }}>
-          Un altro <strong>{num(franchigiaNazionale)}%</strong> è <em>franchigia</em>: infortuni riconosciuti,
-          ma con menomazione inferiore al 6%, quindi senza indennizzo. Non sono rigetti e non vanno sommati
-          ai negativi. Sono la misura di quanto danno lieve emerge in un territorio: la quota di franchigia
-          correla <strong>+0,82</strong> con il tasso di denuncia, cioè cresce dove si denuncia di più.
+          Un altro <strong>{num(franchigiaNazionale)}%</strong> è <em>franchigia</em>: infortuni con assenza
+          dal lavoro non superiore a 3 giorni, escluso quello dell&apos;evento. Non sono rigetti e non vanno
+          sommati ai negativi: sono casi che il datore è tenuto a comunicare a fini statistici anche quando
+          la denuncia non è obbligatoria, e per i quali l&apos;INAIL non eroga prestazioni. Misurano quanto
+          danno lieve emerge in un territorio: la quota di franchigia correla <strong>+0,82</strong> con il
+          tasso di denuncia, cioè cresce dove si denuncia di più.
+        </p>
+        <p className="source-note" style={{ marginBottom: "var(--space-3)" }}>
+          Da non confondere con la <em>franchigia sulla menomazione</em>, che è un istituto diverso: riguarda
+          i gradi di menomazione sotto il 6% e non ha un codice proprio nella definizione amministrativa.
+          Nei dati questi casi restano dentro i positivi (P) senza indennizzo. Nel 2025 in Lombardia sono
+          238 su 71.918 casi positivi, lo 0,33%.
         </p>
 
         <div style={{ display: "grid", gap: 4 }}>
@@ -319,6 +327,16 @@ export function LimitiDatoSection() {
           denunce: una percentuale alta su poche denunce pesa meno di una percentuale media su centomila.
           La franchigia (F) è esclusa da questo conteggio: è un caso riconosciuto, non un rigetto. Fonte
           della decodifica: INAIL Open Data, <em>DefinizioneAmministrativa.csv</em>.
+        </p>
+
+        <p className="card-desc" style={{ marginTop: "var(--space-4)", marginBottom: "var(--space-1)" }}>
+          <strong>Cosa contiene il totale delle denunce.</strong> Il numero che pubblichiamo ovunque (600.640
+          nel 2025) comprende anche i casi in franchigia, cioè gli infortuni con assenza non superiore a
+          3 giorni: sono il <strong>17,1%</strong> del totale. Non è un errore, è la definizione INAIL di
+          «denuncia», che include le comunicazioni a fini statistici sotto la soglia dell&apos;art. 54 del
+          D.Lgs. 81/2008. Se si escludessero, il tasso di denuncia nazionale scenderebbe da 25,8 a 21,4 per
+          1.000 occupati, un quinto in meno. La scelta di includerli è coerente con la fonte e con la serie
+          storica: togliere i casi lievi solo in alcuni anni renderebbe la serie non confrontabile.
         </p>
       </section>
     </div>

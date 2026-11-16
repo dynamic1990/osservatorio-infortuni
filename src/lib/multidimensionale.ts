@@ -21,8 +21,10 @@ export interface RegioneAnnualData {
   /** Quota di denunce con esito NEGATIVO (N) sul totale, in percentuale.
    *  NON include la franchigia: F e' un caso riconosciuto, non un rigetto. */
   tassoRigetto?: number;
-  /** Quota di denunce riconosciute con menomazione sotto il 6% (esito F), in percentuale.
-   *  Indicatore della soglia di emersione del danno lieve, non un rigetto. */
+  /** Quota di denunce definite in franchigia (esito F), in percentuale.
+   *  Franchigia LEGALE: infortunio con assenza dal lavoro non superiore a 3 giorni
+   *  (sotto la soglia dell'art. 54 D.Lgs. 81/2008). Non e' la franchigia sulla
+   *  menomazione, che non ha codice proprio e resta dentro P senza indennizzo. */
   tassoFranchigia?: number;
   /** Casi senza settore ATECO attribuito nel territorio */
   settoreND?: number;

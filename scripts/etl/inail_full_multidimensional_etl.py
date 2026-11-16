@@ -71,16 +71,16 @@ def tasso_rigetto(r_data):
     ATTENZIONE alla decodifica ufficiale INAIL (DefinizioneAmministrativa.csv):
       P = Positivo · F = Franchigia · I = In istruttoria · N = Negativo · ND = Non applicabile
 
-    F non significa "in fase di definizione": significa FRANCHIGIA, cioe' un
-    infortunio riconosciuto con menomazione inferiore al 6%, che non da' diritto
-    a indennizzo. Sommare F a N (come si faceva fino al 15/11/2026) produceva un
-    numero che non e' un tasso di rigetto: mescolava i casi respinti con quelli
-    riconosciuti ma sotto soglia. L'errore gonfiava il dato nazionale dal 13,8%
-    al 30,9% e allargava la forbice tra regioni da 7,9 a 29,1 punti, creando un
-    falso fenomeno territoriale.
+    F non significa "in fase di definizione" e non e' nemmeno la franchigia sulla
+    menomazione: e' la franchigia legale, cioe' infortunio con assenza dal lavoro
+    non superiore a 3 giorni (sotto la soglia dell'art. 54 D.Lgs. 81/2008).
+    Sommare F a N (come si faceva fino al 15/11/2026) produceva un numero che non
+    e' un tasso di rigetto: mescolava i casi respinti con quelli sotto soglia di
+    comunicazione. L'errore gonfiava il dato nazionale dal 13,8% al 30,9% e
+    allargava la forbice tra regioni da 7,9 a 29,1 punti, creando un falso
+    fenomeno territoriale.
 
-    I casi in istruttoria (I) restano fuori dal denominatore delle decisioni ma
-    dentro il totale: sono denunce non ancora decise, non rigettate.
+    I casi in istruttoria (I) restano fuori: sono denunce non ancora decise.
     """
     tot = r_data["totale"]
     if not tot:
@@ -90,13 +90,27 @@ def tasso_rigetto(r_data):
 
 
 def tasso_franchigia(r_data):
-    """Quota di denunce riconosciute con menomazione sotto il 6% (esito F).
+    """Quota di denunce definite in franchigia (esito F).
 
-    Non e' un rigetto: il caso e' riconosciuto, ma la menomazione e' troppo lieve
-    per dare diritto a indennizzo. E' un indicatore della soglia di emersione del
-    danno lieve, e correla fortemente con la propensione alla denuncia (+0,82 con
-    l'incidenza nel 2025): dove si denuncia di piu', cresce anche la quota di casi
-    sotto soglia. Va mostrato separato, mai sommato ai negativi.
+    ATTENZIONE, due istituti diversi si chiamano "franchigia":
+
+    1) FRANCHIGIA LEGALE (questo campo). Definizione ufficiale INAIL: "un caso
+       d'infortunio si definisce in franchigia se provoca assenza dal lavoro non
+       superiore a tre giorni" (Glossario PSAL; cfr. anche Atlante Infortuni
+       Veneto). Sono gli infortuni sotto la soglia dell'art. 54 D.Lgs. 81/2008:
+       il datore deve comunicarli a fini statistici (assenza di almeno un giorno,
+       escluso quello dell'evento) ma la denuncia INAIL non e' obbligatoria, e
+       l'INAIL non eroga prestazioni. Nel file hanno sempre Indennizzo=NE,
+       GradoMenomazione=-1 e GiorniIndennizzati=0.
+
+    2) FRANCHIGIA SULLA MENOMAZIONE. Istituto diverso: menomazioni sotto il 6%
+       non indennizzabili (DPR 1124/1965). NON ha un codice proprio: quei casi
+       restano dentro P con Indennizzo=NE. In Lombardia 2025 sono 238 su 71.918
+       positivi (0,33%). Non vanno cercati nel codice F.
+
+    Verificato sui microdati: nessun caso F ha grado di menomazione tra 1 e 5,
+    mentre i gradi 1-5 compaiono solo dentro P. Se F fosse la franchigia sulla
+    menomazione, il contrario sarebbe vero.
     """
     tot = r_data["totale"]
     if not tot:
